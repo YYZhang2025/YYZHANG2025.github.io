@@ -1,0 +1,9 @@
+---
+title: "**Visual Language Model**"
+author: "Yuyang Zhang"
+description: "In this project, I will implement a Visual Language Model (VLM) using 'pure' PyTorch, which is a model that can understand and generate text based on visual inputs."
+image: "./assets/vit.gif"
+categories: 
+    - Large Language Model 
+    - Multi-Modality
+---

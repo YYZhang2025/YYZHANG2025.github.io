@@ -1,0 +1,20 @@
+---
+title: "Deep Dive into Variational AutoEncoder"
+date: today
+date-modified: last-modified
+date-format: iso
+description: "This blog is my learning notes on the Diffusion Models, which is the state-of-art generative models. This blog will cover that is the diffusion models, how to use diffusion models to generate image, text-to-image, video. It also cover lagnuage diffusion model."
+image: "images/diffusion.png"
+categories: 
+  - Generative Model
+language: 
+  title-block-modified: "Last modified"
+---
+
+# Variance of VAE
+
+## VQ-VAE
+
+![](images/paste-1.png)
+
+[@oordNeuralDiscreteRepresentation2018]

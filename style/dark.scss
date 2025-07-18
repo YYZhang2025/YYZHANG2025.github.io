@@ -1,0 +1,192 @@
+/*-- scss:defaults --*/
+
+$body-bg: #1d1e20;
+$sidebar-bg: #1d1e20; // 侧边栏背景色
+$navbar-bg: #1d1e20;
+$body-color: #faf4fc !default; // 亮灰蓝代替 GhostWhite，更自然护眼
+
+// 标题颜色
+$headings-color: #c9a2ff !default; // 柔和 DodgerBlue（对比好但不刺眼）
+
+// 链接颜色
+$link-color: #c9a2ff !default; // 柔和亮蓝
+$link-hover-color: lighten($link-color, 10%);
+
+// 强调（调整为更统一的粉蓝调）
+strong {
+  color: #f27d8a !important; // 柔和珊瑚红（比 #da6373 更清新）
+  font-weight: bolder;
+}
+
+em {
+  color: #f2b6c1 !important; // 粉白淡化，和 strong 区分但风格统一
+}
+
+// 引用块
+$blockquote-bg: #06192e;
+$blockquote-border-color: #1e90ff;
+
+// 代码区块
+$code-bg: #0d1b2a;
+$code-color: #fcd34d; // 明黄色（主题中的活泼点）
+$code-font-size: 0.9em;
+
+// 表格配色
+$table-bg: #031530;
+$table-striped-bg: #06192e;
+$table-border-color: #1e3a5f;
+
+// 按钮主色调（可用于 future UI 风格或扩展）
+$primary: #1e90ff;
+$secondary: #58687a;
+$success: #2ecc71;
+$info: #3498db;
+$warning: #f39c12;
+$danger: #e74c3c;
+
+.theorem {
+  border-left: 4px solid #1e90ff; /* A bright blue for contrast */
+  background-color: #1e1e1e; /* Dark gray to stand out from pure black */
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 5px;
+  color: #f0f0f0; /* Light text for readability */
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.tag {
+  background-color: #1f4037; /* deep green gradient base */
+  color: #e6ffe6; /* light minty green text */
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  border: 1px solid #2ecc71; /* optional soft green border */
+}
+
+.tag-highlight {
+  background-color: #ff4eb5; /* deep green gradient base */
+  color: #ffffff; /* light minty green text */
+  font-weight: bold;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  border: 1px solid #2ecc71; /* optional soft green border */
+}
+.tag-highlight:hover {
+  transform: scale(1.05);
+}
+
+.timeline {
+  border-left: 2px solid #555;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.timeline-item .dot {
+  width: 10px;
+  height: 10px;
+  background-color: #888;
+  border-radius: 50%;
+  position: absolute;
+  left: -1.8rem;
+  top: 5px;
+}
+
+.content .year {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 0.2rem;
+}
+
+.content .degree {
+  font-weight: bold;
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.content .school {
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.school a {
+  color: #66d9ef; /* light cyan blue */
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.school a:hover {
+  color: #33c6e3;
+  text-decoration: underline;
+}
+
+.subtext {
+  color: rgba(255, 255, 255, 0.6); /* Soft white */
+  font-size: 0.95em;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* for preview */
+blockquote {
+  border: 2px solid $blockquote-border-color;
+  background-color: $blockquote-bg;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 1.5em;
+  margin: 10px 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-style: italic;
+  color: $body-color !important;
+}
+
+blockquote {
+  position: relative;
+}
+
+blockquote:after {
+  content: "\201C";
+  position: absolute;
+  top: 0.3em;
+  left: -0.2em;
+  font-size: 8em;
+  font-style: normal;
+  color: $headings-color !important;
+}
+
+/* if paraphrasing, wrap your quote in <blockquote class=paraphrase>text</blockquote> */
+blockquote.paraphrase:after {
+  display: none;
+}
+
+/* for citations */
+cite {
+  background-color: $headings-color;
+  color: white;
+  margin-left: -10px;
+  margin-right: -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: right;
+  display: block;
+}
+
+cite a:link {
+  color: white;
+}

@@ -1,0 +1,59 @@
+---
+title: "**Attentions are all you Need**"
+author: "Yuyang Zhang"
+description: "Attention mechanisms are at the heart of modern transformer architectures. They allow models to dynamically focus on different parts of the input when processing sequences—making them incredibly powerful for NLP, vision, and beyond. In this post, we’ll break down the major types of attention mechanisms and how they differ from each other."
+image: "./images/sd.png"
+categories: 
+  - Large Language Model
+---
+
+# Standard Structure of Attention
+
+This is some text
+
+``` Python
+import torch
+import torch.nn as nn 
+```
+
+And text under it
+
+# Scaled Dot Product
+
+# Multi Head Attention(MHA)
+
+# KV Cache
+
+Before we discuss more attention mechanism. Let's discuss what is the KV Cache, and why we need it.
+
+# Multi Query Attention(MQA) & Grouped Query Attention
+
+![](images/paste-2.png)
+
+# Multi Head Latent Attention(MLA)
+
+![Illustration of MLA (Image Source: Deepseek-v2)](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202504050150390.png)
+
+![Compare between MHA, MQA, GQA, and MLA (Image Source: DeepSeek V2)](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202504050152164.png)
+
+# Flash Attention
+
+# Linear Attention
+
+<https://arxiv.org/pdf/2006.04768>
+
+# Ring Attent
+
+![Illustraution of the Linear Attention(Image Source: Linformer: Self-Attention with Linear Complexity)](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202504050157907.png)
+
+# ion
+
+Ring Attention with Blockwise Transformers for Near-Infinite Context
+
+<https://arxiv.org/pdf/2310.01889>
+
+# Multi-Token Attention
+
+<https://arxiv.org/abs/2504.00927>
+
+![Multi-Token Attention (MTA) on the right, compared to standard attention on the left. (Image Source: Multi-Token Attention)](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202504050154548.png)

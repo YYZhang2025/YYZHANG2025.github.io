@@ -1,0 +1,18 @@
+---
+title: Projects
+description: "This page contains all the projects I have done during my learning process. I hope you can find something useful here. HAPPY LEARNING😁😁!!!"
+    
+format:
+    html:
+        link-external-icon: false
+        page-layout: full
+        toc: false
+
+listing:
+  contents: Projects
+  categories: true
+  type: grid
+  sort: "date"
+  grid-columns: 3
+  fields: [image, title, author,  description, categories]
+---

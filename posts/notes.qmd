@@ -1,0 +1,19 @@
+---
+title: Learning Notes
+description: |
+  In this page, I will include all my learning material. 
+    
+format:
+    html:
+        link-external-icon: false
+        page-layout: full
+        toc: false
+---
+
+:::: callout-note
+::: {style="font-size: 1.3rem;"}
+I have moved all my learning notes to this website. You can find them at [Course Notes](https://yyzhang2025.github.io/Course-Notes/).
+:::
+::::
+
+![About Page of the Course notes](./assets/notes-about.png)

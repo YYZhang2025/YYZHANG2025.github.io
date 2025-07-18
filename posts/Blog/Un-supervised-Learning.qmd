@@ -1,0 +1,43 @@
+---
+title: "Unsupervised Learning is huge"
+date: today
+date-modified: last-modified
+date-format: iso
+description: "In this blog, I am going to review the most important concept in the AI world "
+image: "images/unsupervised-overview.png"
+language: 
+  title-block-modified: "Last modified"
+
+categories: 
+    - Overview
+---
+
+First, let's think why we need the Un-supervised Learning method?
+
+Unsupervised learning is a type of machine learning where an algorithm is trained on unlabled data without supervision(a.k.a label). The model attempts to discover hidden patterns, structure, or relationships within the data without predefined output labels.
+
+Wha the un-supervised learning method? The norm supervised learning method is know. It have several method that can be used to:
+
+-   Generative Models: generative model, as the define of the up-supervised learning. We only have the data , and not label, so it can be seen as the un-supervised learning methods. (For more details, check my this blog: [**What a Generative Models?**](https://git-ai-zyy.github.io/BLOG/posts/Generative%20Model/Generative%20Model%20Overview.html)
+-   Self-Supervised Learning: This kind of problem can be seen as the un-supervised learning because we find a label from data it self, rather than provided data with label
+-   Contrastive Learning:
+
+In this blog, I mainly focus on the self-supervised learning and Contrastive Learning. For reader who are interested in the generative models, check this blog: [**What a Generative Models?**](https://git-ai-zyy.github.io/BLOG/posts/Generative%20Model/Generative%20Model%20Overview.html)
+
+# Generative Model
+
+We can form the generative model as following:
+
+-   Giving a dataset $\mathcal{D}$, how to learning a model $p_\theta(x)$, that we can sample data points from the trained model.
+
+So, the generative model can be seen as the representation learning. We learn some structure and semantic context from the data through model.
+
+Not all the generative model can be used as up-supervised learning.
+
+Gene
+
+# Self-Supervised Learning
+
+# Contrastive Learning
+
+The other way to learn the representation of the data is through the contrast. The main idea is to compare each other, and want the most similar data points to get closer and the dis-like data dispense as far as possible.

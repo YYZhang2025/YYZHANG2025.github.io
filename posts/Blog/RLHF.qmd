@@ -1,0 +1,106 @@
+---
+title: "Reinforcement Learning From Human Feedback"
+date: today
+date-modified: last-modified
+date-format: iso
+description: "In this blog, I am going to review the most important concept in the AI world "
+image: "images/RLHF.png"
+language: 
+  title-block-modified: "Last modified"
+
+categories: 
+    - Reinforcement Learning
+---
+
+RLHF refers to Reinforcement Learning from Human Feedback. Reinforcement Learning is a type of learning method that involves training an agent to make decision based on the feedback from the environment (also known as state). Different from traditional RL, RLHF combine with the human feedback in the form of ratings or evaluation of its actions, which can help agent learn more quickly and accurately, and align with the human preference. RLHF is a rapidly developing area, there are several advanced techniques that have been developed to improve the performance of the RLHF:
+
+-   Inverse Reinforcemenet Learning(IRL): This is a technique that allows agent to learn a reward function from human feedback, rather than use pre-defined reward function.
+-   Apprenticaship Learning: This technique combine IRL with supervised learning to enable the agent to learn from both human feedback and expert demonstrations. This enable agent to learn. from both positive and negative feedback
+-   Interactive Machine Learning(IML): This technique involves active interaction between the agent and the human expert, allow the expert to provide feedback on the agent's action in real-time. This can help the agent learn more quickly and efficiently, as it can receive feedback on its actions at each step of learning process.
+-   Human-in-the-Loop Reinforcement Learning(HITLRL): This is technique that involves integrating human feedback into the RL process at multiple levels, such as reward shaping, action selection, and policy optimization. This can help to improve the efficiency and effectiveness of the RLHF system by taking advantage of the strengths of both humans and machine.
+
+# Preliminaries
+
+(Reader who have knowledge of RL can skip this section)
+
+Reinforcement Learning is the setting of learning behavior from rewarded interaction with an environment. Usually, it formalized as Markov Decision Process(MDP). In the MDP, the agent observers its current state, takes an action base on the state, this action will lead agent to new state, in the mean time, the agent will receive a reward from environment indicating whether this is good or bad action. The agent goal is to maximize the cumulative rewards.
+
+![](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202503231518131.png){#fig-mdp}
+
+As in the @fig-mdp, an MDP is defined as tuple $(\mathcal{S}, \mathcal{A}, P, R, d_0. \gamma)$:
+
+-   $\mathcal{S}$ is a set of states, known as state space
+-   $\mathcal{A}$ is a set of actions, known as action space
+-   $P: \mathcal{S} \times \mathcal{A} \to \mathcal{S}^{'}$ is a transition function, when agent in the state $s_t$ take action $a_t$, what the probability land on the $s_{t + 1}$ will be.
+-   $R: \mathcal{S} \times \mathcal{A} \to \mathbb{R}$ reward function
+-   $d_0$ distribution over initial states.
+-   $\gamma \in [0, 1]$ discount factor
+
+In an MDP, a trajectory $\tau$ is a sequence of state action pairs that ending in a terminal state, equal to $\tau = (s_0, a_0, s_1, a_1, \cdots, s_t, a_t)$. The cumulative rewards associate with the $\tau$ is known as return $R(\tau)$, denoted as:
+
+$$
+R(\tau) = \sum_{t=0}^{T -1}\gamma^tR(s_t, a_t)
+$$ {#eq-return}
+
+The agent take the action given current state $s_t$ based on policy $\pi$. A policy specifies how to select actions in a state, either deterministically or stochastically. In the plain word, $\pi$ is just a mapping function that map $s_t$ to $a_t$. The goal of the agent is the maximize the cumulative rewards along the trajectory. Since the we have no clue of the environment, so, the agent goal is become maximize the expectation of returns along trajectories $\mathbb{E}_{\tau}[R(\tau)]$. In this setting, the RL agent is hoping to learn an optimal policy $\pi^*$ that maximizes the expected return:
+
+$$
+J(\pi) = \mathbb{E}_{d_0, P, \pi}[R(\tau)]
+$$ {#eq-objective-function}
+
+Action-Value function, also known as $Q$-function, define as:
+
+$$
+Q_\pi(s, a) = \mathbb{E}_{P, \pi}\left[\sum_{t=0}^{T - 1}\gamma^tR(s_t, a_t) \right]
+$$ {#eq-q-function}
+
+Similar, there is also a state-value function, defined as:
+
+$$
+V_\pi(s) = \mathbb{E}_{P, \pi}\left[\sum_{t=0}^{T - 1}\gamma^tR(s_t, a_t)| s_0 = s \right]
+$$ {#eq-value-function}
+
+Those two function are related through the fact that action is the mapping of state through policy, so:
+
+$$
+V_\pi(s) = \mathbb{E}_{a \sim \pi(s)} [Q_\pi(s, a)]
+$$ {#eq-value-q-function}
+
+Another important concept is the Advantage $A$ that measure how the action behavior compare to the expected value, is defined as:
+
+$$
+A(s, a) = Q(s, a) - \mathbb{E}[Q(s, a)] = Q(s, a) - V(s)
+$$ {#eq-advantage-define}
+
+# 
+
+# Algorithms
+
+## PPO
+
+# In LLMs
+
+![The three steps of RLHF (Image source: Training language models to follow instructions with human feedback)](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202503232157413.png){#fig-rlhf-llm-overview}
+
+One of the most known application of RLHF is in the post-training of LLMs, where RLHF is used to align the human preference to the model. (If you are not familiar with the LLM, check this [blog](https://yyzhang2000.github.io/Blog/posts/LLM/LLM-Overview.html)).
+
+Let's first define what is the state, action, in the LLM.
+
+-   State $s$: The prompt or the conversation context
+-   Action: The model's generated tokens – typically a full response or the next token in the auto-regressive generation
+-   Reward: A scalar value that represents human preference or a proxy for it(e.g. output quality, helpfulness, etc.)
+-   Policy: The language model, usually fine-tuned to maximize expected rewards.
+
+## PPO
+
+One of the most widely used RL algorithm in the LLM is the PPO, as showed in the @fig-rlhf-llm-overview. Those model mapping the PPO in the
+
+## DPO
+
+One the problem of PPO is that, it's needed another reward model, which is often same size as the our language model. It take large memory and computing resource. Is it possible to get remove the reward model? The answer is YES! According to the [@rafailovDirectPreferenceOptimization2024], the implicit reward model can be fitting using the language model itself.
+
+![DPO process compare to the traditional PPO process (Image Source: Direct Preference Optimization: Your Language Model is Secretly a Reward Model)](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202503232236952.png){#fig-dpo-process}
+
+## GRPO
+
+![Compare between PPO and GRPO (Image SourcDeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models)e:](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202503232239112.png){#fig-grpo-deepseek-math}

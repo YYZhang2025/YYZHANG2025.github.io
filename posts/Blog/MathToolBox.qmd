@@ -1,0 +1,62 @@
+---
+title: "Math Toolbox for AI"
+date: today
+date-modified: last-modified
+date-format: iso
+description: "An Toolbox of essential math for artificial intelligence, including linear algebra, probability, calculus, and optimization."
+image: "images/math_meme.jpg"
+language: 
+  title-block-modified: "Last modified"
+
+categories: 
+    - Mathematics
+---
+
+::: callout-note
+## Update
+
+Add Vector Normalization
+:::
+
+Mathematics is the important and the most confusion part of artificial intelligence. You might think AI is all about fancy neural networks and mind-blowing predictions, but behind every impressive AI breakthrough is a solid foundation of math. Without math, AI is just a bunch of random code guessing its way through problems like a lost tourist with no GPS.
+
+So why am I writing this blog? Because AI is everywhere—from recommending your next Netflix binge to predicting stock market trends. Yet, many aspiring AI enthusiasts underestimate the power of mathematics. If you've ever wondered, “Do I really need to know linear algebra and calculus to work with AI?” The answer is a resounding YES! And I’m here to make it a little less intimidating (and hopefully a bit more fun).
+
+Now, let’s talk about the real struggle: the fancy names. When you first start learning AI, it feels like math is just out to confuse you. One moment you’re fine with basic addition, and the next, you’re drowning in terms like "eigenvalues," "Jacobian matrices," and "Markov chains." You hear about "gradient descent" and think, "Oh, that sounds cool," only to realize it involves partial derivatives and a whole lot of Greek letters that make your head spin. And don’t even get me started on "Lagrange multipliers"—it sounds like something from a sci-fi movie, but turns out to be just another way math likes to keep us on our toes.
+
+This blog is about the some keep concept in the mathematics and how they used in the AI. Each part is self-contains, readers can choose parts most interested them.
+
+::: callout-note
+This blog is different from others. It will updated from time to time, when I learned the new concepts.
+:::
+
+## 1. Norm of the Vectors(Lp-Norm)
+
+::: callout-caution
+Many people confuse **normalization** with the **length (norm) of a vector**, but they are fundamentally different. The Normalization is defined as:
+
+$$
+v_{\text{normlized}} = \frac{v}{\| v\|_p}
+$$
+
+where $\| v \|_p$ is the Norm of the vector, this form is called **Lp-Norm**.
+
+**Normalization** is the process of [rescaling a vector so that its norm (magnitude) becomes **1**, while preserving its direction]{.underline}. It ensures that all vectors in a dataset have the same scale, which is [crucial for numerical stability and model performance]{.underline} in machine learning and deep learning.
+:::
+
+The **Lp-Norm** is a generalization of different norms, including **L1-Norm**, **L2-Norm**, and others. It measures the magnitude of a vector in various ways depending on the value of $p$ . Lp-Norm is widely used in **machine learning**, **deep learning**, and **signal processing** for tasks like feature scaling, similarity measurements, and optimization. Mathematically, it defined as:
+
+$$
+\| v\|_p = (\sum_i^d |v_i|^p)^{1 / p}
+$$
+
+where:
+
+-   $p$: is a positive real number
+-   $|v_i|$ represents the absolute value of each component of the vectors
+
+There are some special case of the
+
+## KL-Divergence
+
+Kullback-Leibler Divergence (KL-Divergence) is a fundamental and important concept in information theory and machine learning. It measures how one probability distribution $P$ diverges from other probability distribution $Q$.

@@ -1,0 +1,347 @@
+---
+title: "**What a Generative Models?**"
+date: today
+author: "Yuyang Zhang"
+date-modified: last-modified
+date-format: iso
+description: "In this blog, I am going to summary the *6* most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance"
+image: "images/genAI.png"
+categories: 
+  - Generative Model
+  - Overview
+language: 
+  title-block-modified: "Last modified"
+---
+
+# What is the Generative Models and Generative AI?
+
+Generative models, as the name indicated, are models that can *generative* new content. Unlike **discriminate models**, the generative models are sometime hard to train. But why we need generative models in the first place? We want generative models because:
+
+-   [Density Estimation](https://en.wikipedia.org/wiki/Density_estimation): Estimate the probability density function of the data.
+-   [Anomaly Detection](https://en.wikipedia.org/wiki/Anomaly_detection): Detect the anomaly data points.
+-   [Imputation](https://en.wikipedia.org/wiki/Imputation): Fill in the missing data.
+-   [Data Augmentation](https://en.wikipedia.org/wiki/Data_augmentation): Generate new data to increase the size of the dataset.
+-   [Data Generation](https://en.wikipedia.org/wiki/Data_generation): Generate new data to train the model.
+-   [Data Compression](https://en.wikipedia.org/wiki/Data_compression): Compress the data to save the storage.
+-   [Data Denoising](https://en.wikipedia.org/wiki/Denoising): Remove the noise from the data.
+-   [Latent Space Exploration](https://en.wikipedia.org/wiki/Latent_space): Explore the latent space of the data.
+-   [Latent Space Interpolation](https://en.wikipedia.org/wiki/Interpolation): Interpolate between the data points.
+
+![Summary of various kinds of deep generative models. (Image Source: Probabilistic Machine Learning)](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202503062129654.png){#fig-overview-generative-models}
+
+Generative Models can solve **inverse problems**. For example, the medical image reconstruction. Herea re some example of the generative models in the real world:
+
+-   Text to Image Model: this is common in the current AI, for example, the Stable Diffusion Model and Dalles model, below are the example of the generation of Chat-4o model:
+
+![Image Generation through ChatGPT-4o model.](images/paste-5.png){#fig-text2img-wine-glass}
+
+-   Text to Video model such as Sora.
+
+::: {#fig-cern}
+{{< video images/sora-generation.mp4 >}}
+:::
+
+In the blog, we will learn three things:
+
+-   Representation: how to model the joint distribution of many random variables
+-   Learning: how to learn and compare the different probability distribution
+-   Inference: how to invert the generation process ( recover high-level description (latent variables) from raw data(images, text...)
+
+Besides the three main topics, we will introduce 6 different generative models as showed in the @fig-overview-generative-models. In this article, we will go through those 6 different types. Get into the details of each different types and compare models. How to combine those model to get more complex modeling ability.
+
+::: callout-note
+In this blog, we only going through the *main ideas* of the different models, if you want to dig into different topics more deeply, please check my following blogs:
+
+-   [Variational AutoEncoder Models](https://yyzhang2000.github.io/Blog/posts/Generative%20Model/VAE.html)
+-   [Diffusion Models](https://yyzhang2000.github.io/Blog/posts/Generative%20Model/Diffusion%20Model.html)
+-   Auto-Regressive Models (Coming soon...)
+-   Flow Matching(Coming soon...)
+-   GAN(Coming soon...)
+:::
+
+# Maximum Likelihood Learning
+
+![Compare modelled distribution with true distribution (Image Source: Stanford CS236 Deep Generative)](https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202504082033591.png){#fig-mle}
+
+The purpose of the most generative models is to learn the probability distribution $P_\theta$ that is close to the true distribution $P_\text{data}$ which we don't know. There are different form of the $P_\theta$, how do we choose the "best" model to represent the $P_\text{data}$. We can use the Kullback-Leibler divergence (KL-divergence) between two distribution to measure how different those two distributions are. The KL-Divergence is defined as:
+
+$$
+\begin{split}D_{KL} (P\| Q ) & = \mathbb{E}_{P}\left[ \log \frac{P(x)}{Q(x)} \right]  \\& = \mathbb{E}_{P}[\log P(x)] - \mathbb{E}_{P}[\log Q(x)]\end{split}
+$$ {#eq-kl-divergence}
+
+Two of the good property of the KL-Divergence are:
+
+-   $D_{KL} \geq 0$: when $Q = P$ we can get the equal
+-   $\mathbb{E}_{P}\left[ - \log \frac{Q}{P} \right] \geq -\log \mathbb{E}_{P}\left[ \frac{Q}{P} \right]$: due to the[Jensen's inequality](https://en.wikipedia.org/wiki/Jensen%27s_inequality) and $-\log$ is the convex function.
+
+So, we can measure how the $P_{\text{data}}$ and $P_{\theta}$ are different:
+
+$$
+\begin{split}D_{KL}(P_{\text{data}} \| P_{\theta}) & = \mathbb{E}_{x \sim P_{\text{data}}} \left[ \log \frac{P_{data}(x)}{P_{\theta}(x)} \right] \\ &=   \mathbb{E}_{x \sim P_{\text{data}}} [\log P_{\text{data}}(x)] - \textcolor{green}{\mathbb{E}_{x \sim P_{\text{data}}} [\log P_{\theta}(x)]}\\\end{split}
+$$ {#eq-kl-of-two-model-and-true}
+
+As we can see, the first term is not related to the $\theta$, which means const across all the models and we don't know the value. We only need to **maximizing** the $\textcolor{green}{\mathbb{E}_{x \sim P_{\text{data}}} [\log P_{\theta}(x)]}$ in order to minimizing the $D_{KL}$.
+
+::: callout-note
+Notes that, although we can compare models, we are still not know how close we are to the true distribution $P_{\text{data}}$.
+:::
+
+How to calculate $\mathbb{E}_{x \sim P_{\text{data}}} [\log P_{\theta}(x)]$, one way is to <u>approximate the expected log-likelihood with empirical log-likelihood</u>: $$
+\mathbb{E}_{x \sim P_{\text{data}}} [\log P_{\theta}(x)] \approx \mathbb{E}_{\mathcal{D}}[\log P_{\theta}(x)]  
+= \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} \log P_{\theta}(x)
+$$
+
+So, the maximum likelihood learning become: $$
+\underset{P_{\theta}}{\max}  \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} \log P_{\theta}(x)
+$$
+
+The maximum of the likelihood function is equal to minimizing the **negative log-likelihood(NLL)**: $$
+\underset{P_{\theta}}{\max}  \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} \log P_{\theta}(x)   
+\quad \Longleftrightarrow \quad
+\underset{P_{\theta}}{\min} \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} -\log P_{\theta}(x) 
+$$ So, the loss function is: $$
+\mathcal{L}(\theta) = \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} -\log P_{\theta}(x) 
+$$
+
+Depending on what form  $p_\theta(x)$  takes, this NLL simplifies into familiar losses like **MSE** or **CrossEntropy**.
+
+When translating the above mathematical formulation into code, we commonly used some form:
+
+-   Mean Squared Loss (MSE): Diffusion Models
+-   Cross-Entropy Loss: GAN(Binary Cross Entropy)
+
+::: {.callout-note collapse="true"}
+## Why we can convert MLE to loss fucn
+
+Assume the model outputs the **mean** of a Gaussian distribution: $$p_\theta(x) = \mathcal{N}(x; \mu_\theta, \sigma^2 I)$$ Then the log-likelihood is: $$\log p_\theta(x) = -\frac{1}{2\sigma^2} \|x - \mu_\theta\|^2 + \text{const}$$ So the **negative log-likelihood** becomes: $$-\log p_\theta(x) = \frac{1}{2\sigma^2} \|x - \mu_\theta\|^2 + \text{const}$$
+
+One of the problem with the MLE is that, it can easily overfit the data, that means it might not generalize well on the un-seen data set. There are several way to avoid the overfitting:
+
+-   Hard Constraints: limit the choice of the NN
+-   Soft preference for "Simpler" Models
+-   Augment the objective function with regularization
+
+$$
+\text{obj}(x, \mathcal{M}) = \text{loss}(x, \mathcal{M}) + R(\mathcal{M})
+$$
+
+-   Evaluate generalization performance on a held-out validation set.
+:::
+
+# Auto-Regressive Models
+
+::: {layout-ncol="2"}
+![Auto-Regressive Model of Language Model](https://miro.medium.com/v2/resize:fit:315/1*PLsOLk_kmYwW59UeYhegqA.png){width="480" height="494"}
+
+![PixelCNN for the Image Modeling](https://sergeiturukin.com/assets/2017-02-22-183010_479x494_scrot.png){width="480"}
+:::
+
+::: {#thm-ar .theorem-unnumbered}
+## Auto Regressive Model
+
+An **auto-regressive generative model** is a type of **generative model** that models the **joint probability distribution** of a sequence (e.g., words, pixels, audio samples) by factorizing it into a **product of conditional probabilities**—each conditioned on the previous elements Mathematically, given a sequence $x = (x_1, x_2, \cdots, x_T)$, the joint probability is modeled as $$
+P_\theta(\mathrm{x}) = \prod_{t=1}^T P_\theta(x_t | x_{<t})
+$$
+:::
+
+For more details, please check my this [blog]()
+
+# Variational AutoEncoder Models
+
+For more details, please check my this [blog](https://yyzhang2000.github.io/Blog/posts/Generative%20Model/VAE.html)
+
+::: {#thm-vae .theorem-unnumbered}
+## VAE
+
+A VAE aims to model a generative process for data $x$ by introducing latent variables $z$. The key idea involves optimizing the **Evidence Lower Bound (ELBO)**:
+
+$$
+\mathcal{L}(\theta, \phi; x) = \mathbb{E}_{q_{\phi}(z|x)}[\log p_{\theta}(x|z)] - D_{\text{KL}}\left[q_{\phi}(z|x) \| p(z)\right]
+$$
+
+where:
+
+-   $p_\theta(x | z)$ is the decoder network parameterized by $\theta$, often modeled as $p_\theta(x | z) = \mathcal{N}(x; \mu_\theta(z), \sigma^2I)$
+-   $q_\phi(z|x)$ is the approximated distribution for the true posterior $p(z|x)$, this is the encoder part, modeled as: $q_\phi(z | x) = \mathcal{N}(z; \mu_\phi(x), \sigma_\phi^2(x))$
+
+Thus the training objective for the VAE is:
+
+$$
+\max_{\theta, \phi}\; \mathbb{E}_{x \sim p_{\text{data}}(x)}[\mathcal{L}(\theta, \phi; x)]
+$$
+:::
+
+<https://mlarchive.com/wp-content/uploads/2022/09/New-Project-3.png>
+
+The VAE model we are going to introduce is the Variational AutoEncoder. The original VAE objective (ELBO) is derived from MLE.
+
+$$
+\begin{split}\log p(x) &= \log \int p(x, z) \, dz \\&= \log  \int \textcolor{green}{\frac{q(z|x)}{q(z|x)}} p(x, z) \, dz  \\&=  \log \mathbb{E}_{\textcolor{green}{q(z|x)}}\left[ \frac{p(x,z)}{\textcolor{green}{q(z|x)}} \right] \\ &\geq  \mathbb{E}_{\textcolor{green}{q(z|x)}}\left[ \log \frac{p(x,z)}{\textcolor{green}{q(z|x)}} \right]  && \text{(Jensen's Inequality)}\\ & =\underbrace{ \mathbb{E}_{\textcolor{green}{q(z|x)}}[\log p(x, z) -  \log\textcolor{green}{q(z|x)}] }_{ ELBO } \\&=  \mathbb{E}_{\textcolor{green}{q(z|x)}}[\log p(x |z) +\log p(z) - \log (\textcolor{green}{q(z |x)})] \\ &=  \mathbb{E}_{\textcolor{green}{q(z|x)}}[\log p(x|z)]   - \mathbb{E}_{\textcolor{green}{q(z|x)}}\left[ \log \frac{\textcolor{green}{q(z|x)}}{p(x)} \right] \\ &=  \mathbb{E}_{\textcolor{green}{q(z|x)}}[\log p(x|z)]  - D_{KL}(\textcolor{green}{q(z |x)} \| p(z)  ) \\\end{split}
+$$
+
+Since the $\textcolor{green}{q(z|x)}$ is intractable because of the high dimension, we use another function to *approximate* it. Same for the $p(x | z)$. So, the MLE object become:
+
+$$
+\begin{align} &\max \quad  \mathbb{E}_{\textcolor{green}{q(z|x)}}[\log p(x|z)]  - D_{KL}(\textcolor{green}{q(z |x)} \| p(z)  )  \\  \implies &\min_{\theta,\phi} \quad -\mathbb{E}{q_{\phi}(z|x)}[\log p_{\theta}(x|z)] + D_{\text{KL}}(q_{\phi}(z|x)\|p(z))\end{align}
+$$
+
+The $p(z)$ is the prior distribution of latent variable is usually as MultiVariate Gaussian Distribution. However, we can set more fancy and complex distribution as the prior distribution.
+
+There are several tricks used during the training of VAE, the first one is the reparameterization tirck.
+
+## Reparameterization trick
+
+We can use the Monte Carlo Method to evaluate the ELBO $$
+\quad -\mathbb{E}{q_{\phi}(z|x)}[\log p_{\theta}(x|z)] + D_{\text{KL}}(q_{\phi}(z|x)\|p(z)) \approx \log p_{\theta}(x | z_{1})z_{1} + \text{Const}
+$$ However, the $z_{1}$ is sampled from the a Gaussian Distribution with $\mu, \sigma$ calculated from $q_{\phi}(z |x)$, which mean the gradient information which used to update the parameters cannot flow through this node because of the randomness. Is there are other way to remove the randomness from the loss function? This, that's reparameterization trick do. Instead of sampling $z$ from $q_{\phi}(z |x)$, we:
+
+1.  Sample $\epsilon$ from a fixed, parameter-free distribution (e.g. Normal Distribution)
+2.  Use a deterministic function of that sample and the parameters to get $z = f(\epsilon)$
+
+![](https://dilithjay.com/assets/images/reparam-trick.png)
+
+So the model become
+
+![](https://dilithjay.com/assets/images/vae-reparam.png)
+
+# Generative Adversarial Networks
+
+GANs are generative models that consist of two neural networks - a generator $G$, and a discriminator $D$- that complete against each other in a min-max game framework. The goal is for the generator to produce data indistinguishable from real samples, while discriminator tries to distinguish between real and fake(generated) data.
+
+-   Generator $G$: Learns a mapping from random noise $z \sim p_z(z)$ (typically $z \sim \mathcal{N}(0, I)$ to realistic data sample $x$: $G(z; \theta_g) : z \mapsto x_{\text{fake}}$
+-   Discriminator( $D$): Outputs a probability that a given samples $x$ is real (from dataset) rather than fake (from generator): $D(x; \theta_d): x \mapsto [0,1]$
+
+The training of GAN involves solving the following min-max optimization problem:
+
+$$
+\min_{G}\max_{D} V(D, G) = \mathbb{E}_{x \sim p_{\text{data}}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_z(z)}[\log(1 - D(G(z)))]
+$$
+
+The training occurs iteratively by alternating steps:
+
+1.  Step 1 (Discriminator training): Update discriminator parameters $\theta_d$ to maximize tits objective, thus distinguishing fake from real data:
+
+$$
+\max_{\theta_d} \mathbb{E}_{x \sim p_{\text{data}}(x)}[\log D(x)] + \mathbb{E}_{z \sim p_z(z)}[\log(1 - D(G(z)))]
+$$
+
+2.  Step 2(Generator training): Update generator parameters $\theta_g$ to minimize the discriminator's success, effectively fooling it:
+
+$$
+\min_{\theta_g} \mathbb{E}_{z \sim p_z(z)}[\log(1 - D(G(z)))]
+$$
+
+In theory, the training process converges to a **Nash Equilibrium**.
+
+# Energy-Based Models
+
+So far, the generative models modeling the alternative of the probability of the dataset. In the Energy Based Models, it define probabilistic models using an energy function, assigning low energy to configurations(samples) that occur frequently (realistic data points) and high energy to unlikely configurations. An energy-based model defines the probability distribution of data $x$ using an energy function $E_\theta[x]$:
+
+$$
+p_\theta(x) = \frac{\exp(-E_\theta(x))}{Z(\theta)}
+$$
+
+To training from EBMs, one typical is to maximizes the likelihood of observed data $p_{\text{data}}(x)$
+
+$$
+\max_\theta \mathbb{E}_{x \sim p_{\text{data}}}(x)[\log p_\theta(x)] = \max_\theta \mathbb{E}_{x \sim p_{\text{data}}}(x)[-E_\theta(x)] - \log Z(\theta)
+$$
+
+To Sampling from the Energy Based Model, we using an iterative approaches such as Markov Chain Monte Carlo(MCMC), especially Langevin Dynamics.
+
+# Flow-Based Models
+
+Flow-Based models are generative models that represent complex probability distributions through invertible transformations of simpler latent distributions. They explicitly prove tractable likelihood computation, unlike many other generative models such as GANs and VAEs.
+
+Flow-based models define a generative process by applying an invertible and differentiable transformation $f_{\theta}$ (the “flow”) to a latent variable $z$, typically sampled from a simple prior (e.g., standard Gaussian):
+
+Given the invertibility of $f_\theta$ , we can express the likelihood the of observe data explicitly using the change of variables formula:
+
+$$
+p_{X}(x) = p_{Z}(f_{\theta}^{-1}(x)) \left| \det \frac{\partial f_{\theta}^{-1}(x)}{\partial x} \right|
+$$
+
+Training Objective of the Flow Model is:
+
+$$
+\max_{\theta}\; \mathbb{E}{x \sim p{\text{data}}(x)}\left[ \log p_{X}(x;\theta) \right]
+$$
+
+In practice, complex transformations are obtained by composing simpler invertible transformations $f_{\theta}^{(1)}, f_{\theta}^{(2)}, \dots, f_{\theta}^{(K)}$:
+
+$$
+f_{\theta}(z) = f_{\theta}^{(K)} \circ f_{\theta}^{(K-1)} \circ \dots \circ f_{\theta}^{(1)}(z)
+$$
+
+The determinant of the Jacobian for composed transformations simplifies as follows:
+
+$$
+\log \left| \det \frac{\partial f_{\theta}^{-1}(x)}{\partial x} \right|
+= \sum_{i=1}^{K} \log \left| \det \frac{\partial f_{\theta}^{(i)-1}(h_i)}{\partial h_i} \right|
+$$
+
+# Diffusion Models
+
+For more details, please check my this [blog](https://yyzhang2000.github.io/Blog/posts/Generative%20Model/Diffusion%20Model.html)
+
+The Diffusion Models are generative models that learn to reverse a gradual corruption process applies to data. They gained popularity due to their impressive results in generating high-quality, diverse samples across domain such as images, audio, and text. Diffusion models consist of two processes:
+
+-   Forward(Diffusion) Processes:
+
+Gradually adds noises to data $x_0$ over $T$ timesteps, typically Gaussian noise:
+
+$$
+q(x_t|x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t}x_{t-1}, \beta_t I), \quad t = 1,\dots,T
+$$
+
+This form a Markov chain. So the forward distribution can also be expressed directly in terms of $x_0$:
+
+$$
+q(x_t|x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t)I)
+$$
+
+where $\alpha_t = 1 - \beta_t, \quad \bar{\alpha}_t = \prod_{s=1}^{t}\alpha_s$
+
+-   Reverse (Genrative) Process:
+
+The generative models learns to reverse this diffusion, gradually removing noise. It's defined as:
+
+$$
+p_\theta(x_{t-1}|x_t) = \mathcal{N}(x_{t-1}; \mu_\theta(x_t, t), \Sigma_\theta(x_t, t))
+$$
+
+Diffusion models are trained by maximizing the likelihood of the observed data. However, in practice, the training often simplifies to a denoising objective:
+
+$$
+L(\theta) = \mathbb{E}{x_0, \epsilon, t}\left[ \|\epsilon - \epsilon\theta(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon, t)\|^2 \right]
+$$
+
+The Sampling involves starting from pure noise and gradually denoising:
+
+$$
+x_{t-1} = \frac{1}{\sqrt{\alpha_t}}\left(x_t - \frac{\beta_t}{\sqrt{1-\bar{\alpha}t}}\epsilon\theta(x_t, t)\right) + \sqrt{\beta_t}\epsilon,\quad \epsilon\sim\mathcal{N}(0, I)
+$$
+
+# Combining Different Models
+
+## Diffusion Models + VAE
+
+![The Architecture of the Stable Diffusion Models (Image Source: High-Resolution Image Synthesis with Latent Diffusion Models)](images/paste-2.png)
+
+One limitation of the diffusion models, it need to go through many steps on the high-dimensional space. If we can train an model on the lower dimension and recover it back to the high dimension, than we can speed up both training and generating process. As proposed in [@rombachHighResolutionImageSynthesis2022], the Latent Diffusion Model is one of those approach. It leverages latent diffusion techniques, making it computationally efficient and capable of generating diverse, photorealistic, and detailed visuals from textual prompts. Widely adopted for its open-source accessibility, Stable Diffusion enables artists, researchers, and developers to produce remarkable content easily.
+
+## Auto-Regressive + VAE
+
+## Auto-Regressive + Flow Models
+
+## Flow Model + VAE
+
+## Flow Model + GAN
+
+## VAE + GAN
+
+As metioned in the paper [@larsenAutoencodingPixelsUsing2016]
+
+# Conclusion
+
+In the blog, we has explore go through several generative models. We explore why we need generative models. For different purposes, we can different choice of the models. On the other hand, we can combine different models to get better performance. There are still more room for the generative models.\

@@ -1,0 +1,27 @@
+---
+title: "Reinforcement Learning without confusion"
+date: today
+date-modified: last-modified
+date-format: iso
+description: "In this blog, I am going to review the most important concept in the AI world "
+image: "images/RL.png"
+language: 
+  title-block-modified: "Last modified"
+
+categories: 
+    - Overview
+    - Reinforcement Learning
+---
+
+This is some code
+
+```{python}
+print("Hello World")
+```
+
+``` {.python .Python}
+print("Hello World")
+class Net(nn.Module):
+    def __init__(self, config):
+        this s asd asd asd asd asd asd asd this s asd asd asd asd asd asd asd 
+```
