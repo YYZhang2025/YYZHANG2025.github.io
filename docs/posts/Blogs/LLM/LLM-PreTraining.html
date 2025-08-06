@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-07-23">
+<meta name="dcterms.date" content="2025-08-07">
 <meta name="description" content="In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance">
 
 <title>LLM Part1: Pre Training</title>
@@ -44,9 +44,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-72d384ce8fe59fb0fa6f7c5f3001a64f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-4f4fe631b9803fc529f1fe4b9406ea57.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-69a12f6e3c9a4d674a5587900452f571.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-4f4fe631b9803fc529f1fe4b9406ea57.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -330,78 +330,78 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#building-blocks-of-llm" id="toc-building-blocks-of-llm" class="nav-link active" data-scroll-target="#building-blocks-of-llm">Building Blocks of LLM</a></li>
-  <li><a href="#tokenization" id="toc-tokenization" class="nav-link" data-scroll-target="#tokenization">Tokenization</a>
+  <li><a href="#building-blocks-of-llm" id="toc-building-blocks-of-llm" class="nav-link active" data-scroll-target="#building-blocks-of-llm"><span class="header-section-number">1</span> Building Blocks of LLM</a></li>
+  <li><a href="#tokenization" id="toc-tokenization" class="nav-link" data-scroll-target="#tokenization"><span class="header-section-number">2</span> Tokenization</a>
   <ul class="collapse">
-  <li><a href="#word-level" id="toc-word-level" class="nav-link" data-scroll-target="#word-level">Word Level</a></li>
-  <li><a href="#byte-pair-encoding" id="toc-byte-pair-encoding" class="nav-link" data-scroll-target="#byte-pair-encoding">Byte-Pair-Encoding</a></li>
-  <li><a href="#bit-encoding" id="toc-bit-encoding" class="nav-link" data-scroll-target="#bit-encoding">Bit Encoding</a></li>
-  <li><a href="#embedding" id="toc-embedding" class="nav-link" data-scroll-target="#embedding">Embedding</a></li>
+  <li><a href="#word-level" id="toc-word-level" class="nav-link" data-scroll-target="#word-level"><span class="header-section-number">2.1</span> Word Level</a></li>
+  <li><a href="#byte-pair-encoding" id="toc-byte-pair-encoding" class="nav-link" data-scroll-target="#byte-pair-encoding"><span class="header-section-number">2.2</span> Byte-Pair-Encoding</a></li>
+  <li><a href="#bit-encoding" id="toc-bit-encoding" class="nav-link" data-scroll-target="#bit-encoding"><span class="header-section-number">2.3</span> Bit Encoding</a></li>
+  <li><a href="#embedding" id="toc-embedding" class="nav-link" data-scroll-target="#embedding"><span class="header-section-number">2.4</span> Embedding</a></li>
   </ul></li>
-  <li><a href="#nerual-network-architecture" id="toc-nerual-network-architecture" class="nav-link" data-scroll-target="#nerual-network-architecture">Nerual Network Architecture</a>
+  <li><a href="#nerual-network-architecture" id="toc-nerual-network-architecture" class="nav-link" data-scroll-target="#nerual-network-architecture"><span class="header-section-number">3</span> Nerual Network Architecture</a>
   <ul class="collapse">
-  <li><a href="#position-encoding" id="toc-position-encoding" class="nav-link" data-scroll-target="#position-encoding">Position Encoding</a></li>
-  <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization">Normalization</a></li>
-  <li><a href="#layer-normalization" id="toc-layer-normalization" class="nav-link" data-scroll-target="#layer-normalization">Layer Normalization</a></li>
-  <li><a href="#rms-normalization" id="toc-rms-normalization" class="nav-link" data-scroll-target="#rms-normalization">RMS Normalization</a>
+  <li><a href="#position-encoding" id="toc-position-encoding" class="nav-link" data-scroll-target="#position-encoding"><span class="header-section-number">3.1</span> Position Encoding</a></li>
+  <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization"><span class="header-section-number">3.2</span> Normalization</a></li>
+  <li><a href="#layer-normalization" id="toc-layer-normalization" class="nav-link" data-scroll-target="#layer-normalization"><span class="header-section-number">3.3</span> Layer Normalization</a></li>
+  <li><a href="#rms-normalization" id="toc-rms-normalization" class="nav-link" data-scroll-target="#rms-normalization"><span class="header-section-number">3.4</span> RMS Normalization</a>
   <ul class="collapse">
-  <li><a href="#post-norm-vs.-pre-norm" id="toc-post-norm-vs.-pre-norm" class="nav-link" data-scroll-target="#post-norm-vs.-pre-norm">Post-Norm vs.&nbsp;Pre-Norm</a></li>
+  <li><a href="#post-norm-vs.-pre-norm" id="toc-post-norm-vs.-pre-norm" class="nav-link" data-scroll-target="#post-norm-vs.-pre-norm"><span class="header-section-number">3.4.1</span> Post-Norm vs.&nbsp;Pre-Norm</a></li>
   </ul></li>
-  <li><a href="#without-normalization" id="toc-without-normalization" class="nav-link" data-scroll-target="#without-normalization">Without Normalization</a></li>
-  <li><a href="#attention-mechnism" id="toc-attention-mechnism" class="nav-link" data-scroll-target="#attention-mechnism">Attention Mechnism</a></li>
-  <li><a href="#feed-forward-network" id="toc-feed-forward-network" class="nav-link" data-scroll-target="#feed-forward-network">Feed Forward Network</a>
+  <li><a href="#without-normalization" id="toc-without-normalization" class="nav-link" data-scroll-target="#without-normalization"><span class="header-section-number">3.5</span> Without Normalization</a></li>
+  <li><a href="#attention-mechnism" id="toc-attention-mechnism" class="nav-link" data-scroll-target="#attention-mechnism"><span class="header-section-number">3.6</span> Attention Mechnism</a></li>
+  <li><a href="#feed-forward-network" id="toc-feed-forward-network" class="nav-link" data-scroll-target="#feed-forward-network"><span class="header-section-number">3.7</span> Feed Forward Network</a>
   <ul class="collapse">
-  <li><a href="#mixture-of-expert" id="toc-mixture-of-expert" class="nav-link" data-scroll-target="#mixture-of-expert">Mixture of Expert</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#loss-function" id="toc-loss-function" class="nav-link" data-scroll-target="#loss-function">Loss Function</a>
-  <ul class="collapse">
-  <li><a href="#cross-entropy-loss" id="toc-cross-entropy-loss" class="nav-link" data-scroll-target="#cross-entropy-loss">Cross Entropy Loss</a></li>
-  </ul></li>
-  <li><a href="#training" id="toc-training" class="nav-link" data-scroll-target="#training">Training</a>
-  <ul class="collapse">
-  <li><a href="#model-initilization" id="toc-model-initilization" class="nav-link" data-scroll-target="#model-initilization">Model Initilization</a></li>
-  <li><a href="#optimizer" id="toc-optimizer" class="nav-link" data-scroll-target="#optimizer">Optimizer</a></li>
-  <li><a href="#about-gradients" id="toc-about-gradients" class="nav-link" data-scroll-target="#about-gradients">About Gradients</a>
-  <ul class="collapse">
-  <li><a href="#gradient-accumulations" id="toc-gradient-accumulations" class="nav-link" data-scroll-target="#gradient-accumulations">Gradient Accumulations</a></li>
-  <li><a href="#gradiant-clipping" id="toc-gradiant-clipping" class="nav-link" data-scroll-target="#gradiant-clipping">Gradiant Clipping</a></li>
-  </ul></li>
-  <li><a href="#mixed-precision" id="toc-mixed-precision" class="nav-link" data-scroll-target="#mixed-precision">Mixed Precision</a></li>
-  <li><a href="#parallellism" id="toc-parallellism" class="nav-link" data-scroll-target="#parallellism">Parallellism</a></li>
-  </ul></li>
-  <li><a href="#tuning" id="toc-tuning" class="nav-link" data-scroll-target="#tuning">Tuning</a>
-  <ul class="collapse">
-  <li><a href="#supervised-fine-tuning" id="toc-supervised-fine-tuning" class="nav-link" data-scroll-target="#supervised-fine-tuning">Supervised-Fine-Tuning</a></li>
-  <li><a href="#reinforcement-learning-from-human-feedback" id="toc-reinforcement-learning-from-human-feedback" class="nav-link" data-scroll-target="#reinforcement-learning-from-human-feedback">Reinforcement Learning from Human Feedback</a>
-  <ul class="collapse">
-  <li><a href="#ppo" id="toc-ppo" class="nav-link" data-scroll-target="#ppo">PPO</a></li>
-  <li><a href="#dpo" id="toc-dpo" class="nav-link" data-scroll-target="#dpo">DPO</a></li>
-  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo">GRPO</a></li>
+  <li><a href="#mixture-of-expert" id="toc-mixture-of-expert" class="nav-link" data-scroll-target="#mixture-of-expert"><span class="header-section-number">3.7.1</span> Mixture of Expert</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#inferrence" id="toc-inferrence" class="nav-link" data-scroll-target="#inferrence">Inferrence</a>
+  <li><a href="#loss-function" id="toc-loss-function" class="nav-link" data-scroll-target="#loss-function"><span class="header-section-number">4</span> Loss Function</a>
   <ul class="collapse">
-  <li><a href="#quantization" id="toc-quantization" class="nav-link" data-scroll-target="#quantization">Quantization</a></li>
-  <li><a href="#knowledge-distillation" id="toc-knowledge-distillation" class="nav-link" data-scroll-target="#knowledge-distillation">Knowledge Distillation</a></li>
+  <li><a href="#cross-entropy-loss" id="toc-cross-entropy-loss" class="nav-link" data-scroll-target="#cross-entropy-loss"><span class="header-section-number">4.1</span> Cross Entropy Loss</a></li>
   </ul></li>
-  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
-  <li><a href="#fine-tuning-llm" id="toc-fine-tuning-llm" class="nav-link" data-scroll-target="#fine-tuning-llm">Fine-Tuning LLM</a>
+  <li><a href="#training" id="toc-training" class="nav-link" data-scroll-target="#training"><span class="header-section-number">5</span> Training</a>
   <ul class="collapse">
-  <li><a href="#prompt-enginnering" id="toc-prompt-enginnering" class="nav-link" data-scroll-target="#prompt-enginnering">Prompt Enginnering</a></li>
-  <li><a href="#prefix-tuning" id="toc-prefix-tuning" class="nav-link" data-scroll-target="#prefix-tuning">Prefix-Tuning</a></li>
-  <li><a href="#adapter" id="toc-adapter" class="nav-link" data-scroll-target="#adapter">Adapter</a>
+  <li><a href="#model-initilization" id="toc-model-initilization" class="nav-link" data-scroll-target="#model-initilization"><span class="header-section-number">5.1</span> Model Initilization</a></li>
+  <li><a href="#optimizer" id="toc-optimizer" class="nav-link" data-scroll-target="#optimizer"><span class="header-section-number">5.2</span> Optimizer</a></li>
+  <li><a href="#about-gradients" id="toc-about-gradients" class="nav-link" data-scroll-target="#about-gradients"><span class="header-section-number">5.3</span> About Gradients</a>
   <ul class="collapse">
-  <li><a href="#lora" id="toc-lora" class="nav-link" data-scroll-target="#lora">LoRA</a></li>
-  <li><a href="#q-lora" id="toc-q-lora" class="nav-link" data-scroll-target="#q-lora">Q-LoRA</a></li>
+  <li><a href="#gradient-accumulations" id="toc-gradient-accumulations" class="nav-link" data-scroll-target="#gradient-accumulations"><span class="header-section-number">5.3.1</span> Gradient Accumulations</a></li>
+  <li><a href="#gradiant-clipping" id="toc-gradiant-clipping" class="nav-link" data-scroll-target="#gradiant-clipping"><span class="header-section-number">5.3.2</span> Gradiant Clipping</a></li>
+  </ul></li>
+  <li><a href="#mixed-precision" id="toc-mixed-precision" class="nav-link" data-scroll-target="#mixed-precision"><span class="header-section-number">5.4</span> Mixed Precision</a></li>
+  <li><a href="#parallellism" id="toc-parallellism" class="nav-link" data-scroll-target="#parallellism"><span class="header-section-number">5.5</span> Parallellism</a></li>
+  </ul></li>
+  <li><a href="#tuning" id="toc-tuning" class="nav-link" data-scroll-target="#tuning"><span class="header-section-number">6</span> Tuning</a>
+  <ul class="collapse">
+  <li><a href="#supervised-fine-tuning" id="toc-supervised-fine-tuning" class="nav-link" data-scroll-target="#supervised-fine-tuning"><span class="header-section-number">6.1</span> Supervised-Fine-Tuning</a></li>
+  <li><a href="#reinforcement-learning-from-human-feedback" id="toc-reinforcement-learning-from-human-feedback" class="nav-link" data-scroll-target="#reinforcement-learning-from-human-feedback"><span class="header-section-number">6.2</span> Reinforcement Learning from Human Feedback</a>
+  <ul class="collapse">
+  <li><a href="#ppo" id="toc-ppo" class="nav-link" data-scroll-target="#ppo"><span class="header-section-number">6.2.1</span> PPO</a></li>
+  <li><a href="#dpo" id="toc-dpo" class="nav-link" data-scroll-target="#dpo"><span class="header-section-number">6.2.2</span> DPO</a></li>
+  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">6.2.3</span> GRPO</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#multi-modality-of-llm" id="toc-multi-modality-of-llm" class="nav-link" data-scroll-target="#multi-modality-of-llm">Multi Modality of LLM</a></li>
-  <li><a href="#applications-of-llm" id="toc-applications-of-llm" class="nav-link" data-scroll-target="#applications-of-llm">Applications of LLM</a>
+  <li><a href="#inferrence" id="toc-inferrence" class="nav-link" data-scroll-target="#inferrence"><span class="header-section-number">7</span> Inferrence</a>
   <ul class="collapse">
-  <li><a href="#chatbot" id="toc-chatbot" class="nav-link" data-scroll-target="#chatbot">ChatBot</a></li>
-  <li><a href="#ai-agent" id="toc-ai-agent" class="nav-link" data-scroll-target="#ai-agent">AI Agent</a></li>
-  <li><a href="#llm-as-optimizer" id="toc-llm-as-optimizer" class="nav-link" data-scroll-target="#llm-as-optimizer">LLM as Optimizer</a></li>
+  <li><a href="#quantization" id="toc-quantization" class="nav-link" data-scroll-target="#quantization"><span class="header-section-number">7.1</span> Quantization</a></li>
+  <li><a href="#knowledge-distillation" id="toc-knowledge-distillation" class="nav-link" data-scroll-target="#knowledge-distillation"><span class="header-section-number">7.2</span> Knowledge Distillation</a></li>
+  </ul></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation"><span class="header-section-number">8</span> Evaluation</a></li>
+  <li><a href="#fine-tuning-llm" id="toc-fine-tuning-llm" class="nav-link" data-scroll-target="#fine-tuning-llm"><span class="header-section-number">9</span> Fine-Tuning LLM</a>
+  <ul class="collapse">
+  <li><a href="#prompt-enginnering" id="toc-prompt-enginnering" class="nav-link" data-scroll-target="#prompt-enginnering"><span class="header-section-number">9.1</span> Prompt Enginnering</a></li>
+  <li><a href="#prefix-tuning" id="toc-prefix-tuning" class="nav-link" data-scroll-target="#prefix-tuning"><span class="header-section-number">9.2</span> Prefix-Tuning</a></li>
+  <li><a href="#adapter" id="toc-adapter" class="nav-link" data-scroll-target="#adapter"><span class="header-section-number">9.3</span> Adapter</a>
+  <ul class="collapse">
+  <li><a href="#lora" id="toc-lora" class="nav-link" data-scroll-target="#lora"><span class="header-section-number">9.3.1</span> LoRA</a></li>
+  <li><a href="#q-lora" id="toc-q-lora" class="nav-link" data-scroll-target="#q-lora"><span class="header-section-number">9.3.2</span> Q-LoRA</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#multi-modality-of-llm" id="toc-multi-modality-of-llm" class="nav-link" data-scroll-target="#multi-modality-of-llm"><span class="header-section-number">10</span> Multi Modality of LLM</a></li>
+  <li><a href="#applications-of-llm" id="toc-applications-of-llm" class="nav-link" data-scroll-target="#applications-of-llm"><span class="header-section-number">11</span> Applications of LLM</a>
+  <ul class="collapse">
+  <li><a href="#chatbot" id="toc-chatbot" class="nav-link" data-scroll-target="#chatbot"><span class="header-section-number">11.1</span> ChatBot</a></li>
+  <li><a href="#ai-agent" id="toc-ai-agent" class="nav-link" data-scroll-target="#ai-agent"><span class="header-section-number">11.2</span> AI Agent</a></li>
+  <li><a href="#llm-as-optimizer" id="toc-llm-as-optimizer" class="nav-link" data-scroll-target="#llm-as-optimizer"><span class="header-section-number">11.3</span> LLM as Optimizer</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -436,14 +436,14 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2025-07-23</p>
+      <p class="date">2025-08-07</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Last modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">2025-04-05</p>
+      <p class="date-modified">2025-08-07</p>
     </div>
   </div>
     
@@ -455,8 +455,8 @@ window.Quarto = {
 
 
 <p>This is the first part of the LLM series, Pre-training, the Pre-training the most time consuming part of the LLM. In the nutshell, it just the <strong>next-word-prediction task</strong>. That’s it. Not anything fancy. However, what make the LLM hard to train and only achieve in recent years because it is LARGE. People need to develop and invent some efficient training algorithm to speed up the training process, make it efficient to training and deploying. In the article, I am going to take the path going through the training LLM from scratch, make the LLM easy to understand.</p>
-<section id="building-blocks-of-llm" class="level1">
-<h1>Building Blocks of LLM</h1>
+<section id="building-blocks-of-llm" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Building Blocks of LLM</h1>
 <p>Same as other models, there are different building blocks for the LLM. Let’s break it down bottom up:</p>
 <ol type="1">
 <li>Tokenization: Convert words into digits</li>
@@ -469,42 +469,42 @@ window.Quarto = {
 <li>Evaluation: We need some metrics to measure how well the LLM is doing, and compare between different LLMs.</li>
 </ol>
 </section>
-<section id="tokenization" class="level1">
-<h1>Tokenization</h1>
-<section id="word-level" class="level2">
-<h2 class="anchored" data-anchor-id="word-level">Word Level</h2>
+<section id="tokenization" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Tokenization</h1>
+<section id="word-level" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="word-level"><span class="header-section-number">2.1</span> Word Level</h2>
 </section>
-<section id="byte-pair-encoding" class="level2">
-<h2 class="anchored" data-anchor-id="byte-pair-encoding">Byte-Pair-Encoding</h2>
+<section id="byte-pair-encoding" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="byte-pair-encoding"><span class="header-section-number">2.2</span> Byte-Pair-Encoding</h2>
 </section>
-<section id="bit-encoding" class="level2">
-<h2 class="anchored" data-anchor-id="bit-encoding">Bit Encoding</h2>
+<section id="bit-encoding" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="bit-encoding"><span class="header-section-number">2.3</span> Bit Encoding</h2>
 </section>
-<section id="embedding" class="level2">
-<h2 class="anchored" data-anchor-id="embedding">Embedding</h2>
+<section id="embedding" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="embedding"><span class="header-section-number">2.4</span> Embedding</h2>
 <p>Embedding is</p>
 </section>
 </section>
-<section id="nerual-network-architecture" class="level1">
-<h1>Nerual Network Architecture</h1>
+<section id="nerual-network-architecture" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Nerual Network Architecture</h1>
 <p>We are going to do the architecture based on Transformer,</p>
-<section id="position-encoding" class="level2">
-<h2 class="anchored" data-anchor-id="position-encoding">Position Encoding</h2>
+<section id="position-encoding" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="position-encoding"><span class="header-section-number">3.1</span> Position Encoding</h2>
 </section>
-<section id="normalization" class="level2">
-<h2 class="anchored" data-anchor-id="normalization">Normalization</h2>
+<section id="normalization" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="normalization"><span class="header-section-number">3.2</span> Normalization</h2>
 </section>
-<section id="layer-normalization" class="level2">
-<h2 class="anchored" data-anchor-id="layer-normalization">Layer Normalization</h2>
+<section id="layer-normalization" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="layer-normalization"><span class="header-section-number">3.3</span> Layer Normalization</h2>
 </section>
-<section id="rms-normalization" class="level2">
-<h2 class="anchored" data-anchor-id="rms-normalization">RMS Normalization</h2>
-<section id="post-norm-vs.-pre-norm" class="level3">
-<h3 class="anchored" data-anchor-id="post-norm-vs.-pre-norm">Post-Norm vs.&nbsp;Pre-Norm</h3>
+<section id="rms-normalization" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="rms-normalization"><span class="header-section-number">3.4</span> RMS Normalization</h2>
+<section id="post-norm-vs.-pre-norm" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="post-norm-vs.-pre-norm"><span class="header-section-number">3.4.1</span> Post-Norm vs.&nbsp;Pre-Norm</h3>
 </section>
 </section>
-<section id="without-normalization" class="level2">
-<h2 class="anchored" data-anchor-id="without-normalization">Without Normalization</h2>
+<section id="without-normalization" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="without-normalization"><span class="header-section-number">3.5</span> Without Normalization</h2>
 <p>Recently, <span class="citation" data-cites="zhuTransformersNormalization2025">(<a href="#ref-zhuTransformersNormalization2025" role="doc-biblioref"><strong>zhuTransformersNormalization2025?</strong></a>)</span> proposed that we can remove the normalization without harm the performance of the neural network. It replace the normalization layer with a scaled tanh function, named <strong>Dynamic Tanh</strong>, defined as:</p>
 <p><span class="math display">\[
 \text{DyT}(x) = \gamma * \tanh(\alpha x) + \beta
@@ -521,109 +521,109 @@ Figure&nbsp;1: Block with Dynamic Tanh(DyT) (Image Source: Transformers without 
 </div>
 <p>It adjust the input activation range via a learnable scaling factor <span class="math inline">\(\alpha\)</span> and then squashed the extreme values through an S-shaped tanh function.</p>
 </section>
-<section id="attention-mechnism" class="level2">
-<h2 class="anchored" data-anchor-id="attention-mechnism">Attention Mechnism</h2>
+<section id="attention-mechnism" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="attention-mechnism"><span class="header-section-number">3.6</span> Attention Mechnism</h2>
 </section>
-<section id="feed-forward-network" class="level2">
-<h2 class="anchored" data-anchor-id="feed-forward-network">Feed Forward Network</h2>
-<section id="mixture-of-expert" class="level3">
-<h3 class="anchored" data-anchor-id="mixture-of-expert">Mixture of Expert</h3>
+<section id="feed-forward-network" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="feed-forward-network"><span class="header-section-number">3.7</span> Feed Forward Network</h2>
+<section id="mixture-of-expert" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="mixture-of-expert"><span class="header-section-number">3.7.1</span> Mixture of Expert</h3>
 </section>
 </section>
 </section>
-<section id="loss-function" class="level1">
-<h1>Loss Function</h1>
+<section id="loss-function" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Loss Function</h1>
 <p>Similar as the other training process, we need a loss function to training and tuning our parameters.</p>
-<section id="cross-entropy-loss" class="level2">
-<h2 class="anchored" data-anchor-id="cross-entropy-loss">Cross Entropy Loss</h2>
+<section id="cross-entropy-loss" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="cross-entropy-loss"><span class="header-section-number">4.1</span> Cross Entropy Loss</h2>
 </section>
 </section>
-<section id="training" class="level1">
-<h1>Training</h1>
-<section id="model-initilization" class="level2">
-<h2 class="anchored" data-anchor-id="model-initilization">Model Initilization</h2>
+<section id="training" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Training</h1>
+<section id="model-initilization" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="model-initilization"><span class="header-section-number">5.1</span> Model Initilization</h2>
 </section>
-<section id="optimizer" class="level2">
-<h2 class="anchored" data-anchor-id="optimizer">Optimizer</h2>
+<section id="optimizer" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="optimizer"><span class="header-section-number">5.2</span> Optimizer</h2>
 </section>
-<section id="about-gradients" class="level2">
-<h2 class="anchored" data-anchor-id="about-gradients">About Gradients</h2>
-<section id="gradient-accumulations" class="level3">
-<h3 class="anchored" data-anchor-id="gradient-accumulations">Gradient Accumulations</h3>
+<section id="about-gradients" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="about-gradients"><span class="header-section-number">5.3</span> About Gradients</h2>
+<section id="gradient-accumulations" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="gradient-accumulations"><span class="header-section-number">5.3.1</span> Gradient Accumulations</h3>
 </section>
-<section id="gradiant-clipping" class="level3">
-<h3 class="anchored" data-anchor-id="gradiant-clipping">Gradiant Clipping</h3>
-</section>
-</section>
-<section id="mixed-precision" class="level2">
-<h2 class="anchored" data-anchor-id="mixed-precision">Mixed Precision</h2>
-</section>
-<section id="parallellism" class="level2">
-<h2 class="anchored" data-anchor-id="parallellism">Parallellism</h2>
+<section id="gradiant-clipping" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="gradiant-clipping"><span class="header-section-number">5.3.2</span> Gradiant Clipping</h3>
 </section>
 </section>
-<section id="tuning" class="level1">
-<h1>Tuning</h1>
-<section id="supervised-fine-tuning" class="level2">
-<h2 class="anchored" data-anchor-id="supervised-fine-tuning">Supervised-Fine-Tuning</h2>
+<section id="mixed-precision" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="mixed-precision"><span class="header-section-number">5.4</span> Mixed Precision</h2>
 </section>
-<section id="reinforcement-learning-from-human-feedback" class="level2">
-<h2 class="anchored" data-anchor-id="reinforcement-learning-from-human-feedback">Reinforcement Learning from Human Feedback</h2>
-<section id="ppo" class="level3">
-<h3 class="anchored" data-anchor-id="ppo">PPO</h3>
-</section>
-<section id="dpo" class="level3">
-<h3 class="anchored" data-anchor-id="dpo">DPO</h3>
-</section>
-<section id="grpo" class="level3">
-<h3 class="anchored" data-anchor-id="grpo">GRPO</h3>
+<section id="parallellism" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="parallellism"><span class="header-section-number">5.5</span> Parallellism</h2>
 </section>
 </section>
+<section id="tuning" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Tuning</h1>
+<section id="supervised-fine-tuning" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="supervised-fine-tuning"><span class="header-section-number">6.1</span> Supervised-Fine-Tuning</h2>
 </section>
-<section id="inferrence" class="level1">
-<h1>Inferrence</h1>
-<section id="quantization" class="level2">
-<h2 class="anchored" data-anchor-id="quantization">Quantization</h2>
+<section id="reinforcement-learning-from-human-feedback" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="reinforcement-learning-from-human-feedback"><span class="header-section-number">6.2</span> Reinforcement Learning from Human Feedback</h2>
+<section id="ppo" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="ppo"><span class="header-section-number">6.2.1</span> PPO</h3>
 </section>
-<section id="knowledge-distillation" class="level2">
-<h2 class="anchored" data-anchor-id="knowledge-distillation">Knowledge Distillation</h2>
+<section id="dpo" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="dpo"><span class="header-section-number">6.2.2</span> DPO</h3>
 </section>
-</section>
-<section id="evaluation" class="level1">
-<h1>Evaluation</h1>
-</section>
-<section id="fine-tuning-llm" class="level1">
-<h1>Fine-Tuning LLM</h1>
-<section id="prompt-enginnering" class="level2">
-<h2 class="anchored" data-anchor-id="prompt-enginnering">Prompt Enginnering</h2>
-</section>
-<section id="prefix-tuning" class="level2">
-<h2 class="anchored" data-anchor-id="prefix-tuning">Prefix-Tuning</h2>
-</section>
-<section id="adapter" class="level2">
-<h2 class="anchored" data-anchor-id="adapter">Adapter</h2>
-<section id="lora" class="level3">
-<h3 class="anchored" data-anchor-id="lora">LoRA</h3>
-</section>
-<section id="q-lora" class="level3">
-<h3 class="anchored" data-anchor-id="q-lora">Q-LoRA</h3>
+<section id="grpo" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="grpo"><span class="header-section-number">6.2.3</span> GRPO</h3>
 </section>
 </section>
 </section>
-<section id="multi-modality-of-llm" class="level1">
-<h1>Multi Modality of LLM</h1>
+<section id="inferrence" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Inferrence</h1>
+<section id="quantization" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="quantization"><span class="header-section-number">7.1</span> Quantization</h2>
 </section>
-<section id="applications-of-llm" class="level1">
-<h1>Applications of LLM</h1>
-<section id="chatbot" class="level2">
-<h2 class="anchored" data-anchor-id="chatbot">ChatBot</h2>
+<section id="knowledge-distillation" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="knowledge-distillation"><span class="header-section-number">7.2</span> Knowledge Distillation</h2>
+</section>
+</section>
+<section id="evaluation" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Evaluation</h1>
+</section>
+<section id="fine-tuning-llm" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Fine-Tuning LLM</h1>
+<section id="prompt-enginnering" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="prompt-enginnering"><span class="header-section-number">9.1</span> Prompt Enginnering</h2>
+</section>
+<section id="prefix-tuning" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="prefix-tuning"><span class="header-section-number">9.2</span> Prefix-Tuning</h2>
+</section>
+<section id="adapter" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="adapter"><span class="header-section-number">9.3</span> Adapter</h2>
+<section id="lora" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="lora"><span class="header-section-number">9.3.1</span> LoRA</h3>
+</section>
+<section id="q-lora" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="q-lora"><span class="header-section-number">9.3.2</span> Q-LoRA</h3>
+</section>
+</section>
+</section>
+<section id="multi-modality-of-llm" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Multi Modality of LLM</h1>
+</section>
+<section id="applications-of-llm" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Applications of LLM</h1>
+<section id="chatbot" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="chatbot"><span class="header-section-number">11.1</span> ChatBot</h2>
 <p>Most know ChatGPT,</p>
 </section>
-<section id="ai-agent" class="level2">
-<h2 class="anchored" data-anchor-id="ai-agent">AI Agent</h2>
+<section id="ai-agent" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="ai-agent"><span class="header-section-number">11.2</span> AI Agent</h2>
 </section>
-<section id="llm-as-optimizer" class="level2">
-<h2 class="anchored" data-anchor-id="llm-as-optimizer">LLM as Optimizer</h2>
+<section id="llm-as-optimizer" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="llm-as-optimizer"><span class="header-section-number">11.3</span> LLM as Optimizer</h2>
 
 
 </section>

@@ -631,56 +631,58 @@ Figure&nbsp;1: The illustration of the Vision Transformer.
 <section id="modality-projection" class="level3" data-number="1.6">
 <h3 data-number="1.6" class="anchored" data-anchor-id="modality-projection"><span class="header-section-number">1.6</span> Modality Projection</h3>
 <p>Vision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle<span class="citation" data-cites="RealTimeSingleImage2016shi">(<a href="#ref-RealTimeSingleImage2016shi" role="doc-biblioref">Shi et al. 2016</a>)</span>, which is used to reduce the number of tokens.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource {Python} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>from vlm.config import VLMConfig</span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a>import torch </span>
-<span id="cb6-4"><a href="#cb6-4"></a>import torch.nn as nn </span>
-<span id="cb6-5"><a href="#cb6-5"></a></span>
-<span id="cb6-6"><a href="#cb6-6"></a>import einops </span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a></span>
-<span id="cb6-9"><a href="#cb6-9"></a>class ModalityProjector(nn.Module):</span>
-<span id="cb6-10"><a href="#cb6-10"></a>    def __init__(self, config: VLMConfig):</span>
-<span id="cb6-11"><a href="#cb6-11"></a>        super().__init__()</span>
-<span id="cb6-12"><a href="#cb6-12"></a>        </span>
-<span id="cb6-13"><a href="#cb6-13"></a>        self.config = config </span>
-<span id="cb6-14"><a href="#cb6-14"></a>        </span>
-<span id="cb6-15"><a href="#cb6-15"></a>        self.input_dim = config.vit_hidden_dim * (config.mp_pixel_shuffle_factor**2)    </span>
-<span id="cb6-16"><a href="#cb6-16"></a>        self.output_dim = config.lm_hidden_dim</span>
-<span id="cb6-17"><a href="#cb6-17"></a>        self.scale_factor = config.mp_pixel_shuffle_factor</span>
-<span id="cb6-18"><a href="#cb6-18"></a>        </span>
-<span id="cb6-19"><a href="#cb6-19"></a>        </span>
-<span id="cb6-20"><a href="#cb6-20"></a>        self.proj = nn.Linear(self.input_dim, self.output_dim, bias=False)</span>
-<span id="cb6-21"><a href="#cb6-21"></a>        self._init_weight()</span>
-<span id="cb6-22"><a href="#cb6-22"></a></span>
-<span id="cb6-23"><a href="#cb6-23"></a>    def _init_weight(self):</span>
-<span id="cb6-24"><a href="#cb6-24"></a>        nn.init.normal_(self.proj.weight, mean=0.0, std=0.02)</span>
-<span id="cb6-25"><a href="#cb6-25"></a>    </span>
-<span id="cb6-26"><a href="#cb6-26"></a>    def pixel_shuffle(self, x: torch.Tensor) -&gt; torch.Tensor:</span>
-<span id="cb6-27"><a href="#cb6-27"></a>        B, S, D = x.size()</span>
-<span id="cb6-28"><a href="#cb6-28"></a>        assert S % 2 == 0, "Input sequence length must be even for pixel shuffle."</span>
-<span id="cb6-29"><a href="#cb6-29"></a>        assert S ** 0.5 % self.scale_factor == 0, "Input sequence length must be a perfect square for pixel shuffle."</span>
-<span id="cb6-30"><a href="#cb6-30"></a>        </span>
-<span id="cb6-31"><a href="#cb6-31"></a>        </span>
-<span id="cb6-32"><a href="#cb6-32"></a>        H, W = S, S </span>
-<span id="cb6-33"><a href="#cb6-33"></a>        x = x.view(B, H, W, D) # Convert the flattened sequence into a 2D grid</span>
-<span id="cb6-34"><a href="#cb6-34"></a>        h_out = H // self.scale_factor</span>
-<span id="cb6-35"><a href="#cb6-35"></a>        w_out = W // self.scale_factor</span>
-<span id="cb6-36"><a href="#cb6-36"></a>        </span>
-<span id="cb6-37"><a href="#cb6-37"></a>        x = einops.rearrange(x, </span>
-<span id="cb6-38"><a href="#cb6-38"></a>                             "b (h sf1) (w sf2) d -&gt; b (h w) (d sf1 sf2)",</span>
-<span id="cb6-39"><a href="#cb6-39"></a>                             sf1=self.scale_factor, </span>
-<span id="cb6-40"><a href="#cb6-40"></a>                             sf2=self.scale_factor</span>
-<span id="cb6-41"><a href="#cb6-41"></a>                             )</span>
-<span id="cb6-42"><a href="#cb6-42"></a>        </span>
-<span id="cb6-43"><a href="#cb6-43"></a>        return x</span>
-<span id="cb6-44"><a href="#cb6-44"></a></span>
-<span id="cb6-45"><a href="#cb6-45"></a>    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:</span>
-<span id="cb6-46"><a href="#cb6-46"></a>        x = self.pixel_shuffle(x)</span>
-<span id="cb6-47"><a href="#cb6-47"></a>        assert x.size(-1) == self.input_dim, f"Input dimension mismatch: expected {self.input_dim}, got {x.size(-1)}"</span>
-<span id="cb6-48"><a href="#cb6-48"></a>        </span>
-<span id="cb6-49"><a href="#cb6-49"></a>        x = self.proj(x)</span>
-<span id="cb6-50"><a href="#cb6-50"></a>        return x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-pixel-shuffle" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pixel-shuffle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/pixel-shuffle.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pixel-shuffle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Illustration of the pixel shuffle operation and un-shuffling process. The pixel shuffle operation rearranges the elements of a tensor to increase the spatial resolution, while the un-shuffle process reverses this operation.
+</figcaption>
+</figure>
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">class</span> ModalityProjector(nn.Module):</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, config: VLMConfig):</span>
+<span id="cb6-3"><a href="#cb6-3"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb6-4"><a href="#cb6-4"></a>        </span>
+<span id="cb6-5"><a href="#cb6-5"></a>        <span class="va">self</span>.config <span class="op">=</span> config </span>
+<span id="cb6-6"><a href="#cb6-6"></a>        </span>
+<span id="cb6-7"><a href="#cb6-7"></a>        <span class="va">self</span>.input_dim <span class="op">=</span> config.vit_hidden_dim <span class="op">*</span> (config.mp_pixel_shuffle_factor<span class="op">**</span><span class="dv">2</span>)    </span>
+<span id="cb6-8"><a href="#cb6-8"></a>        <span class="va">self</span>.output_dim <span class="op">=</span> config.lm_hidden_dim</span>
+<span id="cb6-9"><a href="#cb6-9"></a>        <span class="va">self</span>.scale_factor <span class="op">=</span> config.mp_pixel_shuffle_factor</span>
+<span id="cb6-10"><a href="#cb6-10"></a>        </span>
+<span id="cb6-11"><a href="#cb6-11"></a>        </span>
+<span id="cb6-12"><a href="#cb6-12"></a>        <span class="va">self</span>.proj <span class="op">=</span> nn.Linear(<span class="va">self</span>.input_dim, <span class="va">self</span>.output_dim, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-13"><a href="#cb6-13"></a>        <span class="va">self</span>._init_weight()</span>
+<span id="cb6-14"><a href="#cb6-14"></a></span>
+<span id="cb6-15"><a href="#cb6-15"></a>    <span class="kw">def</span> _init_weight(<span class="va">self</span>):</span>
+<span id="cb6-16"><a href="#cb6-16"></a>        nn.init.normal_(<span class="va">self</span>.proj.weight, mean<span class="op">=</span><span class="fl">0.0</span>, std<span class="op">=</span><span class="fl">0.02</span>)</span>
+<span id="cb6-17"><a href="#cb6-17"></a>    </span>
+<span id="cb6-18"><a href="#cb6-18"></a>    <span class="kw">def</span> pixel_shuffle(<span class="va">self</span>, x: torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb6-19"><a href="#cb6-19"></a>        B, S, D <span class="op">=</span> x.size()</span>
+<span id="cb6-20"><a href="#cb6-20"></a>        <span class="cf">assert</span> S <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>, <span class="st">"Input sequence length must be even for pixel shuffle."</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a>        <span class="cf">assert</span> S <span class="op">**</span> <span class="fl">0.5</span> <span class="op">%</span> <span class="va">self</span>.scale_factor <span class="op">==</span> <span class="dv">0</span>, <span class="st">"Input sequence length must be a perfect square for pixel shuffle."</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a>        </span>
+<span id="cb6-23"><a href="#cb6-23"></a>        </span>
+<span id="cb6-24"><a href="#cb6-24"></a>        H, W <span class="op">=</span> S, S </span>
+<span id="cb6-25"><a href="#cb6-25"></a>        x <span class="op">=</span> x.view(B, H, W, D) <span class="co"># Convert the flattened sequence into a 2D grid</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a>        h_out <span class="op">=</span> H <span class="op">//</span> <span class="va">self</span>.scale_factor</span>
+<span id="cb6-27"><a href="#cb6-27"></a>        w_out <span class="op">=</span> W <span class="op">//</span> <span class="va">self</span>.scale_factor</span>
+<span id="cb6-28"><a href="#cb6-28"></a>        </span>
+<span id="cb6-29"><a href="#cb6-29"></a>        x <span class="op">=</span> einops.rearrange(x, </span>
+<span id="cb6-30"><a href="#cb6-30"></a>                             <span class="st">"b (h sf1) (w sf2) d -&gt; b (h w) (d sf1 sf2)"</span>,</span>
+<span id="cb6-31"><a href="#cb6-31"></a>                             sf1<span class="op">=</span><span class="va">self</span>.scale_factor, </span>
+<span id="cb6-32"><a href="#cb6-32"></a>                             sf2<span class="op">=</span><span class="va">self</span>.scale_factor</span>
+<span id="cb6-33"><a href="#cb6-33"></a>                             )</span>
+<span id="cb6-34"><a href="#cb6-34"></a>        </span>
+<span id="cb6-35"><a href="#cb6-35"></a>        <span class="cf">return</span> x</span>
+<span id="cb6-36"><a href="#cb6-36"></a></span>
+<span id="cb6-37"><a href="#cb6-37"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x: torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb6-38"><a href="#cb6-38"></a>        x <span class="op">=</span> <span class="va">self</span>.pixel_shuffle(x)</span>
+<span id="cb6-39"><a href="#cb6-39"></a>        <span class="cf">assert</span> x.size(<span class="op">-</span><span class="dv">1</span>) <span class="op">==</span> <span class="va">self</span>.input_dim, <span class="ss">f"Input dimension mismatch: expected </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>input_dim<span class="sc">}</span><span class="ss">, got </span><span class="sc">{</span>x<span class="sc">.</span>size(<span class="op">-</span><span class="dv">1</span>)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a>        </span>
+<span id="cb6-41"><a href="#cb6-41"></a>        x <span class="op">=</span> <span class="va">self</span>.proj(x)</span>
+<span id="cb6-42"><a href="#cb6-42"></a>        <span class="cf">return</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>After the pixel shuffle, the number of tokens is reduced by a factor of <code>mp_pixel_shuffle_factor**2</code>, which helps to reduce the computational cost while maintaining the semantic information of the visual input. The output of the Modality Projector is then ready to be fed into the Language Model (LM) for further processing.</p>
 </section>
 </section>

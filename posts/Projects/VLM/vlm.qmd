@@ -250,17 +250,17 @@ class ViT(nn.Module):
 So, that all we need for the Vision Encoder. After we get the output of the 
 
 ### Modality Projection 
-Vision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle[@RealTimeSingleImage2016shi], which is used to reduce the number of tokens.
+Vision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle[@RealTimeSingleImage2016shi], which is used to reduce the number of tokens. 
 
-```{Python}
-from vlm.config import VLMConfig
+:::{#fig-pixel-shuffle}
 
-import torch 
-import torch.nn as nn 
-
-import einops 
+![](./assets/pixel-shuffle.png)
 
 
+Illustration of the pixel shuffle operation and un-shuffling process. The pixel shuffle operation rearranges the elements of a tensor to increase the spatial resolution, while the un-shuffle process reverses this operation.
+:::
+
+```{.python}
 class ModalityProjector(nn.Module):
     def __init__(self, config: VLMConfig):
         super().__init__()

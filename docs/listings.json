@@ -8,12 +8,12 @@
   {
     "listing": "/posts/blogs.html",
     "items": [
-      "/posts/Blogs/speed-up-training.html",
-      "/posts/Blogs/LLM/RAG.html",
+      "/posts/Blogs/LLM/LLM-Applications.html",
       "/posts/Blogs/LLM/LLM-Overview.html",
       "/posts/Blogs/LLM/LLM-PreTraining.html",
+      "/posts/Blogs/LLM/RAG.html",
       "/posts/Blogs/LLM/LLM-PostTraining.html",
-      "/posts/Blogs/LLM/LLM-Applications.html"
+      "/posts/Blogs/speed-up-training.html"
     ]
   }
 ]

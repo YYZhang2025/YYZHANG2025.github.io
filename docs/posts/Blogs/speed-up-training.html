@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
-<meta name="dcterms.date" content="2025-07-23">
+<meta name="dcterms.date" content="2025-08-07">
 <meta name="description" content="Training large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.">
 
 <title>Speed Up Training for Neural Networks</title>
@@ -435,14 +435,14 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2025-07-23</p>
+      <p class="date">2025-08-07</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Last modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">2025-07-23</p>
+      <p class="date-modified">2025-08-07</p>
     </div>
   </div>
     
@@ -592,7 +592,7 @@ Why need activation for backward pass?
 \]</span> where <span class="math inline">\(\mathbf{x}\)</span> is the input to the layer, which is the activation of the previous layer. Thus, we need to store the activation for the backward pass.</p>
 </div>
 </div>
-<div id="daea1c31" class="cell">
+<div id="8133f63f" class="cell">
 <details class="code-fold">
 <summary>Calculate Memory Usage of Model</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
