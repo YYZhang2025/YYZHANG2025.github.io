@@ -13,25 +13,23 @@ website:
     pinned: false
     left:
       - text: About Me
-        href: ./posts/about.qmd
+        href: index.qmd
 
     right:
       - text: Blogs
-        href: index.qmd
+        href: ./posts/blogs.qmd
       - text: Projects
         href: ./posts/projects.qmd
       - text: Learning Notes
         href: ./posts/notes.qmd
       - icon: github
-        href: https://github.com/Yyzhang2000
+        href: https://github.com/YYZhang2025
       - icon: linkedin
         href: https://www.linkedin.com/in/zhang-yuyang/
 
   favicon: "./style/icon.avif"
 format:
   html:
-    image-height: 300x
-    image-width: 400px
     theme:
       light: [simplex, ./style/light.scss]
       dark: [darkly, ./style/dark.scss]
@@ -42,14 +40,15 @@ format:
     toc-location: left
     toc-expand: 1
 
-    code-overflow: scroll
     # code-fold: true
-    code-block-bg: true
     code-summary: "Show the code"
-    code-line-numbers: false
     code-block-background: true
-
+    code-copy: true
+    code-overflow: scroll
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
     highlight-style: github
+    code-line-numbers: false
 
     link-external-icon: false
     link-external-newwindow: true
@@ -67,4 +66,6 @@ format:
 
     indent: true
     grid:
-      body-width: 1000px
+      body-width: 1200px
+
+    number-sections: true

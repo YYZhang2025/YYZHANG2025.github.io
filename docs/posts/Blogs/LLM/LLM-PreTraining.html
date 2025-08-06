@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="In this page, I will include all my learning material.">
+<meta name="dcterms.date" content="2025-07-23">
+<meta name="description" content="In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance">
 
-<title>Learning Notes</title>
+<title>LLM Part1: Pre Training</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,28 +25,28 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href=".././style/icon.avif" rel="icon">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-72d384ce8fe59fb0fa6f7c5f3001a64f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../.././style/icon.avif" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-72d384ce8fe59fb0fa6f7c5f3001a64f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -75,11 +76,40 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="../style/styles.css">
-<meta property="og:title" content="Learning Notes">
-<meta property="og:description" content="In this page, I will include all my learning material.">
-<meta property="og:image" content="./assets/notes-about.png">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../style/styles.css">
+<meta property="og:title" content="LLM Part1: Pre Training">
+<meta property="og:description" content="In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance">
+<meta property="og:image" content="./images/post-training.jpg">
 </head>
 
 <body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -257,21 +287,21 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../posts/blogs.html"> 
+    <a class="nav-link" href="../../../posts/blogs.html"> 
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../posts/projects.html"> 
+    <a class="nav-link" href="../../../posts/projects.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../posts/notes.html" aria-current="page"> 
+    <a class="nav-link" href="../../../posts/notes.html"> 
 <span class="menu-text">Learning Notes</span></a>
   </li>  
   <li class="nav-item compact">
@@ -293,32 +323,129 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#building-blocks-of-llm" id="toc-building-blocks-of-llm" class="nav-link active" data-scroll-target="#building-blocks-of-llm">Building Blocks of LLM</a></li>
+  <li><a href="#tokenization" id="toc-tokenization" class="nav-link" data-scroll-target="#tokenization">Tokenization</a>
+  <ul class="collapse">
+  <li><a href="#word-level" id="toc-word-level" class="nav-link" data-scroll-target="#word-level">Word Level</a></li>
+  <li><a href="#byte-pair-encoding" id="toc-byte-pair-encoding" class="nav-link" data-scroll-target="#byte-pair-encoding">Byte-Pair-Encoding</a></li>
+  <li><a href="#bit-encoding" id="toc-bit-encoding" class="nav-link" data-scroll-target="#bit-encoding">Bit Encoding</a></li>
+  <li><a href="#embedding" id="toc-embedding" class="nav-link" data-scroll-target="#embedding">Embedding</a></li>
+  </ul></li>
+  <li><a href="#nerual-network-architecture" id="toc-nerual-network-architecture" class="nav-link" data-scroll-target="#nerual-network-architecture">Nerual Network Architecture</a>
+  <ul class="collapse">
+  <li><a href="#position-encoding" id="toc-position-encoding" class="nav-link" data-scroll-target="#position-encoding">Position Encoding</a></li>
+  <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization">Normalization</a></li>
+  <li><a href="#layer-normalization" id="toc-layer-normalization" class="nav-link" data-scroll-target="#layer-normalization">Layer Normalization</a></li>
+  <li><a href="#rms-normalization" id="toc-rms-normalization" class="nav-link" data-scroll-target="#rms-normalization">RMS Normalization</a>
+  <ul class="collapse">
+  <li><a href="#post-norm-vs.-pre-norm" id="toc-post-norm-vs.-pre-norm" class="nav-link" data-scroll-target="#post-norm-vs.-pre-norm">Post-Norm vs.&nbsp;Pre-Norm</a></li>
+  </ul></li>
+  <li><a href="#without-normalization" id="toc-without-normalization" class="nav-link" data-scroll-target="#without-normalization">Without Normalization</a></li>
+  <li><a href="#attention-mechnism" id="toc-attention-mechnism" class="nav-link" data-scroll-target="#attention-mechnism">Attention Mechnism</a></li>
+  <li><a href="#feed-forward-network" id="toc-feed-forward-network" class="nav-link" data-scroll-target="#feed-forward-network">Feed Forward Network</a>
+  <ul class="collapse">
+  <li><a href="#mixture-of-expert" id="toc-mixture-of-expert" class="nav-link" data-scroll-target="#mixture-of-expert">Mixture of Expert</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#loss-function" id="toc-loss-function" class="nav-link" data-scroll-target="#loss-function">Loss Function</a>
+  <ul class="collapse">
+  <li><a href="#cross-entropy-loss" id="toc-cross-entropy-loss" class="nav-link" data-scroll-target="#cross-entropy-loss">Cross Entropy Loss</a></li>
+  </ul></li>
+  <li><a href="#training" id="toc-training" class="nav-link" data-scroll-target="#training">Training</a>
+  <ul class="collapse">
+  <li><a href="#model-initilization" id="toc-model-initilization" class="nav-link" data-scroll-target="#model-initilization">Model Initilization</a></li>
+  <li><a href="#optimizer" id="toc-optimizer" class="nav-link" data-scroll-target="#optimizer">Optimizer</a></li>
+  <li><a href="#about-gradients" id="toc-about-gradients" class="nav-link" data-scroll-target="#about-gradients">About Gradients</a>
+  <ul class="collapse">
+  <li><a href="#gradient-accumulations" id="toc-gradient-accumulations" class="nav-link" data-scroll-target="#gradient-accumulations">Gradient Accumulations</a></li>
+  <li><a href="#gradiant-clipping" id="toc-gradiant-clipping" class="nav-link" data-scroll-target="#gradiant-clipping">Gradiant Clipping</a></li>
+  </ul></li>
+  <li><a href="#mixed-precision" id="toc-mixed-precision" class="nav-link" data-scroll-target="#mixed-precision">Mixed Precision</a></li>
+  <li><a href="#parallellism" id="toc-parallellism" class="nav-link" data-scroll-target="#parallellism">Parallellism</a></li>
+  </ul></li>
+  <li><a href="#tuning" id="toc-tuning" class="nav-link" data-scroll-target="#tuning">Tuning</a>
+  <ul class="collapse">
+  <li><a href="#supervised-fine-tuning" id="toc-supervised-fine-tuning" class="nav-link" data-scroll-target="#supervised-fine-tuning">Supervised-Fine-Tuning</a></li>
+  <li><a href="#reinforcement-learning-from-human-feedback" id="toc-reinforcement-learning-from-human-feedback" class="nav-link" data-scroll-target="#reinforcement-learning-from-human-feedback">Reinforcement Learning from Human Feedback</a>
+  <ul class="collapse">
+  <li><a href="#ppo" id="toc-ppo" class="nav-link" data-scroll-target="#ppo">PPO</a></li>
+  <li><a href="#dpo" id="toc-dpo" class="nav-link" data-scroll-target="#dpo">DPO</a></li>
+  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo">GRPO</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#inferrence" id="toc-inferrence" class="nav-link" data-scroll-target="#inferrence">Inferrence</a>
+  <ul class="collapse">
+  <li><a href="#quantization" id="toc-quantization" class="nav-link" data-scroll-target="#quantization">Quantization</a></li>
+  <li><a href="#knowledge-distillation" id="toc-knowledge-distillation" class="nav-link" data-scroll-target="#knowledge-distillation">Knowledge Distillation</a></li>
+  </ul></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
+  <li><a href="#fine-tuning-llm" id="toc-fine-tuning-llm" class="nav-link" data-scroll-target="#fine-tuning-llm">Fine-Tuning LLM</a>
+  <ul class="collapse">
+  <li><a href="#prompt-enginnering" id="toc-prompt-enginnering" class="nav-link" data-scroll-target="#prompt-enginnering">Prompt Enginnering</a></li>
+  <li><a href="#prefix-tuning" id="toc-prefix-tuning" class="nav-link" data-scroll-target="#prefix-tuning">Prefix-Tuning</a></li>
+  <li><a href="#adapter" id="toc-adapter" class="nav-link" data-scroll-target="#adapter">Adapter</a>
+  <ul class="collapse">
+  <li><a href="#lora" id="toc-lora" class="nav-link" data-scroll-target="#lora">LoRA</a></li>
+  <li><a href="#q-lora" id="toc-q-lora" class="nav-link" data-scroll-target="#q-lora">Q-LoRA</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#multi-modality-of-llm" id="toc-multi-modality-of-llm" class="nav-link" data-scroll-target="#multi-modality-of-llm">Multi Modality of LLM</a></li>
+  <li><a href="#applications-of-llm" id="toc-applications-of-llm" class="nav-link" data-scroll-target="#applications-of-llm">Applications of LLM</a>
+  <ul class="collapse">
+  <li><a href="#chatbot" id="toc-chatbot" class="nav-link" data-scroll-target="#chatbot">ChatBot</a></li>
+  <li><a href="#ai-agent" id="toc-ai-agent" class="nav-link" data-scroll-target="#ai-agent">AI Agent</a></li>
+  <li><a href="#llm-as-optimizer" id="toc-llm-as-optimizer" class="nav-link" data-scroll-target="#llm-as-optimizer">LLM as Optimizer</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Learning Notes</h1>
-</div>
+<h1 class="title">LLM Part1: Pre Training</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Overview</div>
+    <div class="quarto-category">Large Language Model</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    <p>In this page, I will include all my learning material.</p>
+    In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance
   </div>
 </div>
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2025-07-23</p>
+    </div>
+  </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Last modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">2025-04-05</p>
+    </div>
+  </div>
     
   </div>
   
@@ -327,29 +454,180 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>This is the first part of the LLM series, Pre-training, the Pre-training the most time consuming part of the LLM. In the nutshell, it just the <strong>next-word-prediction task</strong>. That’s it. Not anything fancy. However, what make the LLM hard to train and only achieve in recent years because it is LARGE. People need to develop and invent some efficient training algorithm to speed up the training process, make it efficient to training and deploying. In the article, I am going to take the path going through the training LLM from scratch, make the LLM easy to understand.</p>
+<section id="building-blocks-of-llm" class="level1">
+<h1>Building Blocks of LLM</h1>
+<p>Same as other models, there are different building blocks for the LLM. Let’s break it down bottom up:</p>
+<ol type="1">
+<li>Tokenization: Convert words into digits</li>
+<li>Embedding: Convert digits into the format that neural network can understand</li>
+<li>Neural Network: The Transformer neural network architecture of the LLM.</li>
+<li>Loss Function: The Cross Entropy Loss is the most common loss function when training LLM</li>
+<li>Optimizer: Most of the LLM is optimized by the AdamW.</li>
+<li>Parallelism: The Large Lanuage Model is larger, which means it hard to fit into the a single machine.</li>
+<li>Inference: After we have trained the model, we need to deploy it to use. However, due to the computing and memory demanding of the LLM. The inference time is slow.</li>
+<li>Evaluation: We need some metrics to measure how well the LLM is doing, and compare between different LLMs.</li>
+</ol>
+</section>
+<section id="tokenization" class="level1">
+<h1>Tokenization</h1>
+<section id="word-level" class="level2">
+<h2 class="anchored" data-anchor-id="word-level">Word Level</h2>
+</section>
+<section id="byte-pair-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="byte-pair-encoding">Byte-Pair-Encoding</h2>
+</section>
+<section id="bit-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="bit-encoding">Bit Encoding</h2>
+</section>
+<section id="embedding" class="level2">
+<h2 class="anchored" data-anchor-id="embedding">Embedding</h2>
+<p>Embedding is</p>
+</section>
+</section>
+<section id="nerual-network-architecture" class="level1">
+<h1>Nerual Network Architecture</h1>
+<p>We are going to do the architecture based on Transformer,</p>
+<section id="position-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="position-encoding">Position Encoding</h2>
+</section>
+<section id="normalization" class="level2">
+<h2 class="anchored" data-anchor-id="normalization">Normalization</h2>
+</section>
+<section id="layer-normalization" class="level2">
+<h2 class="anchored" data-anchor-id="layer-normalization">Layer Normalization</h2>
+</section>
+<section id="rms-normalization" class="level2">
+<h2 class="anchored" data-anchor-id="rms-normalization">RMS Normalization</h2>
+<section id="post-norm-vs.-pre-norm" class="level3">
+<h3 class="anchored" data-anchor-id="post-norm-vs.-pre-norm">Post-Norm vs.&nbsp;Pre-Norm</h3>
+</section>
+</section>
+<section id="without-normalization" class="level2">
+<h2 class="anchored" data-anchor-id="without-normalization">Without Normalization</h2>
+<p>Recently, <span class="citation" data-cites="zhuTransformersNormalization2025">(<a href="#ref-zhuTransformersNormalization2025" role="doc-biblioref"><strong>zhuTransformersNormalization2025?</strong></a>)</span> proposed that we can remove the normalization without harm the performance of the neural network. It replace the normalization layer with a scaled tanh function, named <strong>Dynamic Tanh</strong>, defined as:</p>
+<p><span class="math display">\[
+\text{DyT}(x) = \gamma * \tanh(\alpha x) + \beta
+\]</span></p>
+<div id="fig-dynamic-tanh" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dynamic-tanh-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/202503171426134.png" class="img-fluid figure-img">
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div style="font-size: 1.3rem;">
-<p>I have moved all my learning notes to this website. You can find them at <a href="https://yyzhang2025.github.io/Course-Notes/">Course Notes</a>.</p>
-</div>
-</div>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="./assets/notes-about.png" class="img-fluid figure-img"></p>
-<figcaption>About Page of the Course notes</figcaption>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dynamic-tanh-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Block with Dynamic Tanh(DyT) (Image Source: Transformers without Normalization)
+</figcaption>
 </figure>
 </div>
+<p>It adjust the input activation range via a learnable scaling factor <span class="math inline">\(\alpha\)</span> and then squashed the extreme values through an S-shaped tanh function.</p>
+</section>
+<section id="attention-mechnism" class="level2">
+<h2 class="anchored" data-anchor-id="attention-mechnism">Attention Mechnism</h2>
+</section>
+<section id="feed-forward-network" class="level2">
+<h2 class="anchored" data-anchor-id="feed-forward-network">Feed Forward Network</h2>
+<section id="mixture-of-expert" class="level3">
+<h3 class="anchored" data-anchor-id="mixture-of-expert">Mixture of Expert</h3>
+</section>
+</section>
+</section>
+<section id="loss-function" class="level1">
+<h1>Loss Function</h1>
+<p>Similar as the other training process, we need a loss function to training and tuning our parameters.</p>
+<section id="cross-entropy-loss" class="level2">
+<h2 class="anchored" data-anchor-id="cross-entropy-loss">Cross Entropy Loss</h2>
+</section>
+</section>
+<section id="training" class="level1">
+<h1>Training</h1>
+<section id="model-initilization" class="level2">
+<h2 class="anchored" data-anchor-id="model-initilization">Model Initilization</h2>
+</section>
+<section id="optimizer" class="level2">
+<h2 class="anchored" data-anchor-id="optimizer">Optimizer</h2>
+</section>
+<section id="about-gradients" class="level2">
+<h2 class="anchored" data-anchor-id="about-gradients">About Gradients</h2>
+<section id="gradient-accumulations" class="level3">
+<h3 class="anchored" data-anchor-id="gradient-accumulations">Gradient Accumulations</h3>
+</section>
+<section id="gradiant-clipping" class="level3">
+<h3 class="anchored" data-anchor-id="gradiant-clipping">Gradiant Clipping</h3>
+</section>
+</section>
+<section id="mixed-precision" class="level2">
+<h2 class="anchored" data-anchor-id="mixed-precision">Mixed Precision</h2>
+</section>
+<section id="parallellism" class="level2">
+<h2 class="anchored" data-anchor-id="parallellism">Parallellism</h2>
+</section>
+</section>
+<section id="tuning" class="level1">
+<h1>Tuning</h1>
+<section id="supervised-fine-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="supervised-fine-tuning">Supervised-Fine-Tuning</h2>
+</section>
+<section id="reinforcement-learning-from-human-feedback" class="level2">
+<h2 class="anchored" data-anchor-id="reinforcement-learning-from-human-feedback">Reinforcement Learning from Human Feedback</h2>
+<section id="ppo" class="level3">
+<h3 class="anchored" data-anchor-id="ppo">PPO</h3>
+</section>
+<section id="dpo" class="level3">
+<h3 class="anchored" data-anchor-id="dpo">DPO</h3>
+</section>
+<section id="grpo" class="level3">
+<h3 class="anchored" data-anchor-id="grpo">GRPO</h3>
+</section>
+</section>
+</section>
+<section id="inferrence" class="level1">
+<h1>Inferrence</h1>
+<section id="quantization" class="level2">
+<h2 class="anchored" data-anchor-id="quantization">Quantization</h2>
+</section>
+<section id="knowledge-distillation" class="level2">
+<h2 class="anchored" data-anchor-id="knowledge-distillation">Knowledge Distillation</h2>
+</section>
+</section>
+<section id="evaluation" class="level1">
+<h1>Evaluation</h1>
+</section>
+<section id="fine-tuning-llm" class="level1">
+<h1>Fine-Tuning LLM</h1>
+<section id="prompt-enginnering" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-enginnering">Prompt Enginnering</h2>
+</section>
+<section id="prefix-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="prefix-tuning">Prefix-Tuning</h2>
+</section>
+<section id="adapter" class="level2">
+<h2 class="anchored" data-anchor-id="adapter">Adapter</h2>
+<section id="lora" class="level3">
+<h3 class="anchored" data-anchor-id="lora">LoRA</h3>
+</section>
+<section id="q-lora" class="level3">
+<h3 class="anchored" data-anchor-id="q-lora">Q-LoRA</h3>
+</section>
+</section>
+</section>
+<section id="multi-modality-of-llm" class="level1">
+<h1>Multi Modality of LLM</h1>
+</section>
+<section id="applications-of-llm" class="level1">
+<h1>Applications of LLM</h1>
+<section id="chatbot" class="level2">
+<h2 class="anchored" data-anchor-id="chatbot">ChatBot</h2>
+<p>Most know ChatGPT,</p>
+</section>
+<section id="ai-agent" class="level2">
+<h2 class="anchored" data-anchor-id="ai-agent">AI Agent</h2>
+</section>
+<section id="llm-as-optimizer" class="level2">
+<h2 class="anchored" data-anchor-id="llm-as-optimizer">LLM as Optimizer</h2>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

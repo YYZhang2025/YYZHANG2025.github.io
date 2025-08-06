@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="In this page, I will include all my learning material.">
+<meta name="dcterms.date" content="2025-07-23">
+<meta name="description" content="In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance">
 
-<title>Learning Notes</title>
+<title>LLM: RAG</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,28 +25,28 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href=".././style/icon.avif" rel="icon">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-72d384ce8fe59fb0fa6f7c5f3001a64f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../.././style/icon.avif" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-72d384ce8fe59fb0fa6f7c5f3001a64f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -76,10 +77,10 @@ ul.task-list li input[type="checkbox"] {
 <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
 
 
-<link rel="stylesheet" href="../style/styles.css">
-<meta property="og:title" content="Learning Notes">
-<meta property="og:description" content="In this page, I will include all my learning material.">
-<meta property="og:image" content="./assets/notes-about.png">
+<link rel="stylesheet" href="../../../style/styles.css">
+<meta property="og:title" content="LLM: RAG">
+<meta property="og:description" content="In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance">
+<meta property="og:image" content="images/rag.png">
 </head>
 
 <body class="floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -257,21 +258,21 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+    <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../posts/blogs.html"> 
+    <a class="nav-link" href="../../../posts/blogs.html"> 
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../posts/projects.html"> 
+    <a class="nav-link" href="../../../posts/projects.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../posts/notes.html" aria-current="page"> 
+    <a class="nav-link" href="../../../posts/notes.html"> 
 <span class="menu-text">Learning Notes</span></a>
   </li>  
   <li class="nav-item compact">
@@ -293,32 +294,74 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#naive-rag" id="toc-naive-rag" class="nav-link active" data-scroll-target="#naive-rag">Naive RAG</a></li>
+  <li><a href="#advanced-rag" id="toc-advanced-rag" class="nav-link" data-scroll-target="#advanced-rag">Advanced RAG</a>
+  <ul class="collapse">
+  <li><a href="#pre-retrieval-process" id="toc-pre-retrieval-process" class="nav-link" data-scroll-target="#pre-retrieval-process">Pre-Retrieval Process</a></li>
+  <li><a href="#post-retrieval-process" id="toc-post-retrieval-process" class="nav-link" data-scroll-target="#post-retrieval-process">Post-Retrieval Process</a></li>
+  </ul></li>
+  <li><a href="#modular-rag" id="toc-modular-rag" class="nav-link" data-scroll-target="#modular-rag">Modular RAG</a>
+  <ul class="collapse">
+  <li><a href="#new-modules" id="toc-new-modules" class="nav-link" data-scroll-target="#new-modules">New Modules</a>
+  <ul class="collapse">
+  <li><a href="#search-module" id="toc-search-module" class="nav-link" data-scroll-target="#search-module">Search Module</a></li>
+  <li><a href="#memory-module" id="toc-memory-module" class="nav-link" data-scroll-target="#memory-module">Memory Module</a></li>
+  <li><a href="#routing-module" id="toc-routing-module" class="nav-link" data-scroll-target="#routing-module">Routing Module</a></li>
+  <li><a href="#the-preict-module" id="toc-the-preict-module" class="nav-link" data-scroll-target="#the-preict-module">The Preict Module</a></li>
+  <li><a href="#task-adapter-module" id="toc-task-adapter-module" class="nav-link" data-scroll-target="#task-adapter-module">Task Adapter Module</a></li>
+  </ul></li>
+  <li><a href="#new-pattern" id="toc-new-pattern" class="nav-link" data-scroll-target="#new-pattern">New Pattern</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Learning Notes</h1>
-</div>
+<h1 class="title">LLM: RAG</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Large Language Model</div>
+    <div class="quarto-category">Overview</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    <p>In this page, I will include all my learning material.</p>
+    In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance
   </div>
 </div>
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2025-07-23</p>
+    </div>
+  </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Last modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">2025-04-27</p>
+    </div>
+  </div>
     
   </div>
   
@@ -327,29 +370,114 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div style="font-size: 1.3rem;">
-<p>I have moved all my learning notes to this website. You can find them at <a href="https://yyzhang2025.github.io/Course-Notes/">Course Notes</a>.</p>
-</div>
-</div>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="./assets/notes-about.png" class="img-fluid figure-img"></p>
-<figcaption>About Page of the Course notes</figcaption>
-</figure>
-</div>
+<p>Retrieval-Augmented Generation (RAG) is a technique used to equip the LLM the ability to use the updated news. It has here are several, it often use vector DB to store the LLM.</p>
+<blockquote class="blockquote">
+<p>Large Language Models (LLMs) showcase impressive capabilities but encounter challenges like <strong>hallucination</strong>, outdated knowledge, and non-transparent, untraceable reasoning processes. Retrieval-Augmented Generation (RAG) has emerged as a promising solution by incorporating knowledge from external databases.</p>
+</blockquote>
+<p>This is good for knowledge-intensive tasks, and allows for continuous knowledge updates and integration of domain-specific information. It retrieving relevant document chunks from external knowledge base through <strong>semantic similarity calculation</strong>. RAG effectively reduces the problem of generating factually incorrect content.</p>
+<p>The In-Context Learning(ICL) abilities first display in the GPT3, which enable RAG to answer more complex and knowledge intensive tasks during the inference stages. Unlike previously, which used the knowledge from RAG to fine-tuning model. Later, the enhancement of RAG began to incorporate more with LLM fine-tuning techniques.</p>
+<p>As name indicated, there are several techniques used in the “Retrieval”, ‘Generation’ and “Augmentation”.</p>
+<p>There are three main parts of the RAG:</p>
+<ul>
+<li>Naive RAG</li>
+<li>Advanced RAG</li>
+<li>Modular RAG</li>
+</ul>
+<section id="naive-rag" class="level1">
+<h1>Naive RAG</h1>
+<p>The Naive RAG follows a traditional process that include indexing, retrieval, and generation, which is also characterized as a “Retrieve-Read” framework</p>
+<ul>
+<li>Indexing: starts with the cleaning and extraction of raw data in diverse formats like PDF, HTML, Word, and Markdown, which is then converted into a uniform plain text format. Due to the context limitation of the language models, text need to be segmented into smaller, digestible chunks. Each chunks are then encoded into vector representations using as embedding model and stored in vector database.</li>
+<li>Retrieval: Upon receive a query from user, the RAG system employs the same encoding model utilized during the indexing phase to transform the query into a vector representation. It then computes the similarity scores between the query vector and the vector of chunks within the indexed corpus. The system return the Top-K chunks, which show greatest similarity to the query. These chunks are then used as the expanded context in prompts.</li>
+<li>Generation: The query and chunks are synthesized into a prompt and sent to the LLM to generate response.</li>
+</ul>
+<p>As we can see, there are several limitation of the Naive RAG:</p>
+<ul>
+<li>Retrieval: The retrieval phase struggle with precision and recall, leading to the selection of misaligned or irrelevant chunks, and missing of crucial information</li>
+<li>Generation: When the chunks is irrelevant to the query, the LLM might produces content not supported by the context.</li>
+<li>Augmentation Hurdles: Integrating retrieved information with the different task can be challenging, sometimes resulting in disjointed or incoherent outputs. The process may also encounter redundancy when similar information is retrieved from multiple sources, leading to repetitive responses.</li>
+</ul>
+</section>
+<section id="advanced-rag" class="level1">
+<h1>Advanced RAG</h1>
+<p>This kind of the RAG introduce specific improvements to overcome the limitations of the Naive RAG.</p>
+<ul>
+<li>Retrieval: It employs pre-retrieval and post-retrieval strategies. And also incorporates the optimization methods.</li>
+<li>Indexing: refines its indexing techniques through the use of a sliding window approach, fine-grained segmentation, and the incorporation of meta-data.</li>
+</ul>
+<section id="pre-retrieval-process" class="level2">
+<h2 class="anchored" data-anchor-id="pre-retrieval-process">Pre-Retrieval Process</h2>
+<p>The primary focus is on optimizing the indexing structure and the original query.</p>
+<ul>
+<li>Optimizing Indexing: enhance the quality of the content being indexed:
+<ul>
+<li>Enhancing data granularity</li>
+<li>Optimizing index structures,</li>
+<li>Adding Meta-data</li>
+<li>Alignment optimization</li>
+<li>Mixed retrieval</li>
+</ul></li>
+<li>Optimizing Query: make the user’s original question clearer and more suitable for the retrieval task, through:
+<ul>
+<li>Query rewritting</li>
+<li>Query Transformation</li>
+<li>Query Expansion</li>
+</ul></li>
+</ul>
+</section>
+<section id="post-retrieval-process" class="level2">
+<h2 class="anchored" data-anchor-id="post-retrieval-process">Post-Retrieval Process</h2>
+<p>Once relevant context is retrieved, it is crucial to integrate it effectively with the query. The main methods in this stage are:</p>
+<ul>
+<li>Re-rank chunks: Re-ranking the retrieved information to relocated the most relevant content to the edges of the prompt</li>
+<li>Context Compressing: concentrate on selecting the essential information, emphasizing critical sections, and shortening the context to be processed.</li>
+</ul>
+</section>
+</section>
+<section id="modular-rag" class="level1">
+<h1>Modular RAG</h1>
+<p>It advances the above two RAG by incorporating diverse strategies for improving its components, such as:</p>
+<ul>
+<li>Adding a search module for similarity searches</li>
+<li>Refining the retriever through fine-tuning</li>
+</ul>
+<p>There are several examples:</p>
+<ul>
+<li>restructured RAG</li>
+<li>re-arranged RAG</li>
+</ul>
+<p>Modular RAG support sequential processing and integrated end-to-end training across its components</p>
+<section id="new-modules" class="level2">
+<h2 class="anchored" data-anchor-id="new-modules">New Modules</h2>
+<section id="search-module" class="level3">
+<h3 class="anchored" data-anchor-id="search-module">Search Module</h3>
+<p>The search module adapts to specific scenarios, enabling direct searches across various sources like search engines, database, and knowledge graphs, using LLM-generated code and query languages</p>
+<p>The RAG-Fusing addresses search limitations by employing a multi-query strategy that expands user queries into diverse perspectives, utilizing parallel vector searches and intelligent re-ranking to uncover both explicit and transformative knowledge, utilizing parallel vector searches and intelligent re-ranking to uncover both explict and transformative knowledge.</p>
+</section>
+<section id="memory-module" class="level3">
+<h3 class="anchored" data-anchor-id="memory-module">Memory Module</h3>
+<p>The Memory module leverages the LLM’s memory to guide retrieval, creating an unbounded memory pool that aligns the text more closely with data distribution through iterative self-enhancement.</p>
+</section>
+<section id="routing-module" class="level3">
+<h3 class="anchored" data-anchor-id="routing-module">Routing Module</h3>
+<p>The Routing navigates through diverse data sources, selecting the optimal pathway for a query, whether it involves summarization, database searches, or merging different information streams.</p>
+</section>
+<section id="the-preict-module" class="level3">
+<h3 class="anchored" data-anchor-id="the-preict-module">The Preict Module</h3>
+<p>The predict module aims to reduce redundancy and noise by generating context directly through the LLM, ensuring relevance and accuracy.</p>
+</section>
+<section id="task-adapter-module" class="level3">
+<h3 class="anchored" data-anchor-id="task-adapter-module">Task Adapter Module</h3>
+<p>The adapter module tailors RAG to various downstream tasks, automating prompt retrieval for zero-shot inputs and creating task-specific retrievers through few-shot query generationg.</p>
+</section>
+</section>
+<section id="new-pattern" class="level2">
+<h2 class="anchored" data-anchor-id="new-pattern">New Pattern</h2>
+<p>Modular RAG offers remarkable adaptability by allowing module substitution or reconfiguration to address specific challenges. Modular RAG expands the flexibility by integrating new modules or adjusting interaction flow among existing ones, enhancing its applicability across different tasks.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

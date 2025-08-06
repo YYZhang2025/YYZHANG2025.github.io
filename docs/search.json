@@ -2,888 +2,34 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "👋🏻Welcome to Yuyang’s Blog",
-    "section": "",
-    "text": "Attentions are all you Need\n\n\n\nLarge Language Model\n\n\n\nAttention mechanisms are at the heart of modern transformer architectures. They allow models to dynamically focus on different parts of the input when processing sequences—making them incredibly powerful for NLP, vision, and beyond. In this post, we’ll break down the major types of attention mechanisms and how they differ from each other.\n\n\n\n\n\nYuyang Zhang\n\n1 min\n\n106 words\n\n\n2025-05-27\n\n\n\n\n\n\n\n\n\n\n\n\nLLM: RAG\n\n\n\nLarge Language Model\n\nOverview\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n\nYuyang Zhang\n\n5 min\n\n965 words\n\n\n2025-04-27\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Overview\n\n\n\nLarge Language Model\n\nOverview\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n\nYuyang Zhang\n\n3 min\n\n564 words\n\n\n2025-04-27\n\n\n\n\n\n\n\n\n\n\n\n\nUnsupervised Learning is huge\n\n\n\nOverview\n\n\n\nIn this blog, I am going to review the most important concept in the AI world\n\n\n\n\n\nYuyang Zhang\n\n2 min\n\n275 words\n\n\n2025-04-27\n\n\n\n\n\n\n\n\n\n\n\n\nDeep Dive into Diffusion Models\n\n\n\nGenerative Model\n\nLarge Language Model\n\n\n\nThis blog is my learning notes on the Diffusion Models, which is the state-of-art generative models. This blog will cover that is the diffusion models, how to use diffusion models to generate image, text-to-image, video. It also cover lagnuage diffusion model.\n\n\n\n\n\nYuyang Zhang\n\n4 min\n\n738 words\n\n\n2025-04-23\n\n\n\n\n\n\n\n\n\n\n\n\nWhat a Generative Models?\n\n\n\nGenerative Model\n\nOverview\n\n\n\nIn this blog, I am going to summary the 6 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n\nYuyang Zhang\n\n12 min\n\n2,215 words\n\n\n2025-04-08\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Part1: Pre Training\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n\nYuyang Zhang\n\n3 min\n\n419 words\n\n\n2025-04-05\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Part2: Post Training\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n\nYuyang Zhang\n\n1 min\n\n1 words\n\n\n2025-04-05\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Part3: Applications\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n\nYuyang Zhang\n\n1 min\n\n70 words\n\n\n2025-04-05\n\n\n\n\n\n\n\n\n\n\n\n\nMath Toolbox for AI\n\n\n\nMathematics\n\n\n\nAn Toolbox of essential math for artificial intelligence, including linear algebra, probability, calculus, and optimization.\n\n\n\n\n\nYuyang Zhang\n\n3 min\n\n489 words\n\n\n2025-04-03\n\n\n\n\n\n\n\n\n\n\n\n\nA Deep Dive into Neural Network\n\n\n\nOverview\n\n\n\nEmbark on a comprehensive exploration of neural networks, the backbone of modern artificial intelligence. This blog post delves into fundamental concepts, including architecture, training algorithms, and essential mathematics. It also covers popular network types—such as CNNs, RNNs, and Transformers—and provides insights into their applications, limitations, and recent innovations. Whether you’re a beginner eager to grasp foundational ideas or an experienced practitioner seeking deeper understanding, this deep dive offers valuable perspectives to enhance your neural network journey.\n\n\n\n\n\nYuyang Zhang\n\n2 min\n\n364 words\n\n\n2025-03-31\n\n\n\n\n\n\n\n\n\n\n\n\nReinforcement Learning without confusion\n\n\n\nOverview\n\nReinforcement Learning\n\n\n\nIn this blog, I am going to review the most important concept in the AI world\n\n\n\n\n\nYuyang Zhang\n\n1 min\n\n41 words\n\n\n2025-03-25\n\n\n\n\n\n\n\n\n\n\n\n\nReinforcement Learning From Human Feedback\n\n\n\nReinforcement Learning\n\n\n\nIn this blog, I am going to review the most important concept in the AI world\n\n\n\n\n\nYuyang Zhang\n\n5 min\n\n927 words\n\n\n2025-03-25\n\n\n\n\n\n\n\n\n\n\n\n\nDeep Dive into Variational AutoEncoder\n\n\n\nGenerative Model\n\n\n\nThis blog is my learning notes on the Diffusion Models, which is the state-of-art generative models. This blog will cover that is the diffusion models, how to use diffusion models to generate image, text-to-image, video. It also cover lagnuage diffusion model.\n\n\n\n\n\nYuyang Zhang\n\n1 min\n\n2 words\n\n\n2025-03-18\n\n\n\n\n\n\n\n\n\n\n\n\nGaussian Distribution is All you need\n\n\n\nMathematics\n\n\n\nAn Toolbox of essential math for artificial intelligence, including linear algebra, probability, calculus, and optimization.\n\n\n\n\n\nYuyang Zhang\n\n7 min\n\n1,243 words\n\n\n2025-03-05\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "posts/Blog/RLHF.html",
-    "href": "posts/Blog/RLHF.html",
-    "title": "Reinforcement Learning From Human Feedback",
-    "section": "",
-    "text": "RLHF refers to Reinforcement Learning from Human Feedback. Reinforcement Learning is a type of learning method that involves training an agent to make decision based on the feedback from the environment (also known as state). Different from traditional RL, RLHF combine with the human feedback in the form of ratings or evaluation of its actions, which can help agent learn more quickly and accurately, and align with the human preference. RLHF is a rapidly developing area, there are several advanced techniques that have been developed to improve the performance of the RLHF:"
-  },
-  {
-    "objectID": "posts/Blog/RLHF.html#ppo",
-    "href": "posts/Blog/RLHF.html#ppo",
-    "title": "Reinforcement Learning From Human Feedback",
-    "section": "PPO",
-    "text": "PPO"
-  },
-  {
-    "objectID": "posts/Blog/RLHF.html#ppo-1",
-    "href": "posts/Blog/RLHF.html#ppo-1",
-    "title": "Reinforcement Learning From Human Feedback",
-    "section": "PPO",
-    "text": "PPO\nOne of the most widely used RL algorithm in the LLM is the PPO, as showed in the Figure 2. Those model mapping the PPO in the"
-  },
-  {
-    "objectID": "posts/Blog/RLHF.html#dpo",
-    "href": "posts/Blog/RLHF.html#dpo",
-    "title": "Reinforcement Learning From Human Feedback",
-    "section": "DPO",
-    "text": "DPO\nOne the problem of PPO is that, it’s needed another reward model, which is often same size as the our language model. It take large memory and computing resource. Is it possible to get remove the reward model? The answer is YES! According to the (rafailovDirectPreferenceOptimization2024?), the implicit reward model can be fitting using the language model itself.\n\n\n\n\n\n\nFigure 3: DPO process compare to the traditional PPO process (Image Source: Direct Preference Optimization: Your Language Model is Secretly a Reward Model)"
-  },
-  {
-    "objectID": "posts/Blog/RLHF.html#grpo",
-    "href": "posts/Blog/RLHF.html#grpo",
-    "title": "Reinforcement Learning From Human Feedback",
-    "section": "GRPO",
-    "text": "GRPO\n\n\n\n\n\n\nFigure 4: Compare between PPO and GRPO (Image SourcDeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models)e:"
-  },
-  {
-    "objectID": "posts/Blog/Attentions.html",
-    "href": "posts/Blog/Attentions.html",
-    "title": "Attentions are all you Need",
-    "section": "",
-    "text": "Standard Structure of Attention\nThis is some text\nimport torch\nimport torch.nn as nn \nAnd text under it\n\n\nScaled Dot Product\n\n\nMulti Head Attention(MHA)\n\n\nKV Cache\nBefore we discuss more attention mechanism. Let’s discuss what is the KV Cache, and why we need it.\n\n\nMulti Query Attention(MQA) & Grouped Query Attention\n\n\n\nMulti Head Latent Attention(MLA)\n\n\n\nIllustration of MLA (Image Source: Deepseek-v2)\n\n\n\n\n\nCompare between MHA, MQA, GQA, and MLA (Image Source: DeepSeek V2)\n\n\n\n\nFlash Attention\n\n\nLinear Attention\nhttps://arxiv.org/pdf/2006.04768\n\n\nRing Attent\n\n\n\nIllustraution of the Linear Attention(Image Source: Linformer: Self-Attention with Linear Complexity)\n\n\n\n\nion\nRing Attention with Blockwise Transformers for Near-Infinite Context\nhttps://arxiv.org/pdf/2310.01889\n\n\nMulti-Token Attention\nhttps://arxiv.org/abs/2504.00927\n\n\n\nMulti-Token Attention (MTA) on the right, compared to standard attention on the left. (Image Source: Multi-Token Attention)"
-  },
-  {
-    "objectID": "posts/Blog/MathToolBox.html",
-    "href": "posts/Blog/MathToolBox.html",
-    "title": "Math Toolbox for AI",
-    "section": "",
-    "text": "Update\n\n\n\nAdd Vector Normalization\nMathematics is the important and the most confusion part of artificial intelligence. You might think AI is all about fancy neural networks and mind-blowing predictions, but behind every impressive AI breakthrough is a solid foundation of math. Without math, AI is just a bunch of random code guessing its way through problems like a lost tourist with no GPS.\nSo why am I writing this blog? Because AI is everywhere—from recommending your next Netflix binge to predicting stock market trends. Yet, many aspiring AI enthusiasts underestimate the power of mathematics. If you’ve ever wondered, “Do I really need to know linear algebra and calculus to work with AI?” The answer is a resounding YES! And I’m here to make it a little less intimidating (and hopefully a bit more fun).\nNow, let’s talk about the real struggle: the fancy names. When you first start learning AI, it feels like math is just out to confuse you. One moment you’re fine with basic addition, and the next, you’re drowning in terms like “eigenvalues,” “Jacobian matrices,” and “Markov chains.” You hear about “gradient descent” and think, “Oh, that sounds cool,” only to realize it involves partial derivatives and a whole lot of Greek letters that make your head spin. And don’t even get me started on “Lagrange multipliers”—it sounds like something from a sci-fi movie, but turns out to be just another way math likes to keep us on our toes.\nThis blog is about the some keep concept in the mathematics and how they used in the AI. Each part is self-contains, readers can choose parts most interested them."
-  },
-  {
-    "objectID": "posts/Blog/MathToolBox.html#norm-of-the-vectorslp-norm",
-    "href": "posts/Blog/MathToolBox.html#norm-of-the-vectorslp-norm",
-    "title": "Math Toolbox for AI",
-    "section": "1. Norm of the Vectors(Lp-Norm)",
-    "text": "1. Norm of the Vectors(Lp-Norm)\n\n\n\n\n\n\nCaution\n\n\n\nMany people confuse normalization with the length (norm) of a vector, but they are fundamentally different. The Normalization is defined as:\n\\[\nv_{\\text{normlized}} = \\frac{v}{\\| v\\|_p}\n\\]\nwhere \\(\\| v \\|_p\\) is the Norm of the vector, this form is called Lp-Norm.\nNormalization is the process of rescaling a vector so that its norm (magnitude) becomes 1, while preserving its direction. It ensures that all vectors in a dataset have the same scale, which is crucial for numerical stability and model performance in machine learning and deep learning.\n\n\nThe Lp-Norm is a generalization of different norms, including L1-Norm, L2-Norm, and others. It measures the magnitude of a vector in various ways depending on the value of \\(p\\) . Lp-Norm is widely used in machine learning, deep learning, and signal processing for tasks like feature scaling, similarity measurements, and optimization. Mathematically, it defined as:\n\\[\n\\| v\\|_p = (\\sum_i^d |v_i|^p)^{1 / p}\n\\]\nwhere:\n\n\\(p\\): is a positive real number\n\\(|v_i|\\) represents the absolute value of each component of the vectors\n\nThere are some special case of the"
-  },
-  {
-    "objectID": "posts/Blog/MathToolBox.html#kl-divergence",
-    "href": "posts/Blog/MathToolBox.html#kl-divergence",
-    "title": "Math Toolbox for AI",
-    "section": "KL-Divergence",
-    "text": "KL-Divergence\nKullback-Leibler Divergence (KL-Divergence) is a fundamental and important concept in information theory and machine learning. It measures how one probability distribution \\(P\\) diverges from other probability distribution \\(Q\\)."
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html",
-    "href": "posts/Blog/NeuralNetwork.html",
-    "title": "A Deep Dive into Neural Network",
-    "section": "",
-    "text": "Neural Network, as the core of the Deep Learning, deserve all the attention at it. It is the backbone of the most AI work nowadays. In the blog, we are going to dive into the Neural Networks, and the most common and useful components in the neural network, such as different activation functions, regulirazation techniques, different architecture of neural networks, and the optimization algorithms to optimize the parameters of the neural network. Besides, we are also going to see some applications of the neural networks in different field, such as computer vision, natural language processing, and reinforcement learning."
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#multiple-layer-percepton",
-    "href": "posts/Blog/NeuralNetwork.html#multiple-layer-percepton",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Multiple Layer Percepton",
-    "text": "Multiple Layer Percepton\nThe most simple form of the neural network."
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#convolution-neural-network",
-    "href": "posts/Blog/NeuralNetwork.html#convolution-neural-network",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Convolution Neural Network",
-    "text": "Convolution Neural Network"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#recurrent-neural-network",
-    "href": "posts/Blog/NeuralNetwork.html#recurrent-neural-network",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Recurrent Neural Network",
-    "text": "Recurrent Neural Network"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#transformer-neural-network",
-    "href": "posts/Blog/NeuralNetwork.html#transformer-neural-network",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Transformer Neural Network",
-    "text": "Transformer Neural Network"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#mamba",
-    "href": "posts/Blog/NeuralNetwork.html#mamba",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Mamba",
-    "text": "Mamba"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#activation-functions",
-    "href": "posts/Blog/NeuralNetwork.html#activation-functions",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Activation Functions",
-    "text": "Activation Functions"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#normalizations",
-    "href": "posts/Blog/NeuralNetwork.html#normalizations",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Normalizations",
-    "text": "Normalizations\n\nBatch Normalization\n\n\nLayer Normalization\n\n\nRMS Normalization"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#dropout",
-    "href": "posts/Blog/NeuralNetwork.html#dropout",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Dropout",
-    "text": "Dropout"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#residual-connection",
-    "href": "posts/Blog/NeuralNetwork.html#residual-connection",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Residual Connection",
-    "text": "Residual Connection"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#maximum-likelihood-learning",
-    "href": "posts/Blog/NeuralNetwork.html#maximum-likelihood-learning",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Maximum Likelihood Learning",
-    "text": "Maximum Likelihood Learning"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#loss-function",
-    "href": "posts/Blog/NeuralNetwork.html#loss-function",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Loss Function",
-    "text": "Loss Function\n\nMean Square Loss\nThis is the one of the most common loss function in the Deep Learning. This loss function is used for the continuous values. Mathematically, it express as:\n\\[\n\\mathcal{L}(\\theta) =  \\mathbb{E}[\\|\\hat{y} - y \\|^2]\n\\]\n\n\nCross Entropy Loss\nThis is another loss function for the discrete values, for example for the Classification problems. Even LLM, which has a huge number of parameters, in the pre-training stage, the loss function is just a simply Cross entropy loss.\n\n\nKL Loss\nThis on is also common in the neural network. When the neural network act like the probability density function, this loss is used to measure how to different neural network are.\n\n\nAuxiliary Loss"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#gradient-descent",
-    "href": "posts/Blog/NeuralNetwork.html#gradient-descent",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Gradient Descent",
-    "text": "Gradient Descent"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#auto-differentiate",
-    "href": "posts/Blog/NeuralNetwork.html#auto-differentiate",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Auto-Differentiate",
-    "text": "Auto-Differentiate\n\nStochastic Gradient Descent\n\n\nAdam"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#weight-decay",
-    "href": "posts/Blog/NeuralNetwork.html#weight-decay",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Weight Decay",
-    "text": "Weight Decay"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#early-stopping",
-    "href": "posts/Blog/NeuralNetwork.html#early-stopping",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Early Stopping",
-    "text": "Early Stopping"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#parameter-initialization",
-    "href": "posts/Blog/NeuralNetwork.html#parameter-initialization",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Parameter Initialization",
-    "text": "Parameter Initialization"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#computer-vision",
-    "href": "posts/Blog/NeuralNetwork.html#computer-vision",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Computer Vision",
-    "text": "Computer Vision"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#natural-language-processing",
-    "href": "posts/Blog/NeuralNetwork.html#natural-language-processing",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Natural Language Processing",
-    "text": "Natural Language Processing"
-  },
-  {
-    "objectID": "posts/Blog/NeuralNetwork.html#deep-reinforcement-learning",
-    "href": "posts/Blog/NeuralNetwork.html#deep-reinforcement-learning",
-    "title": "A Deep Dive into Neural Network",
-    "section": "Deep Reinforcement Learning",
-    "text": "Deep Reinforcement Learning"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Diffusion Model.html",
-    "href": "posts/Blog/Generative Model/Diffusion Model.html",
-    "title": "Deep Dive into Diffusion Models",
-    "section": "",
-    "text": "Diffusion Model is know\n\n\nLet’s first create a very simple diffusion model based on MNIST data. (Full code is available here)\n\nThe central idea is to take each training image and to corrupt it using a multi-step noise process to transform it into a sample from Gaussian distribution. A deep neural network is then trained to invert this process, and once trained the network can then generate new images starting with samples from Gaussian as input\nDeep LearningFoundations and Concepts\n\nThe corrupt process is defined as:\n\ndef corrupt(x, amount):\n    \"\"\"\n    corrupt the input `x` by mixing it with noise\n    x: (B, 1, 28, 28)\n    amount: (B) different amount of noise for different samples\n    \"\"\"\n    noise = torch.rand_like(x)\n    amount = amount.view(-1, 1, 1, 1)\n    return x * (1 - amount) + noise * amount\n\nWe take a batch of image in, and corrupt the image the according to different level of noise.\n\n\n\n\n\n\nFigure 1: Corrupt images with differnt level of noise.\n\n\n\nAfter we get images and corresponding corrupted images, we need to create a neural network to invert this process, which mean we need the neural network take the noise image in, get the de-noised(real) image out. And we want those two as close as possible. So, the loss function \\(\\mathcal{L}\\) is:\n\\[\n\\mathcal{L}(\\theta) = \\sum_{i = 1}^{N}\\| f_\\theta(\\hat{\\mathrm{x}}_i) - \\mathrm{x}_i \\|^2\n\\tag{1}\\]\nwhich is the Mean Square Loss.\nSo, there are different types of neural network, which one should we choose? Since we need the output has same shape as the input, the U-Net(ronnebergerUNetConvolutionalNetworks2015?) is perfect choice.\n\n\n\n\n\nU-Net\n\n\nNow, we got everything we need to trained a neural network, data, model, loss function, let’s start training!!\n\nbatch_size = 128\ntrain_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)\nepochs = 10\n\nnet = UNet()  # This UNet is trained to predict the original image from the corrupted image\ncriterion = nn.MSELoss()\noptimizer = torch.optim.Adam(net.parameters(), lr=1e-3)\n\nfor epoch in range(epochs):\n    for x, _ in tqdm(train_dataloader):\n        noise_amount = torch.rand(x.shape[0]) # Random Generate some noise level[0, 1] add to image x\n        noisy_x = corrupt(x, noise_amount) # Corrput the image\n\n        pred = net(noisy_x) # NN predict what the de-noised image x\n        loss = criterion(pred, x) # Compare \n\n        # Optimize\n        optimizer.zero_grad()\n        loss.backward()\n        optimizer.step()\n\nAfter we trained the model for 10 epochs, we can see that it predict not-bad output.\n\n\n\n\n\n\nFigure 2: Result of one pass U-Net model\n\n\n\nThough, for the image with higher noise-level(more like Gaussian Distribution), the network perform well. One small trick we can use it to pass the image through model several times. We hope each time, the predicted image will get better.\n\nn_steps = 8\nx = torch.rand(8, 1, 28, 28).to(device)\nstep_history = [x.detach().cpu()]\npred_output_history = []\n\nfor i in range(n_steps):\n    with torch.no_grad():\n        pred = net(x)\n\n    step_history.append(x.detach().cpu())\n    pred_output_history.append(pred.detach().cpu())\n    mix_factor = 1 / (n_steps - i)\n    x = x * (1 - mix_factor) + pred * mix_factor\n\nAfter we pass the model 8 times, we get the result:\n\n\n\n\n\n\nFigure 3: The result of the pass model 8 times. On the left of the row is the input to the model and on the right is the denoised images\n\n\n\nIt shows that the output truly get better each times.\nWe increase the number of steps, the result will get better. Below is how it look like after we pass the model 40 times.\n\n\n\n\n\n\nFigure 4: The result of passing model 40 times\n\n\n\n\n\n\n\n\n\nSummary for now\n\n\n\nIn the above example, we see how the Diffusion Model work, we first corrupt the images, and then pass the pass the corrupted images to the model to get the de-noised images back. We training the the model using Mean Square Loss Equation 1. To improve the quality of sampling, we can pass the out back to the model several times Figure 3. The Full code is available here"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Diffusion Model.html#diffusion-models-in-nutshell",
-    "href": "posts/Blog/Generative Model/Diffusion Model.html#diffusion-models-in-nutshell",
-    "title": "Deep Dive into Diffusion Models",
-    "section": "",
-    "text": "Let’s first create a very simple diffusion model based on MNIST data. (Full code is available here)\n\nThe central idea is to take each training image and to corrupt it using a multi-step noise process to transform it into a sample from Gaussian distribution. A deep neural network is then trained to invert this process, and once trained the network can then generate new images starting with samples from Gaussian as input\nDeep LearningFoundations and Concepts\n\nThe corrupt process is defined as:\n\ndef corrupt(x, amount):\n    \"\"\"\n    corrupt the input `x` by mixing it with noise\n    x: (B, 1, 28, 28)\n    amount: (B) different amount of noise for different samples\n    \"\"\"\n    noise = torch.rand_like(x)\n    amount = amount.view(-1, 1, 1, 1)\n    return x * (1 - amount) + noise * amount\n\nWe take a batch of image in, and corrupt the image the according to different level of noise.\n\n\n\n\n\n\nFigure 1: Corrupt images with differnt level of noise.\n\n\n\nAfter we get images and corresponding corrupted images, we need to create a neural network to invert this process, which mean we need the neural network take the noise image in, get the de-noised(real) image out. And we want those two as close as possible. So, the loss function \\(\\mathcal{L}\\) is:\n\\[\n\\mathcal{L}(\\theta) = \\sum_{i = 1}^{N}\\| f_\\theta(\\hat{\\mathrm{x}}_i) - \\mathrm{x}_i \\|^2\n\\tag{1}\\]\nwhich is the Mean Square Loss.\nSo, there are different types of neural network, which one should we choose? Since we need the output has same shape as the input, the U-Net(ronnebergerUNetConvolutionalNetworks2015?) is perfect choice.\n\n\n\n\n\nU-Net\n\n\nNow, we got everything we need to trained a neural network, data, model, loss function, let’s start training!!\n\nbatch_size = 128\ntrain_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)\nepochs = 10\n\nnet = UNet()  # This UNet is trained to predict the original image from the corrupted image\ncriterion = nn.MSELoss()\noptimizer = torch.optim.Adam(net.parameters(), lr=1e-3)\n\nfor epoch in range(epochs):\n    for x, _ in tqdm(train_dataloader):\n        noise_amount = torch.rand(x.shape[0]) # Random Generate some noise level[0, 1] add to image x\n        noisy_x = corrupt(x, noise_amount) # Corrput the image\n\n        pred = net(noisy_x) # NN predict what the de-noised image x\n        loss = criterion(pred, x) # Compare \n\n        # Optimize\n        optimizer.zero_grad()\n        loss.backward()\n        optimizer.step()\n\nAfter we trained the model for 10 epochs, we can see that it predict not-bad output.\n\n\n\n\n\n\nFigure 2: Result of one pass U-Net model\n\n\n\nThough, for the image with higher noise-level(more like Gaussian Distribution), the network perform well. One small trick we can use it to pass the image through model several times. We hope each time, the predicted image will get better.\n\nn_steps = 8\nx = torch.rand(8, 1, 28, 28).to(device)\nstep_history = [x.detach().cpu()]\npred_output_history = []\n\nfor i in range(n_steps):\n    with torch.no_grad():\n        pred = net(x)\n\n    step_history.append(x.detach().cpu())\n    pred_output_history.append(pred.detach().cpu())\n    mix_factor = 1 / (n_steps - i)\n    x = x * (1 - mix_factor) + pred * mix_factor\n\nAfter we pass the model 8 times, we get the result:\n\n\n\n\n\n\nFigure 3: The result of the pass model 8 times. On the left of the row is the input to the model and on the right is the denoised images\n\n\n\nIt shows that the output truly get better each times.\nWe increase the number of steps, the result will get better. Below is how it look like after we pass the model 40 times.\n\n\n\n\n\n\nFigure 4: The result of passing model 40 times\n\n\n\n\n\n\n\n\n\nSummary for now\n\n\n\nIn the above example, we see how the Diffusion Model work, we first corrupt the images, and then pass the pass the corrupted images to the model to get the de-noised images back. We training the the model using Mean Square Loss Equation 1. To improve the quality of sampling, we can pass the out back to the model several times Figure 3. The Full code is available here"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html",
-    "title": "LLM Part1: Pre Training",
-    "section": "",
-    "text": "This is the first part of the LLM series, Pre-training, the Pre-training the most time consuming part of the LLM. In the nutshell, it just the next-word-prediction task. That’s it. Not anything fancy. However, what make the LLM hard to train and only achieve in recent years because it is LARGE. People need to develop and invent some efficient training algorithm to speed up the training process, make it efficient to training and deploying. In the article, I am going to take the path going through the training LLM from scratch, make the LLM easy to understand."
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#word-level",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#word-level",
-    "title": "LLM Part1: Pre Training",
-    "section": "Word Level",
-    "text": "Word Level"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#byte-pair-encoding",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#byte-pair-encoding",
-    "title": "LLM Part1: Pre Training",
-    "section": "Byte-Pair-Encoding",
-    "text": "Byte-Pair-Encoding"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#bit-encoding",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#bit-encoding",
-    "title": "LLM Part1: Pre Training",
-    "section": "Bit Encoding",
-    "text": "Bit Encoding"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#embedding",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#embedding",
-    "title": "LLM Part1: Pre Training",
-    "section": "Embedding",
-    "text": "Embedding\nEmbedding is"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#position-encoding",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#position-encoding",
-    "title": "LLM Part1: Pre Training",
-    "section": "Position Encoding",
-    "text": "Position Encoding"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#normalization",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#normalization",
-    "title": "LLM Part1: Pre Training",
-    "section": "Normalization",
-    "text": "Normalization"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#layer-normalization",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#layer-normalization",
-    "title": "LLM Part1: Pre Training",
-    "section": "Layer Normalization",
-    "text": "Layer Normalization"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#rms-normalization",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#rms-normalization",
-    "title": "LLM Part1: Pre Training",
-    "section": "RMS Normalization",
-    "text": "RMS Normalization\n\nPost-Norm vs. Pre-Norm"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#without-normalization",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#without-normalization",
-    "title": "LLM Part1: Pre Training",
-    "section": "Without Normalization",
-    "text": "Without Normalization\nRecently, (zhuTransformersNormalization2025?) proposed that we can remove the normalization without harm the performance of the neural network. It replace the normalization layer with a scaled tanh function, named Dynamic Tanh, defined as:\n\\[\n\\text{DyT}(x) = \\gamma * \\tanh(\\alpha x) + \\beta\n\\]\n\n\n\n\n\n\nFigure 1: Block with Dynamic Tanh(DyT) (Image Source: Transformers without Normalization)\n\n\n\nIt adjust the input activation range via a learnable scaling factor \\(\\alpha\\) and then squashed the extreme values through an S-shaped tanh function."
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#attention-mechnism",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#attention-mechnism",
-    "title": "LLM Part1: Pre Training",
-    "section": "Attention Mechnism",
-    "text": "Attention Mechnism"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#feed-forward-network",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#feed-forward-network",
-    "title": "LLM Part1: Pre Training",
-    "section": "Feed Forward Network",
-    "text": "Feed Forward Network\n\nMixture of Expert"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#cross-entropy-loss",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#cross-entropy-loss",
-    "title": "LLM Part1: Pre Training",
-    "section": "Cross Entropy Loss",
-    "text": "Cross Entropy Loss"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#model-initilization",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#model-initilization",
-    "title": "LLM Part1: Pre Training",
-    "section": "Model Initilization",
-    "text": "Model Initilization"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#optimizer",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#optimizer",
-    "title": "LLM Part1: Pre Training",
-    "section": "Optimizer",
-    "text": "Optimizer"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#about-gradients",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#about-gradients",
-    "title": "LLM Part1: Pre Training",
-    "section": "About Gradients",
-    "text": "About Gradients\n\nGradient Accumulations\n\n\nGradiant Clipping"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#mixed-precision",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#mixed-precision",
-    "title": "LLM Part1: Pre Training",
-    "section": "Mixed Precision",
-    "text": "Mixed Precision"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#parallellism",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#parallellism",
-    "title": "LLM Part1: Pre Training",
-    "section": "Parallellism",
-    "text": "Parallellism"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#supervised-fine-tuning",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#supervised-fine-tuning",
-    "title": "LLM Part1: Pre Training",
-    "section": "Supervised-Fine-Tuning",
-    "text": "Supervised-Fine-Tuning"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#reinforcement-learning-from-human-feedback",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#reinforcement-learning-from-human-feedback",
-    "title": "LLM Part1: Pre Training",
-    "section": "Reinforcement Learning from Human Feedback",
-    "text": "Reinforcement Learning from Human Feedback\n\nPPO\n\n\nDPO\n\n\nGRPO"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#quantization",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#quantization",
-    "title": "LLM Part1: Pre Training",
-    "section": "Quantization",
-    "text": "Quantization"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#knowledge-distillation",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#knowledge-distillation",
-    "title": "LLM Part1: Pre Training",
-    "section": "Knowledge Distillation",
-    "text": "Knowledge Distillation"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#prompt-enginnering",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#prompt-enginnering",
-    "title": "LLM Part1: Pre Training",
-    "section": "Prompt Enginnering",
-    "text": "Prompt Enginnering"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#prefix-tuning",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#prefix-tuning",
-    "title": "LLM Part1: Pre Training",
-    "section": "Prefix-Tuning",
-    "text": "Prefix-Tuning"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#adapter",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#adapter",
-    "title": "LLM Part1: Pre Training",
-    "section": "Adapter",
-    "text": "Adapter\n\nLoRA\n\n\nQ-LoRA"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#chatbot",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#chatbot",
-    "title": "LLM Part1: Pre Training",
-    "section": "ChatBot",
-    "text": "ChatBot\nMost know ChatGPT,"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#ai-agent",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#ai-agent",
-    "title": "LLM Part1: Pre Training",
-    "section": "AI Agent",
-    "text": "AI Agent"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-PreTraining.html#llm-as-optimizer",
-    "href": "posts/Blog/LLM/LLM-PreTraining.html#llm-as-optimizer",
-    "title": "LLM Part1: Pre Training",
-    "section": "LLM as Optimizer",
-    "text": "LLM as Optimizer"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-Applications.html",
-    "href": "posts/Blog/LLM/LLM-Applications.html",
-    "title": "LLM Part3: Applications",
-    "section": "",
-    "text": "This is the part 3 of the LLM series, application. What can we do after we have an LLM. One of the most significant application is the LLM Based Agent. With the ability of the LLM. The AI agent has acquire incredible ability. Besides the AI Agent, it has so many other applications that can be improve with the help of the LLM. We are going to dig into it."
-  },
-  {
-    "objectID": "posts/Projects/VLM.html",
-    "href": "posts/Projects/VLM.html",
-    "title": "Visual Language Model",
-    "section": "",
-    "text": "So far, in the project Mixture of expert model, we have trained a small LLM model, which perform good on the. In the project, I am going to expand the model to be accept the Image as another input.\nComing soon…."
-  },
-  {
-    "objectID": "posts/Projects/MoE.html",
-    "href": "posts/Projects/MoE.html",
-    "title": "Training a Mixture of Expert LLM",
-    "section": "",
-    "text": "In this blog, I am going to implement the MoE decoder models, which is one of the mainstream LLM model, it used in the prominent LLM, such as DeepSeek[]. The full code is on the following GitHub repository"
-  },
-  {
-    "objectID": "posts/Projects/MoE.html#rms-norm",
-    "href": "posts/Projects/MoE.html#rms-norm",
-    "title": "Training a Mixture of Expert LLM",
-    "section": "RMS Norm",
-    "text": "RMS Norm\n\\[\n\\|\\mathbf{x}\\|_{\\text{RMS}} = \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} x_i^2}\n\\]"
-  },
-  {
-    "objectID": "posts/Projects/MoE.html#multi-head-latent-attention",
-    "href": "posts/Projects/MoE.html#multi-head-latent-attention",
-    "title": "Training a Mixture of Expert LLM",
-    "section": "Multi Head Latent Attention",
-    "text": "Multi Head Latent Attention\nMulti-Head Latent Attention(MLA) is an advanced attention mechanism designed to enhance the efficiency of Transformer-based models by significantly reducing the size of the Key-Value(KV) cache, thereby accelerating inference without compromising performance.\nThe Key Features of MLA is:\n\nLat"
-  },
-  {
-    "objectID": "posts/Projects/MoE.html#mixture-of-expert",
-    "href": "posts/Projects/MoE.html#mixture-of-expert",
-    "title": "Training a Mixture of Expert LLM",
-    "section": "Mixture of Expert",
-    "text": "Mixture of Expert"
-  },
-  {
-    "objectID": "posts/Projects/MoE.html#loss-function",
-    "href": "posts/Projects/MoE.html#loss-function",
-    "title": "Training a Mixture of Expert LLM",
-    "section": "Loss Function",
-    "text": "Loss Function"
-  },
-  {
-    "objectID": "posts/Projects/MoE.html#kv-cache",
-    "href": "posts/Projects/MoE.html#kv-cache",
-    "title": "Training a Mixture of Expert LLM",
-    "section": "KV-Cache",
-    "text": "KV-Cache\n\n\n\nComparison of scaled dot-product attention with and without KV caching. (Image Source: Transformers KV Caching Explained(Medium)\n\n\nWhen generating tokens one by one (as in the auto-regressive decoding), we don’t need to recompute \\(K\\) and \\(V\\), since the property of the causal attention. In the causal attention, the previous tokens will not attend the later tokens. So we can cache them:\n\n\\(K_\\text{cache} = [K_1, K_2, \\cdots, K_{t-1}]\\)\n\\(V_\\text{cache} = [V_1, V_2, \\cdots, V_{t-1}]\\)\n\nThen for the current token at time \\(t\\), we compute attention:\n\\[\n\\text{Attention}(Q_t, [K_\\text{cache}, K_t], [V_\\text{cache}, V_t])\n\\]\nThis will saves computation and accelerates generation significantly without lower the model performance."
-  },
-  {
-    "objectID": "posts/notes.html",
-    "href": "posts/notes.html",
-    "title": "Learning Notes",
-    "section": "",
-    "text": "Note\n\n\n\n\nI have moved all my learning notes to this website. You can find them at Course Notes.\n\n\n\n\n\n\nAbout Page of the Course notes"
-  },
-  {
-    "objectID": "posts/Projects/VAE.html",
-    "href": "posts/Projects/VAE.html",
-    "title": "Training a VAE on Pokemon",
-    "section": "",
-    "text": "In this blog, I am going to implement the MoE decoder models, which is one of the mainstream LLM model, it used in the prominent LLM, such as DeepSeek[]. The full code is on the following GitHub repository"
-  },
-  {
-    "objectID": "posts/Projects/VAE.html#rms-norm",
-    "href": "posts/Projects/VAE.html#rms-norm",
-    "title": "Training a VAE on Pokemon",
-    "section": "RMS Norm",
-    "text": "RMS Norm\n\\[\n\\|\\mathbf{x}\\|_{\\text{RMS}} = \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} x_i^2}\n\\]"
-  },
-  {
-    "objectID": "posts/Projects/VAE.html#multi-head-latent-attention",
-    "href": "posts/Projects/VAE.html#multi-head-latent-attention",
-    "title": "Training a VAE on Pokemon",
-    "section": "Multi Head Latent Attention",
-    "text": "Multi Head Latent Attention\nMulti-Head Latent Attention(MLA) is an advanced attention mechanism designed to enhance the efficiency of Transformer-based models by significantly reducing the size of the Key-Value(KV) cache, thereby accelerating inference without compromising performance.\nThe Key Features of MLA is:\n\nLat"
-  },
-  {
-    "objectID": "posts/Projects/VAE.html#mixture-of-expert",
-    "href": "posts/Projects/VAE.html#mixture-of-expert",
-    "title": "Training a VAE on Pokemon",
-    "section": "Mixture of Expert",
-    "text": "Mixture of Expert"
-  },
-  {
-    "objectID": "posts/Projects/VAE.html#loss-function",
-    "href": "posts/Projects/VAE.html#loss-function",
-    "title": "Training a VAE on Pokemon",
-    "section": "Loss Function",
-    "text": "Loss Function"
-  },
-  {
-    "objectID": "posts/Projects/VAE.html#kv-cache",
-    "href": "posts/Projects/VAE.html#kv-cache",
-    "title": "Training a VAE on Pokemon",
-    "section": "KV-Cache",
-    "text": "KV-Cache\n\n\n\nComparison of scaled dot-product attention with and without KV caching. (Image Source: Transformers KV Caching Explained(Medium)\n\n\nWhen generating tokens one by one (as in the auto-regressive decoding), we don’t need to recompute \\(K\\) and \\(V\\), since the property of the causal attention. In the causal attention, the previous tokens will not attend the later tokens. So we can cache them:\n\n\\(K_\\text{cache} = [K_1, K_2, \\cdots, K_{t-1}]\\)\n\\(V_\\text{cache} = [V_1, V_2, \\cdots, V_{t-1}]\\)\n\nThen for the current token at time \\(t\\), we compute attention:\n\\[\n\\text{Attention}(Q_t, [K_\\text{cache}, K_t], [V_\\text{cache}, V_t])\n\\]\nThis will saves computation and accelerates generation significantly without lower the model performance."
-  },
-  {
-    "objectID": "posts/Projects/StableDiffusion.html",
-    "href": "posts/Projects/StableDiffusion.html",
-    "title": "Stable Diffusion From Scratch with Fine Tuning",
-    "section": "",
-    "text": "Github Link: https://github.com/Yyzhang2000/StableDiffusion-ControlNet"
-  },
-  {
-    "objectID": "posts/Projects/StableDiffusion.html#encoder",
-    "href": "posts/Projects/StableDiffusion.html#encoder",
-    "title": "Stable Diffusion From Scratch with Fine Tuning",
-    "section": "Encoder",
-    "text": "Encoder\nEncoder is represented as \\(\\mathcal{E}\\) in the graph\n(att?)"
-  },
-  {
-    "objectID": "posts/Projects/StableDiffusion.html#decoder",
-    "href": "posts/Projects/StableDiffusion.html#decoder",
-    "title": "Stable Diffusion From Scratch with Fine Tuning",
-    "section": "Decoder",
-    "text": "Decoder\nDecoder is represented as \\(\\mathcal{D}\\) in the graph"
-  },
-  {
-    "objectID": "posts/Projects/StableDiffusion.html#u-net",
-    "href": "posts/Projects/StableDiffusion.html#u-net",
-    "title": "Stable Diffusion From Scratch with Fine Tuning",
-    "section": "U-Net",
-    "text": "U-Net"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-Overview.html",
-    "href": "posts/Blog/LLM/LLM-Overview.html",
-    "title": "LLM Overview",
-    "section": "",
-    "text": "A language model is nothing model that outputs a probability distribution over the next token in a sequence given the previous tokens in the sequence, mathematically, it denoted as:\n\\[\nP_{\\theta}(x_t | x_{1:t-1})\n\\tag{1}\\]\nNowaday, when we say a LLM, we usually mean a decoder model, which mean predict the next token based on the previous tokens. However previous, there is another type of the model, not only depends on the previous tokens, but also depends on other conditions, such as, other language for the machine translation task, which denoted as:\n\\[\nP_{\\theta}(x_t | x_{1:t-1}, z)\n\\tag{2}\\]\nIn the blog, we mainly focus on the first type, which has the form of Equation 1. The second type is not the focus of this blog, but we might mention it in the future blog. There two main steps of the training an LLM, the pre-training and fine-tuning. The pre-training is the most time consuming part of the LLM. In just the next-word-prediction task. After we have the pre-trained model, the model can only generate the next word based on the previous words. So, we need to fine-tune the model to make it output the desired output. This the job of the post-training. In the post-training, there are two main tasks, the supervised fine-tuning(SFT) and reinforcement learning from human feedback(RLHF). The SFT is the supervised fine-tuning, which is the most common way to fine-tune the model. The RLHF is a new way to fine-tune the model, which is more efficient than the SFT."
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-Overview.html#supervised-fine-tuning-sft",
-    "href": "posts/Blog/LLM/LLM-Overview.html#supervised-fine-tuning-sft",
-    "title": "LLM Overview",
-    "section": "Supervised Fine Tuning (SFT)",
-    "text": "Supervised Fine Tuning (SFT)"
-  },
-  {
-    "objectID": "posts/Blog/LLM/LLM-Overview.html#reinforcement-learning-from-human-feedback-rlhf",
-    "href": "posts/Blog/LLM/LLM-Overview.html#reinforcement-learning-from-human-feedback-rlhf",
-    "title": "LLM Overview",
-    "section": "Reinforcement Learning from Human Feedback (RLHF)",
-    "text": "Reinforcement Learning from Human Feedback (RLHF)"
-  },
-  {
-    "objectID": "posts/Blog/LLM/RAG.html",
-    "href": "posts/Blog/LLM/RAG.html",
-    "title": "LLM: RAG",
-    "section": "",
-    "text": "Retrieval-Augmented Generation (RAG) is a technique used to equip the LLM the ability to use the updated news. It has here are several, it often use vector DB to store the LLM.\nThis is good for knowledge-intensive tasks, and allows for continuous knowledge updates and integration of domain-specific information. It retrieving relevant document chunks from external knowledge base through semantic similarity calculation. RAG effectively reduces the problem of generating factually incorrect content.\nThe In-Context Learning(ICL) abilities first display in the GPT3, which enable RAG to answer more complex and knowledge intensive tasks during the inference stages. Unlike previously, which used the knowledge from RAG to fine-tuning model. Later, the enhancement of RAG began to incorporate more with LLM fine-tuning techniques.\nAs name indicated, there are several techniques used in the “Retrieval”, ‘Generation’ and “Augmentation”.\nThere are three main parts of the RAG:"
-  },
-  {
-    "objectID": "posts/Blog/LLM/RAG.html#pre-retrieval-process",
-    "href": "posts/Blog/LLM/RAG.html#pre-retrieval-process",
-    "title": "LLM: RAG",
-    "section": "Pre-Retrieval Process",
-    "text": "Pre-Retrieval Process\nThe primary focus is on optimizing the indexing structure and the original query.\n\nOptimizing Indexing: enhance the quality of the content being indexed:\n\nEnhancing data granularity\nOptimizing index structures,\nAdding Meta-data\nAlignment optimization\nMixed retrieval\n\nOptimizing Query: make the user’s original question clearer and more suitable for the retrieval task, through:\n\nQuery rewritting\nQuery Transformation\nQuery Expansion"
-  },
-  {
-    "objectID": "posts/Blog/LLM/RAG.html#post-retrieval-process",
-    "href": "posts/Blog/LLM/RAG.html#post-retrieval-process",
-    "title": "LLM: RAG",
-    "section": "Post-Retrieval Process",
-    "text": "Post-Retrieval Process\nOnce relevant context is retrieved, it is crucial to integrate it effectively with the query. The main methods in this stage are:\n\nRe-rank chunks: Re-ranking the retrieved information to relocated the most relevant content to the edges of the prompt\nContext Compressing: concentrate on selecting the essential information, emphasizing critical sections, and shortening the context to be processed."
-  },
-  {
-    "objectID": "posts/Blog/LLM/RAG.html#new-modules",
-    "href": "posts/Blog/LLM/RAG.html#new-modules",
-    "title": "LLM: RAG",
-    "section": "New Modules",
-    "text": "New Modules\n\nSearch Module\nThe search module adapts to specific scenarios, enabling direct searches across various sources like search engines, database, and knowledge graphs, using LLM-generated code and query languages\nThe RAG-Fusing addresses search limitations by employing a multi-query strategy that expands user queries into diverse perspectives, utilizing parallel vector searches and intelligent re-ranking to uncover both explicit and transformative knowledge, utilizing parallel vector searches and intelligent re-ranking to uncover both explict and transformative knowledge.\n\n\nMemory Module\nThe Memory module leverages the LLM’s memory to guide retrieval, creating an unbounded memory pool that aligns the text more closely with data distribution through iterative self-enhancement.\n\n\nRouting Module\nThe Routing navigates through diverse data sources, selecting the optimal pathway for a query, whether it involves summarization, database searches, or merging different information streams.\n\n\nThe Preict Module\nThe predict module aims to reduce redundancy and noise by generating context directly through the LLM, ensuring relevance and accuracy.\n\n\nTask Adapter Module\nThe adapter module tailors RAG to various downstream tasks, automating prompt retrieval for zero-shot inputs and creating task-specific retrievers through few-shot query generationg."
-  },
-  {
-    "objectID": "posts/Blog/LLM/RAG.html#new-pattern",
-    "href": "posts/Blog/LLM/RAG.html#new-pattern",
-    "title": "LLM: RAG",
-    "section": "New Pattern",
-    "text": "New Pattern\nModular RAG offers remarkable adaptability by allowing module substitution or reconfiguration to address specific challenges. Modular RAG expands the flexibility by integrating new modules or adjusting interaction flow among existing ones, enhancing its applicability across different tasks."
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/VAE.html",
-    "href": "posts/Blog/Generative Model/VAE.html",
-    "title": "Deep Dive into Variational AutoEncoder",
-    "section": "",
-    "text": "(oordNeuralDiscreteRepresentation2018?)"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/VAE.html#vq-vae",
-    "href": "posts/Blog/Generative Model/VAE.html#vq-vae",
-    "title": "Deep Dive into Variational AutoEncoder",
-    "section": "",
-    "text": "(oordNeuralDiscreteRepresentation2018?)"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Generative Model Overview.html",
-    "href": "posts/Blog/Generative Model/Generative Model Overview.html",
-    "title": "What a Generative Models?",
-    "section": "",
-    "text": "Generative models, as the name indicated, are models that can generative new content. Unlike discriminate models, the generative models are sometime hard to train. But why we need generative models in the first place? We want generative models because:\n\nDensity Estimation: Estimate the probability density function of the data.\nAnomaly Detection: Detect the anomaly data points.\nImputation: Fill in the missing data.\nData Augmentation: Generate new data to increase the size of the dataset.\nData Generation: Generate new data to train the model.\nData Compression: Compress the data to save the storage.\nData Denoising: Remove the noise from the data.\nLatent Space Exploration: Explore the latent space of the data.\nLatent Space Interpolation: Interpolate between the data points.\n\n\n\n\n\n\n\nFigure 1: Summary of various kinds of deep generative models. (Image Source: Probabilistic Machine Learning)\n\n\n\nGenerative Models can solve inverse problems. For example, the medical image reconstruction. Herea re some example of the generative models in the real world:\n\nText to Image Model: this is common in the current AI, for example, the Stable Diffusion Model and Dalles model, below are the example of the generation of Chat-4o model:\n\n\n\n\n\n\n\nFigure 2: Image Generation through ChatGPT-4o model.\n\n\n\n\nText to Video model such as Sora.\n\n\n\n\n\n\n\nFigure 3\n\n\n\nIn the blog, we will learn three things:\n\nRepresentation: how to model the joint distribution of many random variables\nLearning: how to learn and compare the different probability distribution\nInference: how to invert the generation process ( recover high-level description (latent variables) from raw data(images, text…)\n\nBesides the three main topics, we will introduce 6 different generative models as showed in the Figure 1. In this article, we will go through those 6 different types. Get into the details of each different types and compare models. How to combine those model to get more complex modeling ability.\n\n\n\n\n\n\nNote\n\n\n\nIn this blog, we only going through the main ideas of the different models, if you want to dig into different topics more deeply, please check my following blogs:\n\nVariational AutoEncoder Models\nDiffusion Models\nAuto-Regressive Models (Coming soon…)\nFlow Matching(Coming soon…)\nGAN(Coming soon…)"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Generative Model Overview.html#reparameterization-trick",
-    "href": "posts/Blog/Generative Model/Generative Model Overview.html#reparameterization-trick",
-    "title": "What a Generative Models?",
-    "section": "Reparameterization trick",
-    "text": "Reparameterization trick\nWe can use the Monte Carlo Method to evaluate the ELBO \\[\n\\quad -\\mathbb{E}{q_{\\phi}(z|x)}[\\log p_{\\theta}(x|z)] + D_{\\text{KL}}(q_{\\phi}(z|x)\\|p(z)) \\approx \\log p_{\\theta}(x | z_{1})z_{1} + \\text{Const}\n\\] However, the \\(z_{1}\\) is sampled from the a Gaussian Distribution with \\(\\mu, \\sigma\\) calculated from \\(q_{\\phi}(z |x)\\), which mean the gradient information which used to update the parameters cannot flow through this node because of the randomness. Is there are other way to remove the randomness from the loss function? This, that’s reparameterization trick do. Instead of sampling \\(z\\) from \\(q_{\\phi}(z |x)\\), we:\n\nSample \\(\\epsilon\\) from a fixed, parameter-free distribution (e.g. Normal Distribution)\nUse a deterministic function of that sample and the parameters to get \\(z = f(\\epsilon)\\)\n\n\nSo the model become"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Generative Model Overview.html#diffusion-models-vae",
-    "href": "posts/Blog/Generative Model/Generative Model Overview.html#diffusion-models-vae",
-    "title": "What a Generative Models?",
-    "section": "Diffusion Models + VAE",
-    "text": "Diffusion Models + VAE\n\n\n\nThe Architecture of the Stable Diffusion Models (Image Source: High-Resolution Image Synthesis with Latent Diffusion Models)\n\n\nOne limitation of the diffusion models, it need to go through many steps on the high-dimensional space. If we can train an model on the lower dimension and recover it back to the high dimension, than we can speed up both training and generating process. As proposed in (rombachHighResolutionImageSynthesis2022?), the Latent Diffusion Model is one of those approach. It leverages latent diffusion techniques, making it computationally efficient and capable of generating diverse, photorealistic, and detailed visuals from textual prompts. Widely adopted for its open-source accessibility, Stable Diffusion enables artists, researchers, and developers to produce remarkable content easily."
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Generative Model Overview.html#auto-regressive-vae",
-    "href": "posts/Blog/Generative Model/Generative Model Overview.html#auto-regressive-vae",
-    "title": "What a Generative Models?",
-    "section": "Auto-Regressive + VAE",
-    "text": "Auto-Regressive + VAE"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Generative Model Overview.html#auto-regressive-flow-models",
-    "href": "posts/Blog/Generative Model/Generative Model Overview.html#auto-regressive-flow-models",
-    "title": "What a Generative Models?",
-    "section": "Auto-Regressive + Flow Models",
-    "text": "Auto-Regressive + Flow Models"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Generative Model Overview.html#flow-model-vae",
-    "href": "posts/Blog/Generative Model/Generative Model Overview.html#flow-model-vae",
-    "title": "What a Generative Models?",
-    "section": "Flow Model + VAE",
-    "text": "Flow Model + VAE"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Generative Model Overview.html#flow-model-gan",
-    "href": "posts/Blog/Generative Model/Generative Model Overview.html#flow-model-gan",
-    "title": "What a Generative Models?",
-    "section": "Flow Model + GAN",
-    "text": "Flow Model + GAN"
-  },
-  {
-    "objectID": "posts/Blog/Generative Model/Generative Model Overview.html#vae-gan",
-    "href": "posts/Blog/Generative Model/Generative Model Overview.html#vae-gan",
-    "title": "What a Generative Models?",
-    "section": "VAE + GAN",
-    "text": "VAE + GAN\nAs metioned in the paper (larsenAutoencodingPixelsUsing2016?)"
-  },
-  {
-    "objectID": "posts/Blog/Un-supervised-Learning.html",
-    "href": "posts/Blog/Un-supervised-Learning.html",
-    "title": "Unsupervised Learning is huge",
-    "section": "",
-    "text": "First, let’s think why we need the Un-supervised Learning method?\nUnsupervised learning is a type of machine learning where an algorithm is trained on unlabled data without supervision(a.k.a label). The model attempts to discover hidden patterns, structure, or relationships within the data without predefined output labels.\nWha the un-supervised learning method? The norm supervised learning method is know. It have several method that can be used to:\n\nGenerative Models: generative model, as the define of the up-supervised learning. We only have the data , and not label, so it can be seen as the un-supervised learning methods. (For more details, check my this blog: What a Generative Models?\nSelf-Supervised Learning: This kind of problem can be seen as the un-supervised learning because we find a label from data it self, rather than provided data with label\nContrastive Learning:\n\nIn this blog, I mainly focus on the self-supervised learning and Contrastive Learning. For reader who are interested in the generative models, check this blog: What a Generative Models?\n\nGenerative Model\nWe can form the generative model as following:\n\nGiving a dataset \\(\\mathcal{D}\\), how to learning a model \\(p_\\theta(x)\\), that we can sample data points from the trained model.\n\nSo, the generative model can be seen as the representation learning. We learn some structure and semantic context from the data through model.\nNot all the generative model can be used as up-supervised learning.\nGene\n\n\nSelf-Supervised Learning\n\n\nContrastive Learning\nThe other way to learn the representation of the data is through the contrast. The main idea is to compare each other, and want the most similar data points to get closer and the dis-like data dispense as far as possible."
-  },
-  {
-    "objectID": "posts/Blog/Rl.html",
-    "href": "posts/Blog/Rl.html",
-    "title": "Reinforcement Learning without confusion",
-    "section": "",
-    "text": "This is some code\n\nprint(\"Hello World\")\n\nprint(\"Hello World\")\nclass Net(nn.Module):\n    def __init__(self, config):\n        this s asd asd asd asd asd asd asd this s asd asd asd asd asd asd asd"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html",
-    "href": "posts/Blog/Gaussian.html",
-    "title": "Gaussian Distribution is All you need",
-    "section": "",
-    "text": "Gaussian Distribution, one of the most important and widely used probability distributions in statistics and machine learning. It is also known as the normal distribution, which is a continuous probability distribution that is symmetric about the mean, showing that data near the mean are more frequent in occurrence than data far from the mean. In the blog, I will walk through the AI field from basic normal distribution, and see how this tree spread across the world."
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#gaussian-distribution",
-    "href": "posts/Blog/Gaussian.html#gaussian-distribution",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Gaussian Distribution",
-    "text": "Gaussian Distribution\nGaussian distribution, also know as the Normal Distribution, is defined, for a single real-valued variable \\(x\\) as:\n\\[\n\\mathcal{N}(x | \\mu, \\sigma^2) = \\frac{1}{(2\\pi\\sigma^2)^{1/2}}\\exp\\left\\{- \\frac{1}{2\\sigma^2} (x - \\mu)^2\\right\\}\n\\tag{1}\\]\nwhere:\n\n\\(\\mu\\) called the mean\n\\(\\sigma^2\\) called the variance\n\n\\(\\sigma\\) called the standard deviation\n\n\\(\\beta = 1/\\sigma^2\\) called the precision."
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#multivariate-gaussian-distribution",
-    "href": "posts/Blog/Gaussian.html#multivariate-gaussian-distribution",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Multivariate Gaussian Distribution",
-    "text": "Multivariate Gaussian Distribution\nNow, we consider the \\(D\\)-dimensional \\(\\mathbf{x}\\), this lead to the Multivariate Gaussian, which is defined as:\n\\[\n\\mathcal{N}(\\mathcal{\\mathbf{x}|\\boldsymbol{\\mu}, \\boldsymbol{\\Sigma}})= \\frac{1}{(2\\pi)^{D / 2}|\\boldsymbol{\\Sigma}|^{1 / 2}} \\exp\\left\\{  - \\frac{1}{2}  (\\mathbf{x}- \\mathbf{\\mu})^{T} \\boldsymbol{\\Sigma}^{-1}(\\mathbf{x} - \\boldsymbol{\\mu})\\right\\}\n\\tag{2}\\]\nwhere:\n\n\\(\\boldsymbol{\\mu}\\) is the \\(D\\)-dimensional mean vector\n\\(\\boldsymbol{\\Sigma}\\) is the \\(D \\times D\\) covariance matrix - \\(\\det \\boldsymbol{\\Sigma}\\) is the determinant of \\(\\boldsymbol{\\Sigma}\\)\n\\(\\Lambda \\equiv  \\boldsymbol{\\Sigma}^{-1}\\) is the precision matrix."
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#mixture-of-gaussian",
-    "href": "posts/Blog/Gaussian.html#mixture-of-gaussian",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Mixture of Gaussian",
-    "text": "Mixture of Gaussian\nMore complexity, when we take the linear combination of the basic distribution of Normal Distribution, we will get Mixture of Gaussian Distribution, which is defined as:\n\\[\np(\\mathbf{x}) = \\sum_{k=1}^{K}\\pi_{k}\\mathcal{N}(\\mathbf{x} | \\boldsymbol{\\mu}_{k}, \\boldsymbol{\\Sigma}_{k})\n\\tag{3}\\]\nwhere:\n\n\\(\\pi_k\\) called the mixing coefficients, who has constraints that\n\\[\n\\begin{array} &\\sum_{k=1}^K \\pi_k = 1  \\\\ 0 \\leq \\pi_{k} \\leq 1\\end{array}\n\\]\n\\(\\mathcal{N}(\\mathbf{x} | \\boldsymbol{\\mu}{k}, \\boldsymbol{\\Sigma}{k})\\) is called a component of the mixture, has its own \\(\\boldsymbol{\\mu}\\) and \\(\\boldsymbol{\\Sigma}_k\\)"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#conditional-distribution",
-    "href": "posts/Blog/Gaussian.html#conditional-distribution",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Conditional Distribution",
-    "text": "Conditional Distribution\nThe conditional distribution is defined as\n\\[\np(\\mathrm{x} | \\mathrm{y})\n\\]\nwhich mean the probability distribution function of \\(\\mathrm{x}\\) is dependent on the value of \\(\\mathrm{y}\\). One of the nice property of Gaussian Distribution is that:\nIf the joint distribution of the two random variable are gaussian distribution, then the conditional distribution is also a Gaussian distribution."
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#marginal-distribution",
-    "href": "posts/Blog/Gaussian.html#marginal-distribution",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Marginal Distribution",
-    "text": "Marginal Distribution\nThe marginal distribution is defined as:\n\\[\np(\\mathrm{x})= \\int p(\\mathrm{x}, \\mathrm{y}) d\\mathrm{y}\n\\]\nAnother good property of the normal distribution is that:\nIf the joint distribution of the two random variable are gaussian distribution, then the marginal distribution is also gaussian."
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#linear-gaussian-model",
-    "href": "posts/Blog/Gaussian.html#linear-gaussian-model",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Linear Gaussian Model",
-    "text": "Linear Gaussian Model"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#gaussian-in-high-dimension",
-    "href": "posts/Blog/Gaussian.html#gaussian-in-high-dimension",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Gaussian In High-Dimension",
-    "text": "Gaussian In High-Dimension"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#maximum-likelihood-learning",
-    "href": "posts/Blog/Gaussian.html#maximum-likelihood-learning",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Maximum Likelihood Learning",
-    "text": "Maximum Likelihood Learning\nThe first methods we introduce is the maximum likelihood learning, which is defined as:\n\\[\n\\max P(\\mathcal{D} | \\mu, \\Sigma)\n\\tag{4}\\]\nThe \\(P(\\mathcal{D} | \\mu, \\Sigma)\\) is called the likelihood of the dataset, as we defined in the question, the data points are i.i.d. so, we can write the likelihood function as:\n\\[\nP(\\mathcal{D} | \\mu, \\Sigma) = \\prod_{n = 1}^N \\mathcal{N}(\\mathbf{x}_n | \\mu, \\Sigma)\n\\tag{5}\\]\n\n\n\n\n\n\nLog Trick\n\n\n\nIn the practice, because the \\(0 \\leq \\mathcal{N}(\\mathbf{x}_n | \\mu, \\Sigma) \\leq 1\\), when multiplying \\(N\\) small number together, might cause the under-flow problem in the computer. So, we use \\(\\log\\)-form of the function to prevent the under-flow. Because the \\(\\log\\) function is the monomtic function, so, when we maximimzie \\(\\log f\\) is same as \\(\\max f\\).\n\n\nSo, the objective function we want to maximize is:\n\\[\n\\ln P(\\mathcal{D} | \\mu, \\Sigma) = \\sum_{n = 1}^N \\ln\\mathcal{N}(\\mathbf{x}_n | \\mu, \\Sigma)\n\\tag{6}\\]\nHow to maximize the Equation 6. The most intuitive of way is set the derivative of the function with respect to 0.\n\nGradient Descent\n\n\nBias of Maximum Likelihood Learning.\nAs we can see, we used the sample mean to derive the sample variance. Because the sample mean estimated from the dataset \\(\\mathcal{D}\\) , it is not same as the true \\(\\mu\\)."
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#maxium-a-posteriormap-estimate",
-    "href": "posts/Blog/Gaussian.html#maxium-a-posteriormap-estimate",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Maxium A Posterior(MAP) Estimate",
-    "text": "Maxium A Posterior(MAP) Estimate"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#expectation-maximizationem-algorithms",
-    "href": "posts/Blog/Gaussian.html#expectation-maximizationem-algorithms",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Expectation-Maximization(EM) Algorithms",
-    "text": "Expectation-Maximization(EM) Algorithms\n\nEM Algorithms for Gaussian Mxiture Model"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#sequential-estimation",
-    "href": "posts/Blog/Gaussian.html#sequential-estimation",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Sequential Estimation",
-    "text": "Sequential Estimation\nSo far we have assume that we can “see” the whole dataset at once. In practice, we sometime cannot get the whole dataset at one, because:\n\nThe data points comes in sequential, e.g. Online Learning\nThe dataset is too big that can not fit into the memory of the computer.\n\nWe have to way to learn the parameters in sequential version. One of the method is called Robbins-Monro algorithm.\n\nWelford’s Algorithm\n\nRobbins-Monro Algorithm\n\n\n\nKalman Filter\n\n\nStochastic Gradient Descent\n\n\nExpoential Moving Average(EMA)"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#kernl-density-estimation",
-    "href": "posts/Blog/Gaussian.html#kernl-density-estimation",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Kernl Density Estimation",
-    "text": "Kernl Density Estimation"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#linear-regression",
-    "href": "posts/Blog/Gaussian.html#linear-regression",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Linear Regression",
-    "text": "Linear Regression"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#gaussian-process",
-    "href": "posts/Blog/Gaussian.html#gaussian-process",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Gaussian Process",
-    "text": "Gaussian Process"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#clustering",
-    "href": "posts/Blog/Gaussian.html#clustering",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Clustering",
-    "text": "Clustering"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#deep-learning",
-    "href": "posts/Blog/Gaussian.html#deep-learning",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Deep Learning",
-    "text": "Deep Learning\n\nModel Initilization\nAs mention in the (heDelvingDeepRectifiers2015?)\n\nLoRA\n(huLoRALowRankAdaptation2021?)\n\n\n\nLoRA Image Source:(huLoRALowRankAdaptation2021?)\n\n\nIn the LLM, the number of parameters is huge, how we can file-tune those huge parameters. Using parameters efficient fine-tuning technique is one technique. LoRA is one of the PEFT that widely used in the file-tuning huge data.\nThe \\(A\\) matrix is initilization as the Normal DistributionEquation 2"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#normalization",
-    "href": "posts/Blog/Gaussian.html#normalization",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Normalization",
-    "text": "Normalization\n\nLayer Normlization\n(xiong2020?)\n\n\nRMS Normlization\nThis is the RMS with (zhang?)"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#generative-models",
-    "href": "posts/Blog/Gaussian.html#generative-models",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Generative Models",
-    "text": "Generative Models\nIn the Generative Models, the Normal Distribution is sometime used as the noise add to the original data, or the prior distribution of some unknown distribution that we are trying to get. In this chapter,"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#generative-adversarial-networks",
-    "href": "posts/Blog/Gaussian.html#generative-adversarial-networks",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Generative Adversarial Networks",
-    "text": "Generative Adversarial Networks\nThe Latent Space input to the generator is of sampled from a Gaussian Distribution (goodfellowGenerativeAdversarialNetworks2014?)\n\nVariational Autoencoders(VAE)\nVAEs uses a Gaussian Latent space to learn a generative model of data. (kingmaAutoEncodingVariationalBayes2022?)\nA VAE assumes that data is generated from a latent variable \\(Z\\), which follows a Gaussian prior: \\(Z \\sim \\mathcal{N}(0, I)\\). The VAE model learn a probabilistic mapping from \\(Z\\) to the observed data \\(X\\) using:\n\nEncoder: \\(q(Z |X ) \\sim \\mathcal{N}(\\mu_\\theta(X), \\sigma^2_\\theta(X))\\)\nDecoder: \\(P(X | Z)\\) reconstructs \\(X\\) from \\(Z\\)"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#diffusion-models",
-    "href": "posts/Blog/Gaussian.html#diffusion-models",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Diffusion Models",
-    "text": "Diffusion Models\n(For more details, check my this blog about diffusion models)\nThis paper (ho?)"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#reinforcement-learning",
-    "href": "posts/Blog/Gaussian.html#reinforcement-learning",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Reinforcement Learning",
-    "text": "Reinforcement Learning\nIn the Reinforcement Learning, Gaussian Distribution are commonly used in policy gradient methods like Trust Region Optimization(TRPO) and Proximal Policy Optimization(PPO), where policies are modeled as Gaussian distribution.\nWhen Exploration the environment, the exploration is often handled by Gaussian noise, such as in Deep Deterministc Policy Gradient"
-  },
-  {
-    "objectID": "posts/Blog/Gaussian.html#meta-learning",
-    "href": "posts/Blog/Gaussian.html#meta-learning",
-    "title": "Gaussian Distribution is All you need",
-    "section": "Meta Learning",
-    "text": "Meta Learning\nBayesian Meta Learning: Gaussian priors over parameters enable fast adaptation to new tasks in few-shot learning.\nLatent Task Representation: Many meta-learning frameworks use Gaussian distributions in the latent space to generalize across different tasks efficiently\nUncertainty Estimation: Gaussian-based models in meta-learning help quantify uncertainty, improving robustness in real-world application."
-  },
-  {
-    "objectID": "posts/about.html",
-    "href": "posts/about.html",
     "title": "About Yuyang",
     "section": "",
     "text": "I am a recent graduate from Singapore Management University in MITB (AI Track). With a strong foundation in computer science and big data, I have hands-on experience in machine learning and deep learning, and I’m passionate about building impactful AI-driven solutions. I am currently seeking full-time opportunities in the AI field where I can contribute, grow, and make a meaningful impact. Open to Work – feel free to reach out at zhangyuyang1211@gmail.com!"
   },
   {
-    "objectID": "posts/about.html#education",
-    "href": "posts/about.html#education",
+    "objectID": "index.html#education",
+    "href": "index.html#education",
     "title": "About Yuyang",
     "section": "Education",
     "text": "Education\n\n  \n    \n    \n      2023 - 2025\n      Master of IT in Business\n      Singapore Management University\n    \n  \n  \n    \n    \n      2020 - 2023\n      Bachelor of Computer Science\n      University of Wollongong"
   },
   {
-    "objectID": "posts/about.html#work-experience",
-    "href": "posts/about.html#work-experience",
+    "objectID": "index.html#work-experience",
+    "href": "index.html#work-experience",
     "title": "About Yuyang",
     "section": "Work Experience",
     "text": "Work Experience\n\n  \n    \n    \n      March 2025  - Present\n      Research Assistant Intern\n      SMART"
   },
   {
-    "objectID": "posts/about.html#projects",
-    "href": "posts/about.html#projects",
+    "objectID": "index.html#projects",
+    "href": "index.html#projects",
     "title": "About Yuyang",
     "section": "Projects",
     "text": "Projects\n\n  \n    \n    \n       File-Tuning Large Visual Language Model\n          [GitHub]\n          [Blog]\n      \n        Wrting the"
   },
   {
-    "objectID": "posts/about.html#technical-skills",
-    "href": "posts/about.html#technical-skills",
+    "objectID": "index.html#technical-skills",
+    "href": "index.html#technical-skills",
     "title": "About Yuyang",
     "section": "Technical Skills",
     "text": "Technical Skills\n\n  \n    Python Development\n    Algorithm Design\n    Deep Learning\n    Machine Learning\n    Computer Vision\n    Natural Language Processing\n    Deep Reinforcement Learning\n    Graph Neural Networks\n    Large Language Model\n    Model Compression\n    Convex Optimization\n    Probabilistic Graph Model\n    Meta Learning\n    Deep Generative Model"
@@ -894,5 +40,327 @@
     "title": "Projects",
     "section": "",
     "text": "Visual Language Model\n\n\n\nLarge Language Model\n\nMulti-Modality\n\n\n\nIn this project, I will implement a Visual Language Model (VLM) using ‘pure’ PyTorch, which is a model that can understand and generate text based on visual inputs.\n\n\n\nYuyang Zhang\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/notes.html",
+    "href": "posts/notes.html",
+    "title": "Learning Notes",
+    "section": "",
+    "text": "Note\n\n\n\n\nI have moved all my learning notes to this website. You can find them at Course Notes.\n\n\n\n\n\n\nAbout Page of the Course notes"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html",
+    "title": "LLM Part1: Pre Training",
+    "section": "",
+    "text": "This is the first part of the LLM series, Pre-training, the Pre-training the most time consuming part of the LLM. In the nutshell, it just the next-word-prediction task. That’s it. Not anything fancy. However, what make the LLM hard to train and only achieve in recent years because it is LARGE. People need to develop and invent some efficient training algorithm to speed up the training process, make it efficient to training and deploying. In the article, I am going to take the path going through the training LLM from scratch, make the LLM easy to understand."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#word-level",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#word-level",
+    "title": "LLM Part1: Pre Training",
+    "section": "Word Level",
+    "text": "Word Level"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#byte-pair-encoding",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#byte-pair-encoding",
+    "title": "LLM Part1: Pre Training",
+    "section": "Byte-Pair-Encoding",
+    "text": "Byte-Pair-Encoding"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#bit-encoding",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#bit-encoding",
+    "title": "LLM Part1: Pre Training",
+    "section": "Bit Encoding",
+    "text": "Bit Encoding"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#embedding",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#embedding",
+    "title": "LLM Part1: Pre Training",
+    "section": "Embedding",
+    "text": "Embedding\nEmbedding is"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#position-encoding",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#position-encoding",
+    "title": "LLM Part1: Pre Training",
+    "section": "Position Encoding",
+    "text": "Position Encoding"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#normalization",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#normalization",
+    "title": "LLM Part1: Pre Training",
+    "section": "Normalization",
+    "text": "Normalization"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#layer-normalization",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#layer-normalization",
+    "title": "LLM Part1: Pre Training",
+    "section": "Layer Normalization",
+    "text": "Layer Normalization"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#rms-normalization",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#rms-normalization",
+    "title": "LLM Part1: Pre Training",
+    "section": "RMS Normalization",
+    "text": "RMS Normalization\n\nPost-Norm vs. Pre-Norm"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#without-normalization",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#without-normalization",
+    "title": "LLM Part1: Pre Training",
+    "section": "Without Normalization",
+    "text": "Without Normalization\nRecently, (zhuTransformersNormalization2025?) proposed that we can remove the normalization without harm the performance of the neural network. It replace the normalization layer with a scaled tanh function, named Dynamic Tanh, defined as:\n\\[\n\\text{DyT}(x) = \\gamma * \\tanh(\\alpha x) + \\beta\n\\]\n\n\n\n\n\n\nFigure 1: Block with Dynamic Tanh(DyT) (Image Source: Transformers without Normalization)\n\n\n\nIt adjust the input activation range via a learnable scaling factor \\(\\alpha\\) and then squashed the extreme values through an S-shaped tanh function."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#attention-mechnism",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#attention-mechnism",
+    "title": "LLM Part1: Pre Training",
+    "section": "Attention Mechnism",
+    "text": "Attention Mechnism"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#feed-forward-network",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#feed-forward-network",
+    "title": "LLM Part1: Pre Training",
+    "section": "Feed Forward Network",
+    "text": "Feed Forward Network\n\nMixture of Expert"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#cross-entropy-loss",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#cross-entropy-loss",
+    "title": "LLM Part1: Pre Training",
+    "section": "Cross Entropy Loss",
+    "text": "Cross Entropy Loss"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#model-initilization",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#model-initilization",
+    "title": "LLM Part1: Pre Training",
+    "section": "Model Initilization",
+    "text": "Model Initilization"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#optimizer",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#optimizer",
+    "title": "LLM Part1: Pre Training",
+    "section": "Optimizer",
+    "text": "Optimizer"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#about-gradients",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#about-gradients",
+    "title": "LLM Part1: Pre Training",
+    "section": "About Gradients",
+    "text": "About Gradients\n\nGradient Accumulations\n\n\nGradiant Clipping"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#mixed-precision",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#mixed-precision",
+    "title": "LLM Part1: Pre Training",
+    "section": "Mixed Precision",
+    "text": "Mixed Precision"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#parallellism",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#parallellism",
+    "title": "LLM Part1: Pre Training",
+    "section": "Parallellism",
+    "text": "Parallellism"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#supervised-fine-tuning",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#supervised-fine-tuning",
+    "title": "LLM Part1: Pre Training",
+    "section": "Supervised-Fine-Tuning",
+    "text": "Supervised-Fine-Tuning"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#reinforcement-learning-from-human-feedback",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#reinforcement-learning-from-human-feedback",
+    "title": "LLM Part1: Pre Training",
+    "section": "Reinforcement Learning from Human Feedback",
+    "text": "Reinforcement Learning from Human Feedback\n\nPPO\n\n\nDPO\n\n\nGRPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#quantization",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#quantization",
+    "title": "LLM Part1: Pre Training",
+    "section": "Quantization",
+    "text": "Quantization"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#knowledge-distillation",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#knowledge-distillation",
+    "title": "LLM Part1: Pre Training",
+    "section": "Knowledge Distillation",
+    "text": "Knowledge Distillation"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#prompt-enginnering",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#prompt-enginnering",
+    "title": "LLM Part1: Pre Training",
+    "section": "Prompt Enginnering",
+    "text": "Prompt Enginnering"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#prefix-tuning",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#prefix-tuning",
+    "title": "LLM Part1: Pre Training",
+    "section": "Prefix-Tuning",
+    "text": "Prefix-Tuning"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#adapter",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#adapter",
+    "title": "LLM Part1: Pre Training",
+    "section": "Adapter",
+    "text": "Adapter\n\nLoRA\n\n\nQ-LoRA"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#chatbot",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#chatbot",
+    "title": "LLM Part1: Pre Training",
+    "section": "ChatBot",
+    "text": "ChatBot\nMost know ChatGPT,"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#ai-agent",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#ai-agent",
+    "title": "LLM Part1: Pre Training",
+    "section": "AI Agent",
+    "text": "AI Agent"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#llm-as-optimizer",
+    "href": "posts/Blogs/LLM/LLM-PreTraining.html#llm-as-optimizer",
+    "title": "LLM Part1: Pre Training",
+    "section": "LLM as Optimizer",
+    "text": "LLM as Optimizer"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Applications.html",
+    "href": "posts/Blogs/LLM/LLM-Applications.html",
+    "title": "LLM Part3: Applications",
+    "section": "",
+    "text": "This is the part 3 of the LLM series, application. What can we do after we have an LLM. One of the most significant application is the LLM Based Agent. With the ability of the LLM. The AI agent has acquire incredible ability. Besides the AI Agent, it has so many other applications that can be improve with the help of the LLM. We are going to dig into it."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Overview.html",
+    "href": "posts/Blogs/LLM/LLM-Overview.html",
+    "title": "LLM Overview",
+    "section": "",
+    "text": "A language model is nothing model that outputs a probability distribution over the next token in a sequence given the previous tokens in the sequence, mathematically, it denoted as:\n\\[\nP_{\\theta}(x_t | x_{1:t-1})\n\\tag{1}\\]\nNowaday, when we say a LLM, we usually mean a decoder model, which mean predict the next token based on the previous tokens. However previous, there is another type of the model, not only depends on the previous tokens, but also depends on other conditions, such as, other language for the machine translation task, which denoted as:\n\\[\nP_{\\theta}(x_t | x_{1:t-1}, z)\n\\tag{2}\\]\nIn the blog, we mainly focus on the first type, which has the form of Equation 1. The second type is not the focus of this blog, but we might mention it in the future blog. There two main steps of the training an LLM, the pre-training and fine-tuning. The pre-training is the most time consuming part of the LLM. In just the next-word-prediction task. After we have the pre-trained model, the model can only generate the next word based on the previous words. So, we need to fine-tune the model to make it output the desired output. This the job of the post-training. In the post-training, there are two main tasks, the supervised fine-tuning(SFT) and reinforcement learning from human feedback(RLHF). The SFT is the supervised fine-tuning, which is the most common way to fine-tune the model. The RLHF is a new way to fine-tune the model, which is more efficient than the SFT."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Overview.html#supervised-fine-tuning-sft",
+    "href": "posts/Blogs/LLM/LLM-Overview.html#supervised-fine-tuning-sft",
+    "title": "LLM Overview",
+    "section": "Supervised Fine Tuning (SFT)",
+    "text": "Supervised Fine Tuning (SFT)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Overview.html#reinforcement-learning-from-human-feedback-rlhf",
+    "href": "posts/Blogs/LLM/LLM-Overview.html#reinforcement-learning-from-human-feedback-rlhf",
+    "title": "LLM Overview",
+    "section": "Reinforcement Learning from Human Feedback (RLHF)",
+    "text": "Reinforcement Learning from Human Feedback (RLHF)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/RAG.html",
+    "href": "posts/Blogs/LLM/RAG.html",
+    "title": "LLM: RAG",
+    "section": "",
+    "text": "Retrieval-Augmented Generation (RAG) is a technique used to equip the LLM the ability to use the updated news. It has here are several, it often use vector DB to store the LLM.\nThis is good for knowledge-intensive tasks, and allows for continuous knowledge updates and integration of domain-specific information. It retrieving relevant document chunks from external knowledge base through semantic similarity calculation. RAG effectively reduces the problem of generating factually incorrect content.\nThe In-Context Learning(ICL) abilities first display in the GPT3, which enable RAG to answer more complex and knowledge intensive tasks during the inference stages. Unlike previously, which used the knowledge from RAG to fine-tuning model. Later, the enhancement of RAG began to incorporate more with LLM fine-tuning techniques.\nAs name indicated, there are several techniques used in the “Retrieval”, ‘Generation’ and “Augmentation”.\nThere are three main parts of the RAG:"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/RAG.html#pre-retrieval-process",
+    "href": "posts/Blogs/LLM/RAG.html#pre-retrieval-process",
+    "title": "LLM: RAG",
+    "section": "Pre-Retrieval Process",
+    "text": "Pre-Retrieval Process\nThe primary focus is on optimizing the indexing structure and the original query.\n\nOptimizing Indexing: enhance the quality of the content being indexed:\n\nEnhancing data granularity\nOptimizing index structures,\nAdding Meta-data\nAlignment optimization\nMixed retrieval\n\nOptimizing Query: make the user’s original question clearer and more suitable for the retrieval task, through:\n\nQuery rewritting\nQuery Transformation\nQuery Expansion"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/RAG.html#post-retrieval-process",
+    "href": "posts/Blogs/LLM/RAG.html#post-retrieval-process",
+    "title": "LLM: RAG",
+    "section": "Post-Retrieval Process",
+    "text": "Post-Retrieval Process\nOnce relevant context is retrieved, it is crucial to integrate it effectively with the query. The main methods in this stage are:\n\nRe-rank chunks: Re-ranking the retrieved information to relocated the most relevant content to the edges of the prompt\nContext Compressing: concentrate on selecting the essential information, emphasizing critical sections, and shortening the context to be processed."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/RAG.html#new-modules",
+    "href": "posts/Blogs/LLM/RAG.html#new-modules",
+    "title": "LLM: RAG",
+    "section": "New Modules",
+    "text": "New Modules\n\nSearch Module\nThe search module adapts to specific scenarios, enabling direct searches across various sources like search engines, database, and knowledge graphs, using LLM-generated code and query languages\nThe RAG-Fusing addresses search limitations by employing a multi-query strategy that expands user queries into diverse perspectives, utilizing parallel vector searches and intelligent re-ranking to uncover both explicit and transformative knowledge, utilizing parallel vector searches and intelligent re-ranking to uncover both explict and transformative knowledge.\n\n\nMemory Module\nThe Memory module leverages the LLM’s memory to guide retrieval, creating an unbounded memory pool that aligns the text more closely with data distribution through iterative self-enhancement.\n\n\nRouting Module\nThe Routing navigates through diverse data sources, selecting the optimal pathway for a query, whether it involves summarization, database searches, or merging different information streams.\n\n\nThe Preict Module\nThe predict module aims to reduce redundancy and noise by generating context directly through the LLM, ensuring relevance and accuracy.\n\n\nTask Adapter Module\nThe adapter module tailors RAG to various downstream tasks, automating prompt retrieval for zero-shot inputs and creating task-specific retrievers through few-shot query generationg."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/RAG.html#new-pattern",
+    "href": "posts/Blogs/LLM/RAG.html#new-pattern",
+    "title": "LLM: RAG",
+    "section": "New Pattern",
+    "text": "New Pattern\nModular RAG offers remarkable adaptability by allowing module substitution or reconfiguration to address specific challenges. Modular RAG expands the flexibility by integrating new modules or adjusting interaction flow among existing ones, enhancing its applicability across different tasks."
+  },
+  {
+    "objectID": "posts/blogs.html",
+    "href": "posts/blogs.html",
+    "title": "👋🏻Welcome to Yuyang’s Blog",
+    "section": "",
+    "text": "Speed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-07-23\n\n\n\n\n\n\n\nLLM: RAG\n\n\n\nLarge Language Model\n\nOverview\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n5 min\n\n965 words\n\n\n2025-04-27\n\n\n\n\n\n\n\nLLM Overview\n\n\n\nLarge Language Model\n\nOverview\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n3 min\n\n564 words\n\n\n2025-04-27\n\n\n\n\n\n\n\nLLM Part1: Pre Training\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n3 min\n\n419 words\n\n\n2025-04-05\n\n\n\n\n\n\n\nLLM Part2: Post Training\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n1 min\n\n1 words\n\n\n2025-04-05\n\n\n\n\n\n\n\nLLM Part3: Applications\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n1 min\n\n70 words\n\n\n2025-04-05\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/Blogs/speed-up-training.html",
+    "href": "posts/Blogs/speed-up-training.html",
+    "title": "Speed Up Training for Neural Networks",
+    "section": "",
+    "text": "Training large neural networks(such as large language models) can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculations on a single GPU through different techniques such as fusion, tiling, memory coalescing, and parallelizing the training across multiple GPUs such as model parallelism and data parallelism. But before that, we need to understand the basic concepts of GPU, and data types to better understand why and when we need to use these techniques."
+  },
+  {
+    "objectID": "posts/Blogs/speed-up-training.html#preliminary",
+    "href": "posts/Blogs/speed-up-training.html#preliminary",
+    "title": "Speed Up Training for Neural Networks",
+    "section": "1 Preliminary",
+    "text": "1 Preliminary\n\n1.1 Data Representation\nIn deep learning, we often use different data types to represent our data and model parameters. The most common data types are:\n\nFloat32: also known as single-precision floating-point format. This is the default floating-point representation  used in most deep learning frameworks. It provides a good balance between precision and performance. It use 32 bits (4 bytes) to represent a number.\nFloat16: This is a half-precision floating-point representation that uses 16 bits instead of 32 bits. It can significantly speed up training and reduce memory usage, but it may lead to numerical instability in some cases.\nBFloat16: This is a truncated version of Float32 that retains the exponent bits but reduces the mantissa bits. It is designed to provide a good trade-off between precision and performance, especially for training large models.\n\n\n\n\n\n\n\n\n\n\n\n\n(a) The representation of Float32\n\n\n\n\n\n\n\n\n\n\n\n\n\n(b) The representation of Float16\n\n\n\n\n\n\n\n\n\n\n\n\n\n(c) The representation of BFloat16\n\n\n\n\n\n\n\nFigure 1: The representation of float32, float16, and bfloat16 data types. The figure shows how the bits are allocated for the sign, exponent, and mantissa in each data type.\n\n\n\n\n\n\n\n\n\nHow those bits represent the number?\n\n\n\n\\[\n\\text{value} = (-1)^s \\times (1.f) \\times 2^{e - 127}\n\\]\nwhere:\n\n\\(s\\) is the sign bit (0 for positive, 1 for negative)\n\\(f\\) is the mantissa (the fractional part): \\(1.f = 1 + \\sum_{i=1}^{23} b_i \\cdot 2^{-i}\\), where \\(b_i\\) are the bits of the mantissa either 0 or 1.\n\\(e\\) is the exponent (an 8-bit unsigned int) with a bias of 127:\n\nFor Float32, \\(e\\) is 8 bits, which range from [1, 254]\nFor Float16, \\(e\\) is 5 bits, which range from [1, 30]\nFor BFloat16, \\(e\\) is 8 bits, which range from [1, 254]\n\n\n\n\nTo check the data type of a tensor and its properties in PyTorch, you can use the .dtype attribute. For example:\nx = torch.zeros(4, 8)\nx.dtype # check the data type of x\nx.numel() # check the number of elements in x\nx.element_size() # check the size of each element in bytes\nx.numel() * x.element_size() # check the total size in bytes\n\n\n1.2 Calculate Memory Usage of Model\nAssume we have a model with \\(N\\) parameters, and each parameter is represented by float32 (4 bytes). \\(A\\) is the number of activation elements stored during forward (depends on input and model depth). How can we calculate the memory need for training this model? Notice that the memory usage of a model is not only determined by the parameters, but also by:\n\nactivations\ngradients\noptimizer states\n\nFor a single parameter, the memory usage for one forward pass and backward pass is:\n\nparameter: 4 bytes (float32)\nactivation: 4 bytes (float32)\ngradient: 4 bytes (float32)\noptimizer state, which can vary depending on the optimizer used. For example, Adam optimizer requires 2 additional states (momentum and variance), each of which is 4 bytes (float32).\n\nSo, the total memory usage for one parameter is: \\[\n\\text{Memory per parameter} = 4 + 4  + 2 \\times 4 = 16 \\text{ bytes}\n\\]\nThus, the total memory usage for the model is: \\[\n\\text{Total Memory} = N \\times 16 \\text{ bytes} + A \\times 4 \\text{ bytes}\n\\]\n\n\n\n\n\n\nWhy need activation for backward pass?\n\n\n\nSay a layer denotes the input to the layer as \\(\\mathbf{x}\\), the weights as \\(\\theta\\), and the output as \\(\\mathbf{y}\\). The loss function is denoted as \\(L\\), which is a function of the output \\(\\mathbf{y}\\) and the target \\(t\\): \\[\n\\mathbf{y} = f(\\mathbf{x}; \\theta)\n\\] To compute the gradient of the loss with respect to the weights, we need to use the chain rule: \\[\n\\frac{\\partial L}{\\partial \\theta} = \\frac{\\partial L}{\\partial \\mathbf{y}} \\cdot \\frac{\\partial \\mathbf{y}}{\\partial \\theta}\n\\]\nwhere \\(\\frac{\\partial \\mathbf{y}}{\\partial \\theta}\\) is the gradient of the output with respect to the weights \\(\\theta\\), which usually are the function of the input \\(\\mathbf{x}\\) and the weights \\(\\theta\\). To compute this gradient, we need to know the input \\(\\mathbf{x}\\). For example, the linear layer computes: \\[\n\\mathbf{y} = \\mathbf{x} \\cdot \\theta + b\n\\] to compute the gradient, we need to know the input \\(\\mathbf{x}\\), \\[\n\\frac{\\partial L}{\\partial \\theta} = \\frac{\\partial L}{\\partial \\mathbf{y}} \\cdot \\mathbf{x}\n\\] where \\(\\mathbf{x}\\) is the input to the layer, which is the activation of the previous layer. Thus, we need to store the activation for the backward pass.\n\n\n\n\nCalculate Memory Usage of Model\nimport torch\nimport torch.nn as nn\n\n# Set device\ndevice = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")\n\n# Define a simple model\nmodel = nn.Sequential(\n    nn.Linear(100, 200),\n    nn.ReLU(),\n    nn.Linear(200, 50),\n    nn.ReLU(),\n    nn.Linear(50, 10)\n).to(device)\n\n# Register hooks to track activation sizes\nactivation_sizes = []\n\ndef hook_fn(module, input, output):\n    if isinstance(output, torch.Tensor):\n        activation_sizes.append(output.numel())\n    elif isinstance(output, (list, tuple)):\n        activation_sizes.extend(o.numel() for o in output if isinstance(o, torch.Tensor))\n\nhooks = []\nfor layer in model:\n    hooks.append(layer.register_forward_hook(hook_fn))\n\n# Create input\nx = torch.randn(32, 100, device=device, requires_grad=True)\n\n# Forward pass\noutput = model(x)\nloss = output.mean()\n\n# Backward pass\nloss.backward()\n\n# Remove hooks\nfor h in hooks:\n    h.remove()\n\n# --------- Memory Estimation ---------\n# 1. Parameters\nnum_params = sum(p.numel() for p in model.parameters())\nparam_memory = num_params * 4\ngrad_memory = num_params * 4\noptimizer_memory = num_params * 8\n\n# 2. Activations (sum of all layer outputs + input)\nactivation_memory = (x.numel() + sum(activation_sizes)) * 4  # float32\n\n# 3. Total\ntotal_bytes = param_memory + grad_memory + optimizer_memory + activation_memory\ntotal_MB = total_bytes / (1024 ** 2)\n\n# Print\nprint(f\"Total parameters: {num_params}\")\nprint(f\"Activation elements: {sum(activation_sizes)}\")\nprint(f\"Total training memory (float32): {total_MB:.2f} MB\")\n\n\n\n\n1.3 Collective operations\nCollective operations are operations that involve multiple processes or devices, such as GPUs, to perform a computation. They are essential for parallelizing the training process across multiple GPUs. Some common collective operations include:\n\nBroadcast(Figure 2 (a)): This operation sends data from one process to all other processes. It is commonly used to share model parameters or hyperparameters across multiple GPUs.\nScatter(Figure 2 (b)): This operation distributes data from one process to multiple processes. It is often used to distribute input data across multiple GPUs.\nGather(Figure 2 (c)): This operation collects data from multiple processes and combines it into a single process. It is useful for aggregating results from multiple GPUs.\nReduce(Figure 2 (d)): This operation combines data from multiple processes into a single process. It is commonly used to compute the sum or maximum of gradients across multiple GPUs.\nAll-gather(Figure 2 (e)): This operation collects data from all processes and distributes it back to all processes. It is often used to gather gradients or model parameters from multiple GPUs without losing any information.\nAll-reduce(Figure 2 (g)): This operation combines data from all processes and distributes the result back to all processes. It is often used to average gradients across multiple GPUs during training.\nReduce-scatter(Figure 2 (f)): This operation combines data from multiple processes and distributes the result to each process. It is often used to reduce the amount of data that needs to be communicated between processes.\n\n\n\n\n\n\n\n\n\n\n\n\n\n(a) Broadcast\n\n\n\n\n\n\n\n\n\n\n\n(b) Scatter\n\n\n\n\n\n\n\n\n\n\n\n(c) Gather\n\n\n\n\n\n\n\n\n\n\n\n(d) Reduce\n\n\n\n\n\n\n\n\n\n\n\n\n\n(e) All-gather\n\n\n\n\n\n\n\n\n\n\n\n(f) Reduce-scatter\n\n\n\n\n\n\n\n\n\n\n\n(g) All-reduce\n\n\n\n\n\n\n\nFigure 2: The illustration of different collective operations. The figure shows how data is communicated between processes in each operation.(Image take from: Stanford CS336)\n\n\n\n\nOne should take note is Reduce-Scatter combines two operations:\n\nReduce: Each process (or GPU) contributes its data, and a reduction operation (usually sum, mean, max, etc.) is applied across processes.\nScatter: The reduced result is partitioned and each process gets only a portion (its shard) of the reduced result.\n\n\n\n\n\n\n\nTip\n\n\n\nWay to remember the terminology:\n\nGather: collects data from multiple sources into one destination(not do any operation)\nReduce: performs some associative/commutative operation (sum, min, max)\nBroadcast/Scatter: is inverse of Gather\nAll: means destination is all devices"
+  },
+  {
+    "objectID": "posts/Blogs/speed-up-training.html#profiling",
+    "href": "posts/Blogs/speed-up-training.html#profiling",
+    "title": "Speed Up Training for Neural Networks",
+    "section": "2 Profiling",
+    "text": "2 Profiling\nTo optimize the training process, we need to first profile our model to identify the bottlenecks. In this section, we will introduce several tools to profile the model and understand where the time is spent during training. We will discuss several tools that can help us profile our model and identify the bottlenecks in the training process:\n\nSimple Benchmarking (Section 2.1): The simplest way to measure the time taken for each operation in your model. You can use the time module in Python to measure the time taken for each operation. For example, you can wrap your forward pass in a timer to measure the time taken for each layer.\nPyTorch Profiler (Section 2.2): PyTorch provides a built-in profiler that can help you analyze the performance of your model. You can use the torch.profiler module to profile your model and visualize the results. The profiler provides detailed information about the time spent on each operation, memory usage, and more.\nNVIDIA Nsight Systems (Section 2.3): This is a powerful profiling tool that can help you analyze the performance of your model on NVIDIA GPUs. It provides detailed information about the GPU utilization, memory usage, and more. You can use it to identify bottlenecks in your model and optimize the performance.\n\n\n2.1 Simple Benchmarking\n\n\n2.2 PyTorch Profiler\n\n\n2.3 NVIDIA Nsight Systems"
+  },
+  {
+    "objectID": "posts/Blogs/speed-up-training.html#single-gpu-optimization",
+    "href": "posts/Blogs/speed-up-training.html#single-gpu-optimization",
+    "title": "Speed Up Training for Neural Networks",
+    "section": "3 Single GPU Optimization",
+    "text": "3 Single GPU Optimization\nIn this section, we will discuss various techniques to optimize the training process on a single GPU. These techniques include: - Fusion(Section 3.1): This technique combines multiple operations into a single operation to reduce the number of kernel launches and improve performance. For example, you can fuse the forward and backward passes of a layer into a single operation. - Tiling(Section 3.2): This technique divides the input data into smaller tiles and processes them in parallel to improve memory access patterns and reduce memory usage. For example, you can tile the input data into smaller chunks and process them in parallel. - Memory Coalescing(Section 3.3): This technique optimizes memory access patterns to improve memory bandwidth utilization. For example, you can coalesce memory accesses to reduce the number of memory transactions and improve performance. - Mixed Precision Training(Section 3.4): This technique uses lower precision data types (such as float16 or bfloat16) to reduce memory usage and improve performance. It can significantly speed up training while maintaining model accuracy. PyTorch provides built-in support for mixed precision training through the torch.cuda.amp module, which allows you to automatically cast your model and inputs to lower precision during training. - Gradient Accumulation(Section 3.5): This technique accumulates gradients over multiple mini-batches before performing a weight update. It can help reduce the number of weight updates and improve training stability, especially when using large batch sizes. You can implement gradient accumulation by accumulating gradients in a buffer and updating the model parameters only after a certain number of mini-batches.\n\n3.1 Fusion\n\n\n3.2 Tiling\n\n\n3.3 Memory Coalescing\n\n\n3.4 Mixed Precision Training\n\n\n3.5 Gradient Accumulation\n\n\n3.6 Case Study: Flash Attention"
+  },
+  {
+    "objectID": "posts/Blogs/speed-up-training.html#multi-gpu-optimizationparallelism",
+    "href": "posts/Blogs/speed-up-training.html#multi-gpu-optimizationparallelism",
+    "title": "Speed Up Training for Neural Networks",
+    "section": "4 Multi-GPU Optimization(Parallelism)",
+    "text": "4 Multi-GPU Optimization(Parallelism)\nIn this section, we will discuss various techniques to optimize the training process across multiple GPUs. These techniques include: - Data Parallelism(Section 4.1): This technique splits the input data across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different subset of the input data, and the gradients are averaged across GPUs before updating the model parameters. - Model Parallelism(Section 4.2): This technique splits the model across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the model, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large models that do not fit into a single GPU’s memory. - Pipeline Parallelism(Section 4.3): This technique splits the model into multiple stages and processes each stage in parallel across multiple GPUs. Each GPU processes a different stage of the model, and the output of one stage is passed to the next stage. This can help improve throughput and reduce memory usage, especially for large models. - Tensor Parallelism(Section 4.4): This technique splits the tensors across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the tensor, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large tensors that do not fit into a single GPU’s memory. - Context Parallelism(Section 4.5): This technique splits the context across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the context, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large contexts that do not fit into a single GPU’s memory.\n\n4.1 Data Parallelism\n\n\n4.2 Model Parallelism\n\n\n4.3 Pipeline Parallelism\n\n\n4.4 Tensor Parallelism\n\n\n4.5 Context Parallelism\n\n\n4.6 Case Study: DeepSpeed\n\n\n4.7 Case Study: Megatron-LM\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nSelf CPU %\nSelf CPU\nCPU total %\nCPU total\nCPU time avg\nSelf CUDA\nSelf CUDA %\nCUDA total\nCUDA time avg\n# of Calls\n\n\n\n\naten::gelu\n6.76%\n669.785us\n13.48%\n1.336ms\n1.336ms\n8.642ms\n100.00%\n8.642ms\n8.642ms\n1\n\n\nvoid at::native::vectorized_elementwise_kernel&lt;…&gt;\n0.00%\n0.000us\n0.00%\n0.000us\n0.000us\n8.642ms\n100.00%\n8.642ms\n8.642ms\n1\n\n\ncudaLaunchKernel\n6.72%\n665.807us\n6.72%\n665.807us\n665.807us\n0.000us\n0.00%\n0.000us\n0.000us\n1\n\n\ncudaDeviceSynchronize\n86.52%\n8.574ms\n86.52%\n8.574ms\n4.287ms\n0.000us\n0.00%\n0.000us\n0.000us\n2\n\n\n\nSelf CPU time total: 9.909 ms\nSelf CUDA time total: 8.642 ms"
+  },
+  {
+    "objectID": "posts/Projects/VLM/vlm.html",
+    "href": "posts/Projects/VLM/vlm.html",
+    "title": "Visual Language Model",
+    "section": "",
+    "text": "The vision encoder is the classic Vision Transformer (ViT) architecture as proposed in (Dosovitskiy et al. 2021).\n\n\n\n\n\n\nFigure 1: The illustration of the Vision Transformer.\n\n\n\n\n\nThe first component of the ViT is the Patch Embedding layer, which converts the input image into a sequence of patches. Each patch is treated as a token, similar to how words are treated in NLP models. The patches are flattened and linearly projected into a higher-dimensional space. We can combine those two steps into a single convolutional layer. After patching the image into smaller patches, we can add a learnable class token and positional embeddings to the sequence of patches. The class token is used for classification tasks, while positional embeddings help the model understand the spatial relationships between patches.\nclass ViTPatchEmbedding(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.img_size = config.vit_img_size\n        self.patch_size = config.vit_patch_size\n\n        assert (\n            self.img_size % self.patch_size == 0\n        ), \"Image size must be divisible by patch size.\"\n        self.num_patches = (self.img_size // self.patch_size) ** 2\n        self.cls_flag = config.vit_cls_flag\n        self.embd_dim = config.vit_hidden_dim\n\n        self.conv = nn.Conv2d(\n            in_channels=3,\n            out_channels=self.embd_dim,\n            kernel_size=self.patch_size,\n            stride=self.patch_size,\n            padding=\"valid\",\n        )\n\n        if self.cls_flag:\n            self.cls_token = nn.Parameter(torch.zeros(1, 1, self.embd_dim))  # (B, 1, D)\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches + 1, self.embd_dim)\n            )  # (B, P+1, D)\n        else:\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches, self.embd_dim)\n            )\n\n    def forward(self, imgs: torch.Tensor):\n        # (B, C, H, W) -&gt; (B, D, H // P, W // P)\n        x = self.conv(imgs)\n        # (B, D, H // P, W // P) -&gt; (B, H // P * W // P, D)\n        x = x.flatten(2).transpose(1, 2)\n\n        if self.cls_flag:\n            cls_tokens = self.cls_token.expand(x.shape[0], -1, -1)\n            x = torch.cat((cls_tokens, x), dim=1)  # (B, P+1, D)\n\n        x = x + self.position_embeddings  # (B, P+1, D) or (B, P, D)\n        return x\n\n\n\nAfter we get the tokens from the Patch Embedding layer, we can feed those tokens into the transformer block. The transformer block consists of a Multi-Head Self-Attention (MHSA) layer and a Feed Forward Network (FFN). The MHSA layer allows the model to attend to different parts of the input sequence simultaneously, capturing complex relationships between patches. The FFN is a simple feed-forward neural network that processes the output of the MHSA layer.\ndef scale_dot_product_attention(\n    q: torch.Tensor,\n    k: torch.Tensor,\n    v: torch.Tensor,\n    mask: torch.Tensor | None = None,\n    dropout: float = 0.0,\n):\n\n    d_k = q.shape[-1]\n\n    # Compute the dot product attention scores\n    attn_scores = torch.matmul(q, k.transpose(-2, -1)) / (\n        d_k**0.5\n    )  # Scale by the square root of the dimension\n    if mask is not None:\n        attn_scores = attn_scores.masked_fill(mask == 0, float(\"-inf\"))\n    attn_weights = torch.softmax(attn_scores, dim=-1)\n    if dropout &gt; 0.0:\n        attn_weights = torch.nn.functional.dropout(\n            attn_weights, p=dropout, training=True\n        )\n    # Compute the attention output\n    attn_output = torch.matmul(attn_weights, v)  # Shape: (B, S_q, D)\n\n    return attn_output, attn_weights\n\n\n\nclass ViTMultiHeadAttention(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.n_heads = config.vit_n_heads\n        self.embd_dim = config.vit_hidden_dim\n\n        assert (\n            self.embd_dim % self.n_heads == 0\n        ), \"embd_dim must be divisible by num_heads\"\n        self.head_dim = self.embd_dim // self.n_heads\n\n        self.dropout = config.vit_dropout\n\n        self.qkv_proj = nn.Linear(self.embd_dim, 3 * self.embd_dim)\n        self.out_proj = nn.Linear(self.embd_dim, self.embd_dim)\n\n        # Dropout layer\n        self.attn_dropout = nn.Dropout(self.dropout)\n        self.resid_dropout = nn.Dropout(self.dropout)\n\n        # Use scaled dot product attention\n        self.sdpa = hasattr(F, \"scaled_dot_product_attention\")\n        if not self.sdpa:\n            print(\n                \"Warning: Scaled Dot Product Attention not available. Using custom implementation.\"\n            )\n\n    def forward(self, x: torch.Tensor):\n        B, T, C = x.size()\n\n        q, k, v = map(\n            lambda t: t.view(B, T, self.n_heads, self.head_dim).transpose(1, 2),\n            self.qkv_proj(x).chunk(3, dim=-1),\n        )\n\n        if self.sdpa:\n            y = F.scaled_dot_product_attention(\n                q, k, v, dropout_p=self.dropout if self.training else 0.0\n            )\n        else:\n            y, _ = scale_dot_product_attention(\n                q=q, k=k, v=v, dropout=self.dropout if self.training else 0.0\n            )\n\n        y = y.transpose(1, 2).contiguous().view(B, T, C)\n        y = self.out_proj(y)\n\n        return self.resid_dropout(y)\n\n\n\nThe Feed Forward Network (FFN) is a simple two-layer fully connected network with a GeLU activation function in between. It processes the output of the MHSA layer and applies a residual connection to the input.\nclass MLP(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.activation_fn = nn.GELU(approximate=\"tanh\")\n        self.fc1 = nn.Linear(config.vit_hidden_dim, config.vit_inter_dim)\n        self.fc2 = nn.Linear(config.vit_inter_dim, config.vit_hidden_dim)\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n    def forward(self, x: torch.Tensor):\n        x = self.fc1(x)\n        x = self.activation_fn(x)\n        x = self.fc2(x)\n        x = self.dropout(x)\n        return x\n\n\n\nAfter define the MHSA and FFN layers, we can combine them into a single transformer block. The transformer block applies layer normalization before the MHSA and FFN layers(pre-norm), and it also includes residual connections to help with training stability.\nclass ViTBlock(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.attn = ViTMultiHeadAttention(config)\n        self.mlp = MLP(config)\n        self.ln1 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n        self.ln2 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n    def forward(self, x: torch.Tensor):\n        # Layer normalization and multi-head attention\n        x = x + self.attn(self.ln1(x))\n        # Layer normalization and MLP\n        x = x + self.mlp(self.ln2(x))\n        return x\n\n\n\nFinally, we can combine the Patch Embedding layer and the transformer blocks to create the Vision Transformer. The Vision Transformer consists of a series of transformer blocks stacked on top of each other, with the output of the last block being used for classification or further processing.\nclass ViT(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.config = config\n\n        self.patch_embedding = ViTPatchEmbedding(config)\n\n        self.cls_flag = config.vit_cls_flag\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n        self.blocks = nn.ModuleList(\n            [ViTBlock(config) for _ in range(config.vit_n_blocks)]\n        )\n\n        self.layer_norm = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n        self.apply(self._init_weights)\n    \n    def forward(self, imgs: torch.Tensor):\n        x = self.patch_embedding(imgs)\n        x = self.dropout(x)\n\n        for block in self.blocks:\n            x = block(x)\n\n        if self.cls_flag:\n            x = x[:, 0]\n        else:\n            x = self.layer_norm(x)\n\n        return x\nSo, that all we need for the Vision Encoder. After we get the output of the\n\n\n\nVision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle(Shi et al. 2016), which is used to reduce the number of tokens.\nfrom vlm.config import VLMConfig\n\nimport torch \nimport torch.nn as nn \n\nimport einops \n\n\nclass ModalityProjector(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n        \n        self.config = config \n        \n        self.input_dim = config.vit_hidden_dim * (config.mp_pixel_shuffle_factor**2)    \n        self.output_dim = config.lm_hidden_dim\n        self.scale_factor = config.mp_pixel_shuffle_factor\n        \n        \n        self.proj = nn.Linear(self.input_dim, self.output_dim, bias=False)\n        self._init_weight()\n\n    def _init_weight(self):\n        nn.init.normal_(self.proj.weight, mean=0.0, std=0.02)\n    \n    def pixel_shuffle(self, x: torch.Tensor) -&gt; torch.Tensor:\n        B, S, D = x.size()\n        assert S % 2 == 0, \"Input sequence length must be even for pixel shuffle.\"\n        assert S ** 0.5 % self.scale_factor == 0, \"Input sequence length must be a perfect square for pixel shuffle.\"\n        \n        \n        H, W = S, S \n        x = x.view(B, H, W, D) # Convert the flattened sequence into a 2D grid\n        h_out = H // self.scale_factor\n        w_out = W // self.scale_factor\n        \n        x = einops.rearrange(x, \n                             \"b (h sf1) (w sf2) d -&gt; b (h w) (d sf1 sf2)\",\n                             sf1=self.scale_factor, \n                             sf2=self.scale_factor\n                             )\n        \n        return x\n\n    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:\n        x = self.pixel_shuffle(x)\n        assert x.size(-1) == self.input_dim, f\"Input dimension mismatch: expected {self.input_dim}, got {x.size(-1)}\"\n        \n        x = self.proj(x)\n        return x\nAfter the pixel shuffle, the number of tokens is reduced by a factor of mp_pixel_shuffle_factor**2, which helps to reduce the computational cost while maintaining the semantic information of the visual input. The output of the Modality Projector is then ready to be fed into the Language Model (LM) for further processing."
+  },
+  {
+    "objectID": "posts/Projects/VLM/vlm.html#vision-transformer",
+    "href": "posts/Projects/VLM/vlm.html#vision-transformer",
+    "title": "Visual Language Model",
+    "section": "",
+    "text": "The vision encoder is the classic Vision Transformer (ViT) architecture as proposed in (Dosovitskiy et al. 2021).\n\n\n\n\n\n\nFigure 1: The illustration of the Vision Transformer.\n\n\n\n\n\nThe first component of the ViT is the Patch Embedding layer, which converts the input image into a sequence of patches. Each patch is treated as a token, similar to how words are treated in NLP models. The patches are flattened and linearly projected into a higher-dimensional space. We can combine those two steps into a single convolutional layer. After patching the image into smaller patches, we can add a learnable class token and positional embeddings to the sequence of patches. The class token is used for classification tasks, while positional embeddings help the model understand the spatial relationships between patches.\nclass ViTPatchEmbedding(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.img_size = config.vit_img_size\n        self.patch_size = config.vit_patch_size\n\n        assert (\n            self.img_size % self.patch_size == 0\n        ), \"Image size must be divisible by patch size.\"\n        self.num_patches = (self.img_size // self.patch_size) ** 2\n        self.cls_flag = config.vit_cls_flag\n        self.embd_dim = config.vit_hidden_dim\n\n        self.conv = nn.Conv2d(\n            in_channels=3,\n            out_channels=self.embd_dim,\n            kernel_size=self.patch_size,\n            stride=self.patch_size,\n            padding=\"valid\",\n        )\n\n        if self.cls_flag:\n            self.cls_token = nn.Parameter(torch.zeros(1, 1, self.embd_dim))  # (B, 1, D)\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches + 1, self.embd_dim)\n            )  # (B, P+1, D)\n        else:\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches, self.embd_dim)\n            )\n\n    def forward(self, imgs: torch.Tensor):\n        # (B, C, H, W) -&gt; (B, D, H // P, W // P)\n        x = self.conv(imgs)\n        # (B, D, H // P, W // P) -&gt; (B, H // P * W // P, D)\n        x = x.flatten(2).transpose(1, 2)\n\n        if self.cls_flag:\n            cls_tokens = self.cls_token.expand(x.shape[0], -1, -1)\n            x = torch.cat((cls_tokens, x), dim=1)  # (B, P+1, D)\n\n        x = x + self.position_embeddings  # (B, P+1, D) or (B, P, D)\n        return x\n\n\n\nAfter we get the tokens from the Patch Embedding layer, we can feed those tokens into the transformer block. The transformer block consists of a Multi-Head Self-Attention (MHSA) layer and a Feed Forward Network (FFN). The MHSA layer allows the model to attend to different parts of the input sequence simultaneously, capturing complex relationships between patches. The FFN is a simple feed-forward neural network that processes the output of the MHSA layer.\ndef scale_dot_product_attention(\n    q: torch.Tensor,\n    k: torch.Tensor,\n    v: torch.Tensor,\n    mask: torch.Tensor | None = None,\n    dropout: float = 0.0,\n):\n\n    d_k = q.shape[-1]\n\n    # Compute the dot product attention scores\n    attn_scores = torch.matmul(q, k.transpose(-2, -1)) / (\n        d_k**0.5\n    )  # Scale by the square root of the dimension\n    if mask is not None:\n        attn_scores = attn_scores.masked_fill(mask == 0, float(\"-inf\"))\n    attn_weights = torch.softmax(attn_scores, dim=-1)\n    if dropout &gt; 0.0:\n        attn_weights = torch.nn.functional.dropout(\n            attn_weights, p=dropout, training=True\n        )\n    # Compute the attention output\n    attn_output = torch.matmul(attn_weights, v)  # Shape: (B, S_q, D)\n\n    return attn_output, attn_weights\n\n\n\nclass ViTMultiHeadAttention(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.n_heads = config.vit_n_heads\n        self.embd_dim = config.vit_hidden_dim\n\n        assert (\n            self.embd_dim % self.n_heads == 0\n        ), \"embd_dim must be divisible by num_heads\"\n        self.head_dim = self.embd_dim // self.n_heads\n\n        self.dropout = config.vit_dropout\n\n        self.qkv_proj = nn.Linear(self.embd_dim, 3 * self.embd_dim)\n        self.out_proj = nn.Linear(self.embd_dim, self.embd_dim)\n\n        # Dropout layer\n        self.attn_dropout = nn.Dropout(self.dropout)\n        self.resid_dropout = nn.Dropout(self.dropout)\n\n        # Use scaled dot product attention\n        self.sdpa = hasattr(F, \"scaled_dot_product_attention\")\n        if not self.sdpa:\n            print(\n                \"Warning: Scaled Dot Product Attention not available. Using custom implementation.\"\n            )\n\n    def forward(self, x: torch.Tensor):\n        B, T, C = x.size()\n\n        q, k, v = map(\n            lambda t: t.view(B, T, self.n_heads, self.head_dim).transpose(1, 2),\n            self.qkv_proj(x).chunk(3, dim=-1),\n        )\n\n        if self.sdpa:\n            y = F.scaled_dot_product_attention(\n                q, k, v, dropout_p=self.dropout if self.training else 0.0\n            )\n        else:\n            y, _ = scale_dot_product_attention(\n                q=q, k=k, v=v, dropout=self.dropout if self.training else 0.0\n            )\n\n        y = y.transpose(1, 2).contiguous().view(B, T, C)\n        y = self.out_proj(y)\n\n        return self.resid_dropout(y)\n\n\n\nThe Feed Forward Network (FFN) is a simple two-layer fully connected network with a GeLU activation function in between. It processes the output of the MHSA layer and applies a residual connection to the input.\nclass MLP(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.activation_fn = nn.GELU(approximate=\"tanh\")\n        self.fc1 = nn.Linear(config.vit_hidden_dim, config.vit_inter_dim)\n        self.fc2 = nn.Linear(config.vit_inter_dim, config.vit_hidden_dim)\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n    def forward(self, x: torch.Tensor):\n        x = self.fc1(x)\n        x = self.activation_fn(x)\n        x = self.fc2(x)\n        x = self.dropout(x)\n        return x\n\n\n\nAfter define the MHSA and FFN layers, we can combine them into a single transformer block. The transformer block applies layer normalization before the MHSA and FFN layers(pre-norm), and it also includes residual connections to help with training stability.\nclass ViTBlock(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.attn = ViTMultiHeadAttention(config)\n        self.mlp = MLP(config)\n        self.ln1 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n        self.ln2 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n    def forward(self, x: torch.Tensor):\n        # Layer normalization and multi-head attention\n        x = x + self.attn(self.ln1(x))\n        # Layer normalization and MLP\n        x = x + self.mlp(self.ln2(x))\n        return x\n\n\n\nFinally, we can combine the Patch Embedding layer and the transformer blocks to create the Vision Transformer. The Vision Transformer consists of a series of transformer blocks stacked on top of each other, with the output of the last block being used for classification or further processing.\nclass ViT(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.config = config\n\n        self.patch_embedding = ViTPatchEmbedding(config)\n\n        self.cls_flag = config.vit_cls_flag\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n        self.blocks = nn.ModuleList(\n            [ViTBlock(config) for _ in range(config.vit_n_blocks)]\n        )\n\n        self.layer_norm = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n        self.apply(self._init_weights)\n    \n    def forward(self, imgs: torch.Tensor):\n        x = self.patch_embedding(imgs)\n        x = self.dropout(x)\n\n        for block in self.blocks:\n            x = block(x)\n\n        if self.cls_flag:\n            x = x[:, 0]\n        else:\n            x = self.layer_norm(x)\n\n        return x\nSo, that all we need for the Vision Encoder. After we get the output of the\n\n\n\nVision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle(Shi et al. 2016), which is used to reduce the number of tokens.\nfrom vlm.config import VLMConfig\n\nimport torch \nimport torch.nn as nn \n\nimport einops \n\n\nclass ModalityProjector(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n        \n        self.config = config \n        \n        self.input_dim = config.vit_hidden_dim * (config.mp_pixel_shuffle_factor**2)    \n        self.output_dim = config.lm_hidden_dim\n        self.scale_factor = config.mp_pixel_shuffle_factor\n        \n        \n        self.proj = nn.Linear(self.input_dim, self.output_dim, bias=False)\n        self._init_weight()\n\n    def _init_weight(self):\n        nn.init.normal_(self.proj.weight, mean=0.0, std=0.02)\n    \n    def pixel_shuffle(self, x: torch.Tensor) -&gt; torch.Tensor:\n        B, S, D = x.size()\n        assert S % 2 == 0, \"Input sequence length must be even for pixel shuffle.\"\n        assert S ** 0.5 % self.scale_factor == 0, \"Input sequence length must be a perfect square for pixel shuffle.\"\n        \n        \n        H, W = S, S \n        x = x.view(B, H, W, D) # Convert the flattened sequence into a 2D grid\n        h_out = H // self.scale_factor\n        w_out = W // self.scale_factor\n        \n        x = einops.rearrange(x, \n                             \"b (h sf1) (w sf2) d -&gt; b (h w) (d sf1 sf2)\",\n                             sf1=self.scale_factor, \n                             sf2=self.scale_factor\n                             )\n        \n        return x\n\n    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:\n        x = self.pixel_shuffle(x)\n        assert x.size(-1) == self.input_dim, f\"Input dimension mismatch: expected {self.input_dim}, got {x.size(-1)}\"\n        \n        x = self.proj(x)\n        return x\nAfter the pixel shuffle, the number of tokens is reduced by a factor of mp_pixel_shuffle_factor**2, which helps to reduce the computational cost while maintaining the semantic information of the visual input. The output of the Modality Projector is then ready to be fed into the Language Model (LM) for further processing."
   }
 ]

@@ -22,7 +22,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -44,9 +99,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-72d384ce8fe59fb0fa6f7c5f3001a64f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-1242f62f25efc0d1beb763d422796f5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-4f4fe631b9803fc529f1fe4b9406ea57.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-69a12f6e3c9a4d674a5587900452f571.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-4f4fe631b9803fc529f1fe4b9406ea57.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -258,13 +313,13 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/about.html"> 
+    <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
+    <a class="nav-link" href="../../../posts/blogs.html"> 
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
@@ -276,7 +331,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Learning Notes</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/Yyzhang2000"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/YYZhang2025"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -297,7 +352,22 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#vision-transformer" id="toc-vision-transformer" class="nav-link active" data-scroll-target="#vision-transformer"><span class="header-section-number">1</span> Vision Transformer</a>
+  <ul class="collapse">
+  <li><a href="#patch-embedding" id="toc-patch-embedding" class="nav-link" data-scroll-target="#patch-embedding"><span class="header-section-number">1.1</span> Patch Embedding</a></li>
+  <li><a href="#multi-head-self-attention" id="toc-multi-head-self-attention" class="nav-link" data-scroll-target="#multi-head-self-attention"><span class="header-section-number">1.2</span> Multi Head Self-Attention</a></li>
+  <li><a href="#feed-forward-network" id="toc-feed-forward-network" class="nav-link" data-scroll-target="#feed-forward-network"><span class="header-section-number">1.3</span> Feed Forward Network</a></li>
+  <li><a href="#transformer-block" id="toc-transformer-block" class="nav-link" data-scroll-target="#transformer-block"><span class="header-section-number">1.4</span> Transformer Block</a></li>
+  <li><a href="#vision-transformer-1" id="toc-vision-transformer-1" class="nav-link" data-scroll-target="#vision-transformer-1"><span class="header-section-number">1.5</span> Vision Transformer</a></li>
+  <li><a href="#modality-projection" id="toc-modality-projection" class="nav-link" data-scroll-target="#modality-projection"><span class="header-section-number">1.6</span> Modality Projection</a></li>
+  </ul></li>
+  <li><a href="#language-model" id="toc-language-model" class="nav-link" data-scroll-target="#language-model"><span class="header-section-number">2</span> Language Model</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -341,10 +411,294 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="vision-transformer" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="vision-transformer"><span class="header-section-number">1</span> Vision Transformer</h2>
+<p>The vision encoder is the classic Vision Transformer (ViT) architecture as proposed in <span class="citation" data-cites="ImageWorth16x162021dosovitskiy">(<a href="#ref-ImageWorth16x162021dosovitskiy" role="doc-biblioref">Dosovitskiy et al. 2021</a>)</span>.</p>
+<div id="fig-vit" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-vit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/vit.gif" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-vit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The illustration of the Vision Transformer.
+</figcaption>
+</figure>
+</div>
+<section id="patch-embedding" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="patch-embedding"><span class="header-section-number">1.1</span> Patch Embedding</h3>
+<p>The first component of the ViT is the Patch Embedding layer, which converts the input image into a sequence of patches. Each patch is treated as a <strong>token</strong>, similar to how words are treated in NLP models. The patches are flattened and linearly projected into a higher-dimensional space. We can combine those two steps into a single convolutional layer. After patching the image into smaller patches, we can add a learnable class token and positional embeddings to the sequence of patches. The class token is used for classification tasks, while positional embeddings help the model understand the spatial relationships between patches.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> ViTPatchEmbedding(nn.Module):</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, config: VLMConfig):</span>
+<span id="cb1-3"><a href="#cb1-3"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>        <span class="va">self</span>.img_size <span class="op">=</span> config.vit_img_size</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        <span class="va">self</span>.patch_size <span class="op">=</span> config.vit_patch_size</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>        <span class="cf">assert</span> (</span>
+<span id="cb1-9"><a href="#cb1-9"></a>            <span class="va">self</span>.img_size <span class="op">%</span> <span class="va">self</span>.patch_size <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>        ), <span class="st">"Image size must be divisible by patch size."</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>        <span class="va">self</span>.num_patches <span class="op">=</span> (<span class="va">self</span>.img_size <span class="op">//</span> <span class="va">self</span>.patch_size) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>        <span class="va">self</span>.cls_flag <span class="op">=</span> config.vit_cls_flag</span>
+<span id="cb1-13"><a href="#cb1-13"></a>        <span class="va">self</span>.embd_dim <span class="op">=</span> config.vit_hidden_dim</span>
+<span id="cb1-14"><a href="#cb1-14"></a></span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="va">self</span>.conv <span class="op">=</span> nn.Conv2d(</span>
+<span id="cb1-16"><a href="#cb1-16"></a>            in_channels<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb1-17"><a href="#cb1-17"></a>            out_channels<span class="op">=</span><span class="va">self</span>.embd_dim,</span>
+<span id="cb1-18"><a href="#cb1-18"></a>            kernel_size<span class="op">=</span><span class="va">self</span>.patch_size,</span>
+<span id="cb1-19"><a href="#cb1-19"></a>            stride<span class="op">=</span><span class="va">self</span>.patch_size,</span>
+<span id="cb1-20"><a href="#cb1-20"></a>            padding<span class="op">=</span><span class="st">"valid"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21"></a>        )</span>
+<span id="cb1-22"><a href="#cb1-22"></a></span>
+<span id="cb1-23"><a href="#cb1-23"></a>        <span class="cf">if</span> <span class="va">self</span>.cls_flag:</span>
+<span id="cb1-24"><a href="#cb1-24"></a>            <span class="va">self</span>.cls_token <span class="op">=</span> nn.Parameter(torch.zeros(<span class="dv">1</span>, <span class="dv">1</span>, <span class="va">self</span>.embd_dim))  <span class="co"># (B, 1, D)</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a>            <span class="va">self</span>.position_embeddings <span class="op">=</span> nn.Parameter(</span>
+<span id="cb1-26"><a href="#cb1-26"></a>                torch.zeros(<span class="dv">1</span>, <span class="va">self</span>.num_patches <span class="op">+</span> <span class="dv">1</span>, <span class="va">self</span>.embd_dim)</span>
+<span id="cb1-27"><a href="#cb1-27"></a>            )  <span class="co"># (B, P+1, D)</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-29"><a href="#cb1-29"></a>            <span class="va">self</span>.position_embeddings <span class="op">=</span> nn.Parameter(</span>
+<span id="cb1-30"><a href="#cb1-30"></a>                torch.zeros(<span class="dv">1</span>, <span class="va">self</span>.num_patches, <span class="va">self</span>.embd_dim)</span>
+<span id="cb1-31"><a href="#cb1-31"></a>            )</span>
+<span id="cb1-32"><a href="#cb1-32"></a></span>
+<span id="cb1-33"><a href="#cb1-33"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, imgs: torch.Tensor):</span>
+<span id="cb1-34"><a href="#cb1-34"></a>        <span class="co"># (B, C, H, W) -&gt; (B, D, H // P, W // P)</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a>        x <span class="op">=</span> <span class="va">self</span>.conv(imgs)</span>
+<span id="cb1-36"><a href="#cb1-36"></a>        <span class="co"># (B, D, H // P, W // P) -&gt; (B, H // P * W // P, D)</span></span>
+<span id="cb1-37"><a href="#cb1-37"></a>        x <span class="op">=</span> x.flatten(<span class="dv">2</span>).transpose(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb1-38"><a href="#cb1-38"></a></span>
+<span id="cb1-39"><a href="#cb1-39"></a>        <span class="cf">if</span> <span class="va">self</span>.cls_flag:</span>
+<span id="cb1-40"><a href="#cb1-40"></a>            cls_tokens <span class="op">=</span> <span class="va">self</span>.cls_token.expand(x.shape[<span class="dv">0</span>], <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb1-41"><a href="#cb1-41"></a>            x <span class="op">=</span> torch.cat((cls_tokens, x), dim<span class="op">=</span><span class="dv">1</span>)  <span class="co"># (B, P+1, D)</span></span>
+<span id="cb1-42"><a href="#cb1-42"></a></span>
+<span id="cb1-43"><a href="#cb1-43"></a>        x <span class="op">=</span> x <span class="op">+</span> <span class="va">self</span>.position_embeddings  <span class="co"># (B, P+1, D) or (B, P, D)</span></span>
+<span id="cb1-44"><a href="#cb1-44"></a>        <span class="cf">return</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="multi-head-self-attention" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="multi-head-self-attention"><span class="header-section-number">1.2</span> Multi Head Self-Attention</h3>
+<p>After we get the tokens from the Patch Embedding layer, we can feed those tokens into the transformer block. The transformer block consists of a Multi-Head Self-Attention (MHSA) layer and a Feed Forward Network (FFN). The MHSA layer allows the model to attend to different parts of the input sequence simultaneously, capturing complex relationships between patches. The FFN is a simple feed-forward neural network that processes the output of the MHSA layer.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> scale_dot_product_attention(</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    q: torch.Tensor,</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    k: torch.Tensor,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    v: torch.Tensor,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    mask: torch.Tensor <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    dropout: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0</span>,</span>
+<span id="cb2-7"><a href="#cb2-7"></a>):</span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    d_k <span class="op">=</span> q.shape[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="co"># Compute the dot product attention scores</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>    attn_scores <span class="op">=</span> torch.matmul(q, k.transpose(<span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>)) <span class="op">/</span> (</span>
+<span id="cb2-13"><a href="#cb2-13"></a>        d_k<span class="op">**</span><span class="fl">0.5</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a>    )  <span class="co"># Scale by the square root of the dimension</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a>    <span class="cf">if</span> mask <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb2-16"><a href="#cb2-16"></a>        attn_scores <span class="op">=</span> attn_scores.masked_fill(mask <span class="op">==</span> <span class="dv">0</span>, <span class="bu">float</span>(<span class="st">"-inf"</span>))</span>
+<span id="cb2-17"><a href="#cb2-17"></a>    attn_weights <span class="op">=</span> torch.softmax(attn_scores, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb2-18"><a href="#cb2-18"></a>    <span class="cf">if</span> dropout <span class="op">&gt;</span> <span class="fl">0.0</span>:</span>
+<span id="cb2-19"><a href="#cb2-19"></a>        attn_weights <span class="op">=</span> torch.nn.functional.dropout(</span>
+<span id="cb2-20"><a href="#cb2-20"></a>            attn_weights, p<span class="op">=</span>dropout, training<span class="op">=</span><span class="va">True</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a>        )</span>
+<span id="cb2-22"><a href="#cb2-22"></a>    <span class="co"># Compute the attention output</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a>    attn_output <span class="op">=</span> torch.matmul(attn_weights, v)  <span class="co"># Shape: (B, S_q, D)</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25"></a>    <span class="cf">return</span> attn_output, attn_weights</span>
+<span id="cb2-26"><a href="#cb2-26"></a></span>
+<span id="cb2-27"><a href="#cb2-27"></a></span>
+<span id="cb2-28"><a href="#cb2-28"></a></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="kw">class</span> ViTMultiHeadAttention(nn.Module):</span>
+<span id="cb2-30"><a href="#cb2-30"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, config: VLMConfig):</span>
+<span id="cb2-31"><a href="#cb2-31"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb2-32"><a href="#cb2-32"></a></span>
+<span id="cb2-33"><a href="#cb2-33"></a>        <span class="va">self</span>.n_heads <span class="op">=</span> config.vit_n_heads</span>
+<span id="cb2-34"><a href="#cb2-34"></a>        <span class="va">self</span>.embd_dim <span class="op">=</span> config.vit_hidden_dim</span>
+<span id="cb2-35"><a href="#cb2-35"></a></span>
+<span id="cb2-36"><a href="#cb2-36"></a>        <span class="cf">assert</span> (</span>
+<span id="cb2-37"><a href="#cb2-37"></a>            <span class="va">self</span>.embd_dim <span class="op">%</span> <span class="va">self</span>.n_heads <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb2-38"><a href="#cb2-38"></a>        ), <span class="st">"embd_dim must be divisible by num_heads"</span></span>
+<span id="cb2-39"><a href="#cb2-39"></a>        <span class="va">self</span>.head_dim <span class="op">=</span> <span class="va">self</span>.embd_dim <span class="op">//</span> <span class="va">self</span>.n_heads</span>
+<span id="cb2-40"><a href="#cb2-40"></a></span>
+<span id="cb2-41"><a href="#cb2-41"></a>        <span class="va">self</span>.dropout <span class="op">=</span> config.vit_dropout</span>
+<span id="cb2-42"><a href="#cb2-42"></a></span>
+<span id="cb2-43"><a href="#cb2-43"></a>        <span class="va">self</span>.qkv_proj <span class="op">=</span> nn.Linear(<span class="va">self</span>.embd_dim, <span class="dv">3</span> <span class="op">*</span> <span class="va">self</span>.embd_dim)</span>
+<span id="cb2-44"><a href="#cb2-44"></a>        <span class="va">self</span>.out_proj <span class="op">=</span> nn.Linear(<span class="va">self</span>.embd_dim, <span class="va">self</span>.embd_dim)</span>
+<span id="cb2-45"><a href="#cb2-45"></a></span>
+<span id="cb2-46"><a href="#cb2-46"></a>        <span class="co"># Dropout layer</span></span>
+<span id="cb2-47"><a href="#cb2-47"></a>        <span class="va">self</span>.attn_dropout <span class="op">=</span> nn.Dropout(<span class="va">self</span>.dropout)</span>
+<span id="cb2-48"><a href="#cb2-48"></a>        <span class="va">self</span>.resid_dropout <span class="op">=</span> nn.Dropout(<span class="va">self</span>.dropout)</span>
+<span id="cb2-49"><a href="#cb2-49"></a></span>
+<span id="cb2-50"><a href="#cb2-50"></a>        <span class="co"># Use scaled dot product attention</span></span>
+<span id="cb2-51"><a href="#cb2-51"></a>        <span class="va">self</span>.sdpa <span class="op">=</span> <span class="bu">hasattr</span>(F, <span class="st">"scaled_dot_product_attention"</span>)</span>
+<span id="cb2-52"><a href="#cb2-52"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="va">self</span>.sdpa:</span>
+<span id="cb2-53"><a href="#cb2-53"></a>            <span class="bu">print</span>(</span>
+<span id="cb2-54"><a href="#cb2-54"></a>                <span class="st">"Warning: Scaled Dot Product Attention not available. Using custom implementation."</span></span>
+<span id="cb2-55"><a href="#cb2-55"></a>            )</span>
+<span id="cb2-56"><a href="#cb2-56"></a></span>
+<span id="cb2-57"><a href="#cb2-57"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x: torch.Tensor):</span>
+<span id="cb2-58"><a href="#cb2-58"></a>        B, T, C <span class="op">=</span> x.size()</span>
+<span id="cb2-59"><a href="#cb2-59"></a></span>
+<span id="cb2-60"><a href="#cb2-60"></a>        q, k, v <span class="op">=</span> <span class="bu">map</span>(</span>
+<span id="cb2-61"><a href="#cb2-61"></a>            <span class="kw">lambda</span> t: t.view(B, T, <span class="va">self</span>.n_heads, <span class="va">self</span>.head_dim).transpose(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb2-62"><a href="#cb2-62"></a>            <span class="va">self</span>.qkv_proj(x).chunk(<span class="dv">3</span>, dim<span class="op">=-</span><span class="dv">1</span>),</span>
+<span id="cb2-63"><a href="#cb2-63"></a>        )</span>
+<span id="cb2-64"><a href="#cb2-64"></a></span>
+<span id="cb2-65"><a href="#cb2-65"></a>        <span class="cf">if</span> <span class="va">self</span>.sdpa:</span>
+<span id="cb2-66"><a href="#cb2-66"></a>            y <span class="op">=</span> F.scaled_dot_product_attention(</span>
+<span id="cb2-67"><a href="#cb2-67"></a>                q, k, v, dropout_p<span class="op">=</span><span class="va">self</span>.dropout <span class="cf">if</span> <span class="va">self</span>.training <span class="cf">else</span> <span class="fl">0.0</span></span>
+<span id="cb2-68"><a href="#cb2-68"></a>            )</span>
+<span id="cb2-69"><a href="#cb2-69"></a>        <span class="cf">else</span>:</span>
+<span id="cb2-70"><a href="#cb2-70"></a>            y, _ <span class="op">=</span> scale_dot_product_attention(</span>
+<span id="cb2-71"><a href="#cb2-71"></a>                q<span class="op">=</span>q, k<span class="op">=</span>k, v<span class="op">=</span>v, dropout<span class="op">=</span><span class="va">self</span>.dropout <span class="cf">if</span> <span class="va">self</span>.training <span class="cf">else</span> <span class="fl">0.0</span></span>
+<span id="cb2-72"><a href="#cb2-72"></a>            )</span>
+<span id="cb2-73"><a href="#cb2-73"></a></span>
+<span id="cb2-74"><a href="#cb2-74"></a>        y <span class="op">=</span> y.transpose(<span class="dv">1</span>, <span class="dv">2</span>).contiguous().view(B, T, C)</span>
+<span id="cb2-75"><a href="#cb2-75"></a>        y <span class="op">=</span> <span class="va">self</span>.out_proj(y)</span>
+<span id="cb2-76"><a href="#cb2-76"></a></span>
+<span id="cb2-77"><a href="#cb2-77"></a>        <span class="cf">return</span> <span class="va">self</span>.resid_dropout(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="feed-forward-network" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="feed-forward-network"><span class="header-section-number">1.3</span> Feed Forward Network</h3>
+<p>The Feed Forward Network (FFN) is a simple two-layer fully connected network with a GeLU activation function in between. It processes the output of the MHSA layer and applies a residual connection to the input.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">class</span> MLP(nn.Module):</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, config: VLMConfig):</span>
+<span id="cb3-3"><a href="#cb3-3"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a>        <span class="va">self</span>.activation_fn <span class="op">=</span> nn.GELU(approximate<span class="op">=</span><span class="st">"tanh"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>        <span class="va">self</span>.fc1 <span class="op">=</span> nn.Linear(config.vit_hidden_dim, config.vit_inter_dim)</span>
+<span id="cb3-7"><a href="#cb3-7"></a>        <span class="va">self</span>.fc2 <span class="op">=</span> nn.Linear(config.vit_inter_dim, config.vit_hidden_dim)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>        <span class="va">self</span>.dropout <span class="op">=</span> nn.Dropout(config.vit_dropout)</span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x: torch.Tensor):</span>
+<span id="cb3-11"><a href="#cb3-11"></a>        x <span class="op">=</span> <span class="va">self</span>.fc1(x)</span>
+<span id="cb3-12"><a href="#cb3-12"></a>        x <span class="op">=</span> <span class="va">self</span>.activation_fn(x)</span>
+<span id="cb3-13"><a href="#cb3-13"></a>        x <span class="op">=</span> <span class="va">self</span>.fc2(x)</span>
+<span id="cb3-14"><a href="#cb3-14"></a>        x <span class="op">=</span> <span class="va">self</span>.dropout(x)</span>
+<span id="cb3-15"><a href="#cb3-15"></a>        <span class="cf">return</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="transformer-block" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="transformer-block"><span class="header-section-number">1.4</span> Transformer Block</h3>
+<p>After define the MHSA and FFN layers, we can combine them into a single transformer block. The transformer block applies layer normalization before the MHSA and FFN layers(pre-norm), and it also includes residual connections to help with training stability.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span> ViTBlock(nn.Module):</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, config: VLMConfig):</span>
+<span id="cb4-3"><a href="#cb4-3"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a>        <span class="va">self</span>.attn <span class="op">=</span> ViTMultiHeadAttention(config)</span>
+<span id="cb4-6"><a href="#cb4-6"></a>        <span class="va">self</span>.mlp <span class="op">=</span> MLP(config)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>        <span class="va">self</span>.ln1 <span class="op">=</span> nn.LayerNorm(config.vit_hidden_dim, eps<span class="op">=</span>config.vit_ln_eps)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>        <span class="va">self</span>.ln2 <span class="op">=</span> nn.LayerNorm(config.vit_hidden_dim, eps<span class="op">=</span>config.vit_ln_eps)</span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x: torch.Tensor):</span>
+<span id="cb4-11"><a href="#cb4-11"></a>        <span class="co"># Layer normalization and multi-head attention</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>        x <span class="op">=</span> x <span class="op">+</span> <span class="va">self</span>.attn(<span class="va">self</span>.ln1(x))</span>
+<span id="cb4-13"><a href="#cb4-13"></a>        <span class="co"># Layer normalization and MLP</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>        x <span class="op">=</span> x <span class="op">+</span> <span class="va">self</span>.mlp(<span class="va">self</span>.ln2(x))</span>
+<span id="cb4-15"><a href="#cb4-15"></a>        <span class="cf">return</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="vision-transformer-1" class="level3" data-number="1.5">
+<h3 data-number="1.5" class="anchored" data-anchor-id="vision-transformer-1"><span class="header-section-number">1.5</span> Vision Transformer</h3>
+<p>Finally, we can combine the Patch Embedding layer and the transformer blocks to create the Vision Transformer. The Vision Transformer consists of a series of transformer blocks stacked on top of each other, with the output of the last block being used for classification or further processing.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">class</span> ViT(nn.Module):</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, config: VLMConfig):</span>
+<span id="cb5-3"><a href="#cb5-3"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a>        <span class="va">self</span>.config <span class="op">=</span> config</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a>        <span class="va">self</span>.patch_embedding <span class="op">=</span> ViTPatchEmbedding(config)</span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a>        <span class="va">self</span>.cls_flag <span class="op">=</span> config.vit_cls_flag</span>
+<span id="cb5-10"><a href="#cb5-10"></a>        <span class="va">self</span>.dropout <span class="op">=</span> nn.Dropout(config.vit_dropout)</span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a>        <span class="va">self</span>.blocks <span class="op">=</span> nn.ModuleList(</span>
+<span id="cb5-13"><a href="#cb5-13"></a>            [ViTBlock(config) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(config.vit_n_blocks)]</span>
+<span id="cb5-14"><a href="#cb5-14"></a>        )</span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a>        <span class="va">self</span>.layer_norm <span class="op">=</span> nn.LayerNorm(config.vit_hidden_dim, eps<span class="op">=</span>config.vit_ln_eps)</span>
+<span id="cb5-17"><a href="#cb5-17"></a></span>
+<span id="cb5-18"><a href="#cb5-18"></a>        <span class="va">self</span>.<span class="bu">apply</span>(<span class="va">self</span>._init_weights)</span>
+<span id="cb5-19"><a href="#cb5-19"></a>    </span>
+<span id="cb5-20"><a href="#cb5-20"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, imgs: torch.Tensor):</span>
+<span id="cb5-21"><a href="#cb5-21"></a>        x <span class="op">=</span> <span class="va">self</span>.patch_embedding(imgs)</span>
+<span id="cb5-22"><a href="#cb5-22"></a>        x <span class="op">=</span> <span class="va">self</span>.dropout(x)</span>
+<span id="cb5-23"><a href="#cb5-23"></a></span>
+<span id="cb5-24"><a href="#cb5-24"></a>        <span class="cf">for</span> block <span class="kw">in</span> <span class="va">self</span>.blocks:</span>
+<span id="cb5-25"><a href="#cb5-25"></a>            x <span class="op">=</span> block(x)</span>
+<span id="cb5-26"><a href="#cb5-26"></a></span>
+<span id="cb5-27"><a href="#cb5-27"></a>        <span class="cf">if</span> <span class="va">self</span>.cls_flag:</span>
+<span id="cb5-28"><a href="#cb5-28"></a>            x <span class="op">=</span> x[:, <span class="dv">0</span>]</span>
+<span id="cb5-29"><a href="#cb5-29"></a>        <span class="cf">else</span>:</span>
+<span id="cb5-30"><a href="#cb5-30"></a>            x <span class="op">=</span> <span class="va">self</span>.layer_norm(x)</span>
+<span id="cb5-31"><a href="#cb5-31"></a></span>
+<span id="cb5-32"><a href="#cb5-32"></a>        <span class="cf">return</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So, that all we need for the Vision Encoder. After we get the output of the</p>
+</section>
+<section id="modality-projection" class="level3" data-number="1.6">
+<h3 data-number="1.6" class="anchored" data-anchor-id="modality-projection"><span class="header-section-number">1.6</span> Modality Projection</h3>
+<p>Vision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle<span class="citation" data-cites="RealTimeSingleImage2016shi">(<a href="#ref-RealTimeSingleImage2016shi" role="doc-biblioref">Shi et al. 2016</a>)</span>, which is used to reduce the number of tokens.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource {Python} number-lines code-with-copy"><code class="sourceCode"><span id="cb6-1"><a href="#cb6-1"></a>from vlm.config import VLMConfig</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>import torch </span>
+<span id="cb6-4"><a href="#cb6-4"></a>import torch.nn as nn </span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a>import einops </span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a>class ModalityProjector(nn.Module):</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    def __init__(self, config: VLMConfig):</span>
+<span id="cb6-11"><a href="#cb6-11"></a>        super().__init__()</span>
+<span id="cb6-12"><a href="#cb6-12"></a>        </span>
+<span id="cb6-13"><a href="#cb6-13"></a>        self.config = config </span>
+<span id="cb6-14"><a href="#cb6-14"></a>        </span>
+<span id="cb6-15"><a href="#cb6-15"></a>        self.input_dim = config.vit_hidden_dim * (config.mp_pixel_shuffle_factor**2)    </span>
+<span id="cb6-16"><a href="#cb6-16"></a>        self.output_dim = config.lm_hidden_dim</span>
+<span id="cb6-17"><a href="#cb6-17"></a>        self.scale_factor = config.mp_pixel_shuffle_factor</span>
+<span id="cb6-18"><a href="#cb6-18"></a>        </span>
+<span id="cb6-19"><a href="#cb6-19"></a>        </span>
+<span id="cb6-20"><a href="#cb6-20"></a>        self.proj = nn.Linear(self.input_dim, self.output_dim, bias=False)</span>
+<span id="cb6-21"><a href="#cb6-21"></a>        self._init_weight()</span>
+<span id="cb6-22"><a href="#cb6-22"></a></span>
+<span id="cb6-23"><a href="#cb6-23"></a>    def _init_weight(self):</span>
+<span id="cb6-24"><a href="#cb6-24"></a>        nn.init.normal_(self.proj.weight, mean=0.0, std=0.02)</span>
+<span id="cb6-25"><a href="#cb6-25"></a>    </span>
+<span id="cb6-26"><a href="#cb6-26"></a>    def pixel_shuffle(self, x: torch.Tensor) -&gt; torch.Tensor:</span>
+<span id="cb6-27"><a href="#cb6-27"></a>        B, S, D = x.size()</span>
+<span id="cb6-28"><a href="#cb6-28"></a>        assert S % 2 == 0, "Input sequence length must be even for pixel shuffle."</span>
+<span id="cb6-29"><a href="#cb6-29"></a>        assert S ** 0.5 % self.scale_factor == 0, "Input sequence length must be a perfect square for pixel shuffle."</span>
+<span id="cb6-30"><a href="#cb6-30"></a>        </span>
+<span id="cb6-31"><a href="#cb6-31"></a>        </span>
+<span id="cb6-32"><a href="#cb6-32"></a>        H, W = S, S </span>
+<span id="cb6-33"><a href="#cb6-33"></a>        x = x.view(B, H, W, D) # Convert the flattened sequence into a 2D grid</span>
+<span id="cb6-34"><a href="#cb6-34"></a>        h_out = H // self.scale_factor</span>
+<span id="cb6-35"><a href="#cb6-35"></a>        w_out = W // self.scale_factor</span>
+<span id="cb6-36"><a href="#cb6-36"></a>        </span>
+<span id="cb6-37"><a href="#cb6-37"></a>        x = einops.rearrange(x, </span>
+<span id="cb6-38"><a href="#cb6-38"></a>                             "b (h sf1) (w sf2) d -&gt; b (h w) (d sf1 sf2)",</span>
+<span id="cb6-39"><a href="#cb6-39"></a>                             sf1=self.scale_factor, </span>
+<span id="cb6-40"><a href="#cb6-40"></a>                             sf2=self.scale_factor</span>
+<span id="cb6-41"><a href="#cb6-41"></a>                             )</span>
+<span id="cb6-42"><a href="#cb6-42"></a>        </span>
+<span id="cb6-43"><a href="#cb6-43"></a>        return x</span>
+<span id="cb6-44"><a href="#cb6-44"></a></span>
+<span id="cb6-45"><a href="#cb6-45"></a>    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:</span>
+<span id="cb6-46"><a href="#cb6-46"></a>        x = self.pixel_shuffle(x)</span>
+<span id="cb6-47"><a href="#cb6-47"></a>        assert x.size(-1) == self.input_dim, f"Input dimension mismatch: expected {self.input_dim}, got {x.size(-1)}"</span>
+<span id="cb6-48"><a href="#cb6-48"></a>        </span>
+<span id="cb6-49"><a href="#cb6-49"></a>        x = self.proj(x)</span>
+<span id="cb6-50"><a href="#cb6-50"></a>        return x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After the pixel shuffle, the number of tokens is reduced by a factor of <code>mp_pixel_shuffle_factor**2</code>, which helps to reduce the computational cost while maintaining the semantic information of the visual input. The output of the Modality Projector is then ready to be fed into the Language Model (LM) for further processing.</p>
+</section>
+</section>
+<section id="language-model" class="level2" data-number="2">
 
 
 
-</main> <!-- /main -->
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">2 Language Model</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-ImageWorth16x162021dosovitskiy" class="csl-entry" role="listitem">
+Dosovitskiy, Alexey, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, et al. 2021. <span>“An <span>Image</span> Is <span>Worth</span> 16x16 <span>Words</span>: <span>Transformers</span> for <span>Image Recognition</span> at <span>Scale</span>.”</span> June 3, 2021. <a href="https://doi.org/10.48550/arXiv.2010.11929">https://doi.org/10.48550/arXiv.2010.11929</a>.
+</div>
+<div id="ref-RealTimeSingleImage2016shi" class="csl-entry" role="listitem">
+Shi, Wenzhe, Jose Caballero, Ferenc Huszár, Johannes Totz, Andrew P. Aitken, Rob Bishop, Daniel Rueckert, and Zehan Wang. 2016. <span>“Real-<span>Time Single Image</span> and <span>Video Super-Resolution Using</span> an <span>Efficient Sub-Pixel Convolutional Neural Network</span>.”</span> September 23, 2016. <a href="https://doi.org/10.48550/arXiv.1609.05158">https://doi.org/10.48550/arXiv.1609.05158</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

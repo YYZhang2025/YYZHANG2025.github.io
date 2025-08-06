@@ -1,0 +1,19 @@
+---
+title: "👋🏻Welcome to Yuyang's Blog"
+description: Hi, Yuyang here. After learning from excellent people, I want to share my thoughts and experiences with you to contribute a little to the community. I hope you can find something useful here.  HAPPY LEARNING😁😁!!!
+listing:
+  contents: Blogs
+  date-format: iso
+  sort: 
+    - "date-modified desc"
+    - "date desc"
+  categories: true
+  sort-ui: false
+  filter-ui: false
+  fields: [title, author, reading-time, description, word-count, categories, file-modified]
+  
+
+page-layout: full
+title-block-banner: true
+title-block-banner-align: left
+---

@@ -3,7 +3,6 @@
 # freeze computational output
 # (see https://quarto.org/docs/projects/code-execution.html#freeze)
 freeze: true
-author: "Yuyang Zhang"
 
 bibliography: ../references/zotero.bib
 biblio-style: "apa"
