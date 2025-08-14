@@ -14,5 +14,5 @@ listing:
   type: grid
   sort: "date"
   grid-columns: 3
-  fields: [image, title, author,  description, categories]
+  fields: [image, title, author,  description, categories, reading-time]
 ---

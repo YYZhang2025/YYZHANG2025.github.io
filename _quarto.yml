@@ -9,11 +9,17 @@ title-block-banner: false
 
 website:
   open-graph: true
+  sidebar: 
+    style: "docked"
   navbar:
     pinned: false
     left:
       - text: About Me
         href: index.qmd
+      - icon: github
+        href: https://github.com/YYZhang2025
+      - icon: linkedin
+        href: https://www.linkedin.com/in/zhang-yuyang/
 
     right:
       - text: Blogs
@@ -22,10 +28,9 @@ website:
         href: ./posts/projects.qmd
       - text: Learning Notes
         href: ./posts/notes.qmd
-      - icon: github
-        href: https://github.com/YYZhang2025
-      - icon: linkedin
-        href: https://www.linkedin.com/in/zhang-yuyang/
+      
+      - text: 100 Papers with Code
+        href: https://yuyang.info/100-AI-Papers/
 
   favicon: "./style/icon.avif"
 format:
@@ -35,10 +40,10 @@ format:
       dark: [darkly, ./style/dark.scss]
     css: ./style/styles.css
 
-    toc-title: Contents
+    toc-title: On this page
     toc: true
     toc-location: left
-    toc-expand: 1
+    toc-expand: 2
 
     # code-fold: true
     code-summary: "Show the code"
@@ -60,7 +65,7 @@ format:
 
     linestretch: 1.3
 
-    fontsize: 1.2em
+    fontsize: 1.3em
     header-includes: <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
     mainfont: MyFont
 

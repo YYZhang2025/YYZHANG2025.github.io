@@ -1,0 +1,30 @@
+---
+title: "**PaliGemma Inference and Fine Tuning**"
+author: "Yuyang Zhang"
+description: "Built a PaliGemma model from scratch in PyTorch, loaded the 3B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities."
+image: "./assets/cover.png"
+categories: 
+    - Large Language Model 
+    - Multi-Modality
+    - Fine-Tuning
+keywords: 
+    - PaliGemma
+    - PyTorch
+    - LoRA
+    - Gradio
+---
+----------
+
+Here is the full process of the Pali-Gemma 
+
+
+:::{.column-page}
+
+::: {#fig-pali-gemma-full-process}
+
+![](./assets/PaliGemma_full_process.png){width=100%}
+
+The Pali-Gemma model is a multi-modal large language model that integrates vision and language tasks. The full process includes data collection, model training, and fine-tuning for specific applications.
+:::
+
+:::

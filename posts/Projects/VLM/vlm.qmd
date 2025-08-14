@@ -310,3 +310,28 @@ After the pixel shuffle, the number of tokens is reduced by a factor of `mp_pixe
 
 
 ## Language Model
+
+
+
+# Data Prepare 
+We have finished "easy" part of the Vision-Language Model training, now, comes the tricky part. The data preparation and data load. 
+
+The Training data we are going to use is [HuggingFaceM4/the_cauldron](https://huggingface.co/datasets/HuggingFaceM4/the_cauldron), which contain 1,880,992 samples of text and image pairs. An example of dataset is looks like:
+
+```text 
+{
+    "images" = [PIL.Image]
+    "texts" = [
+        {
+            "user": "Question: How many actions are depicted in the diagram?\nChoices:\nA. 6.\nB. 4.\nC. 8.\nD. 7.\nAnswer with the letter.",
+            "assistant": "Answer: D",
+            "source": "TQA"
+        }
+    ]
+}
+```
+
+::: {.callout-note}
+The dataset is around <tag style='color:red'>170GB</tag>. Make sure you have enough disk space and memory to handle it.
+```
+

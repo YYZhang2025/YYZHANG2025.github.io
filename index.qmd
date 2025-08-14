@@ -16,12 +16,13 @@ about:
       href: mailto:zhangyuyang1211@gmail.com
     - icon: file-person
       text: Resume
-      href: https://noblecatt-1304922865.cos.ap-singapore.myqcloud.com/Yuyang_CV_General.pdf
+      href: https://github.com/YYZhang2025/YYZHANG2025/blob/main/cv.pdf
 
 toc: false
 format:
   html: 
     page-layout: full
+    number-sections: false
 ---
 
 I am a recent graduate from Singapore Management University in MITB (AI Track). With a strong foundation in computer science and big data, I have hands-on experience in machine learning and deep learning, and I’m passionate about building impactful AI-driven solutions. I am currently seeking full-time opportunities in the AI field where I can contribute, grow, and make a meaningful impact. **Open to Work** – feel free to reach out at [zhangyuyang1211\@gmail.com](mailto:zhangyuyang1211@gmail.com)!

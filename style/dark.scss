@@ -1,56 +1,123 @@
 /*-- scss:defaults --*/
 
-$body-bg: #1d1e20;
-$sidebar-bg: #1d1e20; // 侧边栏背景色
-$navbar-bg: #1d1e20;
-$body-color: #faf4fc !default; // 亮灰蓝代替 GhostWhite，更自然护眼
+$color-body-bg: #1d1e20;
+$color-sidebar-bg: #1b1b1c; // 侧边栏背景色
+$color-navbar-bg: #1d1e20;
+$color-body-color: #faf4fc !default; // 亮灰蓝代替 GhostWhite，更自然护眼
 
 // 标题颜色
-$headings-color: #c9a2ff !default; // 柔和 DodgerBlue（对比好但不刺眼）
+$color-headings: #c9a2ff !default; // 柔和 DodgerBlue（对比好但不刺眼）
 
 // 链接颜色
-$link-color: #c9a2ff !default; // 柔和亮蓝
-$link-hover-color: lighten($link-color, 10%);
+$color-link: #c9a2ff !default; // 柔和亮蓝
+$color-link-hover: lighten($color-link, 10%);
+
+$color-strong: #f27d8a !important; // 柔和珊瑚红（比 #da6373 更清新）
+$color-em: #f2b6c1 !important; // 粉白淡化，和 strong 区分但风格统一
+
+// 引用块
+$color-blockquote-bg: #06192e;
+$color-blockquote-border: #1e90ff;
+
+// 代码区块
+$color-code-bg: #0d1b2a;
+$color-code: #fcd34d; // 明黄色（主题中的活泼点）
+
+// 表格配色
+$color-table-bg: #031530;
+$color-table-striped-bg: #06192e;
+$color-table-border: #1e3a5f;
+
+// 按钮主色调（可用于 future UI 风格或扩展）
+$color-primary: #1e90ff;
+$color-secondary: #58687a;
+$color-success: #2ecc71;
+$color-info: #3498db;
+$color-warning: #f39c12;
+$color-danger: #e74c3c;
+
+$color-theorem-border: #1e90ff; /* A bright blue for contrast */
+$color-theorem-bg: #1e1e1e; /* Dark gray to stand out from pure black */
+$color-theorem-text: #f0f0f0; /* Light text for readability */
+
+$color-tag-bg: #1f4037; /* deep green gradient base */
+$color-tag-text: #e6ffe6; /* light minty green text */
+$color-tag-border: #2ecc71; /* optional soft green border */
+
+$color-tag-highlight-bg: #ff4eb5; /* deep green gradient base */
+$color-tag-highlight-text: #ffffff; /* light minty green text */
+
+$color-timeline-border: #555;
+$color-timeline-dot-bg: #888;
+
+$color-content-year: #ccc;
+$color-content-degree: #fff;
+$color-content-school: #aaa;
+
+$color-school-link: #66d9ef; /* light cyan blue */
+$color-school-link-hover: #33c6e3;
+
+$color-subtext: rgba(255, 255, 255, 0.6); /* Soft white */
+
+/* for preview */
+$color-blockquote-border-2: $color-blockquote-border;
+$color-blockquote-bg-2: $color-blockquote-bg;
+$color-blockquote-text: $color-body-color !important;
+$color-blockquote-quote: $color-headings !important;
+
+/*-- variables end --*/
+
+$body-bg: $color-body-bg;
+$sidebar-bg: $color-sidebar-bg; // 侧边栏背景色
+$navbar-bg: $color-navbar-bg;
+$body-color: $color-body-color !default; // 亮灰蓝代替 GhostWhite，更自然护眼
+
+// 标题颜色
+$headings-color: $color-headings !default; // 柔和 DodgerBlue（对比好但不刺眼）
+
+// 链接颜色
+$link-color: $color-link !default; // 柔和亮蓝
+$link-hover-color: $color-link-hover;
 
 // 强调（调整为更统一的粉蓝调）
 strong {
-  color: #f27d8a !important; // 柔和珊瑚红（比 #da6373 更清新）
+  color: $color-strong;
   font-weight: bolder;
 }
 
 em {
-  color: #f2b6c1 !important; // 粉白淡化，和 strong 区分但风格统一
+  color: $color-em;
 }
 
 // 引用块
-$blockquote-bg: #06192e;
-$blockquote-border-color: #1e90ff;
+$blockquote-bg: $color-blockquote-bg;
+$blockquote-border-color: $color-blockquote-border;
 
 // 代码区块
-$code-bg: #0d1b2a;
-$code-color: #fcd34d; // 明黄色（主题中的活泼点）
+$code-bg: $color-code-bg;
+$code-color: $color-code; // 明黄色（主题中的活泼点）
 $code-font-size: 0.9em;
 
 // 表格配色
-$table-bg: #031530;
-$table-striped-bg: #06192e;
-$table-border-color: #1e3a5f;
+$table-bg: $color-table-bg;
+$table-striped-bg: $color-table-striped-bg;
+$table-border-color: $color-table-border;
 
 // 按钮主色调（可用于 future UI 风格或扩展）
-$primary: #1e90ff;
-$secondary: #58687a;
-$success: #2ecc71;
-$info: #3498db;
-$warning: #f39c12;
-$danger: #e74c3c;
+$primary: $color-primary;
+$secondary: $color-secondary;
+$success: $color-success;
+$info: $color-info;
+$warning: $color-warning;
+$danger: $color-danger;
 
 .theorem {
-  border-left: 4px solid #1e90ff; /* A bright blue for contrast */
-  background-color: #1e1e1e; /* Dark gray to stand out from pure black */
+  border-left: 4px solid $color-theorem-border; /* A bright blue for contrast */
+  background-color: $color-theorem-bg; /* Dark gray to stand out from pure black */
   padding: 1em;
   margin: 1em 0;
   border-radius: 5px;
-  color: #f0f0f0; /* Light text for readability */
+  color: $color-theorem-text; /* Light text for readability */
 }
 
 .tech-tags {
@@ -60,33 +127,33 @@ $danger: #e74c3c;
 }
 
 .tag {
-  background-color: #1f4037; /* deep green gradient base */
-  color: #e6ffe6; /* light minty green text */
+  background-color: $color-tag-bg; /* deep green gradient base */
+  color: $color-tag-text; /* light minty green text */
   padding: 0.4rem 1rem;
   border-radius: 20px;
   font-family: Arial, sans-serif;
   font-size: 0.8rem;
   white-space: nowrap;
-  border: 1px solid #2ecc71; /* optional soft green border */
+  border: 1px solid $color-tag-border; /* optional soft green border */
 }
 
 .tag-highlight {
-  background-color: #ff4eb5; /* deep green gradient base */
-  color: #ffffff; /* light minty green text */
+  background-color: $color-tag-highlight-bg; /* deep green gradient base */
+  color: $color-tag-highlight-text; /* light minty green text */
   font-weight: bold;
   padding: 0.4rem 1rem;
   border-radius: 20px;
   font-family: Arial, sans-serif;
   font-size: 0.8rem;
   white-space: nowrap;
-  border: 1px solid #2ecc71; /* optional soft green border */
+  border: 1px solid $color-tag-border; /* optional soft green border */
 }
 .tag-highlight:hover {
   transform: scale(1.05);
 }
 
 .timeline {
-  border-left: 2px solid #555;
+  border-left: 2px solid $color-timeline-border;
   padding-left: 1.5rem;
   position: relative;
 }
@@ -99,7 +166,7 @@ $danger: #e74c3c;
 .timeline-item .dot {
   width: 10px;
   height: 10px;
-  background-color: #888;
+  background-color: $color-timeline-dot-bg;
   border-radius: 50%;
   position: absolute;
   left: -1.8rem;
@@ -108,35 +175,35 @@ $danger: #e74c3c;
 
 .content .year {
   font-size: 1rem;
-  color: #ccc;
+  color: $color-content-year;
   margin-bottom: 0.2rem;
 }
 
 .content .degree {
   font-weight: bold;
   font-size: 1.05rem;
-  color: #fff;
+  color: $color-content-degree;
 }
 
 .content .school {
-  color: #aaa;
+  color: $color-content-school;
   font-size: 0.95rem;
 }
 
 .school a {
-  color: #66d9ef; /* light cyan blue */
+  color: $color-school-link; /* light cyan blue */
   text-decoration: none;
   font-weight: bold;
   transition: color 0.2s ease;
 }
 
 .school a:hover {
-  color: #33c6e3;
+  color: $color-school-link-hover;
   text-decoration: underline;
 }
 
 .subtext {
-  color: rgba(255, 255, 255, 0.6); /* Soft white */
+  color: $color-subtext; /* Soft white */
   font-size: 0.95em;
   font-style: italic;
   margin-top: 4px;
@@ -144,8 +211,8 @@ $danger: #e74c3c;
 
 /* for preview */
 blockquote {
-  border: 2px solid $blockquote-border-color;
-  background-color: $blockquote-bg;
+  border: 2px solid $color-blockquote-border-2;
+  background-color: $color-blockquote-bg-2;
   border-radius: 8px;
   font-size: 15px;
   line-height: 1.5em;
@@ -153,7 +220,7 @@ blockquote {
   padding-top: 10px;
   padding-bottom: 10px;
   font-style: italic;
-  color: $body-color !important;
+  color: $color-blockquote-text;
 }
 
 blockquote {
@@ -167,7 +234,7 @@ blockquote:after {
   left: -0.2em;
   font-size: 8em;
   font-style: normal;
-  color: $headings-color !important;
+  color: $color-blockquote-quote;
 }
 
 /* if paraphrasing, wrap your quote in <blockquote class=paraphrase>text</blockquote> */
@@ -177,7 +244,7 @@ blockquote.paraphrase:after {
 
 /* for citations */
 cite {
-  background-color: $headings-color;
+  background-color: $color-headings;
   color: white;
   margin-left: -10px;
   margin-right: -10px;
@@ -189,4 +256,12 @@ cite {
 
 cite a:link {
   color: white;
+}
+
+
+.navbar,
+.quarto-navbar {
+  background-color: $color-sidebar-bg !important;
+  border: none !important;
+  box-shadow: none !important; /* if it's a shadow instead of a border */
 }

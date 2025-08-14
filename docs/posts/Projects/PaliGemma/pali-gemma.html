@@ -6,10 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-08-14">
-<meta name="description" content="In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance">
+<meta name="author" content="Yuyang Zhang">
+<meta name="keywords" content="PaliGemma, PyTorch, LoRA, Gradio">
+<meta name="description" content="Built a PaliGemma model from scratch in PyTorch, loaded the 3B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities.">
 
-<title>LLM Part3: Applications</title>
+<title>PaliGemma Inference and Fine Tuning</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -78,9 +79,9 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../../../style/styles.css">
-<meta property="og:title" content="LLM Part3: Applications">
-<meta property="og:description" content="In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance">
-<meta property="og:image" content="./images/post-training.jpg">
+<meta property="og:title" content="PaliGemma Inference and Fine Tuning">
+<meta property="og:description" content="Built a PaliGemma model from scratch in PyTorch, loaded the 3B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities.">
+<meta property="og:image" content="./assets/cover.png">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -301,7 +302,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">LLM Part3: Applications</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><strong>PaliGemma Inference and Fine Tuning</strong></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -318,50 +319,64 @@ ul.task-list li input[type="checkbox"] {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">LLM Part3: Applications</h1>
+<h1 class="title"><strong>PaliGemma Inference and Fine Tuning</strong></h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Overview</div>
     <div class="quarto-category">Large Language Model</div>
+    <div class="quarto-category">Multi-Modality</div>
+    <div class="quarto-category">Fine-Tuning</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    In this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance
+    Built a PaliGemma model from scratch in PyTorch, loaded the 3B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities.
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
+  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">2025-08-14</p>
-    </div>
-  </div>
   
-    <div>
-    <div class="quarto-title-meta-heading">Last modified</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date-modified">2025-08-07</p>
-    </div>
-  </div>
     
   </div>
   
 
+<div>
+  <div class="keywords">
+    <div class="block-title">Keywords</div>
+    <p>PaliGemma, PyTorch, LoRA, Gradio</p>
+  </div>
+</div>
 
 </header>
 
 
-<p>This is the part 3 of the LLM series, application. What can we do after we have an LLM. One of the most significant application is the LLM Based Agent. With the ability of the LLM. The AI agent has acquire incredible ability. Besides the AI Agent, it has so many other applications that can be improve with the help of the LLM. We are going to dig into it.</p>
+<hr>
+<p>Here is the full process of the Pali-Gemma</p>
+<div class="page-columns page-full">
+<div id="fig-pali-gemma-full-process" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-pali-gemma-full-process-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<img src="./assets/PaliGemma_full_process.png" class="img-fluid figure-img column-page" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pali-gemma-full-process-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The Pali-Gemma model is a multi-modal large language model that integrates vision and language tasks. The full process includes data collection, model training, and fine-tuning for specific applications.
+</figcaption>
+</figure>
+</div>
+</div>
 
 
 
