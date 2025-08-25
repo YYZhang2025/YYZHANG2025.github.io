@@ -42,8 +42,8 @@ format:
 
     toc-title: On this page
     toc: true
-    toc-location: left
-    toc-expand: 2
+    toc-location: left-body
+    toc-expand: 1
 
     # code-fold: true
     code-summary: "Show the code"

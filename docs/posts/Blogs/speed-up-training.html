@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
-<meta name="dcterms.date" content="2025-08-14">
+<meta name="dcterms.date" content="2025-08-25">
 <meta name="description" content="Training large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.">
 
 <title>Speed Up Training for Neural Networks</title>
@@ -376,7 +376,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -449,7 +449,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2025-08-14</p>
+      <p class="date">2025-08-25</p>
     </div>
   </div>
   
@@ -466,7 +466,43 @@ window.Quarto = {
 
 </header>
 
-
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#preliminary" id="toc-preliminary"><span class="header-section-number">1</span> Preliminary</a>
+  <ul>
+  <li><a href="#sec-data-types" id="toc-sec-data-types"><span class="header-section-number">1.1</span> Data Representation</a></li>
+  <li><a href="#sec-calculate-memory-usage" id="toc-sec-calculate-memory-usage"><span class="header-section-number">1.2</span> Calculate Memory Usage of Model</a></li>
+  <li><a href="#collective-operations" id="toc-collective-operations"><span class="header-section-number">1.3</span> Collective operations</a></li>
+  </ul></li>
+  <li><a href="#profiling" id="toc-profiling"><span class="header-section-number">2</span> Profiling</a>
+  <ul>
+  <li><a href="#sec-simple-benchmarking" id="toc-sec-simple-benchmarking"><span class="header-section-number">2.1</span> Simple Benchmarking</a></li>
+  <li><a href="#sec-pytorch-profiler" id="toc-sec-pytorch-profiler"><span class="header-section-number">2.2</span> PyTorch Profiler</a></li>
+  <li><a href="#sec-nsight-systems" id="toc-sec-nsight-systems"><span class="header-section-number">2.3</span> NVIDIA Nsight Systems</a></li>
+  </ul></li>
+  <li><a href="#single-gpu-optimization" id="toc-single-gpu-optimization"><span class="header-section-number">3</span> Single GPU Optimization</a>
+  <ul>
+  <li><a href="#sec-fusion" id="toc-sec-fusion"><span class="header-section-number">3.1</span> Fusion</a></li>
+  <li><a href="#sec-tiling" id="toc-sec-tiling"><span class="header-section-number">3.2</span> Tiling</a></li>
+  <li><a href="#sec-memory-coalescing" id="toc-sec-memory-coalescing"><span class="header-section-number">3.3</span> Memory Coalescing</a></li>
+  <li><a href="#sec-mixed-precision-training" id="toc-sec-mixed-precision-training"><span class="header-section-number">3.4</span> Mixed Precision Training</a></li>
+  <li><a href="#sec-gradient-accumulation" id="toc-sec-gradient-accumulation"><span class="header-section-number">3.5</span> Gradient Accumulation</a></li>
+  <li><a href="#case-study-flash-attention" id="toc-case-study-flash-attention"><span class="header-section-number">3.6</span> Case Study: Flash Attention</a></li>
+  </ul></li>
+  <li><a href="#multi-gpu-optimizationparallelism" id="toc-multi-gpu-optimizationparallelism"><span class="header-section-number">4</span> Multi-GPU Optimization(Parallelism)</a>
+  <ul>
+  <li><a href="#sec-data-parallelism" id="toc-sec-data-parallelism"><span class="header-section-number">4.1</span> Data Parallelism</a></li>
+  <li><a href="#sec-model-parallelism" id="toc-sec-model-parallelism"><span class="header-section-number">4.2</span> Model Parallelism</a></li>
+  <li><a href="#sec-pipeline-parallelism" id="toc-sec-pipeline-parallelism"><span class="header-section-number">4.3</span> Pipeline Parallelism</a></li>
+  <li><a href="#sec-tensor-parallelism" id="toc-sec-tensor-parallelism"><span class="header-section-number">4.4</span> Tensor Parallelism</a></li>
+  <li><a href="#sec-context-parallelism" id="toc-sec-context-parallelism"><span class="header-section-number">4.5</span> Context Parallelism</a></li>
+  <li><a href="#case-study-deepspeed" id="toc-case-study-deepspeed"><span class="header-section-number">4.6</span> Case Study: DeepSpeed</a></li>
+  <li><a href="#case-study-megatron-lm" id="toc-case-study-megatron-lm"><span class="header-section-number">4.7</span> Case Study: Megatron-LM</a></li>
+  </ul></li>
+  </ul>
+</nav>
 <hr>
 <p>Training large neural networks(such as large language models) can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculations on a single GPU through different techniques such as fusion, tiling, memory coalescing, and parallelizing the training across multiple GPUs such as model parallelism and data parallelism. But before that, we need to understand the basic concepts of GPU, and data types to better understand why and when we need to use these techniques.</p>
 <section id="preliminary" class="level2 page-columns page-full" data-number="1">
@@ -606,7 +642,7 @@ Why need activation for backward pass?
 \]</span> where <span class="math inline">\(\mathbf{x}\)</span> is the input to the layer, which is the activation of the previous layer. Thus, we need to store the activation for the backward pass.</p>
 </div>
 </div>
-<div id="ffd4277c" class="cell">
+<div id="7dbbb4df" class="cell">
 <details class="code-fold">
 <summary>Calculate Memory Usage of Model</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>

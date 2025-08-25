@@ -46,14 +46,14 @@
     "href": "posts/Projects/VLM/vlm.html",
     "title": "Visual Language Model",
     "section": "",
-    "text": "The vision encoder is the classic Vision Transformer (ViT) architecture as proposed in (Dosovitskiy et al. 2021).\n\n\n\n\n\n\nFigure 1: The illustration of the Vision Transformer.\n\n\n\n\n\nThe first component of the ViT is the Patch Embedding layer, which converts the input image into a sequence of patches. Each patch is treated as a token, similar to how words are treated in NLP models. The patches are flattened and linearly projected into a higher-dimensional space. We can combine those two steps into a single convolutional layer. After patching the image into smaller patches, we can add a learnable class token and positional embeddings to the sequence of patches. The class token is used for classification tasks, while positional embeddings help the model understand the spatial relationships between patches.\nclass ViTPatchEmbedding(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.img_size = config.vit_img_size\n        self.patch_size = config.vit_patch_size\n\n        assert (\n            self.img_size % self.patch_size == 0\n        ), \"Image size must be divisible by patch size.\"\n        self.num_patches = (self.img_size // self.patch_size) ** 2\n        self.cls_flag = config.vit_cls_flag\n        self.embd_dim = config.vit_hidden_dim\n\n        self.conv = nn.Conv2d(\n            in_channels=3,\n            out_channels=self.embd_dim,\n            kernel_size=self.patch_size,\n            stride=self.patch_size,\n            padding=\"valid\",\n        )\n\n        if self.cls_flag:\n            self.cls_token = nn.Parameter(torch.zeros(1, 1, self.embd_dim))  # (B, 1, D)\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches + 1, self.embd_dim)\n            )  # (B, P+1, D)\n        else:\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches, self.embd_dim)\n            )\n\n    def forward(self, imgs: torch.Tensor):\n        # (B, C, H, W) -&gt; (B, D, H // P, W // P)\n        x = self.conv(imgs)\n        # (B, D, H // P, W // P) -&gt; (B, H // P * W // P, D)\n        x = x.flatten(2).transpose(1, 2)\n\n        if self.cls_flag:\n            cls_tokens = self.cls_token.expand(x.shape[0], -1, -1)\n            x = torch.cat((cls_tokens, x), dim=1)  # (B, P+1, D)\n\n        x = x + self.position_embeddings  # (B, P+1, D) or (B, P, D)\n        return x\n\n\n\nAfter we get the tokens from the Patch Embedding layer, we can feed those tokens into the transformer block. The transformer block consists of a Multi-Head Self-Attention (MHSA) layer and a Feed Forward Network (FFN). The MHSA layer allows the model to attend to different parts of the input sequence simultaneously, capturing complex relationships between patches. The FFN is a simple feed-forward neural network that processes the output of the MHSA layer.\ndef scale_dot_product_attention(\n    q: torch.Tensor,\n    k: torch.Tensor,\n    v: torch.Tensor,\n    mask: torch.Tensor | None = None,\n    dropout: float = 0.0,\n):\n\n    d_k = q.shape[-1]\n\n    # Compute the dot product attention scores\n    attn_scores = torch.matmul(q, k.transpose(-2, -1)) / (\n        d_k**0.5\n    )  # Scale by the square root of the dimension\n    if mask is not None:\n        attn_scores = attn_scores.masked_fill(mask == 0, float(\"-inf\"))\n    attn_weights = torch.softmax(attn_scores, dim=-1)\n    if dropout &gt; 0.0:\n        attn_weights = torch.nn.functional.dropout(\n            attn_weights, p=dropout, training=True\n        )\n    # Compute the attention output\n    attn_output = torch.matmul(attn_weights, v)  # Shape: (B, S_q, D)\n\n    return attn_output, attn_weights\n\n\n\nclass ViTMultiHeadAttention(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.n_heads = config.vit_n_heads\n        self.embd_dim = config.vit_hidden_dim\n\n        assert (\n            self.embd_dim % self.n_heads == 0\n        ), \"embd_dim must be divisible by num_heads\"\n        self.head_dim = self.embd_dim // self.n_heads\n\n        self.dropout = config.vit_dropout\n\n        self.qkv_proj = nn.Linear(self.embd_dim, 3 * self.embd_dim)\n        self.out_proj = nn.Linear(self.embd_dim, self.embd_dim)\n\n        # Dropout layer\n        self.attn_dropout = nn.Dropout(self.dropout)\n        self.resid_dropout = nn.Dropout(self.dropout)\n\n        # Use scaled dot product attention\n        self.sdpa = hasattr(F, \"scaled_dot_product_attention\")\n        if not self.sdpa:\n            print(\n                \"Warning: Scaled Dot Product Attention not available. Using custom implementation.\"\n            )\n\n    def forward(self, x: torch.Tensor):\n        B, T, C = x.size()\n\n        q, k, v = map(\n            lambda t: t.view(B, T, self.n_heads, self.head_dim).transpose(1, 2),\n            self.qkv_proj(x).chunk(3, dim=-1),\n        )\n\n        if self.sdpa:\n            y = F.scaled_dot_product_attention(\n                q, k, v, dropout_p=self.dropout if self.training else 0.0\n            )\n        else:\n            y, _ = scale_dot_product_attention(\n                q=q, k=k, v=v, dropout=self.dropout if self.training else 0.0\n            )\n\n        y = y.transpose(1, 2).contiguous().view(B, T, C)\n        y = self.out_proj(y)\n\n        return self.resid_dropout(y)\n\n\n\nThe Feed Forward Network (FFN) is a simple two-layer fully connected network with a GeLU activation function in between. It processes the output of the MHSA layer and applies a residual connection to the input.\nclass MLP(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.activation_fn = nn.GELU(approximate=\"tanh\")\n        self.fc1 = nn.Linear(config.vit_hidden_dim, config.vit_inter_dim)\n        self.fc2 = nn.Linear(config.vit_inter_dim, config.vit_hidden_dim)\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n    def forward(self, x: torch.Tensor):\n        x = self.fc1(x)\n        x = self.activation_fn(x)\n        x = self.fc2(x)\n        x = self.dropout(x)\n        return x\n\n\n\nAfter define the MHSA and FFN layers, we can combine them into a single transformer block. The transformer block applies layer normalization before the MHSA and FFN layers(pre-norm), and it also includes residual connections to help with training stability.\nclass ViTBlock(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.attn = ViTMultiHeadAttention(config)\n        self.mlp = MLP(config)\n        self.ln1 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n        self.ln2 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n    def forward(self, x: torch.Tensor):\n        # Layer normalization and multi-head attention\n        x = x + self.attn(self.ln1(x))\n        # Layer normalization and MLP\n        x = x + self.mlp(self.ln2(x))\n        return x\n\n\n\nFinally, we can combine the Patch Embedding layer and the transformer blocks to create the Vision Transformer. The Vision Transformer consists of a series of transformer blocks stacked on top of each other, with the output of the last block being used for classification or further processing.\nclass ViT(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.config = config\n\n        self.patch_embedding = ViTPatchEmbedding(config)\n\n        self.cls_flag = config.vit_cls_flag\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n        self.blocks = nn.ModuleList(\n            [ViTBlock(config) for _ in range(config.vit_n_blocks)]\n        )\n\n        self.layer_norm = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n        self.apply(self._init_weights)\n    \n    def forward(self, imgs: torch.Tensor):\n        x = self.patch_embedding(imgs)\n        x = self.dropout(x)\n\n        for block in self.blocks:\n            x = block(x)\n\n        if self.cls_flag:\n            x = x[:, 0]\n        else:\n            x = self.layer_norm(x)\n\n        return x\nSo, that all we need for the Vision Encoder. After we get the output of the\n\n\n\nVision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle(Shi et al. 2016), which is used to reduce the number of tokens.\n\n\n\n\n\n\nFigure 2: Illustration of the pixel shuffle operation and un-shuffling process. The pixel shuffle operation rearranges the elements of a tensor to increase the spatial resolution, while the un-shuffle process reverses this operation.\n\n\n\nclass ModalityProjector(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n        \n        self.config = config \n        \n        self.input_dim = config.vit_hidden_dim * (config.mp_pixel_shuffle_factor**2)    \n        self.output_dim = config.lm_hidden_dim\n        self.scale_factor = config.mp_pixel_shuffle_factor\n        \n        \n        self.proj = nn.Linear(self.input_dim, self.output_dim, bias=False)\n        self._init_weight()\n\n    def _init_weight(self):\n        nn.init.normal_(self.proj.weight, mean=0.0, std=0.02)\n    \n    def pixel_shuffle(self, x: torch.Tensor) -&gt; torch.Tensor:\n        B, S, D = x.size()\n        assert S % 2 == 0, \"Input sequence length must be even for pixel shuffle.\"\n        assert S ** 0.5 % self.scale_factor == 0, \"Input sequence length must be a perfect square for pixel shuffle.\"\n        \n        \n        H, W = S, S \n        x = x.view(B, H, W, D) # Convert the flattened sequence into a 2D grid\n        h_out = H // self.scale_factor\n        w_out = W // self.scale_factor\n        \n        x = einops.rearrange(x, \n                             \"b (h sf1) (w sf2) d -&gt; b (h w) (d sf1 sf2)\",\n                             sf1=self.scale_factor, \n                             sf2=self.scale_factor\n                             )\n        \n        return x\n\n    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:\n        x = self.pixel_shuffle(x)\n        assert x.size(-1) == self.input_dim, f\"Input dimension mismatch: expected {self.input_dim}, got {x.size(-1)}\"\n        \n        x = self.proj(x)\n        return x\nAfter the pixel shuffle, the number of tokens is reduced by a factor of mp_pixel_shuffle_factor**2, which helps to reduce the computational cost while maintaining the semantic information of the visual input. The output of the Modality Projector is then ready to be fed into the Language Model (LM) for further processing."
+    "text": "0.1 Vision Transformer\n  \n  0.1.1 Patch Embedding\n  0.1.2 Multi Head Self-Attention\n  0.1.3 Feed Forward Network\n  0.1.4 Transformer Block\n  0.1.5 Vision Transformer\n  0.1.6 Modality Projection\n  \n  0.2 Language Model\n  1 Data Prepare"
   },
   {
     "objectID": "posts/Projects/VLM/vlm.html#vision-transformer",
     "href": "posts/Projects/VLM/vlm.html#vision-transformer",
     "title": "Visual Language Model",
-    "section": "",
-    "text": "The vision encoder is the classic Vision Transformer (ViT) architecture as proposed in (Dosovitskiy et al. 2021).\n\n\n\n\n\n\nFigure 1: The illustration of the Vision Transformer.\n\n\n\n\n\nThe first component of the ViT is the Patch Embedding layer, which converts the input image into a sequence of patches. Each patch is treated as a token, similar to how words are treated in NLP models. The patches are flattened and linearly projected into a higher-dimensional space. We can combine those two steps into a single convolutional layer. After patching the image into smaller patches, we can add a learnable class token and positional embeddings to the sequence of patches. The class token is used for classification tasks, while positional embeddings help the model understand the spatial relationships between patches.\nclass ViTPatchEmbedding(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.img_size = config.vit_img_size\n        self.patch_size = config.vit_patch_size\n\n        assert (\n            self.img_size % self.patch_size == 0\n        ), \"Image size must be divisible by patch size.\"\n        self.num_patches = (self.img_size // self.patch_size) ** 2\n        self.cls_flag = config.vit_cls_flag\n        self.embd_dim = config.vit_hidden_dim\n\n        self.conv = nn.Conv2d(\n            in_channels=3,\n            out_channels=self.embd_dim,\n            kernel_size=self.patch_size,\n            stride=self.patch_size,\n            padding=\"valid\",\n        )\n\n        if self.cls_flag:\n            self.cls_token = nn.Parameter(torch.zeros(1, 1, self.embd_dim))  # (B, 1, D)\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches + 1, self.embd_dim)\n            )  # (B, P+1, D)\n        else:\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches, self.embd_dim)\n            )\n\n    def forward(self, imgs: torch.Tensor):\n        # (B, C, H, W) -&gt; (B, D, H // P, W // P)\n        x = self.conv(imgs)\n        # (B, D, H // P, W // P) -&gt; (B, H // P * W // P, D)\n        x = x.flatten(2).transpose(1, 2)\n\n        if self.cls_flag:\n            cls_tokens = self.cls_token.expand(x.shape[0], -1, -1)\n            x = torch.cat((cls_tokens, x), dim=1)  # (B, P+1, D)\n\n        x = x + self.position_embeddings  # (B, P+1, D) or (B, P, D)\n        return x\n\n\n\nAfter we get the tokens from the Patch Embedding layer, we can feed those tokens into the transformer block. The transformer block consists of a Multi-Head Self-Attention (MHSA) layer and a Feed Forward Network (FFN). The MHSA layer allows the model to attend to different parts of the input sequence simultaneously, capturing complex relationships between patches. The FFN is a simple feed-forward neural network that processes the output of the MHSA layer.\ndef scale_dot_product_attention(\n    q: torch.Tensor,\n    k: torch.Tensor,\n    v: torch.Tensor,\n    mask: torch.Tensor | None = None,\n    dropout: float = 0.0,\n):\n\n    d_k = q.shape[-1]\n\n    # Compute the dot product attention scores\n    attn_scores = torch.matmul(q, k.transpose(-2, -1)) / (\n        d_k**0.5\n    )  # Scale by the square root of the dimension\n    if mask is not None:\n        attn_scores = attn_scores.masked_fill(mask == 0, float(\"-inf\"))\n    attn_weights = torch.softmax(attn_scores, dim=-1)\n    if dropout &gt; 0.0:\n        attn_weights = torch.nn.functional.dropout(\n            attn_weights, p=dropout, training=True\n        )\n    # Compute the attention output\n    attn_output = torch.matmul(attn_weights, v)  # Shape: (B, S_q, D)\n\n    return attn_output, attn_weights\n\n\n\nclass ViTMultiHeadAttention(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.n_heads = config.vit_n_heads\n        self.embd_dim = config.vit_hidden_dim\n\n        assert (\n            self.embd_dim % self.n_heads == 0\n        ), \"embd_dim must be divisible by num_heads\"\n        self.head_dim = self.embd_dim // self.n_heads\n\n        self.dropout = config.vit_dropout\n\n        self.qkv_proj = nn.Linear(self.embd_dim, 3 * self.embd_dim)\n        self.out_proj = nn.Linear(self.embd_dim, self.embd_dim)\n\n        # Dropout layer\n        self.attn_dropout = nn.Dropout(self.dropout)\n        self.resid_dropout = nn.Dropout(self.dropout)\n\n        # Use scaled dot product attention\n        self.sdpa = hasattr(F, \"scaled_dot_product_attention\")\n        if not self.sdpa:\n            print(\n                \"Warning: Scaled Dot Product Attention not available. Using custom implementation.\"\n            )\n\n    def forward(self, x: torch.Tensor):\n        B, T, C = x.size()\n\n        q, k, v = map(\n            lambda t: t.view(B, T, self.n_heads, self.head_dim).transpose(1, 2),\n            self.qkv_proj(x).chunk(3, dim=-1),\n        )\n\n        if self.sdpa:\n            y = F.scaled_dot_product_attention(\n                q, k, v, dropout_p=self.dropout if self.training else 0.0\n            )\n        else:\n            y, _ = scale_dot_product_attention(\n                q=q, k=k, v=v, dropout=self.dropout if self.training else 0.0\n            )\n\n        y = y.transpose(1, 2).contiguous().view(B, T, C)\n        y = self.out_proj(y)\n\n        return self.resid_dropout(y)\n\n\n\nThe Feed Forward Network (FFN) is a simple two-layer fully connected network with a GeLU activation function in between. It processes the output of the MHSA layer and applies a residual connection to the input.\nclass MLP(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.activation_fn = nn.GELU(approximate=\"tanh\")\n        self.fc1 = nn.Linear(config.vit_hidden_dim, config.vit_inter_dim)\n        self.fc2 = nn.Linear(config.vit_inter_dim, config.vit_hidden_dim)\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n    def forward(self, x: torch.Tensor):\n        x = self.fc1(x)\n        x = self.activation_fn(x)\n        x = self.fc2(x)\n        x = self.dropout(x)\n        return x\n\n\n\nAfter define the MHSA and FFN layers, we can combine them into a single transformer block. The transformer block applies layer normalization before the MHSA and FFN layers(pre-norm), and it also includes residual connections to help with training stability.\nclass ViTBlock(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.attn = ViTMultiHeadAttention(config)\n        self.mlp = MLP(config)\n        self.ln1 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n        self.ln2 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n    def forward(self, x: torch.Tensor):\n        # Layer normalization and multi-head attention\n        x = x + self.attn(self.ln1(x))\n        # Layer normalization and MLP\n        x = x + self.mlp(self.ln2(x))\n        return x\n\n\n\nFinally, we can combine the Patch Embedding layer and the transformer blocks to create the Vision Transformer. The Vision Transformer consists of a series of transformer blocks stacked on top of each other, with the output of the last block being used for classification or further processing.\nclass ViT(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.config = config\n\n        self.patch_embedding = ViTPatchEmbedding(config)\n\n        self.cls_flag = config.vit_cls_flag\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n        self.blocks = nn.ModuleList(\n            [ViTBlock(config) for _ in range(config.vit_n_blocks)]\n        )\n\n        self.layer_norm = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n        self.apply(self._init_weights)\n    \n    def forward(self, imgs: torch.Tensor):\n        x = self.patch_embedding(imgs)\n        x = self.dropout(x)\n\n        for block in self.blocks:\n            x = block(x)\n\n        if self.cls_flag:\n            x = x[:, 0]\n        else:\n            x = self.layer_norm(x)\n\n        return x\nSo, that all we need for the Vision Encoder. After we get the output of the\n\n\n\nVision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle(Shi et al. 2016), which is used to reduce the number of tokens.\n\n\n\n\n\n\nFigure 2: Illustration of the pixel shuffle operation and un-shuffling process. The pixel shuffle operation rearranges the elements of a tensor to increase the spatial resolution, while the un-shuffle process reverses this operation.\n\n\n\nclass ModalityProjector(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n        \n        self.config = config \n        \n        self.input_dim = config.vit_hidden_dim * (config.mp_pixel_shuffle_factor**2)    \n        self.output_dim = config.lm_hidden_dim\n        self.scale_factor = config.mp_pixel_shuffle_factor\n        \n        \n        self.proj = nn.Linear(self.input_dim, self.output_dim, bias=False)\n        self._init_weight()\n\n    def _init_weight(self):\n        nn.init.normal_(self.proj.weight, mean=0.0, std=0.02)\n    \n    def pixel_shuffle(self, x: torch.Tensor) -&gt; torch.Tensor:\n        B, S, D = x.size()\n        assert S % 2 == 0, \"Input sequence length must be even for pixel shuffle.\"\n        assert S ** 0.5 % self.scale_factor == 0, \"Input sequence length must be a perfect square for pixel shuffle.\"\n        \n        \n        H, W = S, S \n        x = x.view(B, H, W, D) # Convert the flattened sequence into a 2D grid\n        h_out = H // self.scale_factor\n        w_out = W // self.scale_factor\n        \n        x = einops.rearrange(x, \n                             \"b (h sf1) (w sf2) d -&gt; b (h w) (d sf1 sf2)\",\n                             sf1=self.scale_factor, \n                             sf2=self.scale_factor\n                             )\n        \n        return x\n\n    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:\n        x = self.pixel_shuffle(x)\n        assert x.size(-1) == self.input_dim, f\"Input dimension mismatch: expected {self.input_dim}, got {x.size(-1)}\"\n        \n        x = self.proj(x)\n        return x\nAfter the pixel shuffle, the number of tokens is reduced by a factor of mp_pixel_shuffle_factor**2, which helps to reduce the computational cost while maintaining the semantic information of the visual input. The output of the Modality Projector is then ready to be fed into the Language Model (LM) for further processing."
+    "section": "0.1 Vision Transformer",
+    "text": "0.1 Vision Transformer\nThe vision encoder is the classic Vision Transformer (ViT) architecture as proposed in (Dosovitskiy et al. 2021).\n\n\n\n\n\n\nFigure 1: The illustration of the Vision Transformer.\n\n\n\n\n0.1.1 Patch Embedding\nThe first component of the ViT is the Patch Embedding layer, which converts the input image into a sequence of patches. Each patch is treated as a token, similar to how words are treated in NLP models. The patches are flattened and linearly projected into a higher-dimensional space. We can combine those two steps into a single convolutional layer. After patching the image into smaller patches, we can add a learnable class token and positional embeddings to the sequence of patches. The class token is used for classification tasks, while positional embeddings help the model understand the spatial relationships between patches.\nclass ViTPatchEmbedding(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.img_size = config.vit_img_size\n        self.patch_size = config.vit_patch_size\n\n        assert (\n            self.img_size % self.patch_size == 0\n        ), \"Image size must be divisible by patch size.\"\n        self.num_patches = (self.img_size // self.patch_size) ** 2\n        self.cls_flag = config.vit_cls_flag\n        self.embd_dim = config.vit_hidden_dim\n\n        self.conv = nn.Conv2d(\n            in_channels=3,\n            out_channels=self.embd_dim,\n            kernel_size=self.patch_size,\n            stride=self.patch_size,\n            padding=\"valid\",\n        )\n\n        if self.cls_flag:\n            self.cls_token = nn.Parameter(torch.zeros(1, 1, self.embd_dim))  # (B, 1, D)\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches + 1, self.embd_dim)\n            )  # (B, P+1, D)\n        else:\n            self.position_embeddings = nn.Parameter(\n                torch.zeros(1, self.num_patches, self.embd_dim)\n            )\n\n    def forward(self, imgs: torch.Tensor):\n        # (B, C, H, W) -&gt; (B, D, H // P, W // P)\n        x = self.conv(imgs)\n        # (B, D, H // P, W // P) -&gt; (B, H // P * W // P, D)\n        x = x.flatten(2).transpose(1, 2)\n\n        if self.cls_flag:\n            cls_tokens = self.cls_token.expand(x.shape[0], -1, -1)\n            x = torch.cat((cls_tokens, x), dim=1)  # (B, P+1, D)\n\n        x = x + self.position_embeddings  # (B, P+1, D) or (B, P, D)\n        return x\n\n\n0.1.2 Multi Head Self-Attention\nAfter we get the tokens from the Patch Embedding layer, we can feed those tokens into the transformer block. The transformer block consists of a Multi-Head Self-Attention (MHSA) layer and a Feed Forward Network (FFN). The MHSA layer allows the model to attend to different parts of the input sequence simultaneously, capturing complex relationships between patches. The FFN is a simple feed-forward neural network that processes the output of the MHSA layer.\ndef scale_dot_product_attention(\n    q: torch.Tensor,\n    k: torch.Tensor,\n    v: torch.Tensor,\n    mask: torch.Tensor | None = None,\n    dropout: float = 0.0,\n):\n\n    d_k = q.shape[-1]\n\n    # Compute the dot product attention scores\n    attn_scores = torch.matmul(q, k.transpose(-2, -1)) / (\n        d_k**0.5\n    )  # Scale by the square root of the dimension\n    if mask is not None:\n        attn_scores = attn_scores.masked_fill(mask == 0, float(\"-inf\"))\n    attn_weights = torch.softmax(attn_scores, dim=-1)\n    if dropout &gt; 0.0:\n        attn_weights = torch.nn.functional.dropout(\n            attn_weights, p=dropout, training=True\n        )\n    # Compute the attention output\n    attn_output = torch.matmul(attn_weights, v)  # Shape: (B, S_q, D)\n\n    return attn_output, attn_weights\n\n\n\nclass ViTMultiHeadAttention(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.n_heads = config.vit_n_heads\n        self.embd_dim = config.vit_hidden_dim\n\n        assert (\n            self.embd_dim % self.n_heads == 0\n        ), \"embd_dim must be divisible by num_heads\"\n        self.head_dim = self.embd_dim // self.n_heads\n\n        self.dropout = config.vit_dropout\n\n        self.qkv_proj = nn.Linear(self.embd_dim, 3 * self.embd_dim)\n        self.out_proj = nn.Linear(self.embd_dim, self.embd_dim)\n\n        # Dropout layer\n        self.attn_dropout = nn.Dropout(self.dropout)\n        self.resid_dropout = nn.Dropout(self.dropout)\n\n        # Use scaled dot product attention\n        self.sdpa = hasattr(F, \"scaled_dot_product_attention\")\n        if not self.sdpa:\n            print(\n                \"Warning: Scaled Dot Product Attention not available. Using custom implementation.\"\n            )\n\n    def forward(self, x: torch.Tensor):\n        B, T, C = x.size()\n\n        q, k, v = map(\n            lambda t: t.view(B, T, self.n_heads, self.head_dim).transpose(1, 2),\n            self.qkv_proj(x).chunk(3, dim=-1),\n        )\n\n        if self.sdpa:\n            y = F.scaled_dot_product_attention(\n                q, k, v, dropout_p=self.dropout if self.training else 0.0\n            )\n        else:\n            y, _ = scale_dot_product_attention(\n                q=q, k=k, v=v, dropout=self.dropout if self.training else 0.0\n            )\n\n        y = y.transpose(1, 2).contiguous().view(B, T, C)\n        y = self.out_proj(y)\n\n        return self.resid_dropout(y)\n\n\n0.1.3 Feed Forward Network\nThe Feed Forward Network (FFN) is a simple two-layer fully connected network with a GeLU activation function in between. It processes the output of the MHSA layer and applies a residual connection to the input.\nclass MLP(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.activation_fn = nn.GELU(approximate=\"tanh\")\n        self.fc1 = nn.Linear(config.vit_hidden_dim, config.vit_inter_dim)\n        self.fc2 = nn.Linear(config.vit_inter_dim, config.vit_hidden_dim)\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n    def forward(self, x: torch.Tensor):\n        x = self.fc1(x)\n        x = self.activation_fn(x)\n        x = self.fc2(x)\n        x = self.dropout(x)\n        return x\n\n\n0.1.4 Transformer Block\nAfter define the MHSA and FFN layers, we can combine them into a single transformer block. The transformer block applies layer normalization before the MHSA and FFN layers(pre-norm), and it also includes residual connections to help with training stability.\nclass ViTBlock(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.attn = ViTMultiHeadAttention(config)\n        self.mlp = MLP(config)\n        self.ln1 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n        self.ln2 = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n    def forward(self, x: torch.Tensor):\n        # Layer normalization and multi-head attention\n        x = x + self.attn(self.ln1(x))\n        # Layer normalization and MLP\n        x = x + self.mlp(self.ln2(x))\n        return x\n\n\n0.1.5 Vision Transformer\nFinally, we can combine the Patch Embedding layer and the transformer blocks to create the Vision Transformer. The Vision Transformer consists of a series of transformer blocks stacked on top of each other, with the output of the last block being used for classification or further processing.\nclass ViT(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n\n        self.config = config\n\n        self.patch_embedding = ViTPatchEmbedding(config)\n\n        self.cls_flag = config.vit_cls_flag\n        self.dropout = nn.Dropout(config.vit_dropout)\n\n        self.blocks = nn.ModuleList(\n            [ViTBlock(config) for _ in range(config.vit_n_blocks)]\n        )\n\n        self.layer_norm = nn.LayerNorm(config.vit_hidden_dim, eps=config.vit_ln_eps)\n\n        self.apply(self._init_weights)\n    \n    def forward(self, imgs: torch.Tensor):\n        x = self.patch_embedding(imgs)\n        x = self.dropout(x)\n\n        for block in self.blocks:\n            x = block(x)\n\n        if self.cls_flag:\n            x = x[:, 0]\n        else:\n            x = self.layer_norm(x)\n\n        return x\nSo, that all we need for the Vision Encoder. After we get the output of the\n\n\n0.1.6 Modality Projection\nVision Encoder, we need to project the output into the semantic embedding space to match the text embedding space. This is done using a linear projection layer. One small trick used here is pixel shuffle(Shi et al. 2016), which is used to reduce the number of tokens.\n\n\n\n\n\n\nFigure 2: Illustration of the pixel shuffle operation and un-shuffling process. The pixel shuffle operation rearranges the elements of a tensor to increase the spatial resolution, while the un-shuffle process reverses this operation.\n\n\n\nclass ModalityProjector(nn.Module):\n    def __init__(self, config: VLMConfig):\n        super().__init__()\n        \n        self.config = config \n        \n        self.input_dim = config.vit_hidden_dim * (config.mp_pixel_shuffle_factor**2)    \n        self.output_dim = config.lm_hidden_dim\n        self.scale_factor = config.mp_pixel_shuffle_factor\n        \n        \n        self.proj = nn.Linear(self.input_dim, self.output_dim, bias=False)\n        self._init_weight()\n\n    def _init_weight(self):\n        nn.init.normal_(self.proj.weight, mean=0.0, std=0.02)\n    \n    def pixel_shuffle(self, x: torch.Tensor) -&gt; torch.Tensor:\n        B, S, D = x.size()\n        assert S % 2 == 0, \"Input sequence length must be even for pixel shuffle.\"\n        assert S ** 0.5 % self.scale_factor == 0, \"Input sequence length must be a perfect square for pixel shuffle.\"\n        \n        \n        H, W = S, S \n        x = x.view(B, H, W, D) # Convert the flattened sequence into a 2D grid\n        h_out = H // self.scale_factor\n        w_out = W // self.scale_factor\n        \n        x = einops.rearrange(x, \n                             \"b (h sf1) (w sf2) d -&gt; b (h w) (d sf1 sf2)\",\n                             sf1=self.scale_factor, \n                             sf2=self.scale_factor\n                             )\n        \n        return x\n\n    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:\n        x = self.pixel_shuffle(x)\n        assert x.size(-1) == self.input_dim, f\"Input dimension mismatch: expected {self.input_dim}, got {x.size(-1)}\"\n        \n        x = self.proj(x)\n        return x\nAfter the pixel shuffle, the number of tokens is reduced by a factor of mp_pixel_shuffle_factor**2, which helps to reduce the computational cost while maintaining the semantic information of the visual input. The output of the Modality Projector is then ready to be fed into the Language Model (LM) for further processing."
   },
   {
     "objectID": "posts/Projects/VLM/vlm.html#language-model",
@@ -67,7 +67,7 @@
     "href": "posts/Blogs/speed-up-training.html",
     "title": "Speed Up Training for Neural Networks",
     "section": "",
-    "text": "Training large neural networks(such as large language models) can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculations on a single GPU through different techniques such as fusion, tiling, memory coalescing, and parallelizing the training across multiple GPUs such as model parallelism and data parallelism. But before that, we need to understand the basic concepts of GPU, and data types to better understand why and when we need to use these techniques."
+    "text": "1 Preliminary\n  \n  1.1 Data Representation\n  1.2 Calculate Memory Usage of Model\n  1.3 Collective operations\n  \n  2 Profiling\n  \n  2.1 Simple Benchmarking\n  2.2 PyTorch Profiler\n  2.3 NVIDIA Nsight Systems\n  \n  3 Single GPU Optimization\n  \n  3.1 Fusion\n  3.2 Tiling\n  3.3 Memory Coalescing\n  3.4 Mixed Precision Training\n  3.5 Gradient Accumulation\n  3.6 Case Study: Flash Attention\n  \n  4 Multi-GPU Optimization(Parallelism)\n  \n  4.1 Data Parallelism\n  4.2 Model Parallelism\n  4.3 Pipeline Parallelism\n  4.4 Tensor Parallelism\n  4.5 Context Parallelism\n  4.6 Case Study: DeepSpeed\n  4.7 Case Study: Megatron-LM\nTraining large neural networks(such as large language models) can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculations on a single GPU through different techniques such as fusion, tiling, memory coalescing, and parallelizing the training across multiple GPUs such as model parallelism and data parallelism. But before that, we need to understand the basic concepts of GPU, and data types to better understand why and when we need to use these techniques."
   },
   {
     "objectID": "posts/Blogs/speed-up-training.html#preliminary",
@@ -98,263 +98,179 @@
     "text": "4 Multi-GPU Optimization(Parallelism)\nIn this section, we will discuss various techniques to optimize the training process across multiple GPUs. These techniques include: - Data Parallelism(Section 4.1): This technique splits the input data across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different subset of the input data, and the gradients are averaged across GPUs before updating the model parameters. - Model Parallelism(Section 4.2): This technique splits the model across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the model, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large models that do not fit into a single GPU’s memory. - Pipeline Parallelism(Section 4.3): This technique splits the model into multiple stages and processes each stage in parallel across multiple GPUs. Each GPU processes a different stage of the model, and the output of one stage is passed to the next stage. This can help improve throughput and reduce memory usage, especially for large models. - Tensor Parallelism(Section 4.4): This technique splits the tensors across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the tensor, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large tensors that do not fit into a single GPU’s memory. - Context Parallelism(Section 4.5): This technique splits the context across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the context, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large contexts that do not fit into a single GPU’s memory.\n\n4.1 Data Parallelism\n\n\n4.2 Model Parallelism\n\n\n4.3 Pipeline Parallelism\n\n\n4.4 Tensor Parallelism\n\n\n4.5 Context Parallelism\n\n\n4.6 Case Study: DeepSpeed\n\n\n4.7 Case Study: Megatron-LM\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nSelf CPU %\nSelf CPU\nCPU total %\nCPU total\nCPU time avg\nSelf CUDA\nSelf CUDA %\nCUDA total\nCUDA time avg\n# of Calls\n\n\n\n\naten::gelu\n6.76%\n669.785us\n13.48%\n1.336ms\n1.336ms\n8.642ms\n100.00%\n8.642ms\n8.642ms\n1\n\n\nvoid at::native::vectorized_elementwise_kernel&lt;…&gt;\n0.00%\n0.000us\n0.00%\n0.000us\n0.000us\n8.642ms\n100.00%\n8.642ms\n8.642ms\n1\n\n\ncudaLaunchKernel\n6.72%\n665.807us\n6.72%\n665.807us\n665.807us\n0.000us\n0.00%\n0.000us\n0.000us\n1\n\n\ncudaDeviceSynchronize\n86.52%\n8.574ms\n86.52%\n8.574ms\n4.287ms\n0.000us\n0.00%\n0.000us\n0.000us\n2\n\n\n\nSelf CPU time total: 9.909 ms\nSelf CUDA time total: 8.642 ms"
   },
   {
-    "objectID": "posts/Blogs/LLM/RAG.html",
-    "href": "posts/Blogs/LLM/RAG.html",
-    "title": "LLM: RAG",
+    "objectID": "posts/Blogs/LLM/LLM-Inference/post.html",
+    "href": "posts/Blogs/LLM/LLM-Inference/post.html",
+    "title": "LLM Part2: Inference",
     "section": "",
-    "text": "Retrieval-Augmented Generation (RAG) is a technique used to equip the LLM the ability to use the updated news. It has here are several, it often use vector DB to store the LLM.\nThis is good for knowledge-intensive tasks, and allows for continuous knowledge updates and integration of domain-specific information. It retrieving relevant document chunks from external knowledge base through semantic similarity calculation. RAG effectively reduces the problem of generating factually incorrect content.\nThe In-Context Learning(ICL) abilities first display in the GPT3, which enable RAG to answer more complex and knowledge intensive tasks during the inference stages. Unlike previously, which used the knowledge from RAG to fine-tuning model. Later, the enhancement of RAG began to incorporate more with LLM fine-tuning techniques.\nAs name indicated, there are several techniques used in the “Retrieval”, ‘Generation’ and “Augmentation”.\nThere are three main parts of the RAG:"
+    "text": "In the part 1 of the LLM series, we covered the architecture of LLMs, including key components such as position encoding, attention mechanisms, and more. We also explored various normalization techniques and the training process for these models. In the part 2, we will explore different inference techniques, which is necessary for effectively utilizing LLMs in real-world applications. And we will also explore several practical examples and use cases to illustrate these techniques in action, such as: - vLLM"
   },
   {
-    "objectID": "posts/Blogs/LLM/RAG.html#pre-retrieval-process",
-    "href": "posts/Blogs/LLM/RAG.html#pre-retrieval-process",
-    "title": "LLM: RAG",
-    "section": "2.1 Pre-Retrieval Process",
-    "text": "2.1 Pre-Retrieval Process\nThe primary focus is on optimizing the indexing structure and the original query.\n\nOptimizing Indexing: enhance the quality of the content being indexed:\n\nEnhancing data granularity\nOptimizing index structures,\nAdding Meta-data\nAlignment optimization\nMixed retrieval\n\nOptimizing Query: make the user’s original question clearer and more suitable for the retrieval task, through:\n\nQuery rewritting\nQuery Transformation\nQuery Expansion"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/RAG.html#post-retrieval-process",
-    "href": "posts/Blogs/LLM/RAG.html#post-retrieval-process",
-    "title": "LLM: RAG",
-    "section": "2.2 Post-Retrieval Process",
-    "text": "2.2 Post-Retrieval Process\nOnce relevant context is retrieved, it is crucial to integrate it effectively with the query. The main methods in this stage are:\n\nRe-rank chunks: Re-ranking the retrieved information to relocated the most relevant content to the edges of the prompt\nContext Compressing: concentrate on selecting the essential information, emphasizing critical sections, and shortening the context to be processed."
-  },
-  {
-    "objectID": "posts/Blogs/LLM/RAG.html#new-modules",
-    "href": "posts/Blogs/LLM/RAG.html#new-modules",
-    "title": "LLM: RAG",
-    "section": "3.1 New Modules",
-    "text": "3.1 New Modules\n\n3.1.1 Search Module\nThe search module adapts to specific scenarios, enabling direct searches across various sources like search engines, database, and knowledge graphs, using LLM-generated code and query languages\nThe RAG-Fusing addresses search limitations by employing a multi-query strategy that expands user queries into diverse perspectives, utilizing parallel vector searches and intelligent re-ranking to uncover both explicit and transformative knowledge, utilizing parallel vector searches and intelligent re-ranking to uncover both explict and transformative knowledge.\n\n\n3.1.2 Memory Module\nThe Memory module leverages the LLM’s memory to guide retrieval, creating an unbounded memory pool that aligns the text more closely with data distribution through iterative self-enhancement.\n\n\n3.1.3 Routing Module\nThe Routing navigates through diverse data sources, selecting the optimal pathway for a query, whether it involves summarization, database searches, or merging different information streams.\n\n\n3.1.4 The Preict Module\nThe predict module aims to reduce redundancy and noise by generating context directly through the LLM, ensuring relevance and accuracy.\n\n\n3.1.5 Task Adapter Module\nThe adapter module tailors RAG to various downstream tasks, automating prompt retrieval for zero-shot inputs and creating task-specific retrievers through few-shot query generationg."
-  },
-  {
-    "objectID": "posts/Blogs/LLM/RAG.html#new-pattern",
-    "href": "posts/Blogs/LLM/RAG.html#new-pattern",
-    "title": "LLM: RAG",
-    "section": "3.2 New Pattern",
-    "text": "3.2 New Pattern\nModular RAG offers remarkable adaptability by allowing module substitution or reconfiguration to address specific challenges. Modular RAG expands the flexibility by integrating new modules or adjusting interaction flow among existing ones, enhancing its applicability across different tasks."
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Overview.html",
-    "href": "posts/Blogs/LLM/LLM-Overview.html",
-    "title": "LLM Overview",
+    "objectID": "posts/Blogs/LLM/LLM-Alignment/post.html",
+    "href": "posts/Blogs/LLM/LLM-Alignment/post.html",
+    "title": "LLM Part3: Alignment",
     "section": "",
-    "text": "A language model is nothing model that outputs a probability distribution over the next token in a sequence given the previous tokens in the sequence, mathematically, it denoted as:\n\\[\nP_{\\theta}(x_t | x_{1:t-1})\n\\tag{1}\\]\nNowaday, when we say a LLM, we usually mean a decoder model, which mean predict the next token based on the previous tokens. However previous, there is another type of the model, not only depends on the previous tokens, but also depends on other conditions, such as, other language for the machine translation task, which denoted as:\n\\[\nP_{\\theta}(x_t | x_{1:t-1}, z)\n\\tag{2}\\]\nIn the blog, we mainly focus on the first type, which has the form of Equation 1. The second type is not the focus of this blog, but we might mention it in the future blog. There two main steps of the training an LLM, the pre-training and fine-tuning. The pre-training is the most time consuming part of the LLM. In just the next-word-prediction task. After we have the pre-trained model, the model can only generate the next word based on the previous words. So, we need to fine-tune the model to make it output the desired output. This the job of the post-training. In the post-training, there are two main tasks, the supervised fine-tuning(SFT) and reinforcement learning from human feedback(RLHF). The SFT is the supervised fine-tuning, which is the most common way to fine-tune the model. The RLHF is a new way to fine-tune the model, which is more efficient than the SFT."
+    "text": "On this page\n   \n  \n  1 Supervised Fine-Tuning (SFT)\n  2 Review of Reinforcement Learning\n  3 RLHF\n  \n\nIn the part 1 and part 2 of the LLM series, we covered the architecture and inference techniques for LLMs. In this part 3, we will focus on alignment techniques, which are crucial for ensuring that LLMs behave in ways that are consistent with human values and intentions. We will explore various methods for aligning LLMs, including reinforcement learning from human feedback (RLHF), and discuss their implications for the development and deployment of these models. We will first explore the simple Supervised Fine-Tuning (SFT) approach, which involves fine-tuning LLMs on curated datasets that reflect human values and preferences. Than we will explore different RLHF techniques, which involve training LLMs using feedback from human evaluators to improve their alignment with human intentions. We will explore algorithms from PPO, DPO to GRPO and\n\n1 Supervised Fine-Tuning (SFT)\n\n\n2 Review of Reinforcement Learning\nIn this part, we will first review the basics of reinforcement learning, including key concepts such as rewards, policy, loss function, actor-critic methods, and more. This will provide a solid foundation for understanding the RLHF techniques we will explore later.\n\n\n3 RLHF"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-Overview.html#supervised-fine-tuning-sft",
-    "href": "posts/Blogs/LLM/LLM-Overview.html#supervised-fine-tuning-sft",
-    "title": "LLM Overview",
-    "section": "4.1 Supervised Fine Tuning (SFT)",
-    "text": "4.1 Supervised Fine Tuning (SFT)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Overview.html#reinforcement-learning-from-human-feedback-rlhf",
-    "href": "posts/Blogs/LLM/LLM-Overview.html#reinforcement-learning-from-human-feedback-rlhf",
-    "title": "LLM Overview",
-    "section": "4.2 Reinforcement Learning from Human Feedback (RLHF)",
-    "text": "4.2 Reinforcement Learning from Human Feedback (RLHF)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Applications.html",
-    "href": "posts/Blogs/LLM/LLM-Applications.html",
-    "title": "LLM Part3: Applications",
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html",
+    "title": "LLM Part1: Architecture",
     "section": "",
-    "text": "This is the part 3 of the LLM series, application. What can we do after we have an LLM. One of the most significant application is the LLM Based Agent. With the ability of the LLM. The AI agent has acquire incredible ability. Besides the AI Agent, it has so many other applications that can be improve with the help of the LLM. We are going to dig into it."
+    "text": "1 The overview of transformer model\n  2 Position Encoding\n  \n  2.1 Fixed Position Encoding\n  2.2 Relative Position Encoding\n  2.3 Learned Position Encoding\n  2.4 RoPE (Rotary Position Embedding)\n  \n  3 Normalization\n  \n  3.1 Layer Normalization vs. RMS Normalization\n  3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n  3.3 QK Normalization\n  \n  4 Attention Mechanism\n  \n  4.1 Multi Headed Attention\n  4.2 Grouped Query Attention / Multi Query Attention\n  4.3 Multi Latent Attention\n  4.4 Flash Attention\n  4.5 Window Attention\n  4.6 Sliding window attention\n  \n  5 Activations\n  6 Feed Forward Network & Mixture of Experts\n  \n  6.1 Multi Layer Perceptron (MLP)\n  6.2 Gated Linear Unit (GLU)\n  6.3 Mixture of Experts (MoE)\n  \n  7 Model Initialization\n  \n  7.1 Weight Initialization\n  7.2 Layer Initialization\n  \n  8 Case Study\n  \n  8.1 LLaMA\n  8.2 Qwen\n  8.3 DeepSeek\n  8.4 GPT\n  \n  9 Conclusion\nThis is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up:\nBesides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures."
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html",
-    "title": "LLM Part1: Pre Training",
-    "section": "",
-    "text": "This is the first part of the LLM series, Pre-training, the Pre-training the most time consuming part of the LLM. In the nutshell, it just the next-word-prediction task. That’s it. Not anything fancy. However, what make the LLM hard to train and only achieve in recent years because it is LARGE. People need to develop and invent some efficient training algorithm to speed up the training process, make it efficient to training and deploying. In the article, I am going to take the path going through the training LLM from scratch, make the LLM easy to understand."
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#fixed-position-encoding",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#fixed-position-encoding",
+    "title": "LLM Part1: Architecture",
+    "section": "2.1 Fixed Position Encoding",
+    "text": "2.1 Fixed Position Encoding"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#word-level",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#word-level",
-    "title": "LLM Part1: Pre Training",
-    "section": "2.1 Word Level",
-    "text": "2.1 Word Level"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#relative-position-encoding",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#relative-position-encoding",
+    "title": "LLM Part1: Architecture",
+    "section": "2.2 Relative Position Encoding",
+    "text": "2.2 Relative Position Encoding"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#byte-pair-encoding",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#byte-pair-encoding",
-    "title": "LLM Part1: Pre Training",
-    "section": "2.2 Byte-Pair-Encoding",
-    "text": "2.2 Byte-Pair-Encoding"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#learned-position-encoding",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#learned-position-encoding",
+    "title": "LLM Part1: Architecture",
+    "section": "2.3 Learned Position Encoding",
+    "text": "2.3 Learned Position Encoding"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#bit-encoding",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#bit-encoding",
-    "title": "LLM Part1: Pre Training",
-    "section": "2.3 Bit Encoding",
-    "text": "2.3 Bit Encoding"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#rope-rotary-position-embedding",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#rope-rotary-position-embedding",
+    "title": "LLM Part1: Architecture",
+    "section": "2.4 RoPE (Rotary Position Embedding)",
+    "text": "2.4 RoPE (Rotary Position Embedding)"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#embedding",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#embedding",
-    "title": "LLM Part1: Pre Training",
-    "section": "2.4 Embedding",
-    "text": "2.4 Embedding\nEmbedding is"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-normalization-vs.-rms-normalization",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-normalization-vs.-rms-normalization",
+    "title": "LLM Part1: Architecture",
+    "section": "3.1 Layer Normalization vs. RMS Normalization",
+    "text": "3.1 Layer Normalization vs. RMS Normalization"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#position-encoding",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#position-encoding",
-    "title": "LLM Part1: Pre Training",
-    "section": "3.1 Position Encoding",
-    "text": "3.1 Position Encoding"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#pre-layer-normalization-vs.-post-layer-normalization",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#pre-layer-normalization-vs.-post-layer-normalization",
+    "title": "LLM Part1: Architecture",
+    "section": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization",
+    "text": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#normalization",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#normalization",
-    "title": "LLM Part1: Pre Training",
-    "section": "3.2 Normalization",
-    "text": "3.2 Normalization"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-normalization",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-normalization",
+    "title": "LLM Part1: Architecture",
+    "section": "3.3 QK Normalization",
+    "text": "3.3 QK Normalization"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#layer-normalization",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#layer-normalization",
-    "title": "LLM Part1: Pre Training",
-    "section": "3.3 Layer Normalization",
-    "text": "3.3 Layer Normalization"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-headed-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-headed-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.1 Multi Headed Attention",
+    "text": "4.1 Multi Headed Attention"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#rms-normalization",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#rms-normalization",
-    "title": "LLM Part1: Pre Training",
-    "section": "3.4 RMS Normalization",
-    "text": "3.4 RMS Normalization\n\n3.4.1 Post-Norm vs. Pre-Norm"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#grouped-query-attention-multi-query-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#grouped-query-attention-multi-query-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.2 Grouped Query Attention / Multi Query Attention",
+    "text": "4.2 Grouped Query Attention / Multi Query Attention"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#without-normalization",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#without-normalization",
-    "title": "LLM Part1: Pre Training",
-    "section": "3.5 Without Normalization",
-    "text": "3.5 Without Normalization\nRecently, (zhuTransformersNormalization2025?) proposed that we can remove the normalization without harm the performance of the neural network. It replace the normalization layer with a scaled tanh function, named Dynamic Tanh, defined as:\n\\[\n\\text{DyT}(x) = \\gamma * \\tanh(\\alpha x) + \\beta\n\\]\n\n\n\n\n\n\nFigure 1: Block with Dynamic Tanh(DyT) (Image Source: Transformers without Normalization)\n\n\n\nIt adjust the input activation range via a learnable scaling factor \\(\\alpha\\) and then squashed the extreme values through an S-shaped tanh function."
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-latent-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-latent-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.3 Multi Latent Attention",
+    "text": "4.3 Multi Latent Attention"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#attention-mechnism",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#attention-mechnism",
-    "title": "LLM Part1: Pre Training",
-    "section": "3.6 Attention Mechnism",
-    "text": "3.6 Attention Mechnism"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#flash-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#flash-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.4 Flash Attention",
+    "text": "4.4 Flash Attention"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#feed-forward-network",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#feed-forward-network",
-    "title": "LLM Part1: Pre Training",
-    "section": "3.7 Feed Forward Network",
-    "text": "3.7 Feed Forward Network\n\n3.7.1 Mixture of Expert"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#window-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#window-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.5 Window Attention",
+    "text": "4.5 Window Attention"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#cross-entropy-loss",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#cross-entropy-loss",
-    "title": "LLM Part1: Pre Training",
-    "section": "4.1 Cross Entropy Loss",
-    "text": "4.1 Cross Entropy Loss"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#sliding-window-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#sliding-window-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.6 Sliding window attention",
+    "text": "4.6 Sliding window attention"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#model-initilization",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#model-initilization",
-    "title": "LLM Part1: Pre Training",
-    "section": "5.1 Model Initilization",
-    "text": "5.1 Model Initilization"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-layer-perceptron-mlp",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-layer-perceptron-mlp",
+    "title": "LLM Part1: Architecture",
+    "section": "6.1 Multi Layer Perceptron (MLP)",
+    "text": "6.1 Multi Layer Perceptron (MLP)"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#optimizer",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#optimizer",
-    "title": "LLM Part1: Pre Training",
-    "section": "5.2 Optimizer",
-    "text": "5.2 Optimizer"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu",
+    "title": "LLM Part1: Architecture",
+    "section": "6.2 Gated Linear Unit (GLU)",
+    "text": "6.2 Gated Linear Unit (GLU)"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#about-gradients",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#about-gradients",
-    "title": "LLM Part1: Pre Training",
-    "section": "5.3 About Gradients",
-    "text": "5.3 About Gradients\n\n5.3.1 Gradient Accumulations\n\n\n5.3.2 Gradiant Clipping"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#mixture-of-experts-moe",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#mixture-of-experts-moe",
+    "title": "LLM Part1: Architecture",
+    "section": "6.3 Mixture of Experts (MoE)",
+    "text": "6.3 Mixture of Experts (MoE)"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#mixed-precision",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#mixed-precision",
-    "title": "LLM Part1: Pre Training",
-    "section": "5.4 Mixed Precision",
-    "text": "5.4 Mixed Precision"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#weight-initialization",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#weight-initialization",
+    "title": "LLM Part1: Architecture",
+    "section": "7.1 Weight Initialization",
+    "text": "7.1 Weight Initialization"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#parallellism",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#parallellism",
-    "title": "LLM Part1: Pre Training",
-    "section": "5.5 Parallellism",
-    "text": "5.5 Parallellism"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-initialization",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-initialization",
+    "title": "LLM Part1: Architecture",
+    "section": "7.2 Layer Initialization",
+    "text": "7.2 Layer Initialization"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#supervised-fine-tuning",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#supervised-fine-tuning",
-    "title": "LLM Part1: Pre Training",
-    "section": "6.1 Supervised-Fine-Tuning",
-    "text": "6.1 Supervised-Fine-Tuning"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#llama",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#llama",
+    "title": "LLM Part1: Architecture",
+    "section": "8.1 LLaMA",
+    "text": "8.1 LLaMA"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#reinforcement-learning-from-human-feedback",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#reinforcement-learning-from-human-feedback",
-    "title": "LLM Part1: Pre Training",
-    "section": "6.2 Reinforcement Learning from Human Feedback",
-    "text": "6.2 Reinforcement Learning from Human Feedback\n\n6.2.1 PPO\n\n\n6.2.2 DPO\n\n\n6.2.3 GRPO"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#qwen",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#qwen",
+    "title": "LLM Part1: Architecture",
+    "section": "8.2 Qwen",
+    "text": "8.2 Qwen"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#quantization",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#quantization",
-    "title": "LLM Part1: Pre Training",
-    "section": "7.1 Quantization",
-    "text": "7.1 Quantization"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#deepseek",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#deepseek",
+    "title": "LLM Part1: Architecture",
+    "section": "8.3 DeepSeek",
+    "text": "8.3 DeepSeek"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#knowledge-distillation",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#knowledge-distillation",
-    "title": "LLM Part1: Pre Training",
-    "section": "7.2 Knowledge Distillation",
-    "text": "7.2 Knowledge Distillation"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#prompt-enginnering",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#prompt-enginnering",
-    "title": "LLM Part1: Pre Training",
-    "section": "9.1 Prompt Enginnering",
-    "text": "9.1 Prompt Enginnering"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#prefix-tuning",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#prefix-tuning",
-    "title": "LLM Part1: Pre Training",
-    "section": "9.2 Prefix-Tuning",
-    "text": "9.2 Prefix-Tuning"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#adapter",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#adapter",
-    "title": "LLM Part1: Pre Training",
-    "section": "9.3 Adapter",
-    "text": "9.3 Adapter\n\n9.3.1 LoRA\n\n\n9.3.2 Q-LoRA"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#chatbot",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#chatbot",
-    "title": "LLM Part1: Pre Training",
-    "section": "11.1 ChatBot",
-    "text": "11.1 ChatBot\nMost know ChatGPT,"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#ai-agent",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#ai-agent",
-    "title": "LLM Part1: Pre Training",
-    "section": "11.2 AI Agent",
-    "text": "11.2 AI Agent"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-PreTraining.html#llm-as-optimizer",
-    "href": "posts/Blogs/LLM/LLM-PreTraining.html#llm-as-optimizer",
-    "title": "LLM Part1: Pre Training",
-    "section": "11.3 LLM as Optimizer",
-    "text": "11.3 LLM as Optimizer"
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt",
+    "title": "LLM Part1: Architecture",
+    "section": "8.4 GPT",
+    "text": "8.4 GPT"
   },
   {
     "objectID": "posts/notes.html",
@@ -375,6 +291,6 @@
     "href": "posts/blogs.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "LLM Part3: Applications\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n1 min\n\n70 words\n\n\n2025-08-07\n\n\n\n\n\n\n\nLLM Overview\n\n\n\nLarge Language Model\n\nOverview\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n3 min\n\n564 words\n\n\n2025-08-07\n\n\n\n\n\n\n\nLLM Part1: Pre Training\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n3 min\n\n419 words\n\n\n2025-08-07\n\n\n\n\n\n\n\nLLM: RAG\n\n\n\nLarge Language Model\n\nOverview\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n5 min\n\n965 words\n\n\n2025-08-07\n\n\n\n\n\n\n\nLLM Part2: Post Training\n\n\n\nOverview\n\nLarge Language Model\n\n\n\nIn this blog, I am going to summary the 5 most common generative models: Auto-Regreesive Model, Variational AutoEncoder, Engery Based Model, Flow Model and Diffusion Model. I will also display the pros and cons between different models, and how we can combine those models to get better performance\n\n\n\n\n1 min\n\n1 words\n\n\n2025-08-07\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-08-07\n\n\n\n\n\nNo matching items"
+    "text": "LLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n2 min\n\n238 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part3: Alignment\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications.\n\n\n\n\n1 min\n\n178 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n1 min\n\n79 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-08-07\n\n\n\n\n\nNo matching items"
   }
 ]

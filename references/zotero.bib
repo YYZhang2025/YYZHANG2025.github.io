@@ -66,6 +66,54 @@
   file = {/Users/yuyang/Zotero/storage/YWJW3DI8/deepspeed-extreme-scale-model-training-for-everyone.html}
 }
 
+@online{DistillingKnowledgeNeural2015hinton,
+  title = {Distilling the {{Knowledge}} in a {{Neural Network}}},
+  author = {Hinton, Geoffrey and Vinyals, Oriol and Dean, Jeff},
+  date = {2015-03-09},
+  eprint = {1503.02531},
+  eprinttype = {arXiv},
+  eprintclass = {stat},
+  doi = {10.48550/arXiv.1503.02531},
+  url = {http://arxiv.org/abs/1503.02531},
+  urldate = {2025-08-19},
+  abstract = {A very simple way to improve the performance of almost any machine learning algorithm is to train many different models on the same data and then to average their predictions. Unfortunately, making predictions using a whole ensemble of models is cumbersome and may be too computationally expensive to allow deployment to a large number of users, especially if the individual models are large neural nets. Caruana and his collaborators have shown that it is possible to compress the knowledge in an ensemble into a single model which is much easier to deploy and we develop this approach further using a different compression technique. We achieve some surprising results on MNIST and we show that we can significantly improve the acoustic model of a heavily used commercial system by distilling the knowledge in an ensemble of models into a single model. We also introduce a new type of ensemble composed of one or more full models and many specialist models which learn to distinguish fine-grained classes that the full models confuse. Unlike a mixture of experts, these specialist models can be trained rapidly and in parallel.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing,Statistics - Machine Learning},
+  file = {/Users/yuyang/Zotero/storage/9WPYISZ6/Hinton et al. - 2015 - Distilling the Knowledge in a Neural Network.pdf;/Users/yuyang/Zotero/storage/GW3BW9YP/1503.html}
+}
+
+@online{EmergingPropertiesSelfSupervised2021caron,
+  title = {Emerging {{Properties}} in {{Self-Supervised Vision Transformers}}},
+  author = {Caron, Mathilde and Touvron, Hugo and Misra, Ishan and Jégou, Hervé and Mairal, Julien and Bojanowski, Piotr and Joulin, Armand},
+  date = {2021-05-24},
+  eprint = {2104.14294},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2104.14294},
+  url = {http://arxiv.org/abs/2104.14294},
+  urldate = {2025-08-19},
+  abstract = {In this paper, we question if self-supervised learning provides new properties to Vision Transformer (ViT) that stand out compared to convolutional networks (convnets). Beyond the fact that adapting self-supervised methods to this architecture works particularly well, we make the following observations: first, self-supervised ViT features contain explicit information about the semantic segmentation of an image, which does not emerge as clearly with supervised ViTs, nor with convnets. Second, these features are also excellent k-NN classifiers, reaching 78.3\% top-1 on ImageNet with a small ViT. Our study also underlines the importance of momentum encoder, multi-crop training, and the use of small patches with ViTs. We implement our findings into a simple self-supervised method, called DINO, which we interpret as a form of self-distillation with no labels. We show the synergy between DINO and ViTs by achieving 80.1\% top-1 on ImageNet in linear evaluation with ViT-Base.},
+  pubstate = {prepublished},
+  keywords = {100-Papers,Computer Science - Computer Vision and Pattern Recognition},
+  file = {/Users/yuyang/Zotero/storage/S57VFT9X/Caron et al. - 2021 - Emerging Properties in Self-Supervised Vision Transformers.pdf;/Users/yuyang/Zotero/storage/P27XIZ7D/2104.html}
+}
+
+@online{ExtendingContextWindow2023chen,
+  title = {Extending {{Context Window}} of {{Large Language Models}} via {{Positional Interpolation}}},
+  author = {Chen, Shouyuan and Wong, Sherman and Chen, Liangjian and Tian, Yuandong},
+  date = {2023-06-28},
+  eprint = {2306.15595},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2306.15595},
+  url = {http://arxiv.org/abs/2306.15595},
+  urldate = {2025-08-17},
+  abstract = {We present Position Interpolation (PI) that extends the context window sizes of RoPE-based pretrained LLMs such as LLaMA models to up to 32768 with minimal fine-tuning (within 1000 steps), while demonstrating strong empirical results on various tasks that require long context, including passkey retrieval, language modeling, and long document summarization from LLaMA 7B to 65B. Meanwhile, the extended model by Position Interpolation preserve quality relatively well on tasks within its original context window. To achieve this goal, Position Interpolation linearly down-scales the input position indices to match the original context window size, rather than extrapolating beyond the trained context length which may lead to catastrophically high attention scores that completely ruin the self-attention mechanism. Our theoretical study shows that the upper bound of interpolation is at least \$\textbackslash sim 600 \textbackslash times\$ smaller than that of extrapolation, further demonstrating its stability. Models extended via Position Interpolation retain its original architecture and can reuse most pre-existing optimization and infrastructure.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/yuyang/Zotero/storage/UVHTHUUD/Chen et al. - 2023 - Extending Context Window of Large Language Models via Positional Interpolation.pdf;/Users/yuyang/Zotero/storage/KQZJ57GV/2306.html}
+}
+
 @online{FixMatchSimplifyingSemiSupervised2020sohn,
   title = {{{FixMatch}}: {{Simplifying Semi-Supervised Learning}} with {{Consistency}} and {{Confidence}}},
   shorttitle = {{{FixMatch}}},

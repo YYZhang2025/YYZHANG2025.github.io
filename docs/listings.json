@@ -9,11 +9,9 @@
   {
     "listing": "/posts/blogs.html",
     "items": [
-      "/posts/Blogs/LLM/LLM-Applications.html",
-      "/posts/Blogs/LLM/LLM-Overview.html",
-      "/posts/Blogs/LLM/LLM-PreTraining.html",
-      "/posts/Blogs/LLM/RAG.html",
-      "/posts/Blogs/LLM/LLM-PostTraining.html",
+      "/posts/Blogs/LLM/LLM-Architecture/post.html",
+      "/posts/Blogs/LLM/LLM-Alignment/post.html",
+      "/posts/Blogs/LLM/LLM-Inference/post.html",
       "/posts/Blogs/speed-up-training.html"
     ]
   }

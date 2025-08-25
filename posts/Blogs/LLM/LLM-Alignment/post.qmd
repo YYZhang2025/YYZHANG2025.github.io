@@ -1,0 +1,27 @@
+---
+title: "LLM Part3: Alignment"
+date: today
+date-modified: last-modified
+date-format: iso
+description: "In this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications."
+image: "./images/post-training.jpg"
+categories: 
+    - Transformer
+    - Large Language Model 
+language: 
+    title-block-modified: "Last modified"
+---
+
+
+
+In the part 1 and part 2 of the LLM series, we covered the architecture and inference techniques for LLMs. In this part 3, we will focus on alignment techniques, which are crucial for ensuring that LLMs behave in ways that are consistent with human values and intentions. We will explore various methods for aligning LLMs, including reinforcement learning from human feedback (RLHF), and discuss their implications for the development and deployment of these models. We will first explore the simple Supervised Fine-Tuning (SFT) approach, which involves fine-tuning LLMs on curated datasets that reflect human values and preferences. Than we will explore different RLHF techniques, which involve training LLMs using feedback from human evaluators to improve their alignment with human intentions. We will explore algorithms from PPO, DPO to GRPO and 
+
+
+# Supervised Fine-Tuning (SFT)
+
+
+# Review of Reinforcement Learning 
+In this part, we will first review the basics of reinforcement learning, including key concepts such as rewards, policy, loss function, actor-critic methods, and more. This will provide a solid foundation for understanding the RLHF techniques we will explore later.
+
+
+# RLHF 

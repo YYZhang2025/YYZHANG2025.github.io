@@ -1,0 +1,100 @@
+---
+title: "LLM Part1: Architecture"
+date: today
+date-modified: last-modified
+date-format: iso
+description: "In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance."
+image: "./images/post-training.jpg"
+categories: 
+    - Transformer
+    - Large Language Model 
+language: 
+  title-block-modified: "Last modified"
+---
+
+
+
+---
+
+This is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up: 
+
+- Position Encoding 
+- Attention Mechanism 
+- Feed Forward Network & Mixture of Experts 
+- Output Layer
+
+Besides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures. 
+
+# The overview of transformer model 
+
+
+
+# Position Encoding 
+
+## Fixed Position Encoding 
+
+## Relative Position Encoding 
+
+## Learned Position Encoding 
+
+## RoPE (Rotary Position Embedding)
+
+
+# Normalization 
+
+## Layer Normalization vs. RMS Normalization
+
+
+## Pre-Layer Normalization vs. Post-Layer Normalization
+
+## QK Normalization 
+
+
+# Attention Mechanism 
+
+## Multi Headed Attention 
+
+## Grouped Query Attention / Multi Query Attention 
+
+## Multi Latent Attention
+
+## Flash Attention 
+
+## Window Attention 
+
+## Sliding window attention 
+
+# Activations
+
+# Feed Forward Network & Mixture of Experts
+
+## Multi Layer Perceptron (MLP)
+
+## Gated Linear Unit (GLU) 
+
+## Mixture of Experts (MoE) 
+
+# Model Initialization
+
+## Weight Initialization
+
+## Layer Initialization
+
+
+
+# Case Study 
+
+Finally, we will examine some state-of-the-art LLM architectures and how they implement the techniques discussed in this blog.
+
+## LLaMA 
+
+## Qwen 
+
+## DeepSeek 
+
+## GPT
+
+
+
+# Conclusion 
+

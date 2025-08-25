@@ -2,6 +2,11 @@
 
 @font-face {
   font-family: "MyFont";
+  src: url("LXGWWenKai-Regular.ttf");
+}
+
+@font-face {
+  font-family: "cmunrm";
   src: url("cmunrm.ttf");
 }
 
@@ -58,3 +63,13 @@ code,
 }
 
 /* Make listing images cover the grid cell */
+
+/* Make TOC sidebar wider */
+.sidebar {
+  width: 300px;  /* default is ~250px */
+}
+
+/* Adjust main content so it doesn’t overlap */
+.content {
+  margin-left: 50px;  /* slightly larger than sidebar width */
+}
