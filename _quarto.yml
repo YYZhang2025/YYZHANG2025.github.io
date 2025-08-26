@@ -53,7 +53,7 @@ format:
     code-block-bg: true
     code-block-border-left: "#31BAE9"
     highlight-style: github
-    code-line-numbers: false
+    code-line-numbers: true
 
     link-external-icon: false
     link-external-newwindow: true
@@ -74,3 +74,7 @@ format:
       body-width: 1200px
 
     number-sections: true
+
+filters: 
+  - line-highlight
+ 

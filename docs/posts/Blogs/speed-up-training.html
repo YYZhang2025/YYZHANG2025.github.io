@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
-<meta name="dcterms.date" content="2025-08-25">
+<meta name="dcterms.date" content="2025-08-26">
 <meta name="description" content="Training large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.">
 
 <title>Speed Up Training for Neural Networks</title>
@@ -80,9 +80,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-019dd6806f48d93d82a14f80d2a7de07.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-8e943ecc5754db01724c99d73bcf36c1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-019dd6806f48d93d82a14f80d2a7de07.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-9edf1536ccff61c16a2cbe51c36f979b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-3c4f9c271d08f4d13d295a8b83971398.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-9edf1536ccff61c16a2cbe51c36f979b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -449,7 +450,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2025-08-25</p>
+      <p class="date">2025-08-26</p>
     </div>
   </div>
   
@@ -593,11 +594,11 @@ How those bits represent the number?
 </div>
 </div>
 <p>To check the data type of a tensor and its properties in PyTorch, you can use the <code>.dtype</code> attribute. For example:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> torch.zeros(<span class="dv">4</span>, <span class="dv">8</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>x.dtype <span class="co"># check the data type of x</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>x.numel() <span class="co"># check the number of elements in x</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x.element_size() <span class="co"># check the size of each element in bytes</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>x.numel() <span class="op">*</span> x.element_size() <span class="co"># check the total size in bytes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>x <span class="op">=</span> torch.zeros(<span class="dv">4</span>, <span class="dv">8</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>x.dtype <span class="co"># check the data type of x</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>x.numel() <span class="co"># check the number of elements in x</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>x.element_size() <span class="co"># check the size of each element in bytes</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>x.numel() <span class="op">*</span> x.element_size() <span class="co"># check the total size in bytes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="sec-calculate-memory-usage" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="sec-calculate-memory-usage"><span class="header-section-number">1.2</span> Calculate Memory Usage of Model</h3>
@@ -642,69 +643,69 @@ Why need activation for backward pass?
 \]</span> where <span class="math inline">\(\mathbf{x}\)</span> is the input to the layer, which is the activation of the previous layer. Thus, we need to store the activation for the backward pass.</p>
 </div>
 </div>
-<div id="7dbbb4df" class="cell">
+<div id="8c3ea83b" class="cell">
 <details class="code-fold">
 <summary>Calculate Memory Usage of Model</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set device</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a simple model</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> nn.Sequential(</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">100</span>, <span class="dv">200</span>),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    nn.ReLU(),</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">200</span>, <span class="dv">50</span>),</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    nn.ReLU(),</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">50</span>, <span class="dv">10</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>).to(device)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Register hooks to track activation sizes</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>activation_sizes <span class="op">=</span> []</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hook_fn(module, <span class="bu">input</span>, output):</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(output, torch.Tensor):</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        activation_sizes.append(output.numel())</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="bu">isinstance</span>(output, (<span class="bu">list</span>, <span class="bu">tuple</span>)):</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        activation_sizes.extend(o.numel() <span class="cf">for</span> o <span class="kw">in</span> output <span class="cf">if</span> <span class="bu">isinstance</span>(o, torch.Tensor))</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>hooks <span class="op">=</span> []</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> layer <span class="kw">in</span> model:</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    hooks.append(layer.register_forward_hook(hook_fn))</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Create input</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> torch.randn(<span class="dv">32</span>, <span class="dv">100</span>, device<span class="op">=</span>device, requires_grad<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Forward pass</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> model(x)</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>loss <span class="op">=</span> output.mean()</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Backward pass</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>loss.backward()</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove hooks</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> h <span class="kw">in</span> hooks:</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    h.remove()</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># --------- Memory Estimation ---------</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Parameters</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>num_params <span class="op">=</span> <span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> model.parameters())</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>param_memory <span class="op">=</span> num_params <span class="op">*</span> <span class="dv">4</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>grad_memory <span class="op">=</span> num_params <span class="op">*</span> <span class="dv">4</span></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>optimizer_memory <span class="op">=</span> num_params <span class="op">*</span> <span class="dv">8</span></span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Activations (sum of all layer outputs + input)</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>activation_memory <span class="op">=</span> (x.numel() <span class="op">+</span> <span class="bu">sum</span>(activation_sizes)) <span class="op">*</span> <span class="dv">4</span>  <span class="co"># float32</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Total</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>total_bytes <span class="op">=</span> param_memory <span class="op">+</span> grad_memory <span class="op">+</span> optimizer_memory <span class="op">+</span> activation_memory</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>total_MB <span class="op">=</span> total_bytes <span class="op">/</span> (<span class="dv">1024</span> <span class="op">**</span> <span class="dv">2</span>)</span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Print</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total parameters: </span><span class="sc">{</span>num_params<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Activation elements: </span><span class="sc">{</span><span class="bu">sum</span>(activation_sizes)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total training memory (float32): </span><span class="sc">{</span>total_MB<span class="sc">:.2f}</span><span class="ss"> MB"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> torch</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># Set device</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>device <span class="op">=</span> torch.device(<span class="st">"cuda"</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">"cpu"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co"># Define a simple model</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>model <span class="op">=</span> nn.Sequential(</span>
+<span id="cb2-9"><a href="#cb2-9"></a>    nn.Linear(<span class="dv">100</span>, <span class="dv">200</span>),</span>
+<span id="cb2-10"><a href="#cb2-10"></a>    nn.ReLU(),</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    nn.Linear(<span class="dv">200</span>, <span class="dv">50</span>),</span>
+<span id="cb2-12"><a href="#cb2-12"></a>    nn.ReLU(),</span>
+<span id="cb2-13"><a href="#cb2-13"></a>    nn.Linear(<span class="dv">50</span>, <span class="dv">10</span>)</span>
+<span id="cb2-14"><a href="#cb2-14"></a>).to(device)</span>
+<span id="cb2-15"><a href="#cb2-15"></a></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co"># Register hooks to track activation sizes</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a>activation_sizes <span class="op">=</span> []</span>
+<span id="cb2-18"><a href="#cb2-18"></a></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="kw">def</span> hook_fn(module, <span class="bu">input</span>, output):</span>
+<span id="cb2-20"><a href="#cb2-20"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(output, torch.Tensor):</span>
+<span id="cb2-21"><a href="#cb2-21"></a>        activation_sizes.append(output.numel())</span>
+<span id="cb2-22"><a href="#cb2-22"></a>    <span class="cf">elif</span> <span class="bu">isinstance</span>(output, (<span class="bu">list</span>, <span class="bu">tuple</span>)):</span>
+<span id="cb2-23"><a href="#cb2-23"></a>        activation_sizes.extend(o.numel() <span class="cf">for</span> o <span class="kw">in</span> output <span class="cf">if</span> <span class="bu">isinstance</span>(o, torch.Tensor))</span>
+<span id="cb2-24"><a href="#cb2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25"></a>hooks <span class="op">=</span> []</span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="cf">for</span> layer <span class="kw">in</span> model:</span>
+<span id="cb2-27"><a href="#cb2-27"></a>    hooks.append(layer.register_forward_hook(hook_fn))</span>
+<span id="cb2-28"><a href="#cb2-28"></a></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="co"># Create input</span></span>
+<span id="cb2-30"><a href="#cb2-30"></a>x <span class="op">=</span> torch.randn(<span class="dv">32</span>, <span class="dv">100</span>, device<span class="op">=</span>device, requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-31"><a href="#cb2-31"></a></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="co"># Forward pass</span></span>
+<span id="cb2-33"><a href="#cb2-33"></a>output <span class="op">=</span> model(x)</span>
+<span id="cb2-34"><a href="#cb2-34"></a>loss <span class="op">=</span> output.mean()</span>
+<span id="cb2-35"><a href="#cb2-35"></a></span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="co"># Backward pass</span></span>
+<span id="cb2-37"><a href="#cb2-37"></a>loss.backward()</span>
+<span id="cb2-38"><a href="#cb2-38"></a></span>
+<span id="cb2-39"><a href="#cb2-39"></a><span class="co"># Remove hooks</span></span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="cf">for</span> h <span class="kw">in</span> hooks:</span>
+<span id="cb2-41"><a href="#cb2-41"></a>    h.remove()</span>
+<span id="cb2-42"><a href="#cb2-42"></a></span>
+<span id="cb2-43"><a href="#cb2-43"></a><span class="co"># --------- Memory Estimation ---------</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a><span class="co"># 1. Parameters</span></span>
+<span id="cb2-45"><a href="#cb2-45"></a>num_params <span class="op">=</span> <span class="bu">sum</span>(p.numel() <span class="cf">for</span> p <span class="kw">in</span> model.parameters())</span>
+<span id="cb2-46"><a href="#cb2-46"></a>param_memory <span class="op">=</span> num_params <span class="op">*</span> <span class="dv">4</span></span>
+<span id="cb2-47"><a href="#cb2-47"></a>grad_memory <span class="op">=</span> num_params <span class="op">*</span> <span class="dv">4</span></span>
+<span id="cb2-48"><a href="#cb2-48"></a>optimizer_memory <span class="op">=</span> num_params <span class="op">*</span> <span class="dv">8</span></span>
+<span id="cb2-49"><a href="#cb2-49"></a></span>
+<span id="cb2-50"><a href="#cb2-50"></a><span class="co"># 2. Activations (sum of all layer outputs + input)</span></span>
+<span id="cb2-51"><a href="#cb2-51"></a>activation_memory <span class="op">=</span> (x.numel() <span class="op">+</span> <span class="bu">sum</span>(activation_sizes)) <span class="op">*</span> <span class="dv">4</span>  <span class="co"># float32</span></span>
+<span id="cb2-52"><a href="#cb2-52"></a></span>
+<span id="cb2-53"><a href="#cb2-53"></a><span class="co"># 3. Total</span></span>
+<span id="cb2-54"><a href="#cb2-54"></a>total_bytes <span class="op">=</span> param_memory <span class="op">+</span> grad_memory <span class="op">+</span> optimizer_memory <span class="op">+</span> activation_memory</span>
+<span id="cb2-55"><a href="#cb2-55"></a>total_MB <span class="op">=</span> total_bytes <span class="op">/</span> (<span class="dv">1024</span> <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb2-56"><a href="#cb2-56"></a></span>
+<span id="cb2-57"><a href="#cb2-57"></a><span class="co"># Print</span></span>
+<span id="cb2-58"><a href="#cb2-58"></a><span class="bu">print</span>(<span class="ss">f"Total parameters: </span><span class="sc">{</span>num_params<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-59"><a href="#cb2-59"></a><span class="bu">print</span>(<span class="ss">f"Activation elements: </span><span class="sc">{</span><span class="bu">sum</span>(activation_sizes)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-60"><a href="#cb2-60"></a><span class="bu">print</span>(<span class="ss">f"Total training memory (float32): </span><span class="sc">{</span>total_MB<span class="sc">:.2f}</span><span class="ss"> MB"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -1424,4 +1425,5 @@ Tip
 
 
 
+<script src="../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
 </body></html>

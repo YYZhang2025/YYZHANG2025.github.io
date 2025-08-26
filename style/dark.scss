@@ -3,24 +3,24 @@
 $color-body-bg: #1d1e20;
 $color-sidebar-bg: #1b1b1c; // 侧边栏背景色
 $color-navbar-bg: #1d1e20;
-$color-body-color: #faf4fc !default; // 亮灰蓝代替 GhostWhite，更自然护眼
+$color-body-color: #F8FeFE !default; // 亮灰蓝代替 GhostWhite，更自然护眼
 
 // 标题颜色
-$color-headings: #c9a2ff !default; // 柔和 DodgerBlue（对比好但不刺眼）
+$color-headings: #9EF7F7 !default; // 柔和 DodgerBlue（对比好但不刺眼）
 
 // 链接颜色
-$color-link: #c9a2ff !default; // 柔和亮蓝
+$color-link: #9EF7F7 !default; // 柔和亮蓝
 $color-link-hover: lighten($color-link, 10%);
 
-$color-strong: #f27d8a !important; // 柔和珊瑚红（比 #da6373 更清新）
-$color-em: #f2b6c1 !important; // 粉白淡化，和 strong 区分但风格统一
+$color-strong: #0571de !important; // 柔和珊瑚红（比 #da6373 更清新）
+$color-em: #94c1ee !important; // 粉白淡化，和 strong 区分但风格统一
 
 // 引用块
 $color-blockquote-bg: #06192e;
 $color-blockquote-border: #1e90ff;
 
 // 代码区块
-$color-code-bg: #0d1b2a;
+$color-code-bg: #0f87ff;
 $color-code: #fcd34d; // 明黄色（主题中的活泼点）
 
 // 表格配色
@@ -37,7 +37,7 @@ $color-warning: #f39c12;
 $color-danger: #e74c3c;
 
 $color-theorem-border: #1e90ff; /* A bright blue for contrast */
-$color-theorem-bg: #1e1e1e; /* Dark gray to stand out from pure black */
+$color-theorem-bg: #b95555; /* Dark gray to stand out from pure black */
 $color-theorem-text: #f0f0f0; /* Light text for readability */
 
 $color-tag-bg: #1f4037; /* deep green gradient base */
@@ -112,7 +112,7 @@ $warning: $color-warning;
 $danger: $color-danger;
 
 .theorem {
-  border-left: 4px solid $color-theorem-border; /* A bright blue for contrast */
+  border-left: 4px solid $color-theorem-text; /* A bright blue for contrast */
   background-color: $color-theorem-bg; /* Dark gray to stand out from pure black */
   padding: 1em;
   margin: 1em 0;
@@ -245,7 +245,7 @@ blockquote.paraphrase:after {
 /* for citations */
 cite {
   background-color: $color-headings;
-  color: white;
+  color: $color-body-bg;
   margin-left: -10px;
   margin-right: -10px;
   padding-left: 10px;

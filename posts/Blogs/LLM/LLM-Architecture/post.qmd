@@ -9,7 +9,7 @@ categories:
     - Transformer
     - Large Language Model 
 language: 
-  title-block-modified: "Last modified"
+    title-block-modified: "Last modified"
 ---
 
 
@@ -27,42 +27,487 @@ Besides that, we will also explore different normalization techniques, such as L
 
 # The overview of transformer model 
 
+The Transformer model, originally proposed in the paper "Attention is All You Need" [@AttentionAllYou2023vaswani], is a neural network architecture designed to process **sequential data**, such as natural language. With the high parallelization capabilities of transformers, they have become the foundation for many state-of-the-art natural language processing models. Nowadays, the most LLM are based on the variance of the transformer architecture. The transformer architecture consists of an encoder and a decoder, each composed of multiple layers of self-attention and feed-forward networks, as displayed in the @fig-original_transformer. 
 
+::: {#fig-original_transformer}
+
+![](./assets/original_transformer_architecture.png){width=100%}
+
+The illustration of the original transformer architecture. (Image Source:[Lil'Log](https://lilianweng.github.io/posts/2018-06-24-attention/#full-architecture))
+:::
+
+For those who are not familiar with the transformer architecture, it is important to understand its key components and how they work together to process sequential data. I highly recommend this post: [01-Attention is All You Need](https://yuyang.info/100-AI-Papers/posts/01-transformer.html), which I implement the transformer from scratch, not just transformer model, but also Adam optimizer, label smoothing, and training loop of the transformer. 
 
 # Position Encoding 
 
-## Fixed Position Encoding 
+Since the transformer architecture does not have any recurrence or convolution, it is necessary to provide some information about the position of the tokens in the sequence. This is achieved through **position encoding**, which adds a unique positional vector to each token embedding. There are several methods for implementing position encoding, including:
 
-## Relative Position Encoding 
+- **Absolute Position Encoding**: This method assigns a unique position embedding to each position in the input sequence, regardless of the content of the tokens. This can be useful for tasks where the absolute position of tokens is important. One common approach is to use a fixed **sinusoidal** function to generate the position embeddings.
+- **Learned Position Encoding**: In this approach, the model learns a set of position embeddings during training, similar to word embeddings. This allows the model to adapt the position encodings to the specific task and dataset.
+- **Relative Position Encoding**: This method encodes the relative distances between tokens, rather than their absolute positions. This can be particularly useful for tasks where the relationships between tokens are more important than their specific locations in the sequence. 
+
+First, let's dive into the absolute position encoding.
 
 ## Learned Position Encoding 
 
+In the absolute position encoding, we put our position information into fixed sinusoidal functions. It is hand-crafted for specific tasks and does not adapt to the data. So, is it possible to learn position encodings from the data itself? It is possible, and this leads us to the concept of learned position encodings. The learned position encodings are typically implemented as additional trainable parameters in the model. Instead of using fixed sinusoidal functions, the model learns to generate position embeddings that are optimized for the specific task and dataset.
+
+```{python}
+#| source-line-numbers: "8"
+
+
+import torch
+import torch.nn as nn
+
+class LearnedPositionalEncoding(nn.Module):
+    def __init__(self, max_len, d_model):
+        super().__init__()
+
+        self.position_embeddings = nn.Embedding(max_len, d_model)
+
+    def forward(self, x):
+        seq_length = x.size(1)
+        # (1, seq_length)
+        positions = torch.arange(0, seq_length, device=x.device).unsqueeze(0)
+        return x + self.position_embeddings(positions)
+```
+
+This method is used in such as Vision Transformers [@ImageWorth16x162021dosovitskiy].
+
+
+
+
+## Absolute Position Encoding 
+As used in the [@AttentionAllYou2023vaswani], absolute position encoding assigns a unique position embedding to each position in the input sequence, regardless of the content of the tokens. One common approach is to use a fixed **sinusoidal** function to generate the position embeddings. For example: for each position $pos$, the position embedding $PE(pos)$ can be defined as:
+
+$$
+\begin{aligned}
+\text{PE}(pos, 2i) &= \sin\!\left(pos \times \frac{1}{10,000^{2i/d_{\text{model}}}}\right) \\
+\text{PE}(pos, 2i+1) &= \cos\!\left(pos \times \frac{1}{10,000^{2i/d_{\text{model}}}}\right)
+\end{aligned}
+$${#eq-absolute-position-encoding}
+
+where 
+
+- $d_{\text{model}}$ is the dimensionality of the embeddings.
+- $i$ is the index of the embedding dimension. The *sin function* is applied to the even indices $2i$, while the *cos function* is applied to the odd indices $2i+1$.
+
+We can illustrate the encoding as following:
+
+:::{.column-page}
+
+::: {#fig-illustration-absolute-position-encoding  layout-ncol="2"}
+
+![Display of the position with different sequence lengths](./assets/position_seq_len_vary.gif){#fig-absolute-position-encoding-seq_variance width=100%}
+
+![Display of the position with different d_model](./assets/position_dmodel_vary.gif){#fig-absolute-position-encoding-d_model_variance width=100%}
+
+
+Illustration of Absolute Position Encoding
+:::
+:::
+
+
+There are several properties can be read from the @fig-illustration-absolute-position-encoding and @eq-absolute-position-encoding:
+
+1. **Periodicity**: The sine and cosine functions used in the position encoding have a periodic nature, which allows the model to easily learn to attend to relative positions. This is evident in @fig-absolute-position-encoding-seq_variance, where the position encodings exhibit similar patterns for different sequence lengths.
+
+2. **Dimensionality**: The choice of $d_{\text{model}}$ affects the granularity of the position encodings. As shown in @fig-absolute-position-encoding-d_model_variance, increasing the dimensionality results in more fine-grained position encodings, which can help the model capture more subtle positional information.
+
+3. The low-dimension part of the dmodel is change more frequently than the high-dimension part, allowing the model to adapt more easily to different input lengths.
+
+```{python} 
+#| source-line-numbers: "8-13"
+
+import torch 
+import torch.nn as nn 
+
+class AbsolutePositionalEncoding(nn.Module):
+    def __init__(self, d_model, max_len=5000):
+        super().__init__()
+
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)  
+        div_term = torch.exp(
+            torch.arange(0, d_model, 2).float() 
+            * 
+            (-torch.log(torch.tensor(10000.0)) / d_model)
+        )
+
+        pe = torch.zeros(max_len, d_model)
+        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 1::2] = torch.cos(position * div_term)
+        # (1, max_len, d_model): Expand the batch dimension
+        pe = pe.unsqueeze(0)
+        self.register_buffer('pe', pe)
+
+    def forward(self, x):
+        position_encoding = self.pe[:, :x.size(1), :]
+        x = x + position_encoding
+        return x
+```
+
+> We chose this function because we hypothesized it would allow the model to easily learn to attend by relative positions, since for any fixed offset $k$, $PE_{pos+k}$ can be represented as a linear function of $PE_{pos}$. 
+> <cite> Attention Is All You Need </cite>
+
+How to understand this sentence. Let's first redefine the position encoding.
+$$
+\begin{aligned}
+\mathrm{PE}(pos,2i) &= \sin\!\Big(\tfrac{pos}{\alpha_i}\Big), \\
+\mathrm{PE}(pos,2i+1) &= \cos\!\Big(\tfrac{pos}{\alpha_i}\Big).
+\end{aligned}
+$$
+where $\alpha_i = 10,000^{2i/d_{\text{model}}}$. And we consider $(2i, 2i+1)$ as one pair. Now, consider the same pair at position $pos + k$. We can write the position encoding as:
+
+
+$$
+\begin{align}
+\mathrm{PE}(pos+k,2i) 
+&= \sin\!\Big(\tfrac{pos+k}{\alpha_i}\Big) 
+    = \sin\!\Big(\tfrac{pos}{\alpha_i}\Big)\cos\!\Big(\tfrac{k}{\alpha_i}\Big)
+    + \cos\!\Big(\tfrac{pos}{\alpha_i}\Big)\sin\!\Big(\tfrac{k}{\alpha_i}\Big) \\
+\mathrm{PE}(pos+k,2i+1) 
+&= \cos\!\Big(\tfrac{pos+k}{\alpha_i}\Big)
+    =\cos\!\Big(\tfrac{pos}{\alpha_i}\Big)\cos\!\Big(\tfrac{k}{\alpha_i}\Big)
+    - \sin\!\Big(\tfrac{pos}{\alpha_i}\Big)\sin\!\Big(\tfrac{k}{\alpha_i}\Big)
+\end{align}
+$$ {#eq-absolute-position-rotation}
+
+
+
+
+::: {.column-margin}
+Angle addition formulas: 
+$$
+\begin{align*}
+&\sin(a+b) = \sin(a)\cos(b) + \cos(a)\sin(b) \\
+&\cos(a+b) = \cos(a)\cos(b) - \sin(a)\sin(b) 
+\end{align*}
+$$
+:::
+
+Write this as vector form: 
+
+$$
+\mathbf{p}_{pos}^{(i)} =
+\begin{bmatrix}
+\sin(pos/\alpha_i) \\
+\cos(pos/\alpha_i)
+\end{bmatrix}
+$$
+
+
+Then $\mathbf{p}_{pos+k}^{(i)}$ equal to:
+$$
+\mathbf{p}_{pos+k}^{(i)} =
+\underbrace{
+\begin{bmatrix}
+\cos(\tfrac{k}{\alpha_i}) & \ \ \sin(\tfrac{k}{\alpha_i}) \\
+-\sin(\tfrac{k}{\alpha_i}) & \ \ \cos(\tfrac{k}{\alpha_i})
+\end{bmatrix}
+}_{\displaystyle R_i(k)}
+\ \mathbf{p}_{pos}^{(i)}
+$$
+
+Notice that $R_i(k)$ is known as **rotation matrix** which only depends on the relative position $k$ and not on the absolute position $pos$. This is the key insight that allows the model to generalize to different positions.
+
+Stacking all pairs,
+$$
+\mathrm{PE}(pos+k) =
+\underbrace{
+    \begin{pmatrix}
+\cos\!\big(\tfrac{k}{\alpha_1}\big) & \sin\!\big(\tfrac{k}{\alpha_1}\big) & 0 & 0 & \cdots & 0 & 0 \\
+-\sin\!\big(\tfrac{k}{\alpha_1}\big) & \ \cos\!\big(\tfrac{k}{\alpha_1}\big) & 0 & 0 & \cdots & 0 & 0 \\
+0 & 0 & \cos\!\big(\tfrac{k}{\alpha_2}\big) &\sin\!\big(\tfrac{k}{\alpha_2}\big) & \cdots & 0 & 0 \\
+0 & 0 &  -\sin\!\big(\tfrac{k}{\alpha_2}\big) & \ \cos\!\big(\tfrac{k}{\alpha_2}\big) & \cdots & 0 & 0 \\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+0 & 0 & 0 & 0 & \cdots & \cos\!\big(\tfrac{k}{\alpha_{d/2}}\big) & \sin\!\big(\tfrac{k}{\alpha_{d/2}}\big) \\
+0 & 0 & 0 & 0 & \cdots & -\sin\!\big(\tfrac{k}{\alpha_{d/2}}\big) & \ \cos\!\big(\tfrac{k}{\alpha_{d/2}}\big)
+\end{pmatrix}
+}_{R(k)}
+\cdot
+\underbrace{
+    \begin{pmatrix}
+\sin(\tfrac{k}{\alpha_1}) \\
+\cos(\tfrac{k}{\alpha_1}) \\
+\sin(\tfrac{k}{\alpha_2}) \\
+\cos(\tfrac{k}{\alpha_2}) \\
+\vdots \\
+\sin(\tfrac{k}{\alpha_{d/2}}) \\
+\cos(\tfrac{k}{\alpha_{d/2}})
+\end{pmatrix}
+}_{\mathrm{PE}(pos)}
+$$
+
+
+where $R(k)$ is block-diagonal with those $2\times2$ rotations, $R(k)$ depends on $k$ but not on $pos$ → a linear map of $\mathrm{PE}(pos)$.
+
+
+## Relative Position Encoding
+
+Relative Position Encoding, first proposed in Transformer-XL [@TransformerXLAttentiveLanguage2019dai], then adaptive in different language model. 
+
+$$
+A_{i,j} =
+\underbrace{Q_i^\top K_j}_{\text{content-based addressing}}
++ 
+\underbrace{Q_i^\top R_{i-j}}_{\text{content-dependent positional bias}}
++ 
+\underbrace{u^\top K_j}_{\text{global content bias}}
++ 
+\underbrace{v^\top R_{i-j}}_{\text{global positional bias}}
+$$
+
+where:
+
+- $Q_i \in \mathbb{R}^d$: query vector at position $i$  
+- $K_j \in \mathbb{R}^d$: key vector at position $j$  
+- $R_{i-j} \in \mathbb{R}^d$: embedding of the relative distance $(i-j)$  
+- $u, v \in \mathbb{R}^d$: learnable global bias vectors  
+- $A_{i,j}$: unnormalized attention score between position $i$ and $j$
+
+
+```{.python}
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class RelPositionalEncoding(nn.Module):
+    def __init__(self, d_model, max_len=5000):
+        super().__init__()
+        self.d_model = d_model
+
+        # relative positions: range [-max_len, max_len]
+        range_len = max_len * 2 + 1
+        self.rel_emb = nn.Embedding(range_len, d_model)
+
+        # trainable biases u, v (Transformer-XL)
+        self.u = nn.Parameter(torch.Tensor(d_model))
+        self.v = nn.Parameter(torch.Tensor(d_model))
+
+    def forward(self, q, k, seq_len):
+        B, H, L, Dh = q.size()
+
+        # (L, L): relative position indices
+        pos_idx = torch.arange(L, dtype=torch.long, device=q.device)
+        rel_idx = pos_idx[None, :] - pos_idx[:, None]  # i-j
+        rel_idx = rel_idx + seq_len  # shift to [0, 2*max_len]
+        rel_pos_emb = self.rel_emb(rel_idx)  # (L, L, d_model)
+
+        # compute QK^T (content-based)
+        content_score = torch.matmul(q, k.transpose(-2, -1))  # (B, H, L, L)
+
+        # project queries with R
+        rel_q = q + self.v.view(1, 1, 1, -1)  # add bias v
+        rel_score = torch.einsum('bhld,lrd->bhlr', rel_q, rel_pos_emb)
+
+        # add global content bias (u)
+        content_bias = torch.einsum('d,bhjd->bhj', self.u, k).unsqueeze(2)
+
+        # total score
+        logits = content_score + rel_score + content_bias
+        return logits / (Dh ** 0.5)  # scale as in attention
+```
+
+
+
 ## RoPE (Rotary Position Embedding)
 
+So far we have see the absolute position encoding and relative position encoding.  For example, for two sentence:
+
+- Every Day I will go to gym
+- I will go to gym every day 
+
+The absolute position encoding is totally different from two sentences, even though they have the same words and means. The problem of the relative position encoding is that it does not capture the absolute position information, which is crucial for understanding the meaning of the sentences for some task such as text summarization. 
+
+
+RoPE [@RoFormerEnhancedTransformer2023su] is a method combine those two. The vector rotated certain degree according to the absolute position in the sentence. On the other hand, it relative position information is preserved. According to @eq-absolute-position-rotation, the relative position is not related to the position. 
+
+
+::: {#fig-rope}
+
+![](./assets/rope.png){width=100%}
+
+Illustration of RoPE    
+:::
+
+
+## ALIBI
+[@TrainShortTest2022press]
 
 # Normalization 
 
 ## Layer Normalization vs. RMS Normalization
 
+The **Layer Normalization** [@LayerNormalization2016ba] is a technique to normalize the inputs across the features for each training example. It is defined as:
+
+$$
+\text{LayerNorm}(x) = \frac{x - \mu}{\sigma + \epsilon} \cdot \gamma + \beta
+$$ {#eq-layer-normalization}
+where:
+
+- $\mu(x)$: the mean of the input features.
+- $\sigma(x)$: the standard deviation of the input features.
+- $\gamma$: a learnable scale parameter. 
+- $\beta$: a learnable shift parameter.
+
+There are two learnable parameters in Layer Normalization: $\gamma$ and $\beta$, which have the same shape as the input features $d_{\text{model}}$.
+
+However, in the **Root Mean Square(RMS) Normalization**, proposed in [@RootMeanSquare2019zhang], that we remove the mean from the normalization process. The RMS Normalization is defined as:
+
+$$
+\text{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon}} \cdot \gamma
+$$ {#eq-rms-normalization}
+where:
+
+- $\epsilon$: a small constant to prevent division by zero.
+- $\gamma$: a learnable scale parameter, which has the same shape as the input features $d_{\text{model}}$.
+
+As we can see, the main difference between Layer Normalization and RMS Normalization is the removal of the mean from the normalization process, and remove the learnable shift parameter $\beta$. There are several advantage of that:
+
+1. Simplicity: RMS Normalization is simpler and requires fewer parameters, making it easier to implement and faster to compute. For model with $d_{\text{model}} = 512$, 8 layers, each layer has 2 normalization. Than the reduction number of parameter is up to $512 \times 8 \times 2 = 8192$ parameters.
+2. Fewer operations: no mean subtraction, no bias addition.
+3. Saves memory bandwidth, which is often the bottleneck in GPUs (not FLOPs).
+4. While reduce the number of parameters, it also maintains similar performance.
 
 ## Pre-Layer Normalization vs. Post-Layer Normalization
 
-## QK Normalization 
+
+::: {#fig-normalization-3-positions}
+
+![](./assets/normalization-3-positions.png){width=100%}
+
+The figure illustrates the three different position of the normalization layer in the transformer architecture.
+::: 
 
 
-# Attention Mechanism 
+
+
+One main good reason why Pre-Layer Normalization is perform bettern than the Post-Layer Normalization is that, according to [@LayerNormalizationTransformer2020xiong], the help the gradient flow back through the network without disrupting the residual connections. When using the Pre-Layer Normalization, it tends to converge faster and more stably. And the initlization methods is become less sensitive to the scale of the inputs.
+
+There are third type of the normalization position by [@CogViewMasteringTexttoImage2021ding] called sandwiched normalization, which is a combination of pre-layer and post-layer normalization. Is is proposed to improve the training for the text-image pair. 
+
+
+::: {.callout-tip title='Gradient Flow'}
+One generalizable lesson is that we should keep residual connections “clean” identity paths.
+:::
+
+
+
+# Attention Mechanism
+Now, we have arrive the most important component of the transformer architecture: the attention mechanism. There are many efforts and research directions aimed at improving the attention mechanism. we first discuss the standard multi-headed attention, proposed in [@AttentionIsAllYouNeed2017vaswani]. And than analysis the time complexity of the the algorithm. Layer see different improvements through change algorithm or better utilize the hardware. 
 
 ## Multi Headed Attention 
 
+The standard multi headed attention is defined as:
+
+$$
+\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O
+$${#eq-multi-head-attention}
+
+where each head is computed as:
+
+$$
+\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
+$${#eq-mha-head}
+with $W_i^Q$, $W_i^K$, and $W_i^V$ being learned projection matrices.
+
+And the attention function, usually is scaled dot-product attention, is defined as:
+$$
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+$${#eq-scaled-dot-product-attention}
+
+where $d_k$ is the dimension of the keys. The reason for the scaling factor $\sqrt{d_k}$ is to counteract the effect of large dot-product values by the large dimension of $K$, which can push the softmax function into regions with very small gradients.
+
+### Time Complexity of Scaled Dot-Product Attention
+
+The time complexity of the scaled dot-product attention mechanism can be analyzed as follows:
+
+1. **Query-Key Dot Product**: The computation of the dot product between the query and key matrices has a time complexity of $O(n^2 d_k)$, where $n$ is the sequence length and $d_k$ is the dimension of the keys.
+2. **Softmax Computation**: The softmax function is applied to the dot product results, which has a time complexity of $O(n^2)$.
+3. **Value Weighting**: The final step involves multiplying the softmax output with the value matrix, which has a time complexity of $O(n^2 d_v)$, where $d_v$ is the dimension of the values.
+
+Overall, the time complexity of the scaled dot-product attention is dominated by the query-key dot product and can be expressed as:
+
+$$
+O(n^2 (d_k + d_v))
+$$ {#eq-time-complexity-of-scaled-dot-product-attention}
+
+
+As we can see, the time complexity is *quadratic in the sequence length*, which can be a bottleneck for long sequences / contexts.  Let's see how we can improve it. 
+
 ## Grouped Query Attention / Multi Query Attention 
+
+::: {#fig-grouped-query-attention}
+
+![](./assets/group-query-attention.png){width=100%}
+
+Overview of Grouped Query Attention & Multi Query Attention (Image Source: [@GQATrainingGeneralized2023ainslie])
+
+:::
+
+Proposed by the [@GQATrainingGeneralized2023ainslie], Grouped Query Attention (GQA) and Multi Query Attention (MQA) are designed to reduce the computational burden of the attention mechanism by grouping queries and sharing keys and values across multiple queries.
+
+
+## Sliding window attention 
+
+
+
+::: {#fig-sliding-window-attention}
+
+![](./assets/sliding-window-attention.png){width=100%}
+
+
+:::
+
+
+
+## Sparse Attention 
+
+
+::: {#fig-sparse-attention}
+
+![](./assets/attention-sparse.png){width=100%}
+
+The illustration of Sparse Attention. (Image Source: [Generating Long Sequences with Sparse Transformers](https://arxiv.org/pdf/1904.10509))
+
+:::
+
+[@GeneratingLongSequences2019child]
+
 
 ## Multi Latent Attention
 
-## Flash Attention 
+::: {#fig-multi-latent-attention}
 
-## Window Attention 
+![](./assets/attention_mla.png){width=100%}
 
-## Sliding window attention 
+Compare between MHA, Grouped Query Attention,  Multi Query Attention and Multi Latent Attention.
+:::
+
+
+Multi Latent Attention (MLA), proposed in [@DeepSeekV2StrongEconomical2024deepseek-ai] is a proposed extension to the attention mechanism that aims to capture more complex relationships within the input data by introducing multiple latent spaces. Each latent space can learn different aspects of the data, allowing for a more nuanced understanding of the input.
+
+
+::: {#fig-multi-latent-attention-detail}
+
+
+![](./assets/attention_mla_detail.png){width=100%}
+
+The detail of Multi Latent Attention (MLA).
+
+:::
+
+
+## Flash Attention
+
+So far, we see different attention mechanisms that aim to improve the efficiency and effectiveness of the standard attention mechanism. However, all aforementioned methods improve the attention mechanism by approximating the attention calculation. On the other hand, Flash Attention, proposed in [@FlashAttention2FasterAttention2023dao], takes a different approach by optimizing the attention computation itself.
+
+::: {#fig-flash-attention}
+
+![](./assets/attention_flash.png){width=100%}
+
+The illustration of Flash Attention 
+:::
 
 # Activations
 
@@ -74,9 +519,17 @@ Besides that, we will also explore different normalization techniques, such as L
 
 ## Mixture of Experts (MoE) 
 
+
+
+
+
 # Model Initialization
 
+
+
 ## Weight Initialization
+
+
 
 ## Layer Initialization
 
@@ -97,4 +550,12 @@ Finally, we will examine some state-of-the-art LLM architectures and how they im
 
 
 # Conclusion 
+
+
+
+This is conclusion 
+
+
+
+
 

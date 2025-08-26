@@ -116,98 +116,98 @@
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html",
     "title": "LLM Part1: Architecture",
     "section": "",
-    "text": "1 The overview of transformer model\n  2 Position Encoding\n  \n  2.1 Fixed Position Encoding\n  2.2 Relative Position Encoding\n  2.3 Learned Position Encoding\n  2.4 RoPE (Rotary Position Embedding)\n  \n  3 Normalization\n  \n  3.1 Layer Normalization vs. RMS Normalization\n  3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n  3.3 QK Normalization\n  \n  4 Attention Mechanism\n  \n  4.1 Multi Headed Attention\n  4.2 Grouped Query Attention / Multi Query Attention\n  4.3 Multi Latent Attention\n  4.4 Flash Attention\n  4.5 Window Attention\n  4.6 Sliding window attention\n  \n  5 Activations\n  6 Feed Forward Network & Mixture of Experts\n  \n  6.1 Multi Layer Perceptron (MLP)\n  6.2 Gated Linear Unit (GLU)\n  6.3 Mixture of Experts (MoE)\n  \n  7 Model Initialization\n  \n  7.1 Weight Initialization\n  7.2 Layer Initialization\n  \n  8 Case Study\n  \n  8.1 LLaMA\n  8.2 Qwen\n  8.3 DeepSeek\n  8.4 GPT\n  \n  9 Conclusion\nThis is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up:\nBesides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures."
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#fixed-position-encoding",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#fixed-position-encoding",
-    "title": "LLM Part1: Architecture",
-    "section": "2.1 Fixed Position Encoding",
-    "text": "2.1 Fixed Position Encoding"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#relative-position-encoding",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#relative-position-encoding",
-    "title": "LLM Part1: Architecture",
-    "section": "2.2 Relative Position Encoding",
-    "text": "2.2 Relative Position Encoding"
+    "text": "1 The overview of transformer model\n  2 Position Encoding\n  \n  2.1 Learned Position Encoding\n  2.2 Absolute Position Encoding\n  2.3 Relative Position Encoding\n  2.4 RoPE (Rotary Position Embedding)\n  2.5 ALIBI\n  \n  3 Normalization\n  \n  3.1 Layer Normalization vs. RMS Normalization\n  3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n  \n  4 Attention Mechanism\n  \n  4.1 Multi Headed Attention\n  \n  4.1.1 Time Complexity of Scaled Dot-Product Attention\n  \n  4.2 Grouped Query Attention / Multi Query Attention\n  4.3 Sliding window attention\n  4.4 Sparse Attention\n  4.5 Multi Latent Attention\n  4.6 Flash Attention\n  \n  5 Activations\n  6 Feed Forward Network & Mixture of Experts\n  \n  6.1 Multi Layer Perceptron (MLP)\n  6.2 Gated Linear Unit (GLU)\n  6.3 Mixture of Experts (MoE)\n  \n  7 Model Initialization\n  \n  7.1 Weight Initialization\n  7.2 Layer Initialization\n  \n  8 Case Study\n  \n  8.1 LLaMA\n  8.2 Qwen\n  8.3 DeepSeek\n  8.4 GPT\n  \n  9 Conclusion\nThis is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up:\nBesides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#learned-position-encoding",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#learned-position-encoding",
     "title": "LLM Part1: Architecture",
-    "section": "2.3 Learned Position Encoding",
-    "text": "2.3 Learned Position Encoding"
+    "section": "2.1 Learned Position Encoding",
+    "text": "2.1 Learned Position Encoding\nIn the absolute position encoding, we put our position information into fixed sinusoidal functions. It is hand-crafted for specific tasks and does not adapt to the data. So, is it possible to learn position encodings from the data itself? It is possible, and this leads us to the concept of learned position encodings. The learned position encodings are typically implemented as additional trainable parameters in the model. Instead of using fixed sinusoidal functions, the model learns to generate position embeddings that are optimized for the specific task and dataset.\n\nimport torch\nimport torch.nn as nn\n\nclass LearnedPositionalEncoding(nn.Module):\n    def __init__(self, max_len, d_model):\n        super().__init__()\n\n        self.position_embeddings = nn.Embedding(max_len, d_model)\n\n    def forward(self, x):\n        seq_length = x.size(1)\n        # (1, seq_length)\n        positions = torch.arange(0, seq_length, device=x.device).unsqueeze(0)\n        return x + self.position_embeddings(positions)\n\nThis method is used in such as Vision Transformers (Dosovitskiy et al. 2021)."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#absolute-position-encoding",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#absolute-position-encoding",
+    "title": "LLM Part1: Architecture",
+    "section": "2.2 Absolute Position Encoding",
+    "text": "2.2 Absolute Position Encoding\nAs used in the (Vaswani et al. 2023), absolute position encoding assigns a unique position embedding to each position in the input sequence, regardless of the content of the tokens. One common approach is to use a fixed sinusoidal function to generate the position embeddings. For example: for each position \\(pos\\), the position embedding \\(PE(pos)\\) can be defined as:\n\\[\n\\begin{aligned}\n\\text{PE}(pos, 2i) &= \\sin\\!\\left(pos \\times \\frac{1}{10,000^{2i/d_{\\text{model}}}}\\right) \\\\\n\\text{PE}(pos, 2i+1) &= \\cos\\!\\left(pos \\times \\frac{1}{10,000^{2i/d_{\\text{model}}}}\\right)\n\\end{aligned}\n\\tag{1}\\]\nwhere\n\n\\(d_{\\text{model}}\\) is the dimensionality of the embeddings.\n\\(i\\) is the index of the embedding dimension. The sin function is applied to the even indices \\(2i\\), while the cos function is applied to the odd indices \\(2i+1\\).\n\nWe can illustrate the encoding as following:\n\n\n\n\n\n\n\n\n\n\n\n\n(a) Display of the position with different sequence lengths\n\n\n\n\n\n\n\n\n\n\n\n(b) Display of the position with different d_model\n\n\n\n\n\n\n\nFigure 2: Illustration of Absolute Position Encoding\n\n\n\n\nThere are several properties can be read from the Figure 2 and Equation 1:\n\nPeriodicity: The sine and cosine functions used in the position encoding have a periodic nature, which allows the model to easily learn to attend to relative positions. This is evident in Figure 2 (a), where the position encodings exhibit similar patterns for different sequence lengths.\nDimensionality: The choice of \\(d_{\\text{model}}\\) affects the granularity of the position encodings. As shown in Figure 2 (b), increasing the dimensionality results in more fine-grained position encodings, which can help the model capture more subtle positional information.\nThe low-dimension part of the dmodel is change more frequently than the high-dimension part, allowing the model to adapt more easily to different input lengths.\n\n\nimport torch \nimport torch.nn as nn \n\nclass AbsolutePositionalEncoding(nn.Module):\n    def __init__(self, d_model, max_len=5000):\n        super().__init__()\n\n        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)  \n        div_term = torch.exp(\n            torch.arange(0, d_model, 2).float() \n            * \n            (-torch.log(torch.tensor(10000.0)) / d_model)\n        )\n\n        pe = torch.zeros(max_len, d_model)\n        pe[:, 0::2] = torch.sin(position * div_term)\n        pe[:, 1::2] = torch.cos(position * div_term)\n        # (1, max_len, d_model): Expand the batch dimension\n        pe = pe.unsqueeze(0)\n        self.register_buffer('pe', pe)\n\n    def forward(self, x):\n        position_encoding = self.pe[:, :x.size(1), :]\n        x = x + position_encoding\n        return x\n\n\nWe chose this function because we hypothesized it would allow the model to easily learn to attend by relative positions, since for any fixed offset \\(k\\), \\(PE_{pos+k}\\) can be represented as a linear function of \\(PE_{pos}\\).  Attention Is All You Need \n\nHow to understand this sentence. Let’s first redefine the position encoding. \\[\n\\begin{aligned}\n\\mathrm{PE}(pos,2i) &= \\sin\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big), \\\\\n\\mathrm{PE}(pos,2i+1) &= \\cos\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big).\n\\end{aligned}\n\\] where \\(\\alpha_i = 10,000^{2i/d_{\\text{model}}}\\). And we consider \\((2i, 2i+1)\\) as one pair. Now, consider the same pair at position \\(pos + k\\). We can write the position encoding as:\n\\[\n\\begin{align}\n\\mathrm{PE}(pos+k,2i)\n&= \\sin\\!\\Big(\\tfrac{pos+k}{\\alpha_i}\\Big)\n    = \\sin\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big)\\cos\\!\\Big(\\tfrac{k}{\\alpha_i}\\Big)\n    + \\cos\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big)\\sin\\!\\Big(\\tfrac{k}{\\alpha_i}\\Big) \\\\\n\\mathrm{PE}(pos+k,2i+1)\n&= \\cos\\!\\Big(\\tfrac{pos+k}{\\alpha_i}\\Big)\n    =\\cos\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big)\\cos\\!\\Big(\\tfrac{k}{\\alpha_i}\\Big)\n    - \\sin\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big)\\sin\\!\\Big(\\tfrac{k}{\\alpha_i}\\Big)\n\\end{align}\n\\tag{2}\\]\n\n\nAngle addition formulas: \\[\n\\begin{align*}\n&\\sin(a+b) = \\sin(a)\\cos(b) + \\cos(a)\\sin(b) \\\\\n&\\cos(a+b) = \\cos(a)\\cos(b) - \\sin(a)\\sin(b)\n\\end{align*}\n\\]\nWrite this as vector form:\n\\[\n\\mathbf{p}_{pos}^{(i)} =\n\\begin{bmatrix}\n\\sin(pos/\\alpha_i) \\\\\n\\cos(pos/\\alpha_i)\n\\end{bmatrix}\n\\]\nThen \\(\\mathbf{p}_{pos+k}^{(i)}\\) equal to: \\[\n\\mathbf{p}_{pos+k}^{(i)} =\n\\underbrace{\n\\begin{bmatrix}\n\\cos(\\tfrac{k}{\\alpha_i}) & \\ \\ \\sin(\\tfrac{k}{\\alpha_i}) \\\\\n-\\sin(\\tfrac{k}{\\alpha_i}) & \\ \\ \\cos(\\tfrac{k}{\\alpha_i})\n\\end{bmatrix}\n}_{\\displaystyle R_i(k)}\n\\ \\mathbf{p}_{pos}^{(i)}\n\\]\nNotice that \\(R_i(k)\\) is known as rotation matrix which only depends on the relative position \\(k\\) and not on the absolute position \\(pos\\). This is the key insight that allows the model to generalize to different positions.\nStacking all pairs, \\[\n\\mathrm{PE}(pos+k) =\n\\underbrace{\n    \\begin{pmatrix}\n\\cos\\!\\big(\\tfrac{k}{\\alpha_1}\\big) & \\sin\\!\\big(\\tfrac{k}{\\alpha_1}\\big) & 0 & 0 & \\cdots & 0 & 0 \\\\\n-\\sin\\!\\big(\\tfrac{k}{\\alpha_1}\\big) & \\ \\cos\\!\\big(\\tfrac{k}{\\alpha_1}\\big) & 0 & 0 & \\cdots & 0 & 0 \\\\\n0 & 0 & \\cos\\!\\big(\\tfrac{k}{\\alpha_2}\\big) &\\sin\\!\\big(\\tfrac{k}{\\alpha_2}\\big) & \\cdots & 0 & 0 \\\\\n0 & 0 &  -\\sin\\!\\big(\\tfrac{k}{\\alpha_2}\\big) & \\ \\cos\\!\\big(\\tfrac{k}{\\alpha_2}\\big) & \\cdots & 0 & 0 \\\\\n\\vdots & \\vdots & \\vdots & \\vdots & \\ddots & \\vdots & \\vdots \\\\\n0 & 0 & 0 & 0 & \\cdots & \\cos\\!\\big(\\tfrac{k}{\\alpha_{d/2}}\\big) & \\sin\\!\\big(\\tfrac{k}{\\alpha_{d/2}}\\big) \\\\\n0 & 0 & 0 & 0 & \\cdots & -\\sin\\!\\big(\\tfrac{k}{\\alpha_{d/2}}\\big) & \\ \\cos\\!\\big(\\tfrac{k}{\\alpha_{d/2}}\\big)\n\\end{pmatrix}\n}_{R(k)}\n\\cdot\n\\underbrace{\n    \\begin{pmatrix}\n\\sin(\\tfrac{k}{\\alpha_1}) \\\\\n\\cos(\\tfrac{k}{\\alpha_1}) \\\\\n\\sin(\\tfrac{k}{\\alpha_2}) \\\\\n\\cos(\\tfrac{k}{\\alpha_2}) \\\\\n\\vdots \\\\\n\\sin(\\tfrac{k}{\\alpha_{d/2}}) \\\\\n\\cos(\\tfrac{k}{\\alpha_{d/2}})\n\\end{pmatrix}\n}_{\\mathrm{PE}(pos)}\n\\]\nwhere \\(R(k)\\) is block-diagonal with those \\(2\\times2\\) rotations, \\(R(k)\\) depends on \\(k\\) but not on \\(pos\\) → a linear map of \\(\\mathrm{PE}(pos)\\)."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#relative-position-encoding",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#relative-position-encoding",
+    "title": "LLM Part1: Architecture",
+    "section": "2.3 Relative Position Encoding",
+    "text": "2.3 Relative Position Encoding\nRelative Position Encoding, first proposed in Transformer-XL (Dai et al. 2019), then adaptive in different language model.\n\\[\nA_{i,j} =\n\\underbrace{Q_i^\\top K_j}_{\\text{content-based addressing}}\n+\n\\underbrace{Q_i^\\top R_{i-j}}_{\\text{content-dependent positional bias}}\n+\n\\underbrace{u^\\top K_j}_{\\text{global content bias}}\n+\n\\underbrace{v^\\top R_{i-j}}_{\\text{global positional bias}}\n\\]\nwhere:\n\n\\(Q_i \\in \\mathbb{R}^d\\): query vector at position \\(i\\)\n\n\\(K_j \\in \\mathbb{R}^d\\): key vector at position \\(j\\)\n\n\\(R_{i-j} \\in \\mathbb{R}^d\\): embedding of the relative distance \\((i-j)\\)\n\n\\(u, v \\in \\mathbb{R}^d\\): learnable global bias vectors\n\n\\(A_{i,j}\\): unnormalized attention score between position \\(i\\) and \\(j\\)\n\nimport torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass RelPositionalEncoding(nn.Module):\n    def __init__(self, d_model, max_len=5000):\n        super().__init__()\n        self.d_model = d_model\n\n        # relative positions: range [-max_len, max_len]\n        range_len = max_len * 2 + 1\n        self.rel_emb = nn.Embedding(range_len, d_model)\n\n        # trainable biases u, v (Transformer-XL)\n        self.u = nn.Parameter(torch.Tensor(d_model))\n        self.v = nn.Parameter(torch.Tensor(d_model))\n\n    def forward(self, q, k, seq_len):\n        B, H, L, Dh = q.size()\n\n        # (L, L): relative position indices\n        pos_idx = torch.arange(L, dtype=torch.long, device=q.device)\n        rel_idx = pos_idx[None, :] - pos_idx[:, None]  # i-j\n        rel_idx = rel_idx + seq_len  # shift to [0, 2*max_len]\n        rel_pos_emb = self.rel_emb(rel_idx)  # (L, L, d_model)\n\n        # compute QK^T (content-based)\n        content_score = torch.matmul(q, k.transpose(-2, -1))  # (B, H, L, L)\n\n        # project queries with R\n        rel_q = q + self.v.view(1, 1, 1, -1)  # add bias v\n        rel_score = torch.einsum('bhld,lrd-&gt;bhlr', rel_q, rel_pos_emb)\n\n        # add global content bias (u)\n        content_bias = torch.einsum('d,bhjd-&gt;bhj', self.u, k).unsqueeze(2)\n\n        # total score\n        logits = content_score + rel_score + content_bias\n        return logits / (Dh ** 0.5)  # scale as in attention"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#rope-rotary-position-embedding",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#rope-rotary-position-embedding",
     "title": "LLM Part1: Architecture",
     "section": "2.4 RoPE (Rotary Position Embedding)",
-    "text": "2.4 RoPE (Rotary Position Embedding)"
+    "text": "2.4 RoPE (Rotary Position Embedding)\nSo far we have see the absolute position encoding and relative position encoding. For example, for two sentence:\n\nEvery Day I will go to gym\nI will go to gym every day\n\nThe absolute position encoding is totally different from two sentences, even though they have the same words and means. The problem of the relative position encoding is that it does not capture the absolute position information, which is crucial for understanding the meaning of the sentences for some task such as text summarization.\nRoPE (Su et al. 2023) is a method combine those two. The vector rotated certain degree according to the absolute position in the sentence. On the other hand, it relative position information is preserved. According to Equation 2, the relative position is not related to the position.\n\n\n\n\n\n\nFigure 3: Illustration of RoPE"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#alibi",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#alibi",
+    "title": "LLM Part1: Architecture",
+    "section": "2.5 ALIBI",
+    "text": "2.5 ALIBI\n(Press, Smith, and Lewis 2022)"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-normalization-vs.-rms-normalization",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-normalization-vs.-rms-normalization",
     "title": "LLM Part1: Architecture",
     "section": "3.1 Layer Normalization vs. RMS Normalization",
-    "text": "3.1 Layer Normalization vs. RMS Normalization"
+    "text": "3.1 Layer Normalization vs. RMS Normalization\nThe Layer Normalization (Ba, Kiros, and Hinton 2016) is a technique to normalize the inputs across the features for each training example. It is defined as:\n\\[\n\\text{LayerNorm}(x) = \\frac{x - \\mu}{\\sigma + \\epsilon} \\cdot \\gamma + \\beta\n\\tag{3}\\] where:\n\n\\(\\mu(x)\\): the mean of the input features.\n\\(\\sigma(x)\\): the standard deviation of the input features.\n\\(\\gamma\\): a learnable scale parameter.\n\\(\\beta\\): a learnable shift parameter.\n\nThere are two learnable parameters in Layer Normalization: \\(\\gamma\\) and \\(\\beta\\), which have the same shape as the input features \\(d_{\\text{model}}\\).\nHowever, in the Root Mean Square(RMS) Normalization, proposed in (Zhang and Sennrich 2019), that we remove the mean from the normalization process. The RMS Normalization is defined as:\n\\[\n\\text{RMSNorm}(x) = \\frac{x}{\\sqrt{\\frac{1}{d} \\sum_{i=1}^{d} x_i^2 + \\epsilon}} \\cdot \\gamma\n\\tag{4}\\] where:\n\n\\(\\epsilon\\): a small constant to prevent division by zero.\n\\(\\gamma\\): a learnable scale parameter, which has the same shape as the input features \\(d_{\\text{model}}\\).\n\nAs we can see, the main difference between Layer Normalization and RMS Normalization is the removal of the mean from the normalization process, and remove the learnable shift parameter \\(\\beta\\). There are several advantage of that:\n\nSimplicity: RMS Normalization is simpler and requires fewer parameters, making it easier to implement and faster to compute. For model with \\(d_{\\text{model}} = 512\\), 8 layers, each layer has 2 normalization. Than the reduction number of parameter is up to \\(512 \\times 8 \\times 2 = 8192\\) parameters.\nFewer operations: no mean subtraction, no bias addition.\nSaves memory bandwidth, which is often the bottleneck in GPUs (not FLOPs).\nWhile reduce the number of parameters, it also maintains similar performance."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#pre-layer-normalization-vs.-post-layer-normalization",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#pre-layer-normalization-vs.-post-layer-normalization",
     "title": "LLM Part1: Architecture",
     "section": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization",
-    "text": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-normalization",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-normalization",
-    "title": "LLM Part1: Architecture",
-    "section": "3.3 QK Normalization",
-    "text": "3.3 QK Normalization"
+    "text": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n\n\n\n\n\n\nFigure 4: The figure illustrates the three different position of the normalization layer in the transformer architecture.\n\n\n\nOne main good reason why Pre-Layer Normalization is perform bettern than the Post-Layer Normalization is that, according to (Xiong et al. 2020), the help the gradient flow back through the network without disrupting the residual connections. When using the Pre-Layer Normalization, it tends to converge faster and more stably. And the initlization methods is become less sensitive to the scale of the inputs.\nThere are third type of the normalization position by (Ding et al. 2021) called sandwiched normalization, which is a combination of pre-layer and post-layer normalization. Is is proposed to improve the training for the text-image pair.\n\n\n\n\n\n\nGradient Flow\n\n\n\nOne generalizable lesson is that we should keep residual connections “clean” identity paths."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-headed-attention",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-headed-attention",
     "title": "LLM Part1: Architecture",
     "section": "4.1 Multi Headed Attention",
-    "text": "4.1 Multi Headed Attention"
+    "text": "4.1 Multi Headed Attention\nThe standard multi headed attention is defined as:\n\\[\n\\text{MultiHead}(Q, K, V) = \\text{Concat}(\\text{head}_1, \\ldots, \\text{head}_h)W^O\n\\tag{5}\\]\nwhere each head is computed as:\n\\[\n\\text{head}_i = \\text{Attention}(QW_i^Q, KW_i^K, VW_i^V)\n\\tag{6}\\] with \\(W_i^Q\\), \\(W_i^K\\), and \\(W_i^V\\) being learned projection matrices.\nAnd the attention function, usually is scaled dot-product attention, is defined as: \\[\n\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V\n\\tag{7}\\]\nwhere \\(d_k\\) is the dimension of the keys. The reason for the scaling factor \\(\\sqrt{d_k}\\) is to counteract the effect of large dot-product values by the large dimension of \\(K\\), which can push the softmax function into regions with very small gradients.\n\n4.1.1 Time Complexity of Scaled Dot-Product Attention\nThe time complexity of the scaled dot-product attention mechanism can be analyzed as follows:\n\nQuery-Key Dot Product: The computation of the dot product between the query and key matrices has a time complexity of \\(O(n^2 d_k)\\), where \\(n\\) is the sequence length and \\(d_k\\) is the dimension of the keys.\nSoftmax Computation: The softmax function is applied to the dot product results, which has a time complexity of \\(O(n^2)\\).\nValue Weighting: The final step involves multiplying the softmax output with the value matrix, which has a time complexity of \\(O(n^2 d_v)\\), where \\(d_v\\) is the dimension of the values.\n\nOverall, the time complexity of the scaled dot-product attention is dominated by the query-key dot product and can be expressed as:\n\\[\nO(n^2 (d_k + d_v))\n\\tag{8}\\]\nAs we can see, the time complexity is quadratic in the sequence length, which can be a bottleneck for long sequences / contexts. Let’s see how we can improve it."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#grouped-query-attention-multi-query-attention",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#grouped-query-attention-multi-query-attention",
     "title": "LLM Part1: Architecture",
     "section": "4.2 Grouped Query Attention / Multi Query Attention",
-    "text": "4.2 Grouped Query Attention / Multi Query Attention"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-latent-attention",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-latent-attention",
-    "title": "LLM Part1: Architecture",
-    "section": "4.3 Multi Latent Attention",
-    "text": "4.3 Multi Latent Attention"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#flash-attention",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#flash-attention",
-    "title": "LLM Part1: Architecture",
-    "section": "4.4 Flash Attention",
-    "text": "4.4 Flash Attention"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#window-attention",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#window-attention",
-    "title": "LLM Part1: Architecture",
-    "section": "4.5 Window Attention",
-    "text": "4.5 Window Attention"
+    "text": "4.2 Grouped Query Attention / Multi Query Attention\n\n\n\n\n\n\nFigure 5: Overview of Grouped Query Attention & Multi Query Attention (Image Source: (Ainslie et al. 2023))\n\n\n\nProposed by the (Ainslie et al. 2023), Grouped Query Attention (GQA) and Multi Query Attention (MQA) are designed to reduce the computational burden of the attention mechanism by grouping queries and sharing keys and values across multiple queries."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#sliding-window-attention",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#sliding-window-attention",
     "title": "LLM Part1: Architecture",
-    "section": "4.6 Sliding window attention",
-    "text": "4.6 Sliding window attention"
+    "section": "4.3 Sliding window attention",
+    "text": "4.3 Sliding window attention\n\n\n\n\n\n\nFigure 6"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#sparse-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#sparse-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.4 Sparse Attention",
+    "text": "4.4 Sparse Attention\n\n\n\n\n\n\nFigure 7: The illustration of Sparse Attention. (Image Source: Generating Long Sequences with Sparse Transformers)\n\n\n\n(Child et al. 2019)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-latent-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-latent-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.5 Multi Latent Attention",
+    "text": "4.5 Multi Latent Attention\n\n\n\n\n\n\nFigure 8: Compare between MHA, Grouped Query Attention, Multi Query Attention and Multi Latent Attention.\n\n\n\nMulti Latent Attention (MLA), proposed in (DeepSeek-AI et al. 2024) is a proposed extension to the attention mechanism that aims to capture more complex relationships within the input data by introducing multiple latent spaces. Each latent space can learn different aspects of the data, allowing for a more nuanced understanding of the input.\n\n\n\n\n\n\nFigure 9: The detail of Multi Latent Attention (MLA)."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#flash-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#flash-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.6 Flash Attention",
+    "text": "4.6 Flash Attention\nSo far, we see different attention mechanisms that aim to improve the efficiency and effectiveness of the standard attention mechanism. However, all aforementioned methods improve the attention mechanism by approximating the attention calculation. On the other hand, Flash Attention, proposed in (Dao 2023), takes a different approach by optimizing the attention computation itself.\n\n\n\n\n\n\nFigure 10: The illustration of Flash Attention"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-layer-perceptron-mlp",
@@ -291,6 +291,6 @@
     "href": "posts/blogs.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "LLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n2 min\n\n238 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part3: Alignment\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications.\n\n\n\n\n1 min\n\n178 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n1 min\n\n79 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-08-07\n\n\n\n\n\nNo matching items"
+    "text": "LLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n15 min\n\n2,944 words\n\n\n2025-08-26\n\n\n\n\n\n\n\nLLM Part3: Alignment\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications.\n\n\n\n\n1 min\n\n178 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n1 min\n\n79 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-08-07\n\n\n\n\n\nNo matching items"
   }
 ]

@@ -54,6 +54,7 @@
 /* for editor */
 .cm-quote {
   color: var(--text-normal) !important;
+  
 }
 
 pre,
@@ -71,5 +72,6 @@ code,
 
 /* Adjust main content so it doesn’t overlap */
 .content {
-  margin-left: 50px;  /* slightly larger than sidebar width */
+  margin-left: 80px;  /* slightly larger than sidebar width */
+  margin-right: 0px;
 }
