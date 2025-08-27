@@ -101,6 +101,24 @@
   file = {/Users/yuyang/Zotero/storage/YWJW3DI8/deepspeed-extreme-scale-model-training-for-everyone.html}
 }
 
+@online{DINOv2LearningRobust2024oquab,
+  title = {{{DINOv2}}: {{Learning Robust Visual Features}} without {{Supervision}}},
+  shorttitle = {{{DINOv2}}},
+  author = {Oquab, Maxime and Darcet, Timothée and Moutakanni, Théo and Vo, Huy and Szafraniec, Marc and Khalidov, Vasil and Fernandez, Pierre and Haziza, Daniel and Massa, Francisco and El-Nouby, Alaaeldin and Assran, Mahmoud and Ballas, Nicolas and Galuba, Wojciech and Howes, Russell and Huang, Po-Yao and Li, Shang-Wen and Misra, Ishan and Rabbat, Michael and Sharma, Vasu and Synnaeve, Gabriel and Xu, Hu and Jegou, Hervé and Mairal, Julien and Labatut, Patrick and Joulin, Armand and Bojanowski, Piotr},
+  date = {2024-02-02},
+  eprint = {2304.07193},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2304.07193},
+  url = {http://arxiv.org/abs/2304.07193},
+  urldate = {2025-08-26},
+  abstract = {The recent breakthroughs in natural language processing for model pretraining on large quantities of data have opened the way for similar foundation models in computer vision. These models could greatly simplify the use of images in any system by producing all-purpose visual features, i.e., features that work across image distributions and tasks without finetuning. This work shows that existing pretraining methods, especially self-supervised methods, can produce such features if trained on enough curated data from diverse sources. We revisit existing approaches and combine different techniques to scale our pretraining in terms of data and model size. Most of the technical contributions aim at accelerating and stabilizing the training at scale. In terms of data, we propose an automatic pipeline to build a dedicated, diverse, and curated image dataset instead of uncurated data, as typically done in the self-supervised literature. In terms of models, we train a ViT model (Dosovitskiy et al., 2020) with 1B parameters and distill it into a series of smaller models that surpass the best available all-purpose features, OpenCLIP (Ilharco et al., 2021) on most of the benchmarks at image and pixel levels.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Computer Vision and Pattern Recognition},
+  annotation = {TLDR: This work revisits existing approaches and combines different techniques to scale the pretraining in terms of data and model size, and proposes an automatic pipeline to build a dedicated, diverse, and curated image dataset instead of uncurated data, as typically done in the self-supervised literature.},
+  file = {/Users/yuyang/Zotero/storage/N5WI8B4D/Oquab et al. - 2024 - DINOv2 Learning Robust Visual Features without Supervision.pdf;/Users/yuyang/Zotero/storage/D3C7THGN/2304.html}
+}
+
 @online{DistillingKnowledgeNeural2015hinton,
   title = {Distilling the {{Knowledge}} in a {{Neural Network}}},
   author = {Hinton, Geoffrey and Vinyals, Oriol and Dean, Jeff},
@@ -115,6 +133,22 @@
   pubstate = {prepublished},
   keywords = {Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing,Statistics - Machine Learning},
   file = {/Users/yuyang/Zotero/storage/9WPYISZ6/Hinton et al. - 2015 - Distilling the Knowledge in a Neural Network.pdf;/Users/yuyang/Zotero/storage/GW3BW9YP/1503.html}
+}
+
+@online{DistillingKnowledgeNeural2015hintona,
+  title = {Distilling the {{Knowledge}} in a {{Neural Network}}},
+  author = {Hinton, Geoffrey and Vinyals, Oriol and Dean, Jeff},
+  date = {2015-03-09},
+  eprint = {1503.02531},
+  eprinttype = {arXiv},
+  eprintclass = {stat},
+  doi = {10.48550/arXiv.1503.02531},
+  url = {http://arxiv.org/abs/1503.02531},
+  urldate = {2025-08-26},
+  abstract = {A very simple way to improve the performance of almost any machine learning algorithm is to train many different models on the same data and then to average their predictions. Unfortunately, making predictions using a whole ensemble of models is cumbersome and may be too computationally expensive to allow deployment to a large number of users, especially if the individual models are large neural nets. Caruana and his collaborators have shown that it is possible to compress the knowledge in an ensemble into a single model which is much easier to deploy and we develop this approach further using a different compression technique. We achieve some surprising results on MNIST and we show that we can significantly improve the acoustic model of a heavily used commercial system by distilling the knowledge in an ensemble of models into a single model. We also introduce a new type of ensemble composed of one or more full models and many specialist models which learn to distinguish fine-grained classes that the full models confuse. Unlike a mixture of experts, these specialist models can be trained rapidly and in parallel.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Machine Learning,Computer Science - Neural and Evolutionary Computing,Statistics - Machine Learning},
+  file = {/Users/yuyang/Zotero/storage/ZH5JLH2Z/Hinton et al. - 2015 - Distilling the Knowledge in a Neural Network.pdf;/Users/yuyang/Zotero/storage/PXJTISN7/1503.html}
 }
 
 @online{EmergingPropertiesSelfSupervised2021caron,

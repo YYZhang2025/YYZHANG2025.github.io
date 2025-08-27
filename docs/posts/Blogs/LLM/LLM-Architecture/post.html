@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-08-26">
+<meta name="dcterms.date" content="2025-08-28">
 <meta name="description" content="In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.">
 
 <title>LLM Part1: Architecture</title>
@@ -100,7 +100,7 @@ div.csl-indent {
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../../../site_libs/bootstrap/bootstrap-9edf1536ccff61c16a2cbe51c36f979b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-3c4f9c271d08f4d13d295a8b83971398.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-42d11e5fbd7ac1634b29124389f21459.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <link href="../../../../site_libs/bootstrap/bootstrap-9edf1536ccff61c16a2cbe51c36f979b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -413,6 +413,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#layer-normalization-vs.-rms-normalization" id="toc-layer-normalization-vs.-rms-normalization" class="nav-link" data-scroll-target="#layer-normalization-vs.-rms-normalization"><span class="header-section-number">3.1</span> Layer Normalization vs.&nbsp;RMS Normalization</a></li>
   <li><a href="#pre-layer-normalization-vs.-post-layer-normalization" id="toc-pre-layer-normalization-vs.-post-layer-normalization" class="nav-link" data-scroll-target="#pre-layer-normalization-vs.-post-layer-normalization"><span class="header-section-number">3.2</span> Pre-Layer Normalization vs.&nbsp;Post-Layer Normalization</a></li>
+  <li><a href="#qk-norm" id="toc-qk-norm" class="nav-link" data-scroll-target="#qk-norm"><span class="header-section-number">3.3</span> QK Norm</a></li>
   </ul></li>
   <li><a href="#attention-mechanism" id="toc-attention-mechanism" class="nav-link" data-scroll-target="#attention-mechanism"><span class="header-section-number">4</span> Attention Mechanism</a>
   <ul class="collapse">
@@ -479,14 +480,14 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2025-08-26</p>
+      <p class="date">2025-08-28</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Last modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">2025-08-26</p>
+      <p class="date-modified">2025-08-28</p>
     </div>
   </div>
     
@@ -513,6 +514,7 @@ window.Quarto = {
   <ul>
   <li><a href="#layer-normalization-vs.-rms-normalization" id="toc-layer-normalization-vs.-rms-normalization"><span class="header-section-number">3.1</span> Layer Normalization vs.&nbsp;RMS Normalization</a></li>
   <li><a href="#pre-layer-normalization-vs.-post-layer-normalization" id="toc-pre-layer-normalization-vs.-post-layer-normalization"><span class="header-section-number">3.2</span> Pre-Layer Normalization vs.&nbsp;Post-Layer Normalization</a></li>
+  <li><a href="#qk-norm" id="toc-qk-norm"><span class="header-section-number">3.3</span> QK Norm</a></li>
   </ul></li>
   <li><a href="#attention-mechanism" id="toc-attention-mechanism"><span class="header-section-number">4</span> Attention Mechanism</a>
   <ul>
@@ -584,7 +586,7 @@ Figure&nbsp;1: The illustration of the original transformer architecture. (Image
 <section id="learned-position-encoding" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="learned-position-encoding"><span class="header-section-number">2.1</span> Learned Position Encoding</h2>
 <p>In the absolute position encoding, we put our position information into fixed sinusoidal functions. It is hand-crafted for specific tasks and does not adapt to the data. So, is it possible to learn position encodings from the data itself? It is possible, and this leads us to the concept of learned position encodings. The learned position encodings are typically implemented as additional trainable parameters in the model. Instead of using fixed sinusoidal functions, the model learns to generate position embeddings that are optimized for the specific task and dataset.</p>
-<div id="9dd3576e" class="cell" data-source-line-numbers="8">
+<div id="34bb78e8" class="cell" data-source-line-numbers="8">
 <div class="sourceCode cell-code" id="cb1" data-source-line-numbers="8" data-code-line-numbers="8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -660,7 +662,7 @@ Figure&nbsp;2: Illustration of Absolute Position Encoding
 <li><p><strong>Dimensionality</strong>: The choice of <span class="math inline">\(d_{\text{model}}\)</span> affects the granularity of the position encodings. As shown in <a href="#fig-absolute-position-encoding-d_model_variance" class="quarto-xref">Figure&nbsp;2 (b)</a>, increasing the dimensionality results in more fine-grained position encodings, which can help the model capture more subtle positional information.</p></li>
 <li><p>The low-dimension part of the dmodel is change more frequently than the high-dimension part, allowing the model to adapt more easily to different input lengths.</p></li>
 </ol>
-<div id="4a114f50" class="cell" data-source-line-numbers="8-13">
+<div id="37ee2d81" class="cell" data-source-line-numbers="8-13">
 <div class="sourceCode cell-code" id="cb2" data-source-line-numbers="8-13" data-code-line-numbers="8-13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> torch </span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn </span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
@@ -830,13 +832,13 @@ A_{i,j} =
 </section>
 <section id="rope-rotary-position-embedding" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="rope-rotary-position-embedding"><span class="header-section-number">2.4</span> RoPE (Rotary Position Embedding)</h2>
-<p>So far we have see the absolute position encoding and relative position encoding. For example, for two sentence:</p>
+<p>So far we have see the absolute position encoding and relative position encoding. However, there is an problem with absolute position encoding. For example, for two sentence:</p>
 <ul>
 <li>Every Day I will go to gym</li>
 <li>I will go to gym every day</li>
 </ul>
-<p>The absolute position encoding is totally different from two sentences, even though they have the same words and means. The problem of the relative position encoding is that it does not capture the absolute position information, which is crucial for understanding the meaning of the sentences for some task such as text summarization.</p>
-<p>RoPE <span class="citation" data-cites="RoFormerEnhancedTransformer2023su">(<a href="#ref-RoFormerEnhancedTransformer2023su" role="doc-biblioref">Su et al. 2023</a>)</span> is a method combine those two. The vector rotated certain degree according to the absolute position in the sentence. On the other hand, it relative position information is preserved. According to <a href="#eq-absolute-position-rotation" class="quarto-xref">Equation&nbsp;2</a>, the relative position is not related to the position.</p>
+<p>The absolute position encoding is totally different from two sentences, even though they have the same words and means. On the other hand, the problem of the relative position encoding is that it does not capture the absolute position information, which is crucial for understanding the meaning of the sentences for some task such as text summarization.</p>
+<p>RoPE <span class="citation" data-cites="RoFormerEnhancedTransformer2023su">(<a href="#ref-RoFormerEnhancedTransformer2023su" role="doc-biblioref">Su et al. 2023</a>)</span> is a method combine those two. The vector rotated certain degree according to the <em>absolute position</em> in the sentence. On the other hand, it relative position information is preserved. According to <a href="#eq-absolute-position-rotation" class="quarto-xref">Equation&nbsp;2</a>, the relative position is not related to the position.</p>
 <div id="fig-rope" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -846,6 +848,205 @@ A_{i,j} =
 Figure&nbsp;3: Illustration of RoPE
 </figcaption>
 </figure>
+</div>
+<p><span id="eq-rope-simple"><span class="math display">\[
+R_{\Theta,m}^{d} \mathbf{x}
+=
+\begin{pmatrix}
+x_1\\
+x_2\\
+x_3\\
+x_4\\
+\vdots\\
+x_{d-1}\\
+x_d
+\end{pmatrix}
+\otimes
+\begin{pmatrix}
+\cos(m\theta_{1})\\
+\cos(m\theta_{1})\\
+\cos(m\theta_{2})\\
+\cos(m\theta_{2})\\
+\vdots\\
+\cos\!\big(m\theta_{d/2}\big)\\
+\cos\!\big(m\theta_{d/2}\big)
+\end{pmatrix}
++
+\begin{pmatrix}
+- x_2\\
+x_1\\
+- x_4\\
+x_3\\
+\vdots\\
+- x_d\\
+x_{d-1}
+\end{pmatrix}
+\otimes
+\begin{pmatrix}
+\sin(m\theta_{1})\\
+\sin(m\theta_{1})\\
+\sin(m\theta_{2})\\
+\sin(m\theta_{2})\\
+\vdots\\
+\sin\!\big(m\theta_{d/2}\big)\\
+\sin\!\big(m\theta_{d/2}\big)
+\end{pmatrix}
+\tag{3}\]</span></span></p>
+<p>where</p>
+<p><span class="math display">\[
+\theta_{i,d} = \frac{1}{10,000^{2(i - 1) / d}} ,\quad i \in [1, 2, \dots, d / 2 ]
+\]</span></p>
+<p>As we can see, to implement the RoPE in code, we can:</p>
+<ol type="1">
+<li>Construct <code>cos</code> and <code>sin</code> matrices for the given input dimensions and maximum position.</li>
+<li>Apply the rotation to the input embeddings using the constructed matrices.</li>
+</ol>
+<div id="eabedc71" class="cell">
+<div class="sourceCode cell-code" id="cb4" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span> RotaryEmbedding(nn.Module):</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, head_dim, max_position_embedding, base):</span>
+<span id="cb4-3"><a href="#cb4-3"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a>        <span class="va">self</span>.head_dim <span class="op">=</span> head_dim</span>
+<span id="cb4-6"><a href="#cb4-6"></a>        <span class="va">self</span>.max_position_embedding <span class="op">=</span> max_position_embedding</span>
+<span id="cb4-7"><a href="#cb4-7"></a>        <span class="va">self</span>.base <span class="op">=</span> base </span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a>        <span class="co"># (head_dim // 2)</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>        inv_freq <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> (base <span class="op">**</span> (torch.arange(<span class="dv">0</span>, head_dim, <span class="dv">2</span>).<span class="bu">float</span>() <span class="op">/</span> head_dim))</span>
+<span id="cb4-11"><a href="#cb4-11"></a>        <span class="va">self</span>.register_buffer(<span class="st">"inv_freq"</span>, inv_freq)</span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x, position_ids, seq_len <span class="op">=</span> <span class="va">None</span> ):</span>
+<span id="cb4-14"><a href="#cb4-14"></a></span>
+<span id="cb4-15"><a href="#cb4-15"></a>        <span class="co"># (head_dim // 2) =&gt; (1, head_dim // 2, 1) =&gt; (B, head_dim // 2, 1)</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a>        inv_freq_expanded <span class="op">=</span> <span class="va">self</span>.inv_freq[<span class="va">None</span>, : , <span class="va">None</span>].expand(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb4-17"><a href="#cb4-17"></a></span>
+<span id="cb4-18"><a href="#cb4-18"></a>        <span class="co"># (B, L)  =&gt; (B, 1, L)</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>        position_ids_expanded <span class="op">=</span> position_ids[:, <span class="va">None</span>, :]</span>
+<span id="cb4-20"><a href="#cb4-20"></a></span>
+<span id="cb4-21"><a href="#cb4-21"></a>        <span class="co"># Outer product </span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>        freqs <span class="op">=</span> (inv_freq_expanded <span class="op">@</span> position_ids_expanded).transpose(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb4-23"><a href="#cb4-23"></a>        emb <span class="op">=</span> torch.cat((freqs, freqs), dim<span class="op">=-</span><span class="dv">1</span>)  <span class="co"># (B, L, d_model)</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a></span>
+<span id="cb4-25"><a href="#cb4-25"></a>        cos <span class="op">=</span> emb.cos()</span>
+<span id="cb4-26"><a href="#cb4-26"></a>        sin <span class="op">=</span> emb.sin()</span>
+<span id="cb4-27"><a href="#cb4-27"></a>    </span>
+<span id="cb4-28"><a href="#cb4-28"></a>        <span class="cf">return</span> cos, sin </span>
+<span id="cb4-29"><a href="#cb4-29"></a></span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="kw">def</span> rotate_half(x):</span>
+<span id="cb4-31"><a href="#cb4-31"></a>    <span class="co">"""</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a><span class="co">    Rotate the last dimension of x by half.</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a><span class="co">    """</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a>    x1 <span class="op">=</span> x[..., : x.shape[<span class="op">-</span><span class="dv">1</span>] <span class="op">//</span> <span class="dv">2</span>] </span>
+<span id="cb4-35"><a href="#cb4-35"></a>    x2 <span class="op">=</span> x[..., x.shape[<span class="op">-</span><span class="dv">1</span>] <span class="op">//</span> <span class="dv">2</span> :] </span>
+<span id="cb4-36"><a href="#cb4-36"></a>    <span class="cf">return</span> torch.cat((<span class="op">-</span>x2, x1), dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb4-37"><a href="#cb4-37"></a></span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="kw">def</span> apply_rotary_pos_emb(q, k, cos, sin, unsqueeze_dim<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb4-40"><a href="#cb4-40"></a>    <span class="co"># (B, L, head_dim) =&gt; (B, 1, L, head_dim)</span></span>
+<span id="cb4-41"><a href="#cb4-41"></a>    cos <span class="op">=</span> cos.unsqueeze(unsqueeze_dim) <span class="co"># Add the head dimension</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a>    sin <span class="op">=</span> sin.unsqueeze(unsqueeze_dim) <span class="co"># Add the head dimension</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a></span>
+<span id="cb4-44"><a href="#cb4-44"></a>    q_embed <span class="op">=</span> (q <span class="op">*</span> cos) <span class="op">+</span> (rotate_half(q) <span class="op">*</span> sin)</span>
+<span id="cb4-45"><a href="#cb4-45"></a>    k_embed <span class="op">=</span> (k <span class="op">*</span> cos) <span class="op">+</span> (rotate_half(k) <span class="op">*</span> sin)</span>
+<span id="cb4-46"><a href="#cb4-46"></a>    <span class="cf">return</span> q_embed, k_embed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>One thing always bother me about this implementation is that the <code>rotate_half</code> function actually swap pair of the last dimension as mentioned in the paper. For example:</p>
+<div class="sourceCode" id="cb5" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> torch.arange(<span class="dv">0</span>, <span class="dv">24</span>).reshape(<span class="dv">3</span>, <span class="dv">8</span>) <span class="co"># (B, D)</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;&gt;&gt;</span> x</span>
+<span id="cb5-3"><a href="#cb5-3"></a>tensor([[ <span class="dv">0</span>,  <span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">3</span>,  <span class="dv">4</span>,  <span class="dv">5</span>,  <span class="dv">6</span>,  <span class="dv">7</span>],</span>
+<span id="cb5-4"><a href="#cb5-4"></a>        [ <span class="dv">8</span>,  <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">14</span>, <span class="dv">15</span>],</span>
+<span id="cb5-5"><a href="#cb5-5"></a>        [<span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="dv">23</span>]])</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="op">&gt;&gt;&gt;</span> x1 <span class="op">=</span> rotate_half(x)</span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="op">&gt;&gt;&gt;</span> x1</span>
+<span id="cb5-8"><a href="#cb5-8"></a>tensor([[ <span class="op">-</span><span class="dv">4</span>,  <span class="op">-</span><span class="dv">5</span>,  <span class="op">-</span><span class="dv">6</span>,  <span class="op">-</span><span class="dv">7</span>,   <span class="dv">0</span>,   <span class="dv">1</span>,   <span class="dv">2</span>,   <span class="dv">3</span>],</span>
+<span id="cb5-9"><a href="#cb5-9"></a>        [<span class="op">-</span><span class="dv">12</span>, <span class="op">-</span><span class="dv">13</span>, <span class="op">-</span><span class="dv">14</span>, <span class="op">-</span><span class="dv">15</span>,   <span class="dv">8</span>,   <span class="dv">9</span>,  <span class="dv">10</span>,  <span class="dv">11</span>],</span>
+<span id="cb5-10"><a href="#cb5-10"></a>        [<span class="op">-</span><span class="dv">20</span>, <span class="op">-</span><span class="dv">21</span>, <span class="op">-</span><span class="dv">22</span>, <span class="op">-</span><span class="dv">23</span>,  <span class="dv">16</span>,  <span class="dv">17</span>,  <span class="dv">18</span>,  <span class="dv">19</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The above function just change the x to <code>[-x_{d//2}, ..., -x_{d}, x_0, ..., x_{d//2-1}]</code></p>
+<p>Check this <a href="https://discuss.huggingface.co/t/is-llama-rotary-embedding-implementation-correct/44509/3">link</a>if you are interested.</p>
+<p>If this really bother you, you can just implement like this:</p>
+<div class="sourceCode" id="cb6" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> rotate_half_v2(x):</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co"># Assume x is (B, D)</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    x <span class="op">=</span> x.reshape(x.shape[<span class="dv">0</span>], <span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    x1, x2 <span class="op">=</span> x.unbind(dim <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>    x <span class="op">=</span> torch.stack((<span class="op">-</span>x2, x1), dim <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    <span class="cf">return</span> x.reshape(x.shape[<span class="dv">0</span>], <span class="op">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>which is same as they mentioned in the paper.</p>
+<div class="sourceCode" id="cb7" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> x</span>
+<span id="cb7-2"><a href="#cb7-2"></a>tensor([[ <span class="dv">0</span>,  <span class="dv">1</span>,  <span class="dv">2</span>,  <span class="dv">3</span>,  <span class="dv">4</span>,  <span class="dv">5</span>,  <span class="dv">6</span>,  <span class="dv">7</span>],</span>
+<span id="cb7-3"><a href="#cb7-3"></a>        [ <span class="dv">8</span>,  <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">14</span>, <span class="dv">15</span>],</span>
+<span id="cb7-4"><a href="#cb7-4"></a>        [<span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>, <span class="dv">20</span>, <span class="dv">21</span>, <span class="dv">22</span>, <span class="dv">23</span>]])</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="op">&gt;&gt;&gt;</span> x2 <span class="op">=</span> rotate_half_v2(x)</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="op">&gt;&gt;&gt;</span> x2</span>
+<span id="cb7-7"><a href="#cb7-7"></a>tensor([[ <span class="op">-</span><span class="dv">1</span>,   <span class="dv">0</span>,  <span class="op">-</span><span class="dv">3</span>,   <span class="dv">2</span>,  <span class="op">-</span><span class="dv">5</span>,   <span class="dv">4</span>,  <span class="op">-</span><span class="dv">7</span>,   <span class="dv">6</span>],</span>
+<span id="cb7-8"><a href="#cb7-8"></a>        [ <span class="op">-</span><span class="dv">9</span>,   <span class="dv">8</span>, <span class="op">-</span><span class="dv">11</span>,  <span class="dv">10</span>, <span class="op">-</span><span class="dv">13</span>,  <span class="dv">12</span>, <span class="op">-</span><span class="dv">15</span>,  <span class="dv">14</span>],</span>
+<span id="cb7-9"><a href="#cb7-9"></a>        [<span class="op">-</span><span class="dv">17</span>,  <span class="dv">16</span>, <span class="op">-</span><span class="dv">19</span>,  <span class="dv">18</span>, <span class="op">-</span><span class="dv">21</span>,  <span class="dv">20</span>, <span class="op">-</span><span class="dv">23</span>,  <span class="dv">22</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or</p>
+<div class="sourceCode" id="cb8" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> rotate_half_v3(x: torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    y <span class="op">=</span> torch.empty_like(x)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    y[..., ::<span class="dv">2</span>] <span class="op">=</span> <span class="op">-</span>x[..., <span class="dv">1</span>::<span class="dv">2</span>]  <span class="co"># even positions get -odd</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    y[..., <span class="dv">1</span>::<span class="dv">2</span>] <span class="op">=</span>  x[..., ::<span class="dv">2</span>]  <span class="co"># odd positions get even</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="cf">return</span> y</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="op">&gt;&gt;&gt;</span> x3 <span class="op">=</span> rotate_half_v3(x)</span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="op">&gt;&gt;&gt;</span> x3</span>
+<span id="cb8-9"><a href="#cb8-9"></a>tensor([[ <span class="op">-</span><span class="dv">1</span>,   <span class="dv">0</span>,  <span class="op">-</span><span class="dv">3</span>,   <span class="dv">2</span>,  <span class="op">-</span><span class="dv">5</span>,   <span class="dv">4</span>,  <span class="op">-</span><span class="dv">7</span>,   <span class="dv">6</span>],</span>
+<span id="cb8-10"><a href="#cb8-10"></a>        [ <span class="op">-</span><span class="dv">9</span>,   <span class="dv">8</span>, <span class="op">-</span><span class="dv">11</span>,  <span class="dv">10</span>, <span class="op">-</span><span class="dv">13</span>,  <span class="dv">12</span>, <span class="op">-</span><span class="dv">15</span>,  <span class="dv">14</span>],</span>
+<span id="cb8-11"><a href="#cb8-11"></a>        [<span class="op">-</span><span class="dv">17</span>,  <span class="dv">16</span>, <span class="op">-</span><span class="dv">19</span>,  <span class="dv">18</span>, <span class="op">-</span><span class="dv">21</span>,  <span class="dv">20</span>, <span class="op">-</span><span class="dv">23</span>,  <span class="dv">22</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>The other implementation of the RoPE is reply on the complex number. We can treat 2D vector <span class="math inline">\((x, y)\)</span> as a complex number <span class="math inline">\(z = x + iy\)</span>, and the rotation can be done by multiplying with a complex exponential:</p>
+<p><span class="math display">\[
+z' = z \cdot e^{i\theta} = (x + iy) \cdot (\cos \theta + i \sin \theta) = (x \cos \theta - y \sin \theta) + i (x \sin \theta + y \cos \theta)
+\]</span></p>
+<p>Code adapted from <a href="https://github.com/meta-llama/llama/blob/main/llama/model.py#L132">LLaMA model</a></p>
+<div id="d5bae51a" class="cell">
+<div class="sourceCode cell-code" id="cb9" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> torch</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="im">from</span> typing <span class="im">import</span> Tuple</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">def</span> precompute_freqs_cis(dim: <span class="bu">int</span>, end: <span class="bu">int</span>, theta: <span class="bu">float</span> <span class="op">=</span> <span class="fl">10000.0</span>) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb9-5"><a href="#cb9-5"></a>    <span class="co">"""</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">    Returns freqs_cis with shape (end, dim//2), dtype complex64.</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">    """</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>    <span class="cf">assert</span> dim <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>, <span class="st">"head_dim (dim) must be even"</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a>    freqs <span class="op">=</span> <span class="fl">1.0</span> <span class="op">/</span> (theta <span class="op">**</span> (torch.arange(<span class="dv">0</span>, dim, <span class="dv">2</span>, dtype<span class="op">=</span>torch.float32) <span class="op">/</span> dim))</span>
+<span id="cb9-10"><a href="#cb9-10"></a>    t <span class="op">=</span> torch.arange(end, device<span class="op">=</span>freqs.device, dtype<span class="op">=</span>torch.float32)          <span class="co"># (end,)</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a>    angles <span class="op">=</span> torch.outer(t, freqs)                                           <span class="co"># (end, dim//2)</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a>    freqs_cis <span class="op">=</span> torch.polar(torch.ones_like(angles), angles)                 <span class="co"># complex64</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a>    <span class="cf">return</span> freqs_cis</span>
+<span id="cb9-14"><a href="#cb9-14"></a></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="kw">def</span> apply_rotary_emb(</span>
+<span id="cb9-16"><a href="#cb9-16"></a>    xq: torch.Tensor,   <span class="co"># (B, T, H, D)</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a>    xk: torch.Tensor,   <span class="co"># (B, T, H, D)</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a>    freqs_cis: torch.Tensor,  <span class="co"># (T, D//2) complex</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a>) <span class="op">-&gt;</span> Tuple[torch.Tensor, torch.Tensor]:</span>
+<span id="cb9-20"><a href="#cb9-20"></a>    <span class="co">"""</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">    Complex RoPE multiply with inline broadcasting reshape (no helper).</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">    """</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a>    B, T, H, D <span class="op">=</span> xq.shape</span>
+<span id="cb9-24"><a href="#cb9-24"></a>    <span class="cf">assert</span> xk.shape <span class="op">==</span> (B, T, H, D)</span>
+<span id="cb9-25"><a href="#cb9-25"></a>    <span class="cf">assert</span> D <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a>    <span class="cf">assert</span> freqs_cis.shape <span class="op">==</span> (T, D <span class="op">//</span> <span class="dv">2</span>), <span class="ss">f"expected </span><span class="sc">{</span>(T, D<span class="op">//</span><span class="dv">2</span>)<span class="sc">}</span><span class="ss">, got </span><span class="sc">{</span>freqs_cis<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a></span>
+<span id="cb9-28"><a href="#cb9-28"></a>    <span class="co"># view as complex: (..., D/2)</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a>    xq_c <span class="op">=</span> torch.view_as_complex(xq.<span class="bu">float</span>().reshape(B, T, H, D <span class="op">//</span> <span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb9-30"><a href="#cb9-30"></a>    xk_c <span class="op">=</span> torch.view_as_complex(xk.<span class="bu">float</span>().reshape(B, T, H, D <span class="op">//</span> <span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb9-31"><a href="#cb9-31"></a></span>
+<span id="cb9-32"><a href="#cb9-32"></a>    <span class="co"># INLINE reshape for broadcasting: (1, T, 1, D/2)</span></span>
+<span id="cb9-33"><a href="#cb9-33"></a>    freqs_cis_b <span class="op">=</span> freqs_cis.view(<span class="dv">1</span>, T, <span class="dv">1</span>, D <span class="op">//</span> <span class="dv">2</span>)</span>
+<span id="cb9-34"><a href="#cb9-34"></a></span>
+<span id="cb9-35"><a href="#cb9-35"></a>    <span class="co"># rotate and return to real, original shape &amp; dtype</span></span>
+<span id="cb9-36"><a href="#cb9-36"></a>    xq_out <span class="op">=</span> torch.view_as_real(xq_c <span class="op">*</span> freqs_cis_b).reshape_as(xq).type_as(xq)</span>
+<span id="cb9-37"><a href="#cb9-37"></a>    xk_out <span class="op">=</span> torch.view_as_real(xk_c <span class="op">*</span> freqs_cis_b).reshape_as(xk).type_as(xk)</span>
+<span id="cb9-38"><a href="#cb9-38"></a>    <span class="cf">return</span> xq_out, xk_out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="alibi" class="level2" data-number="2.5">
@@ -860,7 +1061,7 @@ Figure&nbsp;3: Illustration of RoPE
 <p>The <strong>Layer Normalization</strong> <span class="citation" data-cites="LayerNormalization2016ba">(<a href="#ref-LayerNormalization2016ba" role="doc-biblioref">Ba, Kiros, and Hinton 2016</a>)</span> is a technique to normalize the inputs across the features for each training example. It is defined as:</p>
 <p><span id="eq-layer-normalization"><span class="math display">\[
 \text{LayerNorm}(x) = \frac{x - \mu}{\sigma + \epsilon} \cdot \gamma + \beta
-\tag{3}\]</span></span> where:</p>
+\tag{4}\]</span></span> where:</p>
 <ul>
 <li><span class="math inline">\(\mu(x)\)</span>: the mean of the input features.</li>
 <li><span class="math inline">\(\sigma(x)\)</span>: the standard deviation of the input features.</li>
@@ -871,7 +1072,7 @@ Figure&nbsp;3: Illustration of RoPE
 <p>However, in the <strong>Root Mean Square(RMS) Normalization</strong>, proposed in <span class="citation" data-cites="RootMeanSquare2019zhang">(<a href="#ref-RootMeanSquare2019zhang" role="doc-biblioref">Zhang and Sennrich 2019</a>)</span>, that we remove the mean from the normalization process. The RMS Normalization is defined as:</p>
 <p><span id="eq-rms-normalization"><span class="math display">\[
 \text{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d} \sum_{i=1}^{d} x_i^2 + \epsilon}} \cdot \gamma
-\tag{4}\]</span></span> where:</p>
+\tag{5}\]</span></span> where:</p>
 <ul>
 <li><span class="math inline">\(\epsilon\)</span>: a small constant to prevent division by zero.</li>
 <li><span class="math inline">\(\gamma\)</span>: a learnable scale parameter, which has the same shape as the input features <span class="math inline">\(d_{\text{model}}\)</span>.</li>
@@ -912,23 +1113,27 @@ Gradient Flow
 </div>
 </div>
 </section>
+<section id="qk-norm" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="qk-norm"><span class="header-section-number">3.3</span> QK Norm</h2>
+<p>There is another normalization method called Query-Key Normalization (QK Norm), which is designed to improve the attention mechanism by normalizing the query and key vectors before computing the attention scores.</p>
+</section>
 </section>
 <section id="attention-mechanism" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Attention Mechanism</h1>
-<p>Now, we have arrive the most important component of the transformer architecture: the attention mechanism. There are many efforts and research directions aimed at improving the attention mechanism. we first discuss the standard multi-headed attention, proposed in <span class="citation" data-cites="AttentionIsAllYouNeed2017vaswani">(<a href="#ref-AttentionIsAllYouNeed2017vaswani" role="doc-biblioref"><strong>AttentionIsAllYouNeed2017vaswani?</strong></a>)</span>. And than analysis the time complexity of the the algorithm. Layer see different improvements through change algorithm or better utilize the hardware.</p>
+<p>Now, we have arrive the most important component of the transformer architecture: the attention mechanism. There are many efforts and research directions aimed at improving the attention mechanism. we first discuss the standard multi-headed attention, proposed in <span class="citation" data-cites="AttentionAllYou2023vaswani">(<a href="#ref-AttentionAllYou2023vaswani" role="doc-biblioref">Vaswani et al. 2023</a>)</span>. And than analysis the time complexity of the the algorithm. Layer see different improvements through change algorithm or better utilize the hardware.</p>
 <section id="multi-headed-attention" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="multi-headed-attention"><span class="header-section-number">4.1</span> Multi Headed Attention</h2>
 <p>The standard multi headed attention is defined as:</p>
 <p><span id="eq-multi-head-attention"><span class="math display">\[
 \text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O
-\tag{5}\]</span></span></p>
+\tag{6}\]</span></span></p>
 <p>where each head is computed as:</p>
 <p><span id="eq-mha-head"><span class="math display">\[
 \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
-\tag{6}\]</span></span> with <span class="math inline">\(W_i^Q\)</span>, <span class="math inline">\(W_i^K\)</span>, and <span class="math inline">\(W_i^V\)</span> being learned projection matrices.</p>
+\tag{7}\]</span></span> with <span class="math inline">\(W_i^Q\)</span>, <span class="math inline">\(W_i^K\)</span>, and <span class="math inline">\(W_i^V\)</span> being learned projection matrices.</p>
 <p>And the attention function, usually is scaled dot-product attention, is defined as: <span id="eq-scaled-dot-product-attention"><span class="math display">\[
 \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
-\tag{7}\]</span></span></p>
+\tag{8}\]</span></span></p>
 <p>where <span class="math inline">\(d_k\)</span> is the dimension of the keys. The reason for the scaling factor <span class="math inline">\(\sqrt{d_k}\)</span> is to counteract the effect of large dot-product values by the large dimension of <span class="math inline">\(K\)</span>, which can push the softmax function into regions with very small gradients.</p>
 <section id="time-complexity-of-scaled-dot-product-attention" class="level3" data-number="4.1.1">
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="time-complexity-of-scaled-dot-product-attention"><span class="header-section-number">4.1.1</span> Time Complexity of Scaled Dot-Product Attention</h3>
@@ -941,7 +1146,7 @@ Gradient Flow
 <p>Overall, the time complexity of the scaled dot-product attention is dominated by the query-key dot product and can be expressed as:</p>
 <p><span id="eq-time-complexity-of-scaled-dot-product-attention"><span class="math display">\[
 O(n^2 (d_k + d_v))
-\tag{8}\]</span></span></p>
+\tag{9}\]</span></span></p>
 <p>As we can see, the time complexity is <em>quadratic in the sequence length</em>, which can be a bottleneck for long sequences / contexts. Let’s see how we can improve it.</p>
 </section>
 </section>
