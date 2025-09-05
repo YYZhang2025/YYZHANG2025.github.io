@@ -4,7 +4,6 @@ date: today
 date-modified: last-modified
 date-format: iso
 description: "In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance."
-image: "./images/post-training.jpg"
 categories: 
     - Transformer
     - Large Language Model 
@@ -15,7 +14,6 @@ language:
 
 
 ---
-
 This is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up: 
 
 - Position Encoding 
@@ -548,6 +546,148 @@ def apply_rotary_emb(
 ## ALIBI
 [@TrainShortTest2022press]
 
+::: {#fig-alibi}
+
+![](./assets/alibi-position-encoding.png){width=100%}
+
+
+:::
+
+AliBi: simple, monotonic bias → strong extrapolation, lower overhead.
+
+So far, for the position embedding, we modify the Q, K  to add the position information for attention to calculate. However, is it possible to directly modify the attention score? To notify them the position information? This is exactly what ALIBI does. The ALIBI (Attention with Linear Biases) method introduces a linear bias to the attention scores based on the distance between tokens. The bias is added directly to the attention score before applying the softmax function. Mathematically:
+
+$$
+\operatorname{softmax}\!\Big( q_i k_j^\top \;+\; m \cdot (-(i-j)) \Big)
+$$
+
+where:
+
+- $q_i \in \mathbb{R}^d$: query vector at position $i$
+- $k_j \in \mathbb{R}^d$: key vector at position $j$
+- $m \in \mathbb{R}$: slop (head-dependent constant)
+- $(i - j) \geq 0$: relative distance 
+
+For example, for query $i$, the logits against all keys $[0, 1, \dots, i ]$ become: 
+$$
+\ell_i \;=\; 
+\Big[\, q_i k_0^\top - m(i-0),\;
+       q_i k_1^\top - m(i-1),\;
+       \ldots,\;
+       q_i k_{i-1}^\top - m(1),\;
+       q_i k_i^\top \,\Big]
+$$
+
+```{python}
+#| source-line-numbers: "33-34"
+
+def get_relative_positions(seq_len: int) -> torch.tensor:
+    x = torch.arange(seq_len)[None, :]
+    y = torch.arange(seq_len)[:, None]
+    return x - y
+
+
+def get_alibi_slope(num_heads):
+    x = (2 ** 8) ** (1 / num_heads)
+    return (
+        torch.tensor([1 / x ** (i + 1) for i in range(num_heads)])
+        .unsqueeze(-1)
+        .unsqueeze(-1)
+    )
+
+class AliBiMultiHeadAttention(nn.Module):
+    def __init__(self, num_heads, d_model):
+        super().__init__()
+        self.num_heads = num_heads
+        self.d_model = d_model
+        self.head_dim = d_model // num_heads
+        self.alibi_slope = get_alibi_slope(num_heads)
+
+        self.kqv = nn.Linear(self.d_model, 3 * self.d_model)
+    
+    def forward(self, x):
+        batch_size, seq_len, _ = x.shape
+
+        key, query, value = self.kqv(x).chunk(3, dim=-1)
+        query = query.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)
+        key   = key.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)
+        value = value.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)
+
+        bias = (self.alibi_slope * get_relative_positions(seq_len)).unsqueeze(0)
+        score = query @ key.transpose(-2, -1) / (self.head_dim ** 0.5) + bias
+
+        mask = torch.tril(torch.ones(seq_len, seq_len)).to(x.device)
+        mask = mask[None, None, :, :]  # (1, 1, seq_len, seq_len)
+        score = score.masked_fill(
+            mask[:, :, :seq_len, :seq_len] == 0, float("-inf")
+        )
+
+        attn = F.softmax(score, dim=-1)
+        out = torch.matmul(attn, value)
+        out = out.transpose(1, 2).reshape(batch_size, seq_len, -1)
+        out = self.dropout(out)
+        return out
+```
+
+## Extend to longer context 
+So far, for all the position encoding we discussed, it has one main drawback: it fixed maximum context length during training. 
+
+::: {#fig-inference-longer}
+
+![](./assets/inference_length_longer.png){width=100%}
+
+(Image Source [Video: Long-Context LLM Extension](https://www.youtube.com/watch?v=dc4chADushM)) 
+:::
+
+When we are training on the fixed context length, the model learns to attend to the positions within that context. However, during inference, we may want to extend the context length beyond what the model was trained on. This is where the challenge lies. One way is to train a longer context length model from the beginning. However this requires more computational resources and may not be feasible for all applications. So, we need to find a way to adapt the model to longer contexts without retraining it from scratch.
+
+There are several approaches to address this issue. Let's discuss a few of them.
+
+### Linear Position Interpolation 
+
+
+::: {#fig-linear-position-interpolation}
+
+![](./assets/extend_context_length.png){width=100%}
+
+
+:::
+decreases the frequencies of the basis functions so that more
+tokens fit within each period.
+The position interpolation [@ExtendingContextWindow2023chen] mentioned that we can just linearly interpolate the position embeddings for the extended context. This allows the model to generate position embeddings for longer sequences without requiring additional training. It just rescale the $m$ base in the RoPE by:
+$$
+f'(\mathbf{x}, m) = f(\mathbf{x}, m\frac{L}{L'})
+$$
+where $L$ is the original context length and $L'$ is the new context length.
+
+
+### NTK-Aware Position Interpolation 
+The Linear Position Interpolation, if it was possible to pick the correct scale parameter dynamically based on the sequence length rather than having to settle for the fixed tradeoff of maximum sequence length vs. performance on shorter sequences.  The NTK-Aware Position Interpolation method leverages the Neural Tangent Kernel (NTK) framework to adaptively adjust the position embeddings during inference. By analyzing the model's behavior in the NTK regime, we can identify the optimal scaling factors for different sequence lengths, allowing for more effective extrapolation of position information.
+
+$$
+\alpha^{\text{NTK-RoPE}}_{j} = \kappa^{-\frac{2j}{d_k}}
+$$
+
+::: {.callout-note title="Neural Tangent Kernel (NTK)"}
+
+:::
+
+### YaRN 
+another RoPE extension method, uses “NTK-by-parts" interpolation strategies across different
+dimensions of the embedding space and introduces a temperature factor to adjust the attention
+distribution for long inputs.
+But RoPE cannot extrapolate well to sequences longer than training (e.g., a model trained on 2K tokens struggles at 8K).
+
+$$
+\alpha^{\mathrm{YaRN}}_{j}
+= \frac{(1-\gamma_j)\,\tfrac{1}{t} + \gamma_j}{\sqrt{T}} \,.
+$$
+
+
+YaRN modifies RoPE to support longer context windows while preserving model stability.
+[@YaRNEfficientContext2023peng]
+
+
 # Normalization 
 
 ## Layer Normalization vs. RMS Normalization
@@ -679,6 +819,8 @@ Proposed by the [@GQATrainingGeneralized2023ainslie], Grouped Query Attention (G
 :::
 
 
+[@LongformerLongDocumentTransformer2020beltagy]
+
 
 ## Sparse Attention 
 
@@ -728,7 +870,37 @@ So far, we see different attention mechanisms that aim to improve the efficiency
 The illustration of Flash Attention 
 :::
 
+
+### Flash Attention V1 vs. V2 vs. V3
+
+
+
+## Native Sparse Attention 
+
+::: {#fig-native-sparse-attention}
+
+![](./assets/attention_native_sparse_attention.png){width=100%}
+
+Illustration of Native Sparse Attention (Image Source: [Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention](https://arxiv.org/pdf/2502.11089))
+
+:::
+
+
+
+Proposed in [@NativeSparseAttention2025yuan], this is a novel approach to sparse attention that aligns with hardware capabilities and allows for efficient training of sparse attention mechanisms.
+
+
+## Attention Sink
+
+
+
 # Activations
+
+## Swish
+
+## Gated Linear Unit (GLU)
+
+
 
 # Feed Forward Network & Mixture of Experts
 
@@ -753,7 +925,6 @@ The illustration of Flash Attention
 ## Layer Initialization
 
 
-
 # Case Study 
 
 Finally, we will examine some state-of-the-art LLM architectures and how they implement the techniques discussed in this blog.
@@ -764,7 +935,48 @@ Finally, we will examine some state-of-the-art LLM architectures and how they im
 
 ## DeepSeek 
 
-## GPT
+## GPT-Oss 
+
+
+
+# Other Architectures
+
+Right now, we just see all above model are transformer based architecture. But are they are the best solution? In the following, we will explore some alternative architectures that have been proposed.
+
+## Diffusion Language Models 
+
+
+::: {#fig-diffusion-language-models}
+
+{{<video 
+https://framerusercontent.com/assets/YURlGaqdh4MqvUPfSmGIcaoIFc.mp4 title='What is the CERN'
+>}}
+
+Illustration of Diffusion Language Model. (Video Source: [Inception Lab](https://www.inceptionlabs.ai/introducing-mercury))
+:::
+
+LLaDA [@LargeLanguageDiffusion2025nie] is a diffusion-based language model that leverages the principles of diffusion models to generate text. By modeling the text generation process as a diffusion process, LLaDA aims to improve the quality and diversity of generated text.
+
+
+
+
+::: {#fig-diffusion-llada}
+
+![](./assets/diff_normal_150ms.gif){width=100%}
+
+Example of LLaDA generation process. Prompt: <u>"Explain what artificial intelligence is."</u> (Image Source: [LLaDA demo](https://ml-gsai.github.io/LLaDA-demo/))
+
+:::
+
+
+::: {#fig-llada}
+
+![](./assets/llada.png){width=100%}
+
+The training process and sampling process of LLaDA. (Image Source: [LLaDA](https://arxiv.org/pdf/2502.09992))
+:::
+
+## State Space Model (SSM)
 
 
 

@@ -151,6 +151,23 @@
   file = {/Users/yuyang/Zotero/storage/ZH5JLH2Z/Hinton et al. - 2015 - Distilling the Knowledge in a Neural Network.pdf;/Users/yuyang/Zotero/storage/PXJTISN7/1503.html}
 }
 
+@online{EfficientStreamingLanguage2024xiao,
+  title = {Efficient {{Streaming Language Models}} with {{Attention Sinks}}},
+  author = {Xiao, Guangxuan and Tian, Yuandong and Chen, Beidi and Han, Song and Lewis, Mike},
+  date = {2024-04-07},
+  eprint = {2309.17453},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2309.17453},
+  url = {http://arxiv.org/abs/2309.17453},
+  urldate = {2025-08-31},
+  abstract = {Deploying Large Language Models (LLMs) in streaming applications such as multi-round dialogue, where long interactions are expected, is urgently needed but poses two major challenges. Firstly, during the decoding stage, caching previous tokens' Key and Value states (KV) consumes extensive memory. Secondly, popular LLMs cannot generalize to longer texts than the training sequence length. Window attention, where only the most recent KVs are cached, is a natural approach -- but we show that it fails when the text length surpasses the cache size. We observe an interesting phenomenon, namely attention sink, that keeping the KV of initial tokens will largely recover the performance of window attention. In this paper, we first demonstrate that the emergence of attention sink is due to the strong attention scores towards initial tokens as a "sink" even if they are not semantically important. Based on the above analysis, we introduce StreamingLLM, an efficient framework that enables LLMs trained with a finite length attention window to generalize to infinite sequence lengths without any fine-tuning. We show that StreamingLLM can enable Llama-2, MPT, Falcon, and Pythia to perform stable and efficient language modeling with up to 4 million tokens and more. In addition, we discover that adding a placeholder token as a dedicated attention sink during pre-training can further improve streaming deployment. In streaming settings, StreamingLLM outperforms the sliding window recomputation baseline by up to 22.2x speedup. Code and datasets are provided at https://github.com/mit-han-lab/streaming-llm.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language},
+  annotation = {TLDR: StreamingLLM is introduced, an efficient framework that enables LLMs trained with a finite length attention window to generalize to infinite sequence lengths without any fine-tuning and can enable Llama-2, MPT, Falcon, and Pythia to perform stable and efficient language modeling with up to 4 million tokens and more.},
+  file = {/Users/yuyang/Zotero/storage/VVFT96IC/Xiao et al. - 2024 - Efficient Streaming Language Models with Attention Sinks.pdf;/Users/yuyang/Zotero/storage/T8ERKV9Z/2309.html}
+}
+
 @online{EmergingPropertiesSelfSupervised2021caron,
   title = {Emerging {{Properties}} in {{Self-Supervised Vision Transformers}}},
   author = {Caron, Mathilde and Touvron, Hugo and Misra, Ishan and Jégou, Hervé and Mairal, Julien and Bojanowski, Piotr and Joulin, Armand},
@@ -320,6 +337,23 @@
   file = {/Users/yuyang/Zotero/storage/34P3SJ2N/Radford et al. - Language Models are Unsupervised Multitask Learners.pdf}
 }
 
+@online{LargeLanguageDiffusion2025nie,
+  title = {Large {{Language Diffusion Models}}},
+  author = {Nie, Shen and Zhu, Fengqi and You, Zebin and Zhang, Xiaolu and Ou, Jingyang and Hu, Jun and Zhou, Jun and Lin, Yankai and Wen, Ji-Rong and Li, Chongxuan},
+  date = {2025-02-18},
+  eprint = {2502.09992},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2502.09992},
+  url = {http://arxiv.org/abs/2502.09992},
+  urldate = {2025-08-30},
+  abstract = {Autoregressive models (ARMs) are widely regarded as the cornerstone of large language models (LLMs). We challenge this notion by introducing LLaDA, a diffusion model trained from scratch under the pre-training and supervised fine-tuning (SFT) paradigm. LLaDA models distributions through a forward data masking process and a reverse process, parameterized by a vanilla Transformer to predict masked tokens. By optimizing a likelihood bound, it provides a principled generative approach for probabilistic inference. Across extensive benchmarks, LLaDA demonstrates strong scalability, outperforming our self-constructed ARM baselines. Remarkably, LLaDA 8B is competitive with strong LLMs like LLaMA3 8B in in-context learning and, after SFT, exhibits impressive instruction-following abilities in case studies such as multi-turn dialogue. Moreover, LLaDA addresses the reversal curse, surpassing GPT-4o in a reversal poem completion task. Our findings establish diffusion models as a viable and promising alternative to ARMs, challenging the assumption that key LLM capabilities discussed above are inherently tied to ARMs. Project page and codes: https://ml-gsai.github.io/LLaDA-demo/.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Computation and Language,Computer Science - Machine Learning},
+  annotation = {TLDR: This work introduces LLaDA, a diffusion model trained from scratch under the pre-training and supervised fine-tuning (SFT) paradigm, establishing diffusion models as a viable and promising alternative to ARMs.},
+  file = {/Users/yuyang/Zotero/storage/ZP56R9BW/Nie et al. - 2025 - Large Language Diffusion Models.pdf;/Users/yuyang/Zotero/storage/P5XYEQG2/2502.html}
+}
+
 @online{LayerNormalization2016ba,
   title = {Layer {{Normalization}}},
   author = {Ba, Jimmy Lei and Kiros, Jamie Ryan and Hinton, Geoffrey E.},
@@ -435,6 +469,23 @@
   keywords = {Computer Science - Artificial Intelligence,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Electrical Engineering and Systems Science - Image and Video Processing,Video},
   annotation = {TLDR: Movie Gen is presented, a cast of foundation models that generates high-quality, 1080p HD videos with different aspect ratios and synchronized audio and set a new state-of-the-art on multiple tasks: text-to-video synthesis, video personalization, video editing, video-to-audio generation, and text-to-audio generation.},
   file = {/Users/yuyang/Zotero/storage/WDASYXDA/Polyak et al. - 2025 - Movie Gen A Cast of Media Foundation Models.pdf;/Users/yuyang/Zotero/storage/XE4U7VS4/2410.html}
+}
+
+@online{NativeSparseAttention2025yuan,
+  title = {Native {{Sparse Attention}}: {{Hardware-Aligned}} and {{Natively Trainable Sparse Attention}}},
+  shorttitle = {Native {{Sparse Attention}}},
+  author = {Yuan, Jingyang and Gao, Huazuo and Dai, Damai and Luo, Junyu and Zhao, Liang and Zhang, Zhengyan and Xie, Zhenda and Wei, Y. X. and Wang, Lean and Xiao, Zhiping and Wang, Yuqing and Ruan, Chong and Zhang, Ming and Liang, Wenfeng and Zeng, Wangding},
+  date = {2025-02-27},
+  eprint = {2502.11089},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2502.11089},
+  url = {http://arxiv.org/abs/2502.11089},
+  urldate = {2025-08-29},
+  abstract = {Long-context modeling is crucial for next-generation language models, yet the high computational cost of standard attention mechanisms poses significant computational challenges. Sparse attention offers a promising direction for improving efficiency while maintaining model capabilities. We present NSA, a Natively trainable Sparse Attention mechanism that integrates algorithmic innovations with hardware-aligned optimizations to achieve efficient long-context modeling. NSA employs a dynamic hierarchical sparse strategy, combining coarse-grained token compression with fine-grained token selection to preserve both global context awareness and local precision. Our approach advances sparse attention design with two key innovations: (1) We achieve substantial speedups through arithmetic intensity-balanced algorithm design, with implementation optimizations for modern hardware. (2) We enable end-to-end training, reducing pretraining computation without sacrificing model performance. As shown in Figure 1, experiments show the model pretrained with NSA maintains or exceeds Full Attention models across general benchmarks, long-context tasks, and instruction-based reasoning. Meanwhile, NSA achieves substantial speedups over Full Attention on 64k-length sequences across decoding, forward propagation, and backward propagation, validating its efficiency throughout the model lifecycle.},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/yuyang/Zotero/storage/GJSRIWRB/Yuan et al. - 2025 - Native Sparse Attention Hardware-Aligned and Natively Trainable Sparse Attention.pdf;/Users/yuyang/Zotero/storage/4REPEDTE/2502.html}
 }
 
 @online{RealTimeSingleImage2016shi,
@@ -617,6 +668,24 @@
   pubstate = {prepublished},
   keywords = {Computer Science - Computation and Language},
   file = {/Users/yuyang/Zotero/storage/2F7PHXR4/Press and Wolf - 2017 - Using the Output Embedding to Improve Language Models.pdf;/Users/yuyang/Zotero/storage/JVZSC7MK/1608.html}
+}
+
+@online{YaRNEfficientContext2023peng,
+  title = {{{YaRN}}: {{Efficient Context Window Extension}} of {{Large Language Models}}},
+  shorttitle = {{{YaRN}}},
+  author = {Peng, Bowen and Quesnelle, Jeffrey and Fan, Honglu and Shippole, Enrico},
+  date = {2023-11-01},
+  eprint = {2309.00071},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2309.00071},
+  url = {http://arxiv.org/abs/2309.00071},
+  urldate = {2025-08-30},
+  abstract = {Rotary Position Embeddings (RoPE) have been shown to effectively encode positional information in transformer-based language models. However, these models fail to generalize past the sequence length they were trained on. We present YaRN (Yet another RoPE extensioN method), a compute-efficient method to extend the context window of such models, requiring 10x less tokens and 2.5x less training steps than previous methods. Using YaRN, we show that LLaMA models can effectively utilize and extrapolate to context lengths much longer than their original pre-training would allow, while also surpassing previous the state-of-the-art at context window extension. In addition, we demonstrate that YaRN exhibits the capability to extrapolate beyond the limited context of a fine-tuning dataset. The models fine-tuned using YaRN has been made available and reproduced online up to 128k context length at https://github.com/jquesnelle/yarn},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  annotation = {TLDR: YaRN is presented, a compute-efficient method to extend the context window of RoPE extensioN models, requiring 10x less tokens and 2.5x less training steps than previous methods, and it is shown that LLaMA models can effectively utilize and extrapolate to context lengths much longer than their original pre-training would allow.},
+  file = {/Users/yuyang/Zotero/storage/UKFH5G3A/Peng et al. - 2023 - YaRN Efficient Context Window Extension of Large Language Models.pdf;/Users/yuyang/Zotero/storage/Q489VYFF/2309.html}
 }
 
 @online{ZeROMemoryOptimizations2020rajbhandari,

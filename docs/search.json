@@ -116,7 +116,7 @@
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html",
     "title": "LLM Part1: Architecture",
     "section": "",
-    "text": "1 The overview of transformer model\n  2 Position Encoding\n  \n  2.1 Learned Position Encoding\n  2.2 Absolute Position Encoding\n  2.3 Relative Position Encoding\n  2.4 RoPE (Rotary Position Embedding)\n  2.5 ALIBI\n  \n  3 Normalization\n  \n  3.1 Layer Normalization vs. RMS Normalization\n  3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n  3.3 QK Norm\n  \n  4 Attention Mechanism\n  \n  4.1 Multi Headed Attention\n  \n  4.1.1 Time Complexity of Scaled Dot-Product Attention\n  \n  4.2 Grouped Query Attention / Multi Query Attention\n  4.3 Sliding window attention\n  4.4 Sparse Attention\n  4.5 Multi Latent Attention\n  4.6 Flash Attention\n  \n  5 Activations\n  6 Feed Forward Network & Mixture of Experts\n  \n  6.1 Multi Layer Perceptron (MLP)\n  6.2 Gated Linear Unit (GLU)\n  6.3 Mixture of Experts (MoE)\n  \n  7 Model Initialization\n  \n  7.1 Weight Initialization\n  7.2 Layer Initialization\n  \n  8 Case Study\n  \n  8.1 LLaMA\n  8.2 Qwen\n  8.3 DeepSeek\n  8.4 GPT\n  \n  9 Conclusion\nThis is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up:\nBesides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures."
+    "text": "1 The overview of transformer model\n  2 Position Encoding\n  \n  2.1 Learned Position Encoding\n  2.2 Absolute Position Encoding\n  2.3 Relative Position Encoding\n  2.4 RoPE (Rotary Position Embedding)\n  2.5 ALIBI\n  2.6 Extend to longer context\n  \n  2.6.1 Linear Position Interpolation\n  2.6.2 NTK-Aware Position Interpolation\n  2.6.3 YaRN\n  \n  \n  3 Normalization\n  \n  3.1 Layer Normalization vs. RMS Normalization\n  3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n  3.3 QK Norm\n  \n  4 Attention Mechanism\n  \n  4.1 Multi Headed Attention\n  \n  4.1.1 Time Complexity of Scaled Dot-Product Attention\n  \n  4.2 Grouped Query Attention / Multi Query Attention\n  4.3 Sliding window attention\n  4.4 Sparse Attention\n  4.5 Multi Latent Attention\n  4.6 Flash Attention\n  \n  4.6.1 Flash Attention V1 vs. V2 vs. V3\n  \n  4.7 Native Sparse Attention\n  4.8 Attention Sink\n  \n  5 Activations\n  \n  5.1 Swish\n  5.2 Gated Linear Unit (GLU)\n  \n  6 Feed Forward Network & Mixture of Experts\n  \n  6.1 Multi Layer Perceptron (MLP)\n  6.2 Gated Linear Unit (GLU)\n  6.3 Mixture of Experts (MoE)\n  \n  7 Model Initialization\n  \n  7.1 Weight Initialization\n  7.2 Layer Initialization\n  \n  8 Case Study\n  \n  8.1 LLaMA\n  8.2 Qwen\n  8.3 DeepSeek\n  8.4 GPT-Oss\n  \n  9 Other Architectures\n  \n  9.1 Diffusion Language Models\n  9.2 State Space Model (SSM)\n  \n  10 Conclusion\nThis is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up:\nBesides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#learned-position-encoding",
@@ -151,7 +151,7 @@
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#alibi",
     "title": "LLM Part1: Architecture",
     "section": "2.5 ALIBI",
-    "text": "2.5 ALIBI\n(Press, Smith, and Lewis 2022)"
+    "text": "2.5 ALIBI\n(Press, Smith, and Lewis 2022)\n\n\n\n\n\n\nFigure 4\n\n\n\nAliBi: simple, monotonic bias → strong extrapolation, lower overhead.\nSo far, for the position embedding, we modify the Q, K to add the position information for attention to calculate. However, is it possible to directly modify the attention score? To notify them the position information? This is exactly what ALIBI does. The ALIBI (Attention with Linear Biases) method introduces a linear bias to the attention scores based on the distance between tokens. The bias is added directly to the attention score before applying the softmax function. Mathematically:\n\\[\n\\operatorname{softmax}\\!\\Big( q_i k_j^\\top \\;+\\; m \\cdot (-(i-j)) \\Big)\n\\]\nwhere:\n\n\\(q_i \\in \\mathbb{R}^d\\): query vector at position \\(i\\)\n\\(k_j \\in \\mathbb{R}^d\\): key vector at position \\(j\\)\n\\(m \\in \\mathbb{R}\\): slop (head-dependent constant)\n\\((i - j) \\geq 0\\): relative distance\n\nFor example, for query \\(i\\), the logits against all keys \\([0, 1, \\dots, i ]\\) become: \\[\n\\ell_i \\;=\\;\n\\Big[\\, q_i k_0^\\top - m(i-0),\\;\n       q_i k_1^\\top - m(i-1),\\;\n       \\ldots,\\;\n       q_i k_{i-1}^\\top - m(1),\\;\n       q_i k_i^\\top \\,\\Big]\n\\]\n\ndef get_relative_positions(seq_len: int) -&gt; torch.tensor:\n    x = torch.arange(seq_len)[None, :]\n    y = torch.arange(seq_len)[:, None]\n    return x - y\n\n\ndef get_alibi_slope(num_heads):\n    x = (2 ** 8) ** (1 / num_heads)\n    return (\n        torch.tensor([1 / x ** (i + 1) for i in range(num_heads)])\n        .unsqueeze(-1)\n        .unsqueeze(-1)\n    )\n\nclass AliBiMultiHeadAttention(nn.Module):\n    def __init__(self, num_heads, d_model):\n        super().__init__()\n        self.num_heads = num_heads\n        self.d_model = d_model\n        self.head_dim = d_model // num_heads\n        self.alibi_slope = get_alibi_slope(num_heads)\n\n        self.kqv = nn.Linear(self.d_model, 3 * self.d_model)\n    \n    def forward(self, x):\n        batch_size, seq_len, _ = x.shape\n\n        key, query, value = self.kqv(x).chunk(3, dim=-1)\n        query = query.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n        key   = key.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n        value = value.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n\n        bias = (self.alibi_slope * get_relative_positions(seq_len)).unsqueeze(0)\n        score = query @ key.transpose(-2, -1) / (self.head_dim ** 0.5) + bias\n\n        mask = torch.tril(torch.ones(seq_len, seq_len)).to(x.device)\n        mask = mask[None, None, :, :]  # (1, 1, seq_len, seq_len)\n        score = score.masked_fill(\n            mask[:, :, :seq_len, :seq_len] == 0, float(\"-inf\")\n        )\n\n        attn = F.softmax(score, dim=-1)\n        out = torch.matmul(attn, value)\n        out = out.transpose(1, 2).reshape(batch_size, seq_len, -1)\n        out = self.dropout(out)\n        return out"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-normalization-vs.-rms-normalization",
@@ -165,7 +165,7 @@
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#pre-layer-normalization-vs.-post-layer-normalization",
     "title": "LLM Part1: Architecture",
     "section": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization",
-    "text": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n\n\n\n\n\n\nFigure 4: The figure illustrates the three different position of the normalization layer in the transformer architecture.\n\n\n\nOne main good reason why Pre-Layer Normalization is perform bettern than the Post-Layer Normalization is that, according to (Xiong et al. 2020), the help the gradient flow back through the network without disrupting the residual connections. When using the Pre-Layer Normalization, it tends to converge faster and more stably. And the initlization methods is become less sensitive to the scale of the inputs.\nThere are third type of the normalization position by (Ding et al. 2021) called sandwiched normalization, which is a combination of pre-layer and post-layer normalization. Is is proposed to improve the training for the text-image pair.\n\n\n\n\n\n\nGradient Flow\n\n\n\nOne generalizable lesson is that we should keep residual connections “clean” identity paths."
+    "text": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n\n\n\n\n\n\nFigure 7: The figure illustrates the three different position of the normalization layer in the transformer architecture.\n\n\n\nOne main good reason why Pre-Layer Normalization is perform bettern than the Post-Layer Normalization is that, according to (Xiong et al. 2020), the help the gradient flow back through the network without disrupting the residual connections. When using the Pre-Layer Normalization, it tends to converge faster and more stably. And the initlization methods is become less sensitive to the scale of the inputs.\nThere are third type of the normalization position by (Ding et al. 2021) called sandwiched normalization, which is a combination of pre-layer and post-layer normalization. Is is proposed to improve the training for the text-image pair.\n\n\n\n\n\n\nGradient Flow\n\n\n\nOne generalizable lesson is that we should keep residual connections “clean” identity paths."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-headed-attention",
@@ -179,35 +179,35 @@
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#grouped-query-attention-multi-query-attention",
     "title": "LLM Part1: Architecture",
     "section": "4.2 Grouped Query Attention / Multi Query Attention",
-    "text": "4.2 Grouped Query Attention / Multi Query Attention\n\n\n\n\n\n\nFigure 5: Overview of Grouped Query Attention & Multi Query Attention (Image Source: (Ainslie et al. 2023))\n\n\n\nProposed by the (Ainslie et al. 2023), Grouped Query Attention (GQA) and Multi Query Attention (MQA) are designed to reduce the computational burden of the attention mechanism by grouping queries and sharing keys and values across multiple queries."
+    "text": "4.2 Grouped Query Attention / Multi Query Attention\n\n\n\n\n\n\nFigure 8: Overview of Grouped Query Attention & Multi Query Attention (Image Source: (Ainslie et al. 2023))\n\n\n\nProposed by the (Ainslie et al. 2023), Grouped Query Attention (GQA) and Multi Query Attention (MQA) are designed to reduce the computational burden of the attention mechanism by grouping queries and sharing keys and values across multiple queries."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#sliding-window-attention",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#sliding-window-attention",
     "title": "LLM Part1: Architecture",
     "section": "4.3 Sliding window attention",
-    "text": "4.3 Sliding window attention\n\n\n\n\n\n\nFigure 6"
+    "text": "4.3 Sliding window attention\n\n\n\n\n\n\nFigure 9\n\n\n\n(Beltagy, Peters, and Cohan 2020)"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#sparse-attention",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#sparse-attention",
     "title": "LLM Part1: Architecture",
     "section": "4.4 Sparse Attention",
-    "text": "4.4 Sparse Attention\n\n\n\n\n\n\nFigure 7: The illustration of Sparse Attention. (Image Source: Generating Long Sequences with Sparse Transformers)\n\n\n\n(Child et al. 2019)"
+    "text": "4.4 Sparse Attention\n\n\n\n\n\n\nFigure 10: The illustration of Sparse Attention. (Image Source: Generating Long Sequences with Sparse Transformers)\n\n\n\n(Child et al. 2019)"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-latent-attention",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-latent-attention",
     "title": "LLM Part1: Architecture",
     "section": "4.5 Multi Latent Attention",
-    "text": "4.5 Multi Latent Attention\n\n\n\n\n\n\nFigure 8: Compare between MHA, Grouped Query Attention, Multi Query Attention and Multi Latent Attention.\n\n\n\nMulti Latent Attention (MLA), proposed in (DeepSeek-AI et al. 2024) is a proposed extension to the attention mechanism that aims to capture more complex relationships within the input data by introducing multiple latent spaces. Each latent space can learn different aspects of the data, allowing for a more nuanced understanding of the input.\n\n\n\n\n\n\nFigure 9: The detail of Multi Latent Attention (MLA)."
+    "text": "4.5 Multi Latent Attention\n\n\n\n\n\n\nFigure 11: Compare between MHA, Grouped Query Attention, Multi Query Attention and Multi Latent Attention.\n\n\n\nMulti Latent Attention (MLA), proposed in (DeepSeek-AI et al. 2024) is a proposed extension to the attention mechanism that aims to capture more complex relationships within the input data by introducing multiple latent spaces. Each latent space can learn different aspects of the data, allowing for a more nuanced understanding of the input.\n\n\n\n\n\n\nFigure 12: The detail of Multi Latent Attention (MLA)."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#flash-attention",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#flash-attention",
     "title": "LLM Part1: Architecture",
     "section": "4.6 Flash Attention",
-    "text": "4.6 Flash Attention\nSo far, we see different attention mechanisms that aim to improve the efficiency and effectiveness of the standard attention mechanism. However, all aforementioned methods improve the attention mechanism by approximating the attention calculation. On the other hand, Flash Attention, proposed in (Dao 2023), takes a different approach by optimizing the attention computation itself.\n\n\n\n\n\n\nFigure 10: The illustration of Flash Attention"
+    "text": "4.6 Flash Attention\nSo far, we see different attention mechanisms that aim to improve the efficiency and effectiveness of the standard attention mechanism. However, all aforementioned methods improve the attention mechanism by approximating the attention calculation. On the other hand, Flash Attention, proposed in (Dao 2023), takes a different approach by optimizing the attention computation itself.\n\n\n\n\n\n\nFigure 13: The illustration of Flash Attention\n\n\n\n\n4.6.1 Flash Attention V1 vs. V2 vs. V3"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-layer-perceptron-mlp",
@@ -220,8 +220,8 @@
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu",
     "title": "LLM Part1: Architecture",
-    "section": "6.2 Gated Linear Unit (GLU)",
-    "text": "6.2 Gated Linear Unit (GLU)"
+    "section": "5.2 Gated Linear Unit (GLU)",
+    "text": "5.2 Gated Linear Unit (GLU)"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#mixture-of-experts-moe",
@@ -291,7 +291,7 @@
     "href": "posts/blogs.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "LLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n22 min\n\n4,277 words\n\n\n2025-08-28\n\n\n\n\n\n\n\nLLM Part3: Alignment\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications.\n\n\n\n\n1 min\n\n178 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n1 min\n\n79 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-08-07\n\n\n\n\n\nNo matching items"
+    "text": "LLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n27 min\n\n5,390 words\n\n\n2025-09-03\n\n\n\n\n\n\n\nLLM Part3: Alignment\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications.\n\n\n\n\n1 min\n\n178 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n1 min\n\n79 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-08-07\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-norm",
@@ -299,5 +299,82 @@
     "title": "LLM Part1: Architecture",
     "section": "3.3 QK Norm",
     "text": "3.3 QK Norm\nThere is another normalization method called Query-Key Normalization (QK Norm), which is designed to improve the attention mechanism by normalizing the query and key vectors before computing the attention scores."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#native-sparse-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#native-sparse-attention",
+    "title": "LLM Part1: Architecture",
+    "section": "4.7 Native Sparse Attention",
+    "text": "4.7 Native Sparse Attention\n\n\n\n\n\n\nFigure 14: Illustration of Native Sparse Attention (Image Source: Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention)\n\n\n\nProposed in (Yuan et al. 2025), this is a novel approach to sparse attention that aligns with hardware capabilities and allows for efficient training of sparse attention mechanisms."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu-1",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu-1",
+    "title": "LLM Part1: Architecture",
+    "section": "6.2 Gated Linear Unit (GLU)",
+    "text": "6.2 Gated Linear Unit (GLU)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#swish",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#swish",
+    "title": "LLM Part1: Architecture",
+    "section": "5.1 Swish",
+    "text": "5.1 Swish"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#optimizer",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#optimizer",
+    "title": "LLM Part1: Architecture",
+    "section": "8.1 Optimizer",
+    "text": "8.1 Optimizer"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#diffusion-language-models",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#diffusion-language-models",
+    "title": "LLM Part1: Architecture",
+    "section": "9.1 Diffusion Language Models",
+    "text": "9.1 Diffusion Language Models\n\n\n\n\n\n\nFigure 15: Illustration of Diffusion Language Model. (Video Source: Inception Lab)\n\n\n\nLLaDA (Nie et al. 2025) is a diffusion-based language model that leverages the principles of diffusion models to generate text. By modeling the text generation process as a diffusion process, LLaDA aims to improve the quality and diversity of generated text.\n\n\n\n\n\n\nFigure 16: Example of LLaDA generation process. Prompt: “Explain what artificial intelligence is.” (Image Source: LLaDA demo)\n\n\n\n\n\n\n\n\n\nFigure 17: The training process and sampling process of LLaDA. (Image Source: LLaDA)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#mamba",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#mamba",
+    "title": "LLM Part1: Architecture",
+    "section": "9.2 Mamba",
+    "text": "9.2 Mamba"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#state-space-model-ssm",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#state-space-model-ssm",
+    "title": "LLM Part1: Architecture",
+    "section": "9.2 State Space Model (SSM)",
+    "text": "9.2 State Space Model (SSM)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#yarn",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#yarn",
+    "title": "LLM Part1: Architecture",
+    "section": "2.6 YaRN",
+    "text": "2.6 YaRN\nBut RoPE cannot extrapolate well to sequences longer than training (e.g., a model trained on 2K tokens struggles at 8K). YaRN modifies RoPE to support longer context windows while preserving model stability. (Peng et al. 2023)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#attention-sink",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#attention-sink",
+    "title": "LLM Part1: Architecture",
+    "section": "4.8 Attention Sink",
+    "text": "4.8 Attention Sink"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt-oss",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt-oss",
+    "title": "LLM Part1: Architecture",
+    "section": "8.4 GPT-Oss",
+    "text": "8.4 GPT-Oss"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#extend-to-longer-context",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#extend-to-longer-context",
+    "title": "LLM Part1: Architecture",
+    "section": "2.6 Extend to longer context",
+    "text": "2.6 Extend to longer context\nSo far, for all the position encoding we discussed, it has one main drawback: it fixed maximum context length during training.\n\n\n\n\n\n\nFigure 5: (Image Source Video: Long-Context LLM Extension)\n\n\n\nWhen we are training on the fixed context length, the model learns to attend to the positions within that context. However, during inference, we may want to extend the context length beyond what the model was trained on. This is where the challenge lies. One way is to train a longer context length model from the beginning. However this requires more computational resources and may not be feasible for all applications. So, we need to find a way to adapt the model to longer contexts without retraining it from scratch.\nThere are several approaches to address this issue. Let’s discuss a few of them.\n\n2.6.1 Linear Position Interpolation\n\n\n\n\n\n\nFigure 6\n\n\n\ndecreases the frequencies of the basis functions so that more tokens fit within each period. The position interpolation (Chen et al. 2023) mentioned that we can just linearly interpolate the position embeddings for the extended context. This allows the model to generate position embeddings for longer sequences without requiring additional training. It just rescale the \\(m\\) base in the RoPE by: \\[\nf'(\\mathbf{x}, m) = f(\\mathbf{x}, m\\frac{L}{L'})\n\\] where \\(L\\) is the original context length and \\(L'\\) is the new context length.\n\n\n2.6.2 NTK-Aware Position Interpolation\nThe Linear Position Interpolation, if it was possible to pick the correct scale parameter dynamically based on the sequence length rather than having to settle for the fixed tradeoff of maximum sequence length vs. performance on shorter sequences. The NTK-Aware Position Interpolation method leverages the Neural Tangent Kernel (NTK) framework to adaptively adjust the position embeddings during inference. By analyzing the model’s behavior in the NTK regime, we can identify the optimal scaling factors for different sequence lengths, allowing for more effective extrapolation of position information.\n\\[\n\\alpha^{\\text{NTK-RoPE}}_{j} = \\kappa^{-\\frac{2j}{d_k}}\n\\]\n\n\n\n\n\n\nNeural Tangent Kernel (NTK)\n\n\n\n\n\n\n\n\n2.6.3 YaRN\nanother RoPE extension method, uses “NTK-by-parts” interpolation strategies across different dimensions of the embedding space and introduces a temperature factor to adjust the attention distribution for long inputs. But RoPE cannot extrapolate well to sequences longer than training (e.g., a model trained on 2K tokens struggles at 8K).\n\\[\n\\alpha^{\\mathrm{YaRN}}_{j}\n= \\frac{(1-\\gamma_j)\\,\\tfrac{1}{t} + \\gamma_j}{\\sqrt{T}} \\,.\n\\]\nYaRN modifies RoPE to support longer context windows while preserving model stability. (Peng et al. 2023)"
   }
 ]
