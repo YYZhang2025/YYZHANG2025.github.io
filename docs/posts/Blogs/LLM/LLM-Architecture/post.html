@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2025-09-05">
+<meta name="dcterms.date" content="2025-09-14">
 <meta name="description" content="In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.">
 
 <title>LLM Part1: Architecture</title>
@@ -99,9 +99,9 @@ div.csl-indent {
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-9edf1536ccff61c16a2cbe51c36f979b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-42d11e5fbd7ac1634b29124389f21459.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-9edf1536ccff61c16a2cbe51c36f979b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-58956b0dfc7ff4ca687499986122f731.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-82aef919f132158da7c4d79f856b62f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-58956b0dfc7ff4ca687499986122f731.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../site_libs/quarto-contrib/videojs/video.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
@@ -502,7 +502,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2025-09-05</p>
+      <p class="date">2025-09-14</p>
     </div>
   </div>
   
@@ -628,7 +628,7 @@ Figure&nbsp;1: The illustration of the original transformer architecture. (Image
 <section id="learned-position-encoding" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="learned-position-encoding"><span class="header-section-number">2.1</span> Learned Position Encoding</h2>
 <p>In the absolute position encoding, we put our position information into fixed sinusoidal functions. It is hand-crafted for specific tasks and does not adapt to the data. So, is it possible to learn position encodings from the data itself? It is possible, and this leads us to the concept of learned position encodings. The learned position encodings are typically implemented as additional trainable parameters in the model. Instead of using fixed sinusoidal functions, the model learns to generate position embeddings that are optimized for the specific task and dataset.</p>
-<div id="bc6792d1" class="cell" data-source-line-numbers="8">
+<div id="015245b4" class="cell" data-source-line-numbers="8">
 <div class="sourceCode cell-code" id="cb1" data-source-line-numbers="8" data-code-line-numbers="8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -704,7 +704,7 @@ Figure&nbsp;2: Illustration of Absolute Position Encoding
 <li><p><strong>Dimensionality</strong>: The choice of <span class="math inline">\(d_{\text{model}}\)</span> affects the granularity of the position encodings. As shown in <a href="#fig-absolute-position-encoding-d_model_variance" class="quarto-xref">Figure&nbsp;2 (b)</a>, increasing the dimensionality results in more fine-grained position encodings, which can help the model capture more subtle positional information.</p></li>
 <li><p>The low-dimension part of the dmodel is change more frequently than the high-dimension part, allowing the model to adapt more easily to different input lengths.</p></li>
 </ol>
-<div id="78b28648" class="cell" data-source-line-numbers="8-13">
+<div id="02360769" class="cell" data-source-line-numbers="8-13">
 <div class="sourceCode cell-code" id="cb2" data-source-line-numbers="8-13" data-code-line-numbers="8-13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> torch </span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn </span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
@@ -943,7 +943,7 @@ x_{d-1}
 <li>Construct <code>cos</code> and <code>sin</code> matrices for the given input dimensions and maximum position.</li>
 <li>Apply the rotation to the input embeddings using the constructed matrices.</li>
 </ol>
-<div id="45b50bd9" class="cell">
+<div id="4f4d4d24" class="cell">
 <div class="sourceCode cell-code" id="cb4" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span> RotaryEmbedding(nn.Module):</span>
 <span id="cb4-2"><a href="#cb4-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, head_dim, max_position_embedding, base):</span>
 <span id="cb4-3"><a href="#cb4-3"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
@@ -1050,7 +1050,7 @@ Note
 z' = z \cdot e^{i\theta} = (x + iy) \cdot (\cos \theta + i \sin \theta) = (x \cos \theta - y \sin \theta) + i (x \sin \theta + y \cos \theta)
 \]</span></p>
 <p>Code adapted from <a href="https://github.com/meta-llama/llama/blob/main/llama/model.py#L132">LLaMA model</a></p>
-<div id="9c4777d5" class="cell">
+<div id="b9d961ef" class="cell">
 <div class="sourceCode cell-code" id="cb9" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> torch</span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="im">from</span> typing <span class="im">import</span> Tuple</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
@@ -1124,7 +1124,7 @@ Figure&nbsp;4
        q_i k_{i-1}^\top - m(1),\;
        q_i k_i^\top \,\Big]
 \]</span></p>
-<div id="883839aa" class="cell" data-source-line-numbers="33-34">
+<div id="712a52f9" class="cell" data-source-line-numbers="33-34">
 <div class="sourceCode cell-code" id="cb10" data-source-line-numbers="33-34" data-code-line-numbers="33-34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">def</span> get_relative_positions(seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> torch.tensor:</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    x <span class="op">=</span> torch.arange(seq_len)[<span class="va">None</span>, :]</span>
 <span id="cb10-3"><a href="#cb10-3"></a>    y <span class="op">=</span> torch.arange(seq_len)[:, <span class="va">None</span>]</span>

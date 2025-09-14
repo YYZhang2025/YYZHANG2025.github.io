@@ -98,20 +98,6 @@
     "text": "4 Multi-GPU Optimization(Parallelism)\nIn this section, we will discuss various techniques to optimize the training process across multiple GPUs. These techniques include: - Data Parallelism(Section 4.1): This technique splits the input data across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different subset of the input data, and the gradients are averaged across GPUs before updating the model parameters. - Model Parallelism(Section 4.2): This technique splits the model across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the model, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large models that do not fit into a single GPU’s memory. - Pipeline Parallelism(Section 4.3): This technique splits the model into multiple stages and processes each stage in parallel across multiple GPUs. Each GPU processes a different stage of the model, and the output of one stage is passed to the next stage. This can help improve throughput and reduce memory usage, especially for large models. - Tensor Parallelism(Section 4.4): This technique splits the tensors across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the tensor, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large tensors that do not fit into a single GPU’s memory. - Context Parallelism(Section 4.5): This technique splits the context across multiple GPUs and performs the forward and backward passes in parallel. Each GPU processes a different part of the context, and the gradients are averaged across GPUs before updating the model parameters. This is particularly useful for large contexts that do not fit into a single GPU’s memory.\n\n4.1 Data Parallelism\n\n\n4.2 Model Parallelism\n\n\n4.3 Pipeline Parallelism\n\n\n4.4 Tensor Parallelism\n\n\n4.5 Context Parallelism\n\n\n4.6 Case Study: DeepSpeed\n\n\n4.7 Case Study: Megatron-LM\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nSelf CPU %\nSelf CPU\nCPU total %\nCPU total\nCPU time avg\nSelf CUDA\nSelf CUDA %\nCUDA total\nCUDA time avg\n# of Calls\n\n\n\n\naten::gelu\n6.76%\n669.785us\n13.48%\n1.336ms\n1.336ms\n8.642ms\n100.00%\n8.642ms\n8.642ms\n1\n\n\nvoid at::native::vectorized_elementwise_kernel&lt;…&gt;\n0.00%\n0.000us\n0.00%\n0.000us\n0.000us\n8.642ms\n100.00%\n8.642ms\n8.642ms\n1\n\n\ncudaLaunchKernel\n6.72%\n665.807us\n6.72%\n665.807us\n665.807us\n0.000us\n0.00%\n0.000us\n0.000us\n1\n\n\ncudaDeviceSynchronize\n86.52%\n8.574ms\n86.52%\n8.574ms\n4.287ms\n0.000us\n0.00%\n0.000us\n0.000us\n2\n\n\n\nSelf CPU time total: 9.909 ms\nSelf CUDA time total: 8.642 ms"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-Inference/post.html",
-    "href": "posts/Blogs/LLM/LLM-Inference/post.html",
-    "title": "LLM Part2: Inference",
-    "section": "",
-    "text": "In the part 1 of the LLM series, we covered the architecture of LLMs, including key components such as position encoding, attention mechanisms, and more. We also explored various normalization techniques and the training process for these models. In the part 2, we will explore different inference techniques, which is necessary for effectively utilizing LLMs in real-world applications. And we will also explore several practical examples and use cases to illustrate these techniques in action, such as: - vLLM"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Alignment/post.html",
-    "href": "posts/Blogs/LLM/LLM-Alignment/post.html",
-    "title": "LLM Part3: Alignment",
-    "section": "",
-    "text": "On this page\n   \n  \n  1 Supervised Fine-Tuning (SFT)\n  2 Review of Reinforcement Learning\n  3 RLHF\n  \n\nIn the part 1 and part 2 of the LLM series, we covered the architecture and inference techniques for LLMs. In this part 3, we will focus on alignment techniques, which are crucial for ensuring that LLMs behave in ways that are consistent with human values and intentions. We will explore various methods for aligning LLMs, including reinforcement learning from human feedback (RLHF), and discuss their implications for the development and deployment of these models. We will first explore the simple Supervised Fine-Tuning (SFT) approach, which involves fine-tuning LLMs on curated datasets that reflect human values and preferences. Than we will explore different RLHF techniques, which involve training LLMs using feedback from human evaluators to improve their alignment with human intentions. We will explore algorithms from PPO, DPO to GRPO and\n\n1 Supervised Fine-Tuning (SFT)\n\n\n2 Review of Reinforcement Learning\nIn this part, we will first review the basics of reinforcement learning, including key concepts such as rewards, policy, loss function, actor-critic methods, and more. This will provide a solid foundation for understanding the RLHF techniques we will explore later.\n\n\n3 RLHF"
-  },
-  {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html",
     "title": "LLM Part1: Architecture",
@@ -154,6 +140,13 @@
     "text": "2.5 ALIBI\n(Press, Smith, and Lewis 2022)\n\n\n\n\n\n\nFigure 4\n\n\n\nAliBi: simple, monotonic bias → strong extrapolation, lower overhead.\nSo far, for the position embedding, we modify the Q, K to add the position information for attention to calculate. However, is it possible to directly modify the attention score? To notify them the position information? This is exactly what ALIBI does. The ALIBI (Attention with Linear Biases) method introduces a linear bias to the attention scores based on the distance between tokens. The bias is added directly to the attention score before applying the softmax function. Mathematically:\n\\[\n\\operatorname{softmax}\\!\\Big( q_i k_j^\\top \\;+\\; m \\cdot (-(i-j)) \\Big)\n\\]\nwhere:\n\n\\(q_i \\in \\mathbb{R}^d\\): query vector at position \\(i\\)\n\\(k_j \\in \\mathbb{R}^d\\): key vector at position \\(j\\)\n\\(m \\in \\mathbb{R}\\): slop (head-dependent constant)\n\\((i - j) \\geq 0\\): relative distance\n\nFor example, for query \\(i\\), the logits against all keys \\([0, 1, \\dots, i ]\\) become: \\[\n\\ell_i \\;=\\;\n\\Big[\\, q_i k_0^\\top - m(i-0),\\;\n       q_i k_1^\\top - m(i-1),\\;\n       \\ldots,\\;\n       q_i k_{i-1}^\\top - m(1),\\;\n       q_i k_i^\\top \\,\\Big]\n\\]\n\ndef get_relative_positions(seq_len: int) -&gt; torch.tensor:\n    x = torch.arange(seq_len)[None, :]\n    y = torch.arange(seq_len)[:, None]\n    return x - y\n\n\ndef get_alibi_slope(num_heads):\n    x = (2 ** 8) ** (1 / num_heads)\n    return (\n        torch.tensor([1 / x ** (i + 1) for i in range(num_heads)])\n        .unsqueeze(-1)\n        .unsqueeze(-1)\n    )\n\nclass AliBiMultiHeadAttention(nn.Module):\n    def __init__(self, num_heads, d_model):\n        super().__init__()\n        self.num_heads = num_heads\n        self.d_model = d_model\n        self.head_dim = d_model // num_heads\n        self.alibi_slope = get_alibi_slope(num_heads)\n\n        self.kqv = nn.Linear(self.d_model, 3 * self.d_model)\n    \n    def forward(self, x):\n        batch_size, seq_len, _ = x.shape\n\n        key, query, value = self.kqv(x).chunk(3, dim=-1)\n        query = query.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n        key   = key.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n        value = value.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n\n        bias = (self.alibi_slope * get_relative_positions(seq_len)).unsqueeze(0)\n        score = query @ key.transpose(-2, -1) / (self.head_dim ** 0.5) + bias\n\n        mask = torch.tril(torch.ones(seq_len, seq_len)).to(x.device)\n        mask = mask[None, None, :, :]  # (1, 1, seq_len, seq_len)\n        score = score.masked_fill(\n            mask[:, :, :seq_len, :seq_len] == 0, float(\"-inf\")\n        )\n\n        attn = F.softmax(score, dim=-1)\n        out = torch.matmul(attn, value)\n        out = out.transpose(1, 2).reshape(batch_size, seq_len, -1)\n        out = self.dropout(out)\n        return out"
   },
   {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#extend-to-longer-context",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#extend-to-longer-context",
+    "title": "LLM Part1: Architecture",
+    "section": "2.6 Extend to longer context",
+    "text": "2.6 Extend to longer context\nSo far, for all the position encoding we discussed, it has one main drawback: it fixed maximum context length during training.\n\n\n\n\n\n\nFigure 5: (Image Source Video: Long-Context LLM Extension)\n\n\n\nWhen we are training on the fixed context length, the model learns to attend to the positions within that context. However, during inference, we may want to extend the context length beyond what the model was trained on. This is where the challenge lies. One way is to train a longer context length model from the beginning. However this requires more computational resources and may not be feasible for all applications. So, we need to find a way to adapt the model to longer contexts without retraining it from scratch.\nThere are several approaches to address this issue. Let’s discuss a few of them.\n\n2.6.1 Linear Position Interpolation\n\n\n\n\n\n\nFigure 6\n\n\n\ndecreases the frequencies of the basis functions so that more tokens fit within each period. The position interpolation (Chen et al. 2023) mentioned that we can just linearly interpolate the position embeddings for the extended context. This allows the model to generate position embeddings for longer sequences without requiring additional training. It just rescale the \\(m\\) base in the RoPE by: \\[\nf'(\\mathbf{x}, m) = f(\\mathbf{x}, m\\frac{L}{L'})\n\\] where \\(L\\) is the original context length and \\(L'\\) is the new context length.\n\n\n2.6.2 NTK-Aware Position Interpolation\nThe Linear Position Interpolation, if it was possible to pick the correct scale parameter dynamically based on the sequence length rather than having to settle for the fixed tradeoff of maximum sequence length vs. performance on shorter sequences. The NTK-Aware Position Interpolation method leverages the Neural Tangent Kernel (NTK) framework to adaptively adjust the position embeddings during inference. By analyzing the model’s behavior in the NTK regime, we can identify the optimal scaling factors for different sequence lengths, allowing for more effective extrapolation of position information.\n\\[\n\\alpha^{\\text{NTK-RoPE}}_{j} = \\kappa^{-\\frac{2j}{d_k}}\n\\]\n\n\n\n\n\n\nNeural Tangent Kernel (NTK)\n\n\n\n\n\n\n\n\n2.6.3 YaRN\nanother RoPE extension method, uses “NTK-by-parts” interpolation strategies across different dimensions of the embedding space and introduces a temperature factor to adjust the attention distribution for long inputs. But RoPE cannot extrapolate well to sequences longer than training (e.g., a model trained on 2K tokens struggles at 8K).\n\\[\n\\alpha^{\\mathrm{YaRN}}_{j}\n= \\frac{(1-\\gamma_j)\\,\\tfrac{1}{t} + \\gamma_j}{\\sqrt{T}} \\,.\n\\]\nYaRN modifies RoPE to support longer context windows while preserving model stability. (Peng et al. 2023)"
+  },
+  {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-normalization-vs.-rms-normalization",
     "href": "posts/Blogs/LLM/LLM-Architecture/post.html#layer-normalization-vs.-rms-normalization",
     "title": "LLM Part1: Architecture",
@@ -166,6 +159,13 @@
     "title": "LLM Part1: Architecture",
     "section": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization",
     "text": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n\n\n\n\n\n\nFigure 7: The figure illustrates the three different position of the normalization layer in the transformer architecture.\n\n\n\nOne main good reason why Pre-Layer Normalization is perform bettern than the Post-Layer Normalization is that, according to (Xiong et al. 2020), the help the gradient flow back through the network without disrupting the residual connections. When using the Pre-Layer Normalization, it tends to converge faster and more stably. And the initlization methods is become less sensitive to the scale of the inputs.\nThere are third type of the normalization position by (Ding et al. 2021) called sandwiched normalization, which is a combination of pre-layer and post-layer normalization. Is is proposed to improve the training for the text-image pair.\n\n\n\n\n\n\nGradient Flow\n\n\n\nOne generalizable lesson is that we should keep residual connections “clean” identity paths."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-norm",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-norm",
+    "title": "LLM Part1: Architecture",
+    "section": "3.3 QK Norm",
+    "text": "3.3 QK Norm\nThere is another normalization method called Query-Key Normalization (QK Norm), which is designed to improve the attention mechanism by normalizing the query and key vectors before computing the attention scores."
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-headed-attention",
@@ -210,11 +210,25 @@
     "text": "4.6 Flash Attention\nSo far, we see different attention mechanisms that aim to improve the efficiency and effectiveness of the standard attention mechanism. However, all aforementioned methods improve the attention mechanism by approximating the attention calculation. On the other hand, Flash Attention, proposed in (Dao 2023), takes a different approach by optimizing the attention computation itself.\n\n\n\n\n\n\nFigure 13: The illustration of Flash Attention\n\n\n\n\n4.6.1 Flash Attention V1 vs. V2 vs. V3"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-layer-perceptron-mlp",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-layer-perceptron-mlp",
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#native-sparse-attention",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#native-sparse-attention",
     "title": "LLM Part1: Architecture",
-    "section": "6.1 Multi Layer Perceptron (MLP)",
-    "text": "6.1 Multi Layer Perceptron (MLP)"
+    "section": "4.7 Native Sparse Attention",
+    "text": "4.7 Native Sparse Attention\n\n\n\n\n\n\nFigure 14: Illustration of Native Sparse Attention (Image Source: Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention)\n\n\n\nProposed in (Yuan et al. 2025), this is a novel approach to sparse attention that aligns with hardware capabilities and allows for efficient training of sparse attention mechanisms."
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#attention-sink",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#attention-sink",
+    "title": "LLM Part1: Architecture",
+    "section": "4.8 Attention Sink",
+    "text": "4.8 Attention Sink"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#swish",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#swish",
+    "title": "LLM Part1: Architecture",
+    "section": "5.1 Swish",
+    "text": "5.1 Swish"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu",
@@ -222,6 +236,20 @@
     "title": "LLM Part1: Architecture",
     "section": "5.2 Gated Linear Unit (GLU)",
     "text": "5.2 Gated Linear Unit (GLU)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-layer-perceptron-mlp",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#multi-layer-perceptron-mlp",
+    "title": "LLM Part1: Architecture",
+    "section": "6.1 Multi Layer Perceptron (MLP)",
+    "text": "6.1 Multi Layer Perceptron (MLP)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu-1",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu-1",
+    "title": "LLM Part1: Architecture",
+    "section": "6.2 Gated Linear Unit (GLU)",
+    "text": "6.2 Gated Linear Unit (GLU)"
   },
   {
     "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#mixture-of-experts-moe",
@@ -266,11 +294,102 @@
     "text": "8.3 DeepSeek"
   },
   {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt",
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt-oss",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt-oss",
     "title": "LLM Part1: Architecture",
-    "section": "8.4 GPT",
-    "text": "8.4 GPT"
+    "section": "8.4 GPT-Oss",
+    "text": "8.4 GPT-Oss"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#diffusion-language-models",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#diffusion-language-models",
+    "title": "LLM Part1: Architecture",
+    "section": "9.1 Diffusion Language Models",
+    "text": "9.1 Diffusion Language Models\n\n\n\n\n\n\nFigure 15: Illustration of Diffusion Language Model. (Video Source: Inception Lab)\n\n\n\nLLaDA (Nie et al. 2025) is a diffusion-based language model that leverages the principles of diffusion models to generate text. By modeling the text generation process as a diffusion process, LLaDA aims to improve the quality and diversity of generated text.\n\n\n\n\n\n\nFigure 16: Example of LLaDA generation process. Prompt: “Explain what artificial intelligence is.” (Image Source: LLaDA demo)\n\n\n\n\n\n\n\n\n\nFigure 17: The training process and sampling process of LLaDA. (Image Source: LLaDA)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#state-space-model-ssm",
+    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#state-space-model-ssm",
+    "title": "LLM Part1: Architecture",
+    "section": "9.2 State Space Model (SSM)",
+    "text": "9.2 State Space Model (SSM)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Alignment/post.html",
+    "href": "posts/Blogs/LLM/LLM-Alignment/post.html",
+    "title": "LLM Part3: Alignment",
+    "section": "",
+    "text": "On this page\n   \n  \n  1 Supervised Fine-Tuning (SFT)\n  2 Review of Reinforcement Learning\n  3 RLHF\n  \n\nIn the part 1 and part 2 of the LLM series, we covered the architecture and inference techniques for LLMs. In this part 3, we will focus on alignment techniques, which are crucial for ensuring that LLMs behave in ways that are consistent with human values and intentions. We will explore various methods for aligning LLMs, including reinforcement learning from human feedback (RLHF), and discuss their implications for the development and deployment of these models. We will first explore the simple Supervised Fine-Tuning (SFT) approach, which involves fine-tuning LLMs on curated datasets that reflect human values and preferences. Than we will explore different RLHF techniques, which involve training LLMs using feedback from human evaluators to improve their alignment with human intentions. We will explore algorithms from PPO, DPO to GRPO and\n\n1 Supervised Fine-Tuning (SFT)\n\n\n2 Review of Reinforcement Learning\nIn this part, we will first review the basics of reinforcement learning, including key concepts such as rewards, policy, loss function, actor-critic methods, and more. This will provide a solid foundation for understanding the RLHF techniques we will explore later.\n\n\n3 RLHF"
+  },
+  {
+    "objectID": "posts/Blogs/LLM/LLM-Inference/post.html",
+    "href": "posts/Blogs/LLM/LLM-Inference/post.html",
+    "title": "LLM Part2: Inference",
+    "section": "",
+    "text": "In the part 1 of the LLM series, we covered the architecture of LLMs, including key components such as position encoding, attention mechanisms, and more. We also explored various normalization techniques and the training process for these models. In the part 2, we will explore different inference techniques, which is necessary for effectively utilizing LLMs in real-world applications. And we will also explore several practical examples and use cases to illustrate these techniques in action, such as: - vLLM"
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html",
+    "href": "posts/Blogs/DiffusionModels/post.html",
+    "title": "Diffusion Models",
+    "section": "",
+    "text": "1 Preliminaries\n  \n  1.1 Kullback-Leibler Divergence(KL Divergence)\n  1.2 Jensen’s Inequality\n  1.3 Variational Lower Bound (ELBO)\n  1.4 Langevin Dynamics\n  \n  2 Diffusion Models\n  3 Case Study\n  \n  3.1 Text-to-Image Generation\n  3.2 Video Generation\n  3.3 Diffusion Policy\n  3.4 Diffusion Language Models\n  \n  4 Learning Resource\nInterested in the generative models. For example Nano Banana, DALL-E 2, Stable Diffusion, Midjourney, and so on. I have been reading some papers and blogs about diffusion models. Here is a summary of what I learned.\nFirst, let’s prepare some math knowledge."
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html#kullback-leibler-divergencekl-divergence",
+    "href": "posts/Blogs/DiffusionModels/post.html#kullback-leibler-divergencekl-divergence",
+    "title": "Diffusion Models",
+    "section": "1.1 Kullback-Leibler Divergence(KL Divergence)",
+    "text": "1.1 Kullback-Leibler Divergence(KL Divergence)\nThe Kullback-Leibler divergence, also known as relative entropy, is a measure of how one probability distribution diverges from a second expected probability distribution. For two probability distributions \\(P\\) and \\(Q\\) defined on the same probability space, the KL divergence from \\(P\\) to \\(Q\\) is defined as:\n\\[\nD_{KL}(P || Q) = \\mathbb{E}_{x \\sim P}\\left[\\log\\left(\\frac{P(x)}{Q(x)}\\right)\\right]\n\\tag{1}\\]\nthere are some properties of KL divergence:\n\nNon-negativity: \\(D_{KL}(P || Q) \\geq 0\\), with equality if and only if \\(P = Q\\) almost everywhere.\nAsymmetry: \\(D_{KL}(P || Q) \\neq D_{KL}(Q || P)\\) in general."
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html#jensens-inequality",
+    "href": "posts/Blogs/DiffusionModels/post.html#jensens-inequality",
+    "title": "Diffusion Models",
+    "section": "1.2 Jensen’s Inequality",
+    "text": "1.2 Jensen’s Inequality\nJensen’s Inequality is a fundamental result in convex analysis. It states that for a concave function \\(f\\) and a random variable \\(X\\),\n\\[\nf(\\mathbb{E}[X]) \\geq \\mathbb{E}[f(X)] .\n\\tag{2}\\]\nFor example, \\(f(x) = \\log x\\) is a concave function, so we have \\[\n\\log(\\mathbb{E}[X]) \\geq \\mathbb{E}[\\log(X)] .\n\\tag{3}\\]"
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html#variational-lower-bound-elbo",
+    "href": "posts/Blogs/DiffusionModels/post.html#variational-lower-bound-elbo",
+    "title": "Diffusion Models",
+    "section": "1.3 Variational Lower Bound (ELBO)",
+    "text": "1.3 Variational Lower Bound (ELBO)\nIn the context of probabilistic models, the Evidence Lower Bound (ELBO) is a lower bound on the log-likelihood of observed data. It is commonly used in variational inference to approximate complex posterior distributions. For example, in the variational autoencoder (VAE)(Kingma and Welling 2022) framework, the ELBO is given by:\n\\[\n\\text{ELBO}(x) = \\mathbb{E}_{q(z|x)}[\\log p(x|z)] - D_{KL}(q(z|x) || p(z))\n\\tag{4}\\] where:\n\n\\(x\\) is the observed data,\n\\(z\\) is the latent variable,\n\\(p(x|z)\\) is the likelihood of the data given the latent variable,\n\\(p(z)\\) is the prior distribution over the latent variable,\n\\(q(z|x)\\) is the variational posterior distribution.\n\\(D_{KL}(q(z|x) || p(z))\\) is the KL divergence between the variational posterior and the prior.\n\nThe ELBO serves as a surrogate objective function that can be maximized to learn the parameters of the model and the variational distribution. Maximizing the ELBO is equivalent to minimizing the KL divergence between the variational posterior and the true posterior distribution, thereby improving the approximation of the posterior."
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html#langevin-dynamics",
+    "href": "posts/Blogs/DiffusionModels/post.html#langevin-dynamics",
+    "title": "Diffusion Models",
+    "section": "1.4 Langevin Dynamics",
+    "text": "1.4 Langevin Dynamics\nLangevin dynamics is a sampling method that combines gradient information with stochastic noise to sample from a target distribution. It is particularly useful for sampling from complex, high-dimensional distributions where traditional methods may struggle. The Langevin dynamics update rule is given by: \\[\nx_{t+1} = x_t + \\frac{\\epsilon}{2} \\nabla \\log p(x_t) + \\sqrt{\\epsilon} \\eta_t\n\\tag{5}\\]"
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html#text-to-image-generation",
+    "href": "posts/Blogs/DiffusionModels/post.html#text-to-image-generation",
+    "title": "Diffusion Models",
+    "section": "3.1 Text-to-Image Generation",
+    "text": "3.1 Text-to-Image Generation"
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html#video-generation",
+    "href": "posts/Blogs/DiffusionModels/post.html#video-generation",
+    "title": "Diffusion Models",
+    "section": "3.2 Video Generation",
+    "text": "3.2 Video Generation\nMovie Gen"
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html#diffusion-policy",
+    "href": "posts/Blogs/DiffusionModels/post.html#diffusion-policy",
+    "title": "Diffusion Models",
+    "section": "3.3 Diffusion Policy",
+    "text": "3.3 Diffusion Policy"
+  },
+  {
+    "objectID": "posts/Blogs/DiffusionModels/post.html#diffusion-language-models",
+    "href": "posts/Blogs/DiffusionModels/post.html#diffusion-language-models",
+    "title": "Diffusion Models",
+    "section": "3.4 Diffusion Language Models",
+    "text": "3.4 Diffusion Language Models"
   },
   {
     "objectID": "posts/notes.html",
@@ -291,90 +410,6 @@
     "href": "posts/blogs.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "LLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n27 min\n\n5,390 words\n\n\n2025-09-03\n\n\n\n\n\n\n\nLLM Part3: Alignment\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications.\n\n\n\n\n1 min\n\n178 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n1 min\n\n79 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-08-07\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-norm",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#qk-norm",
-    "title": "LLM Part1: Architecture",
-    "section": "3.3 QK Norm",
-    "text": "3.3 QK Norm\nThere is another normalization method called Query-Key Normalization (QK Norm), which is designed to improve the attention mechanism by normalizing the query and key vectors before computing the attention scores."
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#native-sparse-attention",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#native-sparse-attention",
-    "title": "LLM Part1: Architecture",
-    "section": "4.7 Native Sparse Attention",
-    "text": "4.7 Native Sparse Attention\n\n\n\n\n\n\nFigure 14: Illustration of Native Sparse Attention (Image Source: Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention)\n\n\n\nProposed in (Yuan et al. 2025), this is a novel approach to sparse attention that aligns with hardware capabilities and allows for efficient training of sparse attention mechanisms."
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu-1",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gated-linear-unit-glu-1",
-    "title": "LLM Part1: Architecture",
-    "section": "6.2 Gated Linear Unit (GLU)",
-    "text": "6.2 Gated Linear Unit (GLU)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#swish",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#swish",
-    "title": "LLM Part1: Architecture",
-    "section": "5.1 Swish",
-    "text": "5.1 Swish"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#optimizer",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#optimizer",
-    "title": "LLM Part1: Architecture",
-    "section": "8.1 Optimizer",
-    "text": "8.1 Optimizer"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#diffusion-language-models",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#diffusion-language-models",
-    "title": "LLM Part1: Architecture",
-    "section": "9.1 Diffusion Language Models",
-    "text": "9.1 Diffusion Language Models\n\n\n\n\n\n\nFigure 15: Illustration of Diffusion Language Model. (Video Source: Inception Lab)\n\n\n\nLLaDA (Nie et al. 2025) is a diffusion-based language model that leverages the principles of diffusion models to generate text. By modeling the text generation process as a diffusion process, LLaDA aims to improve the quality and diversity of generated text.\n\n\n\n\n\n\nFigure 16: Example of LLaDA generation process. Prompt: “Explain what artificial intelligence is.” (Image Source: LLaDA demo)\n\n\n\n\n\n\n\n\n\nFigure 17: The training process and sampling process of LLaDA. (Image Source: LLaDA)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#mamba",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#mamba",
-    "title": "LLM Part1: Architecture",
-    "section": "9.2 Mamba",
-    "text": "9.2 Mamba"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#state-space-model-ssm",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#state-space-model-ssm",
-    "title": "LLM Part1: Architecture",
-    "section": "9.2 State Space Model (SSM)",
-    "text": "9.2 State Space Model (SSM)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#yarn",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#yarn",
-    "title": "LLM Part1: Architecture",
-    "section": "2.6 YaRN",
-    "text": "2.6 YaRN\nBut RoPE cannot extrapolate well to sequences longer than training (e.g., a model trained on 2K tokens struggles at 8K). YaRN modifies RoPE to support longer context windows while preserving model stability. (Peng et al. 2023)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#attention-sink",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#attention-sink",
-    "title": "LLM Part1: Architecture",
-    "section": "4.8 Attention Sink",
-    "text": "4.8 Attention Sink"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt-oss",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#gpt-oss",
-    "title": "LLM Part1: Architecture",
-    "section": "8.4 GPT-Oss",
-    "text": "8.4 GPT-Oss"
-  },
-  {
-    "objectID": "posts/Blogs/LLM/LLM-Architecture/post.html#extend-to-longer-context",
-    "href": "posts/Blogs/LLM/LLM-Architecture/post.html#extend-to-longer-context",
-    "title": "LLM Part1: Architecture",
-    "section": "2.6 Extend to longer context",
-    "text": "2.6 Extend to longer context\nSo far, for all the position encoding we discussed, it has one main drawback: it fixed maximum context length during training.\n\n\n\n\n\n\nFigure 5: (Image Source Video: Long-Context LLM Extension)\n\n\n\nWhen we are training on the fixed context length, the model learns to attend to the positions within that context. However, during inference, we may want to extend the context length beyond what the model was trained on. This is where the challenge lies. One way is to train a longer context length model from the beginning. However this requires more computational resources and may not be feasible for all applications. So, we need to find a way to adapt the model to longer contexts without retraining it from scratch.\nThere are several approaches to address this issue. Let’s discuss a few of them.\n\n2.6.1 Linear Position Interpolation\n\n\n\n\n\n\nFigure 6\n\n\n\ndecreases the frequencies of the basis functions so that more tokens fit within each period. The position interpolation (Chen et al. 2023) mentioned that we can just linearly interpolate the position embeddings for the extended context. This allows the model to generate position embeddings for longer sequences without requiring additional training. It just rescale the \\(m\\) base in the RoPE by: \\[\nf'(\\mathbf{x}, m) = f(\\mathbf{x}, m\\frac{L}{L'})\n\\] where \\(L\\) is the original context length and \\(L'\\) is the new context length.\n\n\n2.6.2 NTK-Aware Position Interpolation\nThe Linear Position Interpolation, if it was possible to pick the correct scale parameter dynamically based on the sequence length rather than having to settle for the fixed tradeoff of maximum sequence length vs. performance on shorter sequences. The NTK-Aware Position Interpolation method leverages the Neural Tangent Kernel (NTK) framework to adaptively adjust the position embeddings during inference. By analyzing the model’s behavior in the NTK regime, we can identify the optimal scaling factors for different sequence lengths, allowing for more effective extrapolation of position information.\n\\[\n\\alpha^{\\text{NTK-RoPE}}_{j} = \\kappa^{-\\frac{2j}{d_k}}\n\\]\n\n\n\n\n\n\nNeural Tangent Kernel (NTK)\n\n\n\n\n\n\n\n\n2.6.3 YaRN\nanother RoPE extension method, uses “NTK-by-parts” interpolation strategies across different dimensions of the embedding space and introduces a temperature factor to adjust the attention distribution for long inputs. But RoPE cannot extrapolate well to sequences longer than training (e.g., a model trained on 2K tokens struggles at 8K).\n\\[\n\\alpha^{\\mathrm{YaRN}}_{j}\n= \\frac{(1-\\gamma_j)\\,\\tfrac{1}{t} + \\gamma_j}{\\sqrt{T}} \\,.\n\\]\nYaRN modifies RoPE to support longer context windows while preserving model stability. (Peng et al. 2023)"
+    "text": "Diffusion Models\n\n\n\nGenerative AI\n\nDiffusion Models\n\n\n\nThis blog introduces diffusion models, covering their core principles and perspectives. We begin with the basics of DDPM, then explore score-based, ODE, and SDE viewpoints, as well as flow and score matching. Finally, we highlight applications in image generation, text-to-image, video, and reinforcement learning.\n\n\n\n\n3 min\n\n540 words\n\n\n2025-09-11\n\n\n\n\n\n\n\nLLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n27 min\n\n5,390 words\n\n\n2025-09-03\n\n\n\n\n\n\n\nLLM Part3: Alignment\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications.\n\n\n\n\n1 min\n\n178 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n1 min\n\n79 words\n\n\n2025-08-25\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n2025-08-07\n\n\n\n\n\nNo matching items"
   }
 ]

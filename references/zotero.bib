@@ -18,6 +18,22 @@
   file = {/Users/yuyang/Zotero/storage/T6GJPX4N/Vaswani et al. - 2023 - Attention Is All You Need.pdf;/Users/yuyang/Zotero/storage/9KKNW32J/1706.html}
 }
 
+@online{AutoEncodingVariationalBayes2022kingma,
+  title = {Auto-{{Encoding Variational Bayes}}},
+  author = {Kingma, Diederik P. and Welling, Max},
+  date = {2022-12-10},
+  eprint = {1312.6114},
+  eprinttype = {arXiv},
+  eprintclass = {stat},
+  doi = {10.48550/arXiv.1312.6114},
+  url = {http://arxiv.org/abs/1312.6114},
+  urldate = {2025-09-11},
+  abstract = {How can we perform efficient inference and learning in directed probabilistic models, in the presence of continuous latent variables with intractable posterior distributions, and large datasets? We introduce a stochastic variational inference and learning algorithm that scales to large datasets and, under some mild differentiability conditions, even works in the intractable case. Our contributions are two-fold. First, we show that a reparameterization of the variational lower bound yields a lower bound estimator that can be straightforwardly optimized using standard stochastic gradient methods. Second, we show that for i.i.d. datasets with continuous latent variables per datapoint, posterior inference can be made especially efficient by fitting an approximate inference model (also called a recognition model) to the intractable posterior using the proposed lower bound estimator. Theoretical advantages are reflected in experimental results.},
+  pubstate = {prepublished},
+  keywords = {100-Papers,Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/yuyang/Zotero/storage/56VT9NRY/Kingma and Welling - 2022 - Auto-Encoding Variational Bayes.pdf;/Users/yuyang/Zotero/storage/ZPFC4KRK/1312.html}
+}
+
 @online{BERTPretrainingDeep2019devlin,
   title = {{{BERT}}: {{Pre-training}} of {{Deep Bidirectional Transformers}} for {{Language Understanding}}},
   shorttitle = {{{BERT}}},
@@ -99,6 +115,22 @@
   langid = {american},
   organization = {Microsoft Research},
   file = {/Users/yuyang/Zotero/storage/YWJW3DI8/deepspeed-extreme-scale-model-training-for-everyone.html}
+}
+
+@online{DenoisingDiffusionProbabilistic2020ho,
+  title = {Denoising {{Diffusion Probabilistic Models}}},
+  author = {Ho, Jonathan and Jain, Ajay and Abbeel, Pieter},
+  date = {2020-12-16},
+  eprint = {2006.11239},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2006.11239},
+  url = {http://arxiv.org/abs/2006.11239},
+  urldate = {2025-09-09},
+  abstract = {We present high quality image synthesis results using diffusion probabilistic models, a class of latent variable models inspired by considerations from nonequilibrium thermodynamics. Our best results are obtained by training on a weighted variational bound designed according to a novel connection between diffusion probabilistic models and denoising score matching with Langevin dynamics, and our models naturally admit a progressive lossy decompression scheme that can be interpreted as a generalization of autoregressive decoding. On the unconditional CIFAR10 dataset, we obtain an Inception score of 9.46 and a state-of-the-art FID score of 3.17. On 256x256 LSUN, we obtain sample quality similar to ProgressiveGAN. Our implementation is available at https://github.com/hojonathanho/diffusion},
+  pubstate = {prepublished},
+  keywords = {100-Papers,Computer Science - Machine Learning,Statistics - Machine Learning},
+  file = {/Users/yuyang/Zotero/storage/A8J3WGYP/Ho et al. - 2020 - Denoising Diffusion Probabilistic Models.pdf;/Users/yuyang/Zotero/storage/H2RLKCH6/2006.html}
 }
 
 @online{DINOv2LearningRobust2024oquab,
@@ -569,6 +601,22 @@
   keywords = {Computer Science - Computation and Language,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning,Computer Science - Robotics,RL},
   annotation = {TLDR: This work proposes a simple, general recipe to enable a single end-to-end trained model to both learn to map robot observations to actions and enjoy the benefits of large-scale pretraining on language and vision-language data from the web.},
   file = {/Users/yuyang/Zotero/storage/H6NC8W4Z/Brohan et al. - 2023 - RT-2 Vision-Language-Action Models Transfer Web Knowledge to Robotic Control.pdf}
+}
+
+@online{ScalableDiffusionModels2023peebles,
+  title = {Scalable {{Diffusion Models}} with {{Transformers}}},
+  author = {Peebles, William and Xie, Saining},
+  date = {2023-03-02},
+  eprint = {2212.09748},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2212.09748},
+  url = {http://arxiv.org/abs/2212.09748},
+  urldate = {2025-09-07},
+  abstract = {We explore a new class of diffusion models based on the transformer architecture. We train latent diffusion models of images, replacing the commonly-used U-Net backbone with a transformer that operates on latent patches. We analyze the scalability of our Diffusion Transformers (DiTs) through the lens of forward pass complexity as measured by Gflops. We find that DiTs with higher Gflops -- through increased transformer depth/width or increased number of input tokens -- consistently have lower FID. In addition to possessing good scalability properties, our largest DiT-XL/2 models outperform all prior diffusion models on the class-conditional ImageNet 512x512 and 256x256 benchmarks, achieving a state-of-the-art FID of 2.27 on the latter.},
+  pubstate = {prepublished},
+  keywords = {100-Papers,Computer Science - Computer Vision and Pattern Recognition,Computer Science - Machine Learning},
+  file = {/Users/yuyang/Zotero/storage/PANR8434/Peebles and Xie - 2023 - Scalable Diffusion Models with Transformers.pdf;/Users/yuyang/Zotero/storage/PW5LVA9F/2212.html}
 }
 
 @online{ScalingRLLong2025chen,
