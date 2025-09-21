@@ -9,11 +9,11 @@
   {
     "listing": "/posts/blogs.html",
     "items": [
-      "/posts/Blogs/DiffusionModels/post.html",
-      "/posts/Blogs/LLM/LLM-Architecture/post.html",
-      "/posts/Blogs/LLM/LLM-Alignment/post.html",
-      "/posts/Blogs/LLM/LLM-Inference/post.html",
-      "/posts/Blogs/speed-up-training.html"
+      "/posts/Blogs/DiffusionModels/Diffusion Model.html",
+      "/posts/Blogs/LLM-Alignment/post.html",
+      "/posts/Blogs/LLM-Inference/post.html",
+      "/posts/Blogs/Speed-up-training/post.html",
+      "/posts/Blogs/LLM-Architecture/Post.html"
     ]
   }
 ]

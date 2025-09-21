@@ -7,3 +7,4 @@ freeze: true
 bibliography: ../references/zotero.bib
 biblio-style: "apa"
 tbl-cap-location: "bottom"
+author: "Yuyang Zhang"

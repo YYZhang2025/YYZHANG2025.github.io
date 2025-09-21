@@ -6,14 +6,15 @@ about:
   image-shape: rounded
   links:
     - icon: linkedin
-      text: LinkedIn
       href: https://www.linkedin.com/in/zhang-yuyang/
     - icon: github
-      text: Github
       href: https://github.com/YYZhang2025
     - icon: envelope
-      text: Email
       href: mailto:zhangyuyang1211@gmail.com
+    - icon: twitter
+      href: https://x.com/YUYANGZHAN2025
+    - icon: facebook
+      href: https://www.facebook.com/yuyang.zhang.202512
     - icon: file-person
       text: Resume
       href: https://github.com/YYZhang2025/YYZHANG2025/blob/main/cv.pdf

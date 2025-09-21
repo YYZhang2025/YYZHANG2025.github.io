@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yuyang Zhang">
+<meta name="description" content="This is a decition mode ls">
+
+<title>Diffusion Model</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../.././style/icon.avif" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-58956b0dfc7ff4ca687499986122f731.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-82aef919f132158da7c4d79f856b62f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-58956b0dfc7ff4ca687499986122f731.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../../style/styles.css">
+<meta property="og:title" content="Diffusion Model">
+<meta property="og:description" content="This is a decition mode ls">
+<meta property="og:image" content="assets/denoise-loss-function.png">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/YYZhang2025"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/zhang-yuyang/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/blogs.html"> 
+<span class="menu-text">Blogs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/notes.html"> 
+<span class="menu-text">Learning Notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://yuyang.info/100-AI-Papers/"> 
+<span class="menu-text">100 Papers with Code</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Diffusion Model</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prelimeany" id="toc-prelimeany" class="nav-link active" data-scroll-target="#prelimeany"><span class="header-section-number">1</span> Prelimeany</a>
+  <ul class="collapse">
+  <li><a href="#elbo" id="toc-elbo" class="nav-link" data-scroll-target="#elbo"><span class="header-section-number">1.1</span> ELBO</a></li>
+  <li><a href="#ddpm" id="toc-ddpm" class="nav-link" data-scroll-target="#ddpm"><span class="header-section-number">1.2</span> DDPM</a>
+  <ul class="collapse">
+  <li><a href="#loss-function" id="toc-loss-function" class="nav-link" data-scroll-target="#loss-function"><span class="header-section-number">1.2.1</span> Loss Function</a></li>
+  </ul></li>
+  <li><a href="#time-embedding" id="toc-time-embedding" class="nav-link" data-scroll-target="#time-embedding"><span class="header-section-number">1.3</span> Time Embedding</a></li>
+  <li><a href="#sampling" id="toc-sampling" class="nav-link" data-scroll-target="#sampling"><span class="header-section-number">1.4</span> Sampling</a></li>
+  <li><a href="#ddpm-1" id="toc-ddpm-1" class="nav-link" data-scroll-target="#ddpm-1"><span class="header-section-number">1.5</span> DDPM</a></li>
+  <li><a href="#ddim" id="toc-ddim" class="nav-link" data-scroll-target="#ddim"><span class="header-section-number">1.6</span> DDIM</a></li>
+  <li><a href="#conditioned-generation" id="toc-conditioned-generation" class="nav-link" data-scroll-target="#conditioned-generation"><span class="header-section-number">1.7</span> Conditioned Generation</a>
+  <ul class="collapse">
+  <li><a href="#classifier-generation" id="toc-classifier-generation" class="nav-link" data-scroll-target="#classifier-generation"><span class="header-section-number">1.7.1</span> Classifier Generation</a></li>
+  <li><a href="#classifier-free-generation" id="toc-classifier-free-generation" class="nav-link" data-scroll-target="#classifier-free-generation"><span class="header-section-number">1.7.2</span> Classifier-Free Generation</a></li>
+  </ul></li>
+  <li><a href="#speed-up-diffusion-models" id="toc-speed-up-diffusion-models" class="nav-link" data-scroll-target="#speed-up-diffusion-models"><span class="header-section-number">1.8</span> Speed Up Diffusion Models</a>
+  <ul class="collapse">
+  <li><a href="#consistency-models" id="toc-consistency-models" class="nav-link" data-scroll-target="#consistency-models"><span class="header-section-number">1.8.1</span> Consistency Models</a></li>
+  <li><a href="#latent-variable-space" id="toc-latent-variable-space" class="nav-link" data-scroll-target="#latent-variable-space"><span class="header-section-number">1.8.2</span> Latent Variable Space</a></li>
+  </ul></li>
+  <li><a href="#score-matching" id="toc-score-matching" class="nav-link" data-scroll-target="#score-matching"><span class="header-section-number">1.9</span> Score Matching</a></li>
+  </ul></li>
+  <li><a href="#from-ode-and-sde-view-point" id="toc-from-ode-and-sde-view-point" class="nav-link" data-scroll-target="#from-ode-and-sde-view-point"><span class="header-section-number">2</span> From ODE and SDE view point</a>
+  <ul class="collapse">
+  <li><a href="#ode-vs.-sde" id="toc-ode-vs.-sde" class="nav-link" data-scroll-target="#ode-vs.-sde"><span class="header-section-number">2.1</span> ODE vs.&nbsp;SDE</a>
+  <ul class="collapse">
+  <li><a href="#vector-field" id="toc-vector-field" class="nav-link" data-scroll-target="#vector-field"><span class="header-section-number">2.1.1</span> Vector Field</a></li>
+  </ul></li>
+  <li><a href="#mean-flow" id="toc-mean-flow" class="nav-link" data-scroll-target="#mean-flow"><span class="header-section-number">2.2</span> Mean Flow</a></li>
+  </ul></li>
+  <li><a href="#model-architecture" id="toc-model-architecture" class="nav-link" data-scroll-target="#model-architecture"><span class="header-section-number">3</span> Model Architecture</a>
+  <ul class="collapse">
+  <li><a href="#u-net" id="toc-u-net" class="nav-link" data-scroll-target="#u-net"><span class="header-section-number">3.1</span> U-Net</a></li>
+  <li><a href="#control-net" id="toc-control-net" class="nav-link" data-scroll-target="#control-net"><span class="header-section-number">3.2</span> Control Net</a></li>
+  <li><a href="#diffusion-transformer-dit" id="toc-diffusion-transformer-dit" class="nav-link" data-scroll-target="#diffusion-transformer-dit"><span class="header-section-number">3.3</span> Diffusion Transformer (DiT)</a></li>
+  </ul></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">4</span> Case Study</a>
+  <ul class="collapse">
+  <li><a href="#imagen" id="toc-imagen" class="nav-link" data-scroll-target="#imagen"><span class="header-section-number">4.1</span> Imagen</a></li>
+  </ul></li>
+  <li><a href="#dalle" id="toc-dalle" class="nav-link" data-scroll-target="#dalle"><span class="header-section-number">5</span> DALL·E</a>
+  <ul class="collapse">
+  <li><a href="#stable-diffusion" id="toc-stable-diffusion" class="nav-link" data-scroll-target="#stable-diffusion"><span class="header-section-number">5.1</span> Stable Diffusion</a></li>
+  <li><a href="#meta-movie-gen-video" id="toc-meta-movie-gen-video" class="nav-link" data-scroll-target="#meta-movie-gen-video"><span class="header-section-number">5.2</span> Meta Movie Gen Video</a></li>
+  </ul></li>
+  <li><a href="#learning-resource" id="toc-learning-resource" class="nav-link" data-scroll-target="#learning-resource"><span class="header-section-number">6</span> Learning Resource</a></li>
+  <li><a href="#kaist-cs492-diffusion-models-and-their-applications" id="toc-kaist-cs492-diffusion-models-and-their-applications" class="nav-link" data-scroll-target="#kaist-cs492-diffusion-models-and-their-applications"><span class="header-section-number">7</span> KAIST CS492 Diffusion Models and Their Applications</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Diffusion Model</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">DecisionMaking</div>
+    <div class="quarto-category">NN-Training-Tricks</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    This is a decition mode ls
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prelimeany" id="toc-prelimeany"><span class="header-section-number">1</span> Prelimeany</a>
+  <ul>
+  <li><a href="#elbo" id="toc-elbo"><span class="header-section-number">1.1</span> ELBO</a></li>
+  <li><a href="#ddpm" id="toc-ddpm"><span class="header-section-number">1.2</span> DDPM</a>
+  <ul>
+  <li><a href="#loss-function" id="toc-loss-function"><span class="header-section-number">1.2.1</span> Loss Function</a></li>
+  </ul></li>
+  <li><a href="#time-embedding" id="toc-time-embedding"><span class="header-section-number">1.3</span> Time Embedding</a></li>
+  <li><a href="#sampling" id="toc-sampling"><span class="header-section-number">1.4</span> Sampling</a></li>
+  <li><a href="#ddpm-1" id="toc-ddpm-1"><span class="header-section-number">1.5</span> DDPM</a></li>
+  <li><a href="#ddim" id="toc-ddim"><span class="header-section-number">1.6</span> DDIM</a></li>
+  <li><a href="#conditioned-generation" id="toc-conditioned-generation"><span class="header-section-number">1.7</span> Conditioned Generation</a>
+  <ul>
+  <li><a href="#classifier-generation" id="toc-classifier-generation"><span class="header-section-number">1.7.1</span> Classifier Generation</a></li>
+  <li><a href="#classifier-free-generation" id="toc-classifier-free-generation"><span class="header-section-number">1.7.2</span> Classifier-Free Generation</a></li>
+  </ul></li>
+  <li><a href="#speed-up-diffusion-models" id="toc-speed-up-diffusion-models"><span class="header-section-number">1.8</span> Speed Up Diffusion Models</a>
+  <ul>
+  <li><a href="#consistency-models" id="toc-consistency-models"><span class="header-section-number">1.8.1</span> Consistency Models</a></li>
+  <li><a href="#latent-variable-space" id="toc-latent-variable-space"><span class="header-section-number">1.8.2</span> Latent Variable Space</a></li>
+  </ul></li>
+  <li><a href="#score-matching" id="toc-score-matching"><span class="header-section-number">1.9</span> Score Matching</a></li>
+  </ul></li>
+  <li><a href="#from-ode-and-sde-view-point" id="toc-from-ode-and-sde-view-point"><span class="header-section-number">2</span> From ODE and SDE view point</a>
+  <ul>
+  <li><a href="#ode-vs.-sde" id="toc-ode-vs.-sde"><span class="header-section-number">2.1</span> ODE vs.&nbsp;SDE</a>
+  <ul>
+  <li><a href="#vector-field" id="toc-vector-field"><span class="header-section-number">2.1.1</span> Vector Field</a></li>
+  </ul></li>
+  <li><a href="#mean-flow" id="toc-mean-flow"><span class="header-section-number">2.2</span> Mean Flow</a></li>
+  </ul></li>
+  <li><a href="#model-architecture" id="toc-model-architecture"><span class="header-section-number">3</span> Model Architecture</a>
+  <ul>
+  <li><a href="#u-net" id="toc-u-net"><span class="header-section-number">3.1</span> U-Net</a></li>
+  <li><a href="#control-net" id="toc-control-net"><span class="header-section-number">3.2</span> Control Net</a></li>
+  <li><a href="#diffusion-transformer-dit" id="toc-diffusion-transformer-dit"><span class="header-section-number">3.3</span> Diffusion Transformer (DiT)</a></li>
+  </ul></li>
+  <li><a href="#case-study" id="toc-case-study"><span class="header-section-number">4</span> Case Study</a>
+  <ul>
+  <li><a href="#imagen" id="toc-imagen"><span class="header-section-number">4.1</span> Imagen</a></li>
+  </ul></li>
+  <li><a href="#dalle" id="toc-dalle"><span class="header-section-number">5</span> DALL·E</a>
+  <ul>
+  <li><a href="#stable-diffusion" id="toc-stable-diffusion"><span class="header-section-number">5.1</span> Stable Diffusion</a></li>
+  <li><a href="#meta-movie-gen-video" id="toc-meta-movie-gen-video"><span class="header-section-number">5.2</span> Meta Movie Gen Video</a></li>
+  </ul></li>
+  <li><a href="#learning-resource" id="toc-learning-resource"><span class="header-section-number">6</span> Learning Resource</a></li>
+  <li><a href="#kaist-cs492-diffusion-models-and-their-applications" id="toc-kaist-cs492-diffusion-models-and-their-applications"><span class="header-section-number">7</span> KAIST CS492 Diffusion Models and Their Applications</a></li>
+  </ul>
+</nav>
+<section id="prelimeany" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Prelimeany</h1>
+<section id="elbo" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="elbo"><span class="header-section-number">1.1</span> ELBO</h2>
+<p><span class="math display">\[
+\begin{align}
+\log_{\theta}P(\mathrm{x})   
+&amp;= \log \int P_{\theta}(\mathrm{x} | \mathrm{z}) \, d\mathrm{z} \\
+&amp;=  \log \int P_{\theta}(\mathrm{x, z}) \frac{Q_{\phi}(\mathrm{z} | \mathrm{x})}{Q_{\phi}(\mathrm{z} | \mathrm{x})} \, dx   \\
+&amp;=  \log \mathbb{E}_{\mathrm{z} \sim Q_{\phi}} \left[ \frac{P_{\theta}(\mathrm{x, z})}{Q_{\phi}(\mathrm{z} | \mathrm{x})} \right] \\
+&amp;\geq   \boxed{\mathbb{E}_{\mathrm{z} \sim Q_{\phi}} \left[ \log  \frac{P_{\theta}(\mathrm{x, z})}{Q_{\phi}(\mathrm{z} | \mathrm{x})} \right] } \\
+&amp;=  \mathbb{E}_{\mathrm{z} \sim Q_{\phi}} \left[  \log\frac{P_{\theta}(\mathrm{x} | \mathrm{z}) P(\mathrm{z})}{Q_{\phi}(\mathrm{z} | \mathrm{x})}  \right]    \\
+&amp; = \mathbb{E}_{\mathrm{z} \sim Q_{\phi}}[\log P_{\theta}(\mathrm{x} | \mathrm{z})] - D_{KL}[Q_{\phi}(\mathrm{z} | \mathrm{x}) \| P(\mathrm{z})]
+\end{align}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+D_{KL}[Q_{\phi}(\mathrm{z} | \mathrm{x}) \| P(\mathrm{z} | \mathrm{x})]   
+&amp; = \mathbb{E}_{\mathrm{z} \sim Q_{\phi}(\mathrm{z} | \mathrm{x})} \left[ \log \frac{Q_{\phi}(\mathrm{z} | \mathrm{x})}{P(\mathrm{z} | \mathrm{x})} \right] \\
+&amp; = \int Q_{\phi}(\mathrm{z} | \mathrm{x}) \log \frac{Q_{\phi}(\mathrm{z} | \mathrm{x})}{P(\mathrm{z} | \mathrm{x})} \, d\mathrm{z}  \\
+&amp; = - \int Q_{\phi}(\mathrm{z} | \mathrm{x}) \log \frac{P(\mathrm{z} | \mathrm{x})}{Q_{\phi}(\mathrm{z} | \mathrm{x})} \, d\mathrm{z}  \\
+&amp; = - \int Q_{\phi}(\mathrm{z} | \mathrm{x}) \log \frac{P(\mathrm{z} | \mathrm{x}) P_{\theta}(\mathrm{x})}{Q_{\phi}(\mathrm{z} | \mathrm{x}) P_{\theta}(\mathrm{x})}  \, d\mathrm{z}  \\
+&amp; = - \int Q_{\phi}(\mathrm{z} | \mathrm{x}) \log \frac{P_{\theta}(\mathrm{x, z})}{Q_{\phi}(\mathrm{z} | \mathrm{x}) P_{\theta}(\mathrm{x})}  \, d\mathrm{z}  \\
+&amp; = - \int Q_{\phi}(\mathrm{z} | \mathrm{x}) \log \frac{P_{\theta}(\mathrm{x, z})}{Q_{\phi}(\mathrm{z} | \mathrm{x})}  \, d\mathrm{z}   + \int Q_{\phi}(\mathrm{z} | \mathrm{x}) \log P_{\theta}(\mathrm{x})  \, d\mathrm{z}  \\
+&amp; = - \boxed{\mathbb{E}_{\mathrm{z} \sim Q_{\phi}(\mathrm{z} | \mathrm{x})}\left[\log \frac{P_{\theta}(\mathrm{x, z})}{Q_{\phi}(\mathrm{z} | \mathrm{x})} \right]}  + \log P_{\theta}(\mathrm{x})
+\end{align}
+\]</span></p>
+<p>That lead to: <span class="math display">\[
+\log P_{\theta}(\mathrm{x}) = \underbrace{ \mathbb{E}_{\mathrm{z} \sim Q_{\phi}(\mathrm{z} | \mathrm{x})}\left[\log \frac{P_{\theta}(\mathrm{x, z})}{Q_{\phi}(\mathrm{z} | \mathrm{x})} \right]  }_{ ELBO }+ D_{KL}[Q_{\phi}(\mathrm{z} | \mathrm{x}) \| P(\mathrm{z} | \mathrm{x})]    
+\]</span> We use <span class="math inline">\(Q_{\phi}(\mathrm{z} | \mathrm{x})\)</span> to approximate the true posterior distribution <span class="math inline">\(P(\mathrm{z} | \mathrm{x})\)</span>. <span class="math display">\[
+EBLO =  \mathbb{E}_{\mathrm{z} \sim Q_{\phi}(\mathrm{z} | \mathrm{x})}\left[\log \frac{P_{\theta}(\mathrm{x, z})}{Q_{\phi}(\mathrm{z} | \mathrm{x})} \right]  =  \mathbb{E}_{\mathrm{z} \sim Q_{\phi}}[\log P_{\theta}(\mathrm{x} | \mathrm{z})] - D_{KL}[Q_{\phi}(\mathrm{z} | \mathrm{x}) \| P(\mathrm{z})]
+\]</span></p>
+</section>
+<section id="ddpm" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="ddpm"><span class="header-section-number">1.2</span> DDPM</h2>
+<p>We will derive three predictor: - Image predictor <span class="math inline">\(\hat{\mathrm{x}}\)</span> - Mean Predictor <span class="math inline">\(\hat{\mu}\)</span> - Noise Predictor <span class="math inline">\(\hat{\epsilon}\)</span> To solve the DDPM problem, it is ok if you don’t understand.</p>
+<section id="loss-function" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="loss-function"><span class="header-section-number">1.2.1</span> Loss Function</h3>
+<p><span class="math display">\[
+\begin{align}
+\log P_{\theta}(\mathrm{x}) &amp; =  ELBO + D_{KL}[Q_{\phi}(\mathrm{z} | \mathrm{x}) \| P(\mathrm{z} | \mathrm{x})]     \\
+&amp; \geq   \mathbb{E}_{\mathrm{z} \sim Q_{\phi}(\mathrm{z} | \mathrm{x})}\left[\log \frac{P_{\theta}(\mathrm{x, z})}{Q_{\phi}(\mathrm{z} | \mathrm{x})} \right]    \\
+&amp; = \mathbb{E}_{\mathrm{x}_{1:T} \sim Q_{\phi}(\mathrm{x}_{1:T} | \mathrm{x}_{0})}\left[\log \frac{P_{\theta}(\mathrm{x}_{0}, \mathrm{x}_{1:T})}{Q_{\phi}(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \right]  
+\end{align}
+\]</span></p>
+<p>One thing good about DDPM is that, we know what <span class="math inline">\(Q_{\phi}(\mathrm{x}_{1:T} | \mathrm{x}_{0})\)</span> exactly: <span class="math display">\[
+Q_{\phi}(\mathrm{x}_{1:T} | \mathrm{x}_{0}) = \prod_{t=1}^{T}P(\mathrm{x}_{t} | \mathrm{x}_{t - 1})
+\]</span></p>
+<p><span class="math display">\[
+\begin{align}
+EBLO   
+&amp; = \mathbb{E}_{\mathrm{x}_{1:T} \sim Q_{\phi}(\mathrm{x}_{1:T} | \mathrm{x}_{0})}\left[\log \frac{P_{\theta}(\mathrm{x}_{0}, \mathrm{x}_{1:T})}{Q_{\phi}(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \right]   \\
+&amp; =  \mathbb{E}_{\mathrm{x}_{1:T} \sim Q(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \left[ \log \frac{P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}}) \prod_{t = 2}^{T}P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})P(\mathrm{x}_{T})}
+{Q(\mathrm{x}_{1} | \mathrm{x}_{0})\prod_{t=2}^{T}Q(\mathrm{x}_{t} | \mathrm{x}_{t - 1})}  \right] \\
+&amp; = \mathbb{E}_{ Q(\mathrm{x}_{T} | \mathrm{x}_{0})} [\log  P(\mathrm{x}_{T})] +  \mathbb{E}_{ Q(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \left[ \log \frac{\prod_{t=2}^{T}P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})}{\prod_{t=2}^{T}Q(\mathrm{x}_{t} | \mathrm{x}_{t - 1})} \right] + \mathbb{E}_{ Q(\mathrm{x}_{1} | \mathrm{x}_{0})} \left[ \log \frac{P_{\theta}(\mathrm{x}_{0} | \mathrm{x}_{1})}{Q(\mathrm{x}_{1} | \mathrm{x}_{0})}  \right] \\
+&amp; = \mathbb{E}_{ Q(\mathrm{x}_{T} | \mathrm{x}_{0})} [\log  P(\mathrm{x}_{T})]  
++ \log  \sum_{t=2}^{T}\mathbb{E}_{ Q(\mathrm{x}_{t-1}, \mathrm{x_{t}} | \mathrm{x}_{0})}\left[ \log \frac{P_{\theta}(\mathrm{x}_{t-1} | \mathrm{x}_{t})}{Q(\mathrm{x}_{t} | \mathrm{x}_{t-1})}  \right]
++ \mathbb{E}_{ Q(\mathrm{x}_{1} | \mathrm{x}_{0})} \left[ \log \frac{P_{\theta}(\mathrm{x}_{0} | \mathrm{x}_{1})}{Q(\mathrm{x}_{1} | \mathrm{x}_{0})}  \right]
+\end{align}
+\]</span></p>
+<p>As we can see, to calculate the second term, we need to sample from two random distribution, to get <span class="math inline">\(\mathrm{x_{t}}, \mathrm{x_{t-1}}\)</span>. This will create very noisy estimate with high variance. So, we need to re-write the ELBO, to make it better low variance.</p>
+<p><span class="math display">\[
+\begin{align}
+ELBO &amp;=   \mathbb{E}_{\mathrm{x}_{1:T} \sim Q(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \left[ \log \left( P(\mathrm{x}_{T})\frac{\prod_{t = 2}^{T}P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})}
+{\prod_{t=2}^{T}Q(\mathrm{x}_{t} | \mathrm{x}_{t - 1})} \frac{P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}})}{Q(\mathrm{x}_{1} | \mathrm{x}_{0})} \right)  \right]    \\
+&amp;=   \mathbb{E}_{\mathrm{x}_{1:T} \sim Q(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \left[ \log \left( P(\mathrm{x}_{T})\frac{\prod_{t = 2}^{T}P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})}
+{\prod_{t=2}^{T}Q(\textcolor{green}{\mathrm{x}_{t} | \mathrm{x}_{t - 1}, \mathrm{x}_{0}})} \frac{P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}})}{Q(\mathrm{x}_{1} | \mathrm{x}_{0})} \right)  \right]  \\
+&amp;=   \mathbb{E}_{\mathrm{x}_{1:T} \sim Q(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \left[ \log \left( P(\mathrm{x}_{T})\frac{\prod_{t = 2}^{T}P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})}
+{\prod_{t=2}^{T}Q(\textcolor{green}{\mathrm{x}_{t-1} | \mathrm{x}_{t}, \mathrm{x}_{0}})} \frac{Q(\mathrm{x}_{t-1} | \mathrm{x}_{0})}{Q(\mathrm{x}_{t}|\mathrm{x}_{0})}\frac{P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}})}{Q(\mathrm{x}_{1} | \mathrm{x}_{0})} \right)  \right]  \\
+&amp;=   \mathbb{E}_{\mathrm{x}_{1:T} \sim Q(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \left[ \log \left( P(\mathrm{x}_{T})\frac{\prod_{t = 2}^{T}P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})}
+{\prod_{t=2}^{T}Q(\textcolor{green}{\mathrm{x}_{t-1} | \mathrm{x}_{t}, \mathrm{x}_{0}})} \frac{Q(\mathrm{x}_{1} | \mathrm{x}_{0})}{Q(\mathrm{x}_{T}|\mathrm{x}_{0})}\frac{P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}})}{Q(\mathrm{x}_{1} | \mathrm{x}_{0})} \right)  \right]  \\
+&amp;=  \mathbb{E}_{\mathrm{x}_{1:T} \sim Q(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \left[ \log \left( \frac{P(\mathrm{x}_{T})}{Q(\mathrm{x}_{T}|\mathrm{x}_{0})} \frac{\prod_{t = 2}^{T}P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})}
+{\prod_{t=2}^{T}Q(\textcolor{green}{\mathrm{x}_{t-1} | \mathrm{x}_{t}, \mathrm{x}_{0}})}P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}}) \right)  \right]   \\
+&amp;=  \mathbb{E}_{\mathrm{x}_{1:T} \sim Q(\mathrm{x}_{1:T} | \mathrm{x}_{0})} \left[ \log \left( \frac{P(\mathrm{x}_{T})}{Q(\mathrm{x}_{T}|\mathrm{x}_{0})} \frac{\prod_{t = 2}^{T}P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})}
+{\prod_{t=2}^{T}Q(\textcolor{green}{\mathrm{x}_{t-1} | \mathrm{x}_{t}, \mathrm{x}_{0}})}P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}}) \right)  \right]   \\
+&amp; = \mathbb{E}_{\mathrm{x}_{T} \sim Q(\mathrm{x}_{T} | \mathrm{x}_{0})} \left[\log \frac{P(\mathrm{x}_{T})}{Q(\mathrm{x}_{T}|\mathrm{x}_{0})} \right] + \sum_{t=2}^{T} \mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_{t} |\mathrm{x}_{0} )} \left[\log \frac{P_{\theta}(\mathrm{x_{t - 1} | \mathrm{x}_{t}})}
+{Q(\textcolor{green}{\mathrm{x}_{t-1} | \mathrm{x}_{t}, \mathrm{x}_{0}})} \right]
++ \mathbb{E}_{\mathrm{x}_{1} \sim Q(\mathrm{x}_{1} | \mathrm{x}_{0})}[P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}}) ]  \\
+&amp; = -D_{KL}[Q(\mathrm{x}_{T} | \mathrm{x}_{0}) \| P(\mathrm{x}_{T})]  \\ &amp;
+\quad - \sum_{t=2}^{T}\mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_{t} |\mathrm{x}_{0} )} [D_{KL}[Q(\mathrm{x}_{t-1} |\mathrm{x}_{t} \mathrm{x}_{0}) \| P_{\theta}(\mathrm{x}_{t-1} | \mathrm{x}_{t})]  ]\\&amp;
+\quad +  \mathbb{E}_{\mathrm{x}_{1} \sim Q(\mathrm{x}_{1} | \mathrm{x}_{0})}[P_{\theta}(\mathrm{x}_{0} | \mathrm{x_{1}}) ]
+\end{align}
+\]</span></p>
+<p>The first term is the prior matching term, which is the constant, no need to optimize. The third term is the reconstruction term, which is the The second term is the consistent term, which the KL Divergence between two gaussian distribution, which has close form: <span class="math display">\[
+\mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_{t} |\mathrm{x}_{0} )} [D_{KL}[Q(\mathrm{x}_{t-1} |\mathrm{x}_{t} \mathrm{x}_{0}) \| P_{\theta}(\mathrm{x}_{t-1} | \mathrm{x}_{t})]  ] = \mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_{t} | \mathrm{x}_{0})} \left [\frac{1}{2\tilde{\sigma}_{t}^{2}}\| \mu_{\theta}(\mathrm{x}_{t}, t)  - \tilde{\mu}(\mathrm{x}_{t}, \mathrm{x}_{0})\|^{2} \right]
+\]</span></p>
+<p>This is called the <strong>mean predictor</strong>. What if we want to precict get the <span class="math inline">\(\mathrm{x}_{0}\)</span>. <span class="math display">\[
+\begin{align}
+\mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_{t} |\mathrm{x}_{0} )} [D_{KL}[Q(\mathrm{x}_{t-1} |\mathrm{x}_{t} \mathrm{x}_{0}) \| P_{\theta}(\mathrm{x}_{t-1} | \mathrm{x}_{t})]  ] &amp;= \mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_{t} | \mathrm{x}_{0})} \left [\frac{1}{2\tilde{\sigma}_{t}^{2}}\| \mu_{\theta}(\mathrm{x}_{t}, t)  - \tilde{\mu}(\mathrm{x}_{t}, \mathrm{x}_{0})\|^{2} \right] \\
+&amp; = \frac{1}{2 \tilde{\sigma}_t^2}&nbsp;\cdot&nbsp;
+\frac{\bar{\alpha}_{t-1} \beta_t^2}{(1-\bar{\alpha}_t)^2}&nbsp;
+\mathbb{E}_{\mathrm{x}_{t}\sim Q(\mathrm{x}_t|\mathrm{x}_0)}&nbsp;
+\left[ \| \hat{x}_\theta(x_t, t) - x_0 \|^2 \right] \\
+&amp; =\omega_t
+\mathbb{E}_{\mathrm{x}_{t}\sim Q(\mathrm{x}_t|\mathrm{x}_0)}&nbsp;
+\left[ \| \hat{\mathrm{x}}_\theta(\mathrm{x}_t, t) - \mathrm{x}_0 \|^2 \right]
+\end{align}
+\]</span></p>
+<p>This is called the <span class="math inline">\(\mathrm{x}_{0}\)</span> predictor, finally, we can get the <span class="math inline">\(\varepsilon_t\)</span>-predictor: <span class="math display">\[
+\begin{align}
+\mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_{t} |\mathrm{x}_{0} )} [D_{KL}[Q(\mathrm{x}_{t-1} |\mathrm{x}_{t} \mathrm{x}_{0}) \| P_{\theta}(\mathrm{x}_{t-1} | \mathrm{x}_{t})]  ] &amp;= \mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_{t} | \mathrm{x}_{0})} \left [\frac{1}{2\tilde{\sigma}_{t}^{2}}\| \mu_{\theta}(\mathrm{x}_{t}, t)  - \tilde{\mu}(\mathrm{x}_{t}, \mathrm{x}_{0})\|^{2} \right] \\
+&amp; = \frac{1}{2 \tilde{\sigma}_t^2}
+\cdot
+\frac{(1-\bar{\alpha}_t)^2}{\bar{\alpha}_t (1-\bar{\alpha}_t)}
+\mathbb{E}_{\mathrm{x}_{t} \sim Q(\mathrm{x}_t|\mathrm{x}_0)}
+\left[ \| \hat{\varepsilon}_\theta(x_t, t) - \varepsilon_t \|^2 \right]
+\\
+&amp; =\omega_{t}'
+\mathbb{E}_{\mathrm{x}_{t}\sim Q(\mathrm{x}_t|\mathrm{x}_0)}&nbsp;
+\left[ \| \hat{\varepsilon}_\theta(x_t, t) - \varepsilon_t \|^2 \right]
+\end{align}
+\]</span></p>
+<p>This is the noise predictor.</p>
+<p><img src="assets/denoise-loss-function.png" class="img-fluid"></p>
+<p><img src="assets/3-different-posterior-dist.png" class="img-fluid"></p>
+<p><img src="assets/3-different-predictor.png" class="img-fluid"></p>
+<p>In practice, we can simply drop the weight term in training: and use noise predictor</p>
+<p>In this blog, we will first introduce what is the diffusion models, than we will introduce how to implement the DDPM from scratch using PyTorch. After that, we will explore the flow matching and score matching model through the ODE/SDE. By the end of the blog, I believe you will gain a comprehensive understanding of the diffusion model, and SOTA generative models.</p>
+<p>The central idea of DDPM is take each training image and to corrupt it using a multi-step noise process to transform it into a sample from a Gaussian distribution. Than, a neural network, known as denoiser <span class="math inline">\(\epsilon_{\theta}\)</span>, is trained to inver this process. Once the denoiser is trained, it can than generate new images starting with samples from Gaussian.</p>
+<p><img src="assets/ODE-Illutrations.png" class="img-fluid"></p>
+<p>Diffusion Model</p>
+<p><img src="assets/DDPM-Training-Sampling-algs.png" class="img-fluid"></p>
+<p><img src="assets/ddpm-forward-reverse.png" class="img-fluid"></p>
+<p>Forward Diffusion Process: <span class="math display">\[
+q(\mathrm{x}_{t} | \mathrm{x}_{t - 1}) =\mathcal{N}(
+\mathrm{x}_{t};
+\sqrt{ 1 - \beta_{t} }\mathrm{x}_{t}, \beta_{t}\mathbf{I}
+)
+\]</span></p>
+<p><span class="math display">\[
+\mathrm{x}_{t} =  \sqrt{ 1 - \beta_{t} }\mathrm{x}_{t} + \beta_{t}\epsilon_{t}, \quad \text{where} \ \epsilon_{t} \sim \mathcal{N}(0, \mathbf{I}_{})
+\]</span></p>
+<p><span class="math display">\[
+\mathrm{x}_{t} = \sqrt{ \bar{\alpha}_{t} }\mathrm{x_{0}} +  \sqrt{ 1 - \bar{\alpha}_{t} }\epsilon
+\]</span></p>
+<p>&nbsp;Langevin dynamics: $$ <em>t = </em>{t-1} + <em>{} p(</em>{t-1}) + ,_t, _t (0, )</p>
+<p>$$</p>
+<p>Backward Diffusion Process: $$ <span class="math display">\[\begin{align}
+&amp; p_{\theta}(\mathbf{x}_{0:T}) = p(\mathbf{x}_T) \prod_{t=1}^T p_{\theta}(\mathbf{x}_{t-1} \mid \mathbf{x}_t)  \\
+
+&amp;  p_{\theta}(\mathbf{x}_{t-1} \mid \mathbf{x}_t) = \mathcal{N}\!\left(\mathbf{x}_{t-1}; \mu_{\theta}(\mathbf{x}_t, t), \Sigma_{\theta}(\mathbf{x}_t, t)\right)
+
+\end{align}\]</span> $$</p>
+<p>The above content is intractable, one thing to notice that is is tractable when we conditioned on the <span class="math inline">\(\mathrm{x}_{0}\)</span> <span class="math display">\[
+q(\mathbf{x}_{t-1} \mid \mathbf{x}_t, \mathbf{x}_0)
+= \mathcal{N}\!\left(\mathbf{x}_{t-1};
+\textcolor{blue}{\tilde{\mu}(\mathbf{x}_t, \mathbf{x}_0)}, \,
+\textcolor{red}{\tilde{\beta}_t \mathbf{I}}\right)
+\]</span> where : <span class="math display">\[
+\begin{align}
+\tilde{\mu}_t
+&amp; = \frac{\sqrt{\alpha_t}(1 - \bar{\alpha}_{t-1})}{1 - \bar{\alpha}_t}\mathbf{x}_t
++ \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1 - \bar{\alpha}_t}
+   \frac{1}{\sqrt{\alpha_t}} \left(\mathbf{x}_t - \sqrt{1 - \bar{\alpha}_t}\,\epsilon_t\right) \\
+&amp; = \textcolor{cyan}{\frac{1}{\sqrt{\alpha_t}}
+   \left(\mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \,\epsilon_t\right)}
+\end{align}
+\]</span></p>
+<p>So, the loss function become: $$</p>
+<p><span class="math display">\[\begin{align}
+\mathcal{L}_t^{\text{simple}}
+&amp; = \mathbb{E}_{t \sim [1,T], \mathbf{x}_0, \epsilon_t}
+  \left[ \left\| \epsilon_t - \epsilon_\theta(\mathbf{x}_t, t) \right\|^2 \right] \\
+&amp; = \mathbb{E}_{t \sim [1,T], \mathbf{x}_0, \epsilon_t}
+  \left[ \left\| \epsilon_t - \epsilon_\theta\!\left(\sqrt{\bar{\alpha}_t}\mathbf{x}_0
+  + \sqrt{1 - \bar{\alpha}_t}\,\epsilon_t,\, t \right) \right\|^2 \right]
+\end{align}\]</span> $$</p>
+<p>and the loss is: <span class="math display">\[
+\mathcal{L} = \mathcal{L}_{t} + C
+\]</span> where <span class="math inline">\(C\)</span> is some constant not depend on <span class="math inline">\(\theta\)</span></p>
+</section>
+</section>
+<section id="time-embedding" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="time-embedding"><span class="header-section-number">1.3</span> Time Embedding</h2>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> get_timestep_embedding(timesteps, embedding_dim):</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">"""</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">    This matches the implementation in Denoising Diffusion Probabilistic Models:</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    From Fairseq.</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">    Build sinusoidal embeddings.</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    This matches the implementation in tensor2tensor, but differs slightly</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    from the description in Section 3.5 of "Attention Is All You Need".</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    """</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="cf">assert</span> <span class="bu">len</span>(timesteps.shape) <span class="op">==</span> <span class="dv">1</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a>    half_dim <span class="op">=</span> embedding_dim <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>    emb <span class="op">=</span> math.log(<span class="dv">10000</span>) <span class="op">/</span> (half_dim <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    emb <span class="op">=</span> torch.exp(torch.arange(half_dim, dtype<span class="op">=</span>torch.float32) <span class="op">*</span> <span class="op">-</span>emb)</span>
+<span id="cb1-14"><a href="#cb1-14"></a>    emb <span class="op">=</span> emb.to(device<span class="op">=</span>timesteps.device)</span>
+<span id="cb1-15"><a href="#cb1-15"></a>    emb <span class="op">=</span> timesteps.<span class="bu">float</span>()[:, <span class="va">None</span>] <span class="op">*</span> emb[<span class="va">None</span>, :]</span>
+<span id="cb1-16"><a href="#cb1-16"></a>    emb <span class="op">=</span> torch.cat([torch.sin(emb), torch.cos(emb)], dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-17"><a href="#cb1-17"></a>    <span class="cf">if</span> embedding_dim <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">1</span>:  <span class="co"># zero pad</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a>        emb <span class="op">=</span> torch.nn.functional.pad(emb, (<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb1-19"><a href="#cb1-19"></a>    <span class="cf">return</span> emb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sampling" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sampling"><span class="header-section-number">1.4</span> Sampling</h2>
+<p>After training a <strong>noise denoiser</strong>, we can sample from the <span class="math inline">\(p_{\text{init}}\)</span>, and convert it to the <span class="math inline">\(p_{\text{data}}\)</span>. There are several approaches</p>
+</section>
+<section id="ddpm-1" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="ddpm-1"><span class="header-section-number">1.5</span> DDPM</h2>
+<p>This are random samples.</p>
+</section>
+<section id="ddim" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="ddim"><span class="header-section-number">1.6</span> DDIM</h2>
+<p>DDIM is determinstic</p>
+</section>
+<section id="conditioned-generation" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="conditioned-generation"><span class="header-section-number">1.7</span> Conditioned Generation</h2>
+<p>So far in the DDPM model, the image generated is un-conditioned. How can we generated content from some condition <span class="math inline">\(y\)</span> such as some prompts</p>
+<section id="classifier-generation" class="level3" data-number="1.7.1">
+<h3 data-number="1.7.1" class="anchored" data-anchor-id="classifier-generation"><span class="header-section-number">1.7.1</span> Classifier Generation</h3>
+</section>
+<section id="classifier-free-generation" class="level3" data-number="1.7.2">
+<h3 data-number="1.7.2" class="anchored" data-anchor-id="classifier-free-generation"><span class="header-section-number">1.7.2</span> Classifier-Free Generation</h3>
+</section>
+</section>
+<section id="speed-up-diffusion-models" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="speed-up-diffusion-models"><span class="header-section-number">1.8</span> Speed Up Diffusion Models</h2>
+<section id="consistency-models" class="level3" data-number="1.8.1">
+<h3 data-number="1.8.1" class="anchored" data-anchor-id="consistency-models"><span class="header-section-number">1.8.1</span> Consistency Models</h3>
+</section>
+<section id="latent-variable-space" class="level3" data-number="1.8.2">
+<h3 data-number="1.8.2" class="anchored" data-anchor-id="latent-variable-space"><span class="header-section-number">1.8.2</span> Latent Variable Space</h3>
+<p>Variance Autoencoder</p>
+</section>
+</section>
+<section id="score-matching" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="score-matching"><span class="header-section-number">1.9</span> Score Matching</h2>
+<p><span class="math display">\[
+\nabla_{x_t} \log q(x_t|x_0)
+= \nabla_x \left( - \frac{\| x_t - \sqrt{\bar{\alpha}_t} x_0 \|^2}{2(1-\bar{\alpha}_t)} \right)
+= - \frac{x_t - \sqrt{\bar{\alpha}_t} x_0}{1-\bar{\alpha}_t}
+\]</span></p>
+<p>$$ _{x_t} q(x_t|x_0) = - = - </p>
+<p>$$</p>
+<p>So, can be interpreted as predicting the score <span class="math inline">\(\nabla_{x_t} \log q(x_t|x_0)\)</span> up to a scaling factor <span class="math inline">\(- \frac{1}{\sqrt{1-\bar{\alpha}_t}}\)</span></p>
+<p>According to the Tweedie’s formula, we have: <span class="math display">\[
+\nabla_{x_t} \log q(x_t)
+= - \frac{x_t - \sqrt{\bar{\alpha}_t}\,\mathbb{E}[x_0 \mid x_t]}{1-\bar{\alpha}_t}
+\]</span></p>
+<p><img src="assets/Post-1.png" class="img-fluid"> <img src="assets/Post-2.png" class="img-fluid"></p>
+<p><img src="assets/Post-3.png" class="img-fluid"></p>
+<p>So, this is the Noise-Conditional Score-Based Models <img src="assets/Post-5.png" class="img-fluid"></p>
+<p><img src="assets/Post-6.png" class="img-fluid"></p>
+<p>So, the solution is the Annealed Langevin Dynamics <img src="assets/Post-7.png" class="img-fluid"> At the beginning (when <span class="math inline">\(\sigma_{t}\)</span> is large), As time progresses (and <span class="math inline">\(\sigma_{t}\)</span> decreases), <img src="assets/Post-8.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="from-ode-and-sde-view-point" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> From ODE and SDE view point</h1>
+<p>So far, we have see the diffusion as add gaussian noise and de-noise it. Now, let’s switch gear, and under stand the Diffusion Models from the ODE view. For this Part, we will main focus on the Flow Matching, which is based on the ODE. The Score matching can understand.</p>
+<section id="ode-vs.-sde" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="ode-vs.-sde"><span class="header-section-number">2.1</span> ODE vs.&nbsp;SDE</h2>
+<p>Before talk about the ODE and SDE, let’s first understand some concepts to solid our understanding.</p>
+<section id="vector-field" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="vector-field"><span class="header-section-number">2.1.1</span> Vector Field</h3>
+<p>Vector Field is a function that assign a vector to every point in space. For example: imagine a weather map: at each location, an arrow shows the wind’s direction and strength. That arrow map is a vector field.</p>
+<p><img src="assets/vector-field-weather-map.gif" class="img-fluid"></p>
+<p><span class="math display">\[
+F: \mathbb{R}^{n} \to \mathbb{R}^{n}
+\]</span></p>
+<p>And every ODE <span class="math inline">\(u\)</span> is defined by a vector field: <span class="math display">\[
+u: \mathbb{R}^{d} \times [0, 1] \to \mathbb{R}^{d}, \quad (x, t) \to u_{t}(x)
+\]</span> that for every time <span class="math inline">\(t\)</span> and location <span class="math inline">\(\mathrm{x}\)</span>, we get a vector <span class="math inline">\(u_{t}(\mathrm{x})  \in \mathbb{R}^{d}\)</span> that point to some <strong>direction</strong>.</p>
+<hr>
+<p>Why we need time <span class="math inline">\(t\)</span>? Because for every location <span class="math inline">\(\mathrm{x}\)</span>, we might arrive same location at different time, due to the random start point <span class="math inline">\(\mathrm{x}_{0}\)</span></p>
+<p><span class="math display">\[
+\begin{align}
+\frac{d}{dt}\mathrm{x}_{t } &amp;= u_{t}(\mathrm{x}_{t}) \\
+\mathrm{x_{0}}&amp;=x_{0}
+\end{align}
+\]</span></p>
+<p>So, another question we want to ask it: when we start at <span class="math inline">\(x_{0}\)</span>, where are we at <span class="math inline">\(t\)</span>. This can be solved by flow, which is a solution to the ODE:</p>
+<p>$$</p>
+<p><span class="math display">\[\begin{align}
+\psi : \mathbb{R}^d \times [0,1] \mapsto \mathbb{R}^d &amp;,
+\quad (x_0, t) \mapsto \psi_t(x_0) \\
+
+\frac{d}{dt} \psi_t(x_0) &amp; = u_t(\psi_t(x_0)) \\
+
+\psi_0(x_0)&amp; = x_0\\
+\end{align}\]</span> $$</p>
+<p><span class="math display">\[
+\mathrm{x}_{1} \sim  p_{\text{data}}  
+\]</span> However, we can not solve the problem. But we can use the numerical analysis. One of the simplest and intuitive methods is Euler method:</p>
+<p><span class="math display">\[
+\mathrm{x}_{t + h} = \mathrm{x}_{t} +  h u_{t}(\mathrm{x}_{t}) \quad (t = 0, h, 2h, 3h, \dots,  1- h)
+\]</span></p>
+<p>Stochastic Differential Equations extend the ODEs with stochastic(random) trajectories, which is also known as <strong>stochastic process</strong>. The stochastic is add through a <strong>Brownian motion</strong>. A Brownain motion <span class="math inline">\(W = (W_{t})_{0\leq t \leq 1}\)</span> is a stochastic process such that: <span class="math inline">\(W_{0} = 0\)</span>: - Normal Increments: <span class="math inline">\(W_{t} - W_{s} \sim \mathcal{N}(0, (t - s)\mathbf{I}_{d})\)</span> for all <span class="math inline">\(0 \leq s \leq t\)</span> - Independent Increments</p>
+<p>Brownian Motion is also known as Wiener Process: <span class="math display">\[
+W_{t + h} = W_{t} + \sqrt{ h }\epsilon_{t}, \quad \text{where} \ \epsilon_{t} \sim \mathcal{N}(0, \mathbf{I}_{d})
+\]</span></p>
+<p>Ornstein-Unlenbeck(OU) process</p>
+<p>Euler-Maruyama Method is a numerical method.</p>
+</section>
+</section>
+<section id="mean-flow" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="mean-flow"><span class="header-section-number">2.2</span> Mean Flow</h2>
+<p>Mean Flows for One-step Generative Modeling</p>
+<p>MMDiT</p>
+</section>
+</section>
+<section id="model-architecture" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Model Architecture</h1>
+<section id="u-net" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="u-net"><span class="header-section-number">3.1</span> U-Net</h2>
+<p>U-Net: Convolutional Networks for Biomedical Image Segmentation</p>
+<p><img src="assets/U-net.png" class="img-fluid"></p>
+</section>
+<section id="control-net" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="control-net"><span class="header-section-number">3.2</span> Control Net</h2>
+<p>Adding Conditional Control to Text-to-Image Diffusion Models</p>
+<p><img src="assets/control-net.png" class="img-fluid"></p>
+</section>
+<section id="diffusion-transformer-dit" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="diffusion-transformer-dit"><span class="header-section-number">3.3</span> Diffusion Transformer (DiT)</h2>
+<p><img src="assets/DiT.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="case-study" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Case Study</h1>
+<section id="imagen" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="imagen"><span class="header-section-number">4.1</span> Imagen</h2>
+<p>Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding</p>
+</section>
+</section>
+<section id="dalle" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> DALL·E</h1>
+<section id="stable-diffusion" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="stable-diffusion"><span class="header-section-number">5.1</span> Stable Diffusion</h2>
+<p><img src="assets/stable-diffusion.png" class="img-fluid"></p>
+</section>
+<section id="meta-movie-gen-video" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="meta-movie-gen-video"><span class="header-section-number">5.2</span> Meta Movie Gen Video</h2>
+<p>Movie Gen: A Cast of Media Foundation Models</p>
+<p>Rectified Flow: Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow https://arxiv.org/pdf/2209.03003</p>
+<p>Mean Flow Mean Flows for One-step Generative Modeling https://arxiv.org/pdf/2505.13447</p>
+</section>
+</section>
+<section id="learning-resource" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Learning Resource</h1>
+<p>There are many good learning resource available online, thanks those who are opening those content:</p>
+<p>Lectures: - <a href="https://www.practical-diffusion.org/">MIT 6.S183: A Practical Introduction to Diffusion Models</a>: - <a href="https://diffusion.csail.mit.edu/">MIT 6.S184: Generative AI with Stochastic Differential Equations</a>: focusing on diffusion models through the lens of SDEs. The ODE/SDE is based on this lecture</p>
+<ul>
+<li><a href="https://mhsung.github.io/kaist-cs492d-fall-2024/">KAIST: CS492(D): Diffusion Models and Their Applications</a>: More comprehensive introduction to the diffusion models</li>
+<li><a href="https://deepgenerativemodels.github.io/">Stanford CS236 Deep Generative Models</a>: Introduce different generative models from VAE to GAN and DDPM</li>
+</ul>
+<p>Blogs: - <a href="https://yang-song.net/blog/2021/score/">Generative Modeling by Estimating Gradients of the Data Distribution By Yang Song</a> - <a href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/#nice">What are Diffusion Models? By Lilian Wang</a></p>
+</section>
+<section id="kaist-cs492-diffusion-models-and-their-applications" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> KAIST CS492 Diffusion Models and Their Applications</h1>
+<p>https://mhsung.github.io/kaist-cs492d-fall-2024/</p>
+<p>Map from <span class="math inline">\(z \sim \mathcal{N}(0, \mathbf{I}_{d})\)</span> to <span class="math inline">\(x \sim P_{data}\)</span> - VAE: represent the mapping from the latent distribution <span class="math inline">\(p(z)\)</span> to the data distribution <span class="math inline">\(p(x)\)</span> as conditional distribution <span class="math inline">\(p(x | z)\)</span> <span class="math display">\[
+p(x | z) = \mathcal{N}(x; D_{\theta}(z), \sigma^{2}\mathbf{I}_{d})
+\]</span></p>
+<p><img src="assets/ddpm_forward_process.png" class="img-fluid"></p>
+<p><img src="assets/vp-ve.png" class="img-fluid"></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+</body></html>
