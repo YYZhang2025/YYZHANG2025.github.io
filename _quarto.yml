@@ -4,10 +4,10 @@ project:
 
 freeze: true
 
-# Enable banner style title blocks
 title-block-banner: false
 
 website:
+  site-url: "https://yuyang.info/"
   open-graph: true
   sidebar: 
     style: "docked"

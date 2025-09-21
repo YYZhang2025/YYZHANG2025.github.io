@@ -168,7 +168,9 @@ window.Quarto = {
 <link rel="stylesheet" href="../../../style/styles.css">
 <meta property="og:title" content="LLM Part1: Architecture">
 <meta property="og:description" content="In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.">
-<meta property="og:image" content="assets/original_transformer_architecture.png">
+<meta property="og:image" content="https://yuyang.info/posts/Blogs/LLM-Architecture/assets/original_transformer_architecture.png">
+<meta property="og:image:height" content="1151">
+<meta property="og:image:width" content="1999">
 </head>
 
 <body class="nav-sidebar docked nav-fixed slimcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -641,7 +643,7 @@ Figure&nbsp;1: The illustration of the original transformer architecture. (Image
 <section id="learned-position-encoding" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="learned-position-encoding"><span class="header-section-number">2.1</span> Learned Position Encoding</h2>
 <p>In the absolute position encoding, we put our position information into fixed sinusoidal functions. It is hand-crafted for specific tasks and does not adapt to the data. So, is it possible to learn position encodings from the data itself? It is possible, and this leads us to the concept of learned position encodings. The learned position encodings are typically implemented as additional trainable parameters in the model. Instead of using fixed sinusoidal functions, the model learns to generate position embeddings that are optimized for the specific task and dataset.</p>
-<div id="1570ce29" class="cell" data-source-line-numbers="8">
+<div id="ce16184e" class="cell" data-source-line-numbers="8">
 <div class="sourceCode cell-code" id="cb1" data-source-line-numbers="8" data-code-line-numbers="8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -717,7 +719,7 @@ Figure&nbsp;2: Illustration of Absolute Position Encoding
 <li><p><strong>Dimensionality</strong>: The choice of <span class="math inline">\(d_{\text{model}}\)</span> affects the granularity of the position encodings. As shown in <a href="#fig-absolute-position-encoding-d_model_variance" class="quarto-xref">Figure&nbsp;2 (b)</a>, increasing the dimensionality results in more fine-grained position encodings, which can help the model capture more subtle positional information.</p></li>
 <li><p>The low-dimension part of the dmodel is change more frequently than the high-dimension part, allowing the model to adapt more easily to different input lengths.</p></li>
 </ol>
-<div id="0b2cdb2b" class="cell" data-source-line-numbers="8-13">
+<div id="cb892c45" class="cell" data-source-line-numbers="8-13">
 <div class="sourceCode cell-code" id="cb2" data-source-line-numbers="8-13" data-code-line-numbers="8-13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> torch </span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn </span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
@@ -956,7 +958,7 @@ x_{d-1}
 <li>Construct <code>cos</code> and <code>sin</code> matrices for the given input dimensions and maximum position.</li>
 <li>Apply the rotation to the input embeddings using the constructed matrices.</li>
 </ol>
-<div id="5e1460b1" class="cell">
+<div id="98c0d71d" class="cell">
 <div class="sourceCode cell-code" id="cb4" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span> RotaryEmbedding(nn.Module):</span>
 <span id="cb4-2"><a href="#cb4-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, head_dim, max_position_embedding, base):</span>
 <span id="cb4-3"><a href="#cb4-3"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
@@ -1063,7 +1065,7 @@ Note
 z' = z \cdot e^{i\theta} = (x + iy) \cdot (\cos \theta + i \sin \theta) = (x \cos \theta - y \sin \theta) + i (x \sin \theta + y \cos \theta)
 \]</span></p>
 <p>Code adapted from <a href="https://github.com/meta-llama/llama/blob/main/llama/model.py#L132">LLaMA model</a></p>
-<div id="81c8c3cb" class="cell">
+<div id="dc5c4218" class="cell">
 <div class="sourceCode cell-code" id="cb9" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> torch</span>
 <span id="cb9-2"><a href="#cb9-2"></a><span class="im">from</span> typing <span class="im">import</span> Tuple</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
@@ -1137,7 +1139,7 @@ Figure&nbsp;4
        q_i k_{i-1}^\top - m(1),\;
        q_i k_i^\top \,\Big]
 \]</span></p>
-<div id="65302930" class="cell" data-source-line-numbers="33-34">
+<div id="e86bacf9" class="cell" data-source-line-numbers="33-34">
 <div class="sourceCode cell-code" id="cb10" data-source-line-numbers="33-34" data-code-line-numbers="33-34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">def</span> get_relative_positions(seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> torch.tensor:</span>
 <span id="cb10-2"><a href="#cb10-2"></a>    x <span class="op">=</span> torch.arange(seq_len)[<span class="va">None</span>, :]</span>
 <span id="cb10-3"><a href="#cb10-3"></a>    y <span class="op">=</span> torch.arange(seq_len)[:, <span class="va">None</span>]</span>
@@ -1691,7 +1693,7 @@ Zhang, Biao, and Rico Sennrich. 2019. <span>“Root <span>Mean Square Layer Norm
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/yuyang\.info\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

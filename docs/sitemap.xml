@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://yuyang.info/index.html</loc>
+    <lastmod>2025-09-14T15:53:21.421Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/projects.html</loc>
+    <lastmod>2025-08-14T12:44:39.962Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/Projects/VLM/vlm.html</loc>
+    <lastmod>2025-08-10T10:41:22.588Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/Blogs/LLM-Architecture/Post.html</loc>
+    <lastmod>2025-09-21T15:27:31.589Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/Blogs/LLM-Inference/post.html</loc>
+    <lastmod>2025-09-21T15:30:15.301Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/Blogs/Speed-up-training/post.html</loc>
+    <lastmod>2025-09-21T15:28:52.525Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/Blogs/LLM-Alignment/post.html</loc>
+    <lastmod>2025-09-21T15:30:40.094Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/Blogs/DiffusionModels/Diffusion Model.html</loc>
+    <lastmod>2025-09-21T15:30:58.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/notes.html</loc>
+    <lastmod>2025-09-21T11:21:33.235Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/Projects/PaliGemma/pali-gemma.html</loc>
+    <lastmod>2025-08-14T12:24:34.999Z</lastmod>
+  </url>
+  <url>
+    <loc>https://yuyang.info/posts/blogs.html</loc>
+    <lastmod>2025-08-06T17:17:09.090Z</lastmod>
+  </url>
+</urlset>
