@@ -2,7 +2,8 @@
 title: Learning Notes
 description: |
   In this page, I will include all my learning material. 
-    
+
+author: ""
 format:
     html:
         link-external-icon: false

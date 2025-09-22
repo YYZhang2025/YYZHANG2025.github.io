@@ -1,14 +1,80 @@
-/* css styles  008c8c */
-
 @font-face {
-  font-family: "MyFont";
-  src: url("LXGWWenKai-Regular.ttf");
+  font-family: "LXGWWenKai";
+  src: url("fonts/LXGWWenKai-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: "cmunrm";
-  src: url("cmunrm.ttf");
+  font-family: "LXGWWenKai";
+  src: url("fonts/LXGWWenKai-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
 }
+
+@font-face {
+  font-family: "LXGWWenKai";
+  src: url("fonts/LXGWWenKai-Medium.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Allow synthetic bold/italic when a real face at that weight/style is missing */
+html { font-synthesis: weight style; }
+/* Ensure strong/b tags request true bold (700) */
+b, strong { font-weight: 800; }
+
+
+body {
+  font-family: "LXGWWenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
+  font-size: 18px !important;     /* 正文字号 */
+  line-height: 1.5;  
+  font-weight: 400;
+}
+
+
+h1 {
+  font-size: 2.0rem !important;   /* 一级标题 */
+  font-weight: 700;
+  text-align: center;
+  position: relative;
+}
+
+
+h1::after {
+  content: "";
+  display: block;
+  width: 70%;
+  height: 1px;
+  background-color: currentColor;
+  margin: 8px auto 0;
+  transition: width 0.3s ease;
+}
+h1:hover::after {
+  width: 100%;
+}
+
+
+h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+
+
+h3 {
+  font-size: 1.4rem !important;
+  font-weight: 600;
+}
+
+
+p {
+  margin-bottom: 1em;             /* 段落间距 */
+}
+
+
+
 
 .summary-callout {
   background: linear-gradient(
@@ -30,26 +96,6 @@
   color: #0056b3; /* Slightly darker color for emphasis */
 }
 
-:is(
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    .HyperMD-header-1,
-    .HyperMD-header-2,
-    .HyperMD-header-3,
-    .HyperMD-header-4,
-    .HyperMD-header-5,
-    .HyperMD-header-6
-  )::before {
-  content: "§ ";
-  font-size: 0.7em;
-  vertical-align: middle;
-  color: var(--text-accent);
-  font-weight: 500;
-}
 
 /* for editor */
 .cm-quote {
@@ -63,15 +109,3 @@ code,
   font-size: 0.95em;
 }
 
-/* Make listing images cover the grid cell */
-
-/* Make TOC sidebar wider */
-.sidebar {
-  width: 300px;  /* default is ~250px */
-}
-
-/* Adjust main content so it doesn’t overlap */
-.content {
-  margin-left: 80px;  /* slightly larger than sidebar width */
-  margin-right: 0px;
-}

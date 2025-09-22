@@ -21,6 +21,9 @@ This is the part 1 of the LLM series, architecture. In this blog, we will going 
 
 Besides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures. 
 
+
+
+
 # The overview of transformer model 
 
 The Transformer model, originally proposed in the paper "Attention is All You Need" [@AttentionAllYou2023vaswani], is a neural network architecture designed to process **sequential data**, such as natural language. With the high parallelization capabilities of transformers, they have become the foundation for many state-of-the-art natural language processing models. Nowadays, the most LLM are based on the variance of the transformer architecture. The transformer architecture consists of an encoder and a decoder, each composed of multiple layers of self-attention and feed-forward networks, as displayed in the @fig-original_transformer. 

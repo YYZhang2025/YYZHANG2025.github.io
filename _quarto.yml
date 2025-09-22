@@ -8,6 +8,8 @@ title-block-banner: false
 
 website:
   site-url: "https://yuyang.info/"
+  bread-crumbs: false
+  back-to-top-navigation: true
   open-graph: true
   sidebar: 
     style: "docked"
@@ -26,13 +28,15 @@ website:
         href: ./posts/blogs.qmd
       - text: Projects
         href: ./posts/projects.qmd
-      - text: Learning Notes
-        href: ./posts/notes.qmd
-      
       - text: 100 Papers with Code
         href: https://yuyang.info/100-AI-Papers/
 
   favicon: "./style/icon.avif"
+
+  page-footer:
+    right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
+    left: "&copy; CC-By Yuyang, 2025"
+    background: "#D9E3E4"
 format:
   html:
     theme:
@@ -51,29 +55,40 @@ format:
     code-copy: true
     code-overflow: scroll
     code-block-bg: true
-    code-block-border-left: "#31BAE9"
+    code-block-border-left: "#31bbe96b"
     highlight-style: github
     code-line-numbers: true
 
     link-external-icon: false
     link-external-newwindow: true
-    execute:
-      enabled: false
-      freeze: true
+    
 
     citations-hover: true
 
     linestretch: 1.4
 
-    fontsize: 1.1em
-    header-includes: <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
-    mainfont: MyFont
 
     indent: true
     grid:
-      body-width: 1200px
+      body-width: 1000px
+      gutter-width: 3rem
 
     number-sections: true
+
+    
+    
+    header-includes: [
+      <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">,
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    ]
+
+
+
+execute:
+  echo: false
+  enabled: false
+
+
 
 filters: 
   - line-highlight

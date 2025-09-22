@@ -7,7 +7,7 @@ format:
         link-external-icon: false
         page-layout: full
         toc: false
-
+author: ""
 listing:
   contents: Projects
   categories: true
