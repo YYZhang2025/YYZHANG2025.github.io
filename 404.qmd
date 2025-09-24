@@ -7,5 +7,8 @@ author: ""
 ![](./style/404.png)
 
 <div style="text-align: center; font-size: 1.5em; margin-top: 2em;">
-Sorry, the paper you are looking for is not implemented yet. Please check back later! In the mean time you can check out the [my other blogs](/posts/blogs.html) or the **list of other papers** on the right.
+Sorry, the page you are looking for is not reachable. Please check back later! 
+
+In the mean time you can check out the [my other blogs](/posts/blogs.html).
+
 </div>
