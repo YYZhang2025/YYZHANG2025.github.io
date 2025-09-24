@@ -1,12 +1,5 @@
 [
   {
-    "listing": "/posts/projects.html",
-    "items": [
-      "/posts/Projects/VLM/vlm.html",
-      "/posts/Projects/PaliGemma/pali-gemma.html"
-    ]
-  },
-  {
     "listing": "/posts/blogs.html",
     "items": [
       "/posts/Blogs/Diffusion-Models/Diffusion-Model.html",
@@ -14,6 +7,13 @@
       "/posts/Blogs/LLM-Alignment/post.html",
       "/posts/Blogs/LLM-Inference/post.html",
       "/posts/Blogs/Speed-up-training/post.html"
+    ]
+  },
+  {
+    "listing": "/posts/projects.html",
+    "items": [
+      "/posts/Projects/VLM/vlm.html",
+      "/posts/Projects/PaliGemma/pali-gemma.html"
     ]
   }
 ]

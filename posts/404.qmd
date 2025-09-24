@@ -1,0 +1,10 @@
+---
+title: Oops! That page can't be found.
+author: ""
+---
+
+<div style="text-align: center; font-size: 1.5em; margin-top: 2em;">
+Sorry, the paper you are looking for is not implemented yet. Please check back later! In the mean time you can check out the [my other blogs](/) or the **list of other papers** on the right.
+
+If you want to contribute, please check out the this GitHub repo: [100-AI-Codes](https://github.com/YYZhang2025/100-AI-Code), and feel free to open a PR!
+</div>

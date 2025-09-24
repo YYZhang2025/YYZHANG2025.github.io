@@ -7,10 +7,11 @@ freeze: true
 title-block-banner: false
 
 website:
-  site-url: "https://yuyang.info/"
+  site-url: "https://yuyang.info"
   bread-crumbs: false
   back-to-top-navigation: true
   open-graph: true
+  site-path: '/posts/'
   sidebar: 
     style: "docked"
   navbar:
