@@ -74,28 +74,28 @@
     "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#normalization",
     "title": "Lecture 03: LM Model Architecture & Hyperparameters",
     "section": "2.1 Normalization",
-    "text": "2.1 Normalization\n\n为什么需要 Normalization？\nNormalization 技术在深度学习中起到了稳定训练过程和加速收敛的作用。 它通过调整神经网络层的输入分布，减少了内部协变量偏移 (Internal Covariate Shift)，从而使得模型在训练过程中更加稳定。此外，Normalization 还可以帮助缓解梯度消失和梯度爆炸问题，提高模型的泛化能力。\n\n\n2.1.1 Position of Normalization\n\n2.1.1.1 Post-Norm\n在Transformer中，Normalization放置在Sublayer之后，也就是所谓的 Post-Norm 结构。用数学公式表示为:\n\\[\n\\text{Post-Norm: } \\quad \\text{Norm}(x + \\text{Sublayer}(x))\n\\tag{1}\\]\n然而，(Ba, Kiros, and Hinton 2016) 指出，Post-Norm存在以下的问题:\n\n梯度不稳定，特别是在初始化阶段： 论文使用平均场理论分析指出，在 Post-Norm 结构 下（即 LayerNorm 放在残差连接之后），靠近输出层的参数在初始化时梯度期望值很大。 这会导致训练初期梯度爆炸，从而影响模型的稳定性和收敛速度。\n依赖复杂的 warm-up 超参数调优： 由于 Post-Norm 结构在训练初期容易出现梯度不稳定的问题，因此需要使用复杂的学习率 warm-up 策略来缓解这一问题。 这增加了模型训练的复杂性和调优难度。\n\n\nSpecifically, we prove with mean field theory that at initialization, for the original-designed Post-LN Transformer, which places the layer normalization between the residual blocks, the expected gradients of the parameters near the output layer are large. Therefore, using a large learning rate on those gradients makes the training unstable. The warm-up stage is practically helpful for avoiding this problem.  On Layer Normalization in the Transformer Architecture P.1 \n\n\n\n2.1.1.2 Pre-Norm\n为了缓解 Post-Norm 的问题，(Ba, Kiros, and Hinton 2016) 提出了 Pre-Norm 结构，即将 Normalization 放置在 Sublayer 之前。 用数学公式表示为:\n\\[\n\\text{Pre-Norm: } \\quad x + \\text{Sublayer}(\\text{Norm}(x))\n\\tag{2}\\]\n下图展示了 Post-Norm 与 Pre-Norm 结构的对比:\n\n\n\n\n\n\nFigure 2: Post Norm 与 Pre-Norm 结构对比。\n\n\n\nPre-Norm 有以下优点:\n\n提高训练稳定性： Pre-Norm 结构通过在每个子层之前进行归一化，减少了梯度爆炸和梯度消失的风险，从而提高了训练的稳定性。\n简化超参数调优： 由于 Pre-Norm 结构在训练过程中更加稳定，因此不再需要复杂的学习率 warm-up 策略，简化了模型的训练过程和超参数调优。\n\n\nWe show in our experiments that Pre-LN Transformers without the warm-up stage can reach comparable results with baselines while requiring significantly less training time and hyper-parameter tuning on a wide range of applications.  On Layer Normalization in the Transformer Architecture P.1 \n\n接下来我们来看一下为什么Pre-Norm能有这么多的好处：\n\nGradient Attenuation\n\n\n\n\n\n\n\nFigure 3: 上图展示了 Pre-Norm 与 Post-Norm Transformer 在梯度行为上的差异。可以看到，在初始化阶段，Post-Norm 会导致靠近输出层的梯度期望值显著增大，而底层梯度被明显削弱，呈现出严重的梯度失衡（gradient attenuation across layers），从而使训练过程极不稳定，必须依赖学习率 warm-up 进行缓解。相比之下，Pre-Norm 在初始化时各层梯度规模保持一致且稳定，避免了梯度衰减与爆炸问题。\n\n\n\n\nGradient Spike / Noise\n\n实验表明 (Nguyen and Salazar 2019)\n\n\n\n\n\n\nFigure 4\n\n\n\n\nPost-norm produces noisy gradients with many sharp spikes, even towards the end of training. On the other hand, Pre-norm has fewer noisy gradients with smaller sizes, even without warmup.  Transformers without Tears: Improving the Normalization of Self-Attention P.6 \n\n\n\n2.1.1.3 Other Positions\n除了 Pre-Norm 和 Post-Norm 之外，还有一些其他的 Normalization 位置设计，例如:\n\nSandwich Norm: 将 Normalization 放置在每个子层的输入和输出之间。\nDouble Norm: 在每个子层的输入和输出都进行归一化。\n\n\n\n\n2.1.2 Normalization Types\n除了 Normalization 的位置设计之外，Normalization 的形式也是一个重要的设计选择。 常见的 Normalization 形式包括:\n\nLayerNorm(Ba, Kiros, and Hinton 2016): 对每个样本的特征维度进行归一化，适用于序列数据。\nRMSNorm(RootMeanSquareLayer2020zhang?): 只使用均方根（Root Mean Square）来进行归一化，省略了均值的计算，减少了计算开销。 RMSNorm 在某些情况下可以提供与 LayerNorm 相似的性能，但计算更高效。\n\n原始的Transformer中使用的是LayerNorm， 但是现代大语言模型中，RMSNorm被广泛采用， 例如在 LLaMA(Llama2023touvron?)、GPT-3(LanguageModelsAre2020brown?)、PaLM(ScalingLanguageModels2022chowdhery?) 等模型中都使用了 RMSNorm。"
+    "text": "2.1 Normalization\n\n为什么需要 Normalization？\nNormalization 技术在深度学习中起到了稳定训练过程和加速收敛的作用。 它通过调整神经网络层的输入分布，减少了内部协变量偏移 (Internal Covariate Shift)，从而使得模型在训练过程中更加稳定。此外，Normalization 还可以帮助缓解梯度消失和梯度爆炸问题，提高模型的泛化能力。\n\n\n2.1.1 Position of Normalization\n\n2.1.1.1 Post-Norm\n在Transformer中，Normalization放置在Sublayer之后，也就是所谓的 Post-Norm 结构。用数学公式表示为:\n\\[\n\\text{Post-Norm: } \\quad \\text{Norm}(x + \\text{Sublayer}(x))\n\\tag{1}\\]\n然而，(Ba, Kiros, and Hinton 2016) 指出，Post-Norm存在以下的问题:\n\n梯度不稳定，特别是在初始化阶段： 论文使用平均场理论分析指出，在 Post-Norm 结构 下（即 LayerNorm 放在残差连接之后），靠近输出层的参数在初始化时梯度期望值很大。 这会导致训练初期梯度爆炸，从而影响模型的稳定性和收敛速度。\n依赖复杂的 warm-up 超参数调优： 由于 Post-Norm 结构在训练初期容易出现梯度不稳定的问题，因此需要使用复杂的学习率 warm-up 策略来缓解这一问题。 这增加了模型训练的复杂性和调优难度。\n\n\nSpecifically, we prove with mean field theory that at initialization, for the original-designed Post-LN Transformer, which places the layer normalization between the residual blocks, the expected gradients of the parameters near the output layer are large. Therefore, using a large learning rate on those gradients makes the training unstable. The warm-up stage is practically helpful for avoiding this problem.  On Layer Normalization in the Transformer Architecture P.1 \n\n\n\n2.1.1.2 Pre-Norm\n为了缓解 Post-Norm 的问题，(Ba, Kiros, and Hinton 2016) 提出了 Pre-Norm 结构，即将 Normalization 放置在 Sublayer 之前。 用数学公式表示为:\n\\[\n\\text{Pre-Norm: } \\quad x + \\text{Sublayer}(\\text{Norm}(x))\n\\tag{2}\\]\n下图展示了 Post-Norm 与 Pre-Norm 结构的对比:\n\n\n\n\n\n\nFigure 2: Post Norm 与 Pre-Norm 结构对比。\n\n\n\nPre-Norm 有以下优点:\n\n提高训练稳定性： Pre-Norm 结构通过在每个子层之前进行归一化，减少了梯度爆炸和梯度消失的风险，从而提高了训练的稳定性。\n简化超参数调优： 由于 Pre-Norm 结构在训练过程中更加稳定，因此不再需要复杂的学习率 warm-up 策略，简化了模型的训练过程和超参数调优。\n\n\nWe show in our experiments that Pre-LN Transformers without the warm-up stage can reach comparable results with baselines while requiring significantly less training time and hyper-parameter tuning on a wide range of applications.  On Layer Normalization in the Transformer Architecture P.1 \n\n接下来我们来看一下为什么Pre-Norm能有这么多的好处：\n\nGradient Attenuation\n\n\n\n\n\n\n\nFigure 3: 上图展示了 Pre-Norm 与 Post-Norm Transformer 在梯度行为上的差异。可以看到，在初始化阶段，Post-Norm 会导致靠近输出层的梯度期望值显著增大，而底层梯度被明显削弱，呈现出严重的梯度失衡（gradient attenuation across layers），从而使训练过程极不稳定，必须依赖学习率 warm-up 进行缓解。相比之下，Pre-Norm 在初始化时各层梯度规模保持一致且稳定，避免了梯度衰减与爆炸问题。\n\n\n\n\nGradient Spike / Noise\n\n实验表明 (Nguyen and Salazar 2019)\n\n\n\n\n\n\nFigure 4\n\n\n\n\nPost-norm produces noisy gradients with many sharp spikes, even towards the end of training. On the other hand, Pre-norm has fewer noisy gradients with smaller sizes, even without warmup.  Transformers without Tears: Improving the Normalization of Self-Attention P.6 \n\n\n\n2.1.1.3 Other Positions\n除了 Pre-Norm 和 Post-Norm 之外，还有一些其他的 Normalization 位置设计，例如:\n\nSandwich Norm: 将 Normalization 放置在每个子层的输入和输出之间。\nDouble Norm: 在每个子层的输入和输出都进行归一化。\n\n从这些实验结果来看，我们可以得出结论： - 尽量保持Residual Connection两端的信号稳定是非常重要的, 这可以保证梯度在网络中顺利传播。\n\n\n\n2.1.2 Normalization Types\n除了 Normalization 的位置设计之外，Normalization 的形式也是一个重要的设计选择。 常见的 Normalization 形式包括:\n\nLayerNorm(Ba, Kiros, and Hinton 2016): 对每个样本的特征维度进行归一化，适用于序列数据。\nRMSNorm(RootMeanSquareLayer2020zhang?): 只使用均方根（Root Mean Square）来进行归一化，省略了均值的计算，减少了计算开销。 RMSNorm 在某些情况下可以提供与 LayerNorm 相似的性能，但计算更高效。\n\n原始的Transformer中使用的是LayerNorm， 但是现代大语言模型中，RMSNorm被广泛采用， 例如在 LLaMA(Llama2023touvron?)、GPT-3(LanguageModelsAre2020brown?)、PaLM(ScalingLanguageModels2022chowdhery?) 等模型中都使用了 RMSNorm。\nRMSNorm的存在的优势是，\n\n计算效率更高： 由于 RMSNorm 省略了均值的计算，因此在计算上更加高效，特别是在大规模模型中，这种效率提升尤为显著。\n性能相似： 实验表明，在许多任务中，RMSNorm 可以提供与 LayerNorm 相似的性能，尤其是在大语言模型中。"
   },
   {
     "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#activations",
     "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#activations",
     "title": "Lecture 03: LM Model Architecture & Hyperparameters",
     "section": "2.2 Activations",
-    "text": "2.2 Activations"
+    "text": "2.2 Activations\nActivation Functions给模型引入了非线性，使得神经网络能够学习复杂的函数映射关系。 常见的激活函数包括ReLU、Sigmoid、Tanh等。\n\n现代LLM中，最常见的激活函数是 Gated Activations家族，例如 SwiGLU，接下来，我们看看这些架构\n\n2.2.1 Gated Activations(*GLU)\nGated Activations 通过引入门控机制，允许模型在前馈神经网络中动态调整信息流，从而提高模型的表达能力和性能。在传统的FFN中，输入通过两个线性变换和一个非线性激活函数进行处理。而在 Gated Activations 中，输入被分成两部分，一部分通过激活函数处理，另一部分通过门控机制进行调节，最终两部分的输出进行元素级乘法操作。用数学公式表示为:\n\\[\n\\text{FF} = \\textcolor{red}{\\max (0, XW_1 )} \\ctimes (XW_2 )\n\\]\nGated Activations 主要改变的就是红色部分，用数学表达就是： \\[\n\\text{Gated FF} = \\textcolor{red}{(\\max (0, XW_1 ) \\odot XV )}W_2\n\\]\n常见的 Gated Activations 包括:\n\nGeGLU:\n\n\\[\n\\text{GeGLU: } \\quad \\text{Gated FF} = (\\text{GELU}(XW_1 ) \\odot XV )W_2\n\\]\n\nSwiGLU: \\[\n\\text{SwiGLU: } \\quad \\text{Gated FF} = (\\text{SiLU}(XW_1 ) \\odot XV )W_2\n\\]\n\n实验表明，Gated Activations 在许多任务中都优于传统的激活函数，特别是在大语言模型中，例如 LLaMA(Llama2023touvron?) 和 GPT-4(GPT4TechnicalReport2023openai?) 等模型中都采用了 SwiGLU 作为前馈神经网络的激活函数。\n不过需要主要的一点是，Gated Activation引入了一个额外的线性变换矩阵V，这会增加模型的参数量和计算开销。 因此，在实际应用中，为了保持模型数量的不变，通常我们将 \\(d_ff\\) 设定为 \\(\\frac{8}{3} d_{model}\\)， 这样就可以在引入Gated Activation的同时，保持模型的参数量不变。"
   },
   {
     "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#serial-parallel-mlp",
     "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#serial-parallel-mlp",
     "title": "Lecture 03: LM Model Architecture & Hyperparameters",
     "section": "2.3 Serial & Parallel MLP",
-    "text": "2.3 Serial & Parallel MLP"
+    "text": "2.3 Serial & Parallel MLP\n传统的Transformer Block是串行的结构 Figure 1， 即先经过Attention模块， 然后再经过MLP模块。 这种设计虽然简单，但在某些情况下可能会限制模型的表达能力。有研究提出了并行的MLP设计，将Attention和MLP模块并行处理，然后将它们的输出进行融合。这种设计可以提高模型的表达能力和计算效率。 用数学公式表示为:\n\\[\ny = x + \\text{MLP}(Norm(x)) + \\text{Attention}(Norm(x))\n\\]\n通过并行这两层，可以让模型训练的更快速，同时可以减少模型的参数，比如Norm层只需要一层。\n不过，目前主流的大语言模型仍然采用串行的Transformer Block设计，但并行的MLP设计为未来的模型架构提供了一个有趣的方向。"
   },
   {
     "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#position-encoding",
     "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#position-encoding",
     "title": "Lecture 03: LM Model Architecture & Hyperparameters",
     "section": "2.4 Position Encoding",
-    "text": "2.4 Position Encoding"
+    "text": "2.4 Position Encoding\n位置编码 (Positional Encoding) 用于引入序列中单词的位置信息，因为自注意力机制本身不具备顺序信息。 传统的Transformer使用的是绝对位置编码，例如正弦和余弦函数编码(Vaswani et al. 2023)。常见的位置编码方法包括:\n\nAbsolute Position Encoding: 使用固定的编码方式为每个位置分配一个唯一的向量表示。\nRelative Position Encoding(SelfAttentionWithRelative2021shaw?): 通过计算单词之间的相对位置来引入位置信息，增强模型对序列中单词相对关系的理解能力。\nRotary Position Embedding (RoPE)(RoFormerEnhancedTransformer2021su?): 通过旋转位置向量来引入位置信息，增强模型对长距离依赖关系的捕捉能力。\n\n接下来我们重点介绍 RoPE。\n\n2.4.1 Rotary Position Embedding (RoPE)\n\n\n\n\n\n\nFigure 5\n\n\n\nRoPE 通过对查询和键的向量进行旋转来引入位置信息。 具体来说，RoPE 将位置编码表示为一个旋转矩阵，然后将查询和键的向量与该旋转矩阵相乘，从而引入位置信息。 用数学公式表示为:\n\\[\n\\text{RoPE}(Q, K, P) = (Q R(P), K R(P))\n\\] 其中，\\(R(P)\\) 是位置编码对应的旋转矩阵。\n用数学表示就是： \\[\nR_{\\Theta,m}^{d} \\mathbf{x}\n=\n\\begin{pmatrix}\nx_1\\\\\nx_2\\\\\nx_3\\\\\nx_4\\\\\n\\vdots\\\\\nx_{d-1}\\\\\nx_d\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\cos(m\\theta_{1})\\\\\n\\cos(m\\theta_{1})\\\\\n\\cos(m\\theta_{2})\\\\\n\\cos(m\\theta_{2})\\\\\n\\vdots\\\\\n\\cos\\!\\big(m\\theta_{d/2}\\big)\\\\\n\\cos\\!\\big(m\\theta_{d/2}\\big)\n\\end{pmatrix}\n+\n\\begin{pmatrix}\n- x_2\\\\\nx_1\\\\\n- x_4\\\\\nx_3\\\\\n\\vdots\\\\\n- x_d\\\\\nx_{d-1}\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\sin(m\\theta_{1})\\\\\n\\sin(m\\theta_{1})\\\\\n\\sin(m\\theta_{2})\\\\\n\\sin(m\\theta_{2})\\\\\n\\vdots\\\\\n\\sin\\!\\big(m\\theta_{d/2}\\big)\\\\\n\\sin\\!\\big(m\\theta_{d/2}\\big)\n\\end{pmatrix}\n\\]\n我非常推荐以下的视频，它很清楚的介绍了RoPE以及它的扩展，有兴趣的同学可以前去查看："
   },
   {
     "objectID": "posts/LearningNotes/CS336/Assignments/Ass01/ass01.html",
@@ -221,7 +221,7 @@
     "href": "posts/LearningNotes/DLFaC/index.html",
     "title": "Deep Learning Foundation and Concepts(DLFaC) Learning Notes",
     "section": "",
-    "text": "Note\n\n\n\n Due to the time constraint, these notes may contain errors or omissions. And to speed up the writing process, I only wrote the notes in CHINESES. If you are interested in collaborating to improve these notes,or transalting to different languages, please feel free to contact me. \n\n\nRelated Resources:\n\nBook Website: Deep Learning Foundations and Concepts\nMy GitHub Repo: GitHub\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChapter 01: Introduction to the Deep Learning\n\n\nChapter 01 主要介绍了什么Deep Learning 与其的应用，并且通过一个简单的 Polynomial Regression 例子来说明 Deep Learning 模型训练的基本流程。通过Chapter 01的学习，读者可以初步了解深度学习的基本概念、应用领域以及模型训练的基本步骤。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nDLFaC Chapter 01: Introduction to the Deep Learning\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "Note\n\n\n\n Due to the time constraint, these notes may contain errors or omissions. And to speed up the writing process, I only wrote the notes in CHINESES. If you are interested in collaborating to improve these notes,or transalting to different languages, please feel free to contact me. \n\n\nRelated Resources:\n\nBook Website: Deep Learning Foundations and Concepts\nMy GitHub Repo: GitHub\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChapter 01: Introduction to the Deep Learning\n\n\nChapter 01 主要介绍了什么Deep Learning 与其的应用，并且通过一个简单的 Polynomial Regression 例子来说明 Deep Learning 模型训练的基本流程。通过Chapter 01的学习，读者可以初步了解深度学习的基本概念、应用领域以及模型训练的基本步骤。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nChapter 02: Probabilities & Information Theory\n\n\nChapter 02 介绍了概率论和信息论的基本概念，包括随机变量、概率分布、条件概率、熵等内容。这些概念在深度学习中尤为重要，因为它们帮助我们理解模型如何处理不确定性和信息。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/PapersWithCode/05-dino/DINO.html",
@@ -289,72 +289,72 @@
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html",
-    "title": "Vision-Transformer",
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
     "section": "",
-    "text": "1 Preliminary\n  2 Vision-Transformer\n  3 Summary\n  4 Key Concepts\n  5 Q & A\n  6 Related resource & Further Reading\n  7 Preliminary\n  8 Vision-Transformer\n  \n  8.1 Patch Embedding\n  8.2 Position Encoding\n  \n  8.2.1 Extending Position Encoding\n  \n  8.3 [CLS] Tokens & MLP Head\n  8.4 Transformer Encoder Block\n  8.5 CNN vs. ViT： Inductive bias\n  8.6 ViT Model Variants\n  \n  9 Q&A\n  10 扩展\n  \n  10.1 减少Tokens\n  10.2 Vision Language Model\n  \n  11 Appendix\n  \n  11.1 Axial Attention（轴向注意力）\n  \n  12 Summary\n  13 Key Concepts\n  14 Q & A\n  15 Related resource & Further Reading"
+    "text": "0.1 Patch Embedding\n  0.2 Position Encoding\n  \n  0.2.1 Extending Position Encoding\n  \n  0.3 [CLS] Tokens & MLP Head\n  0.4 Transformer Encoder Block\n  0.5 CNN vs. ViT： Inductive bias\n  0.6 ViT Model Variants\n  1 Q&A\n  2 Appendix\n  \n  2.1 Axial Attention（轴向注意力）\n  \n  3 Summary\n  4 Key Concepts\n  5 Q & A\n  6 Related resource & Further Reading\n  \n  6.1 减少Tokens\n  6.2 Vision Language Model\n在了解了什么是Transformer之后，我们来看看如何将Transformer应用于Computer Vision。Vision Transformer（ViT）(Dosovitskiy et al. 2021) 是一个将Transformer架构应用于图像分类的模型。它的核心思想是将图像划分为小块（patches），然后将这些小块视为序列数据，类似于处理文本数据。\n# Vision-Transformer\nVision Transformer 的工作流程（如上图所示）： 1. 图像切分（Patchify）： 将输入图像划分为若干大小相同的小块（Patch），并展开为一维序列。 2. 线性映射： 使用线性层将每个 Patch 映射为固定维度的隐藏向量（Hidden Embedding）。 3. 加入 [CLS] 标记： 在序列开头添加一个特殊的 [CLS] token，用于表示整张图像的全局语义。 4. 位置编码： 为每个向量添加可学习的位置嵌入（Position Embedding），保留空间位置信息。 5. Transformer 编码器： 将上述序列输入 Transformer Encoder，以捕捉全局依赖关系。 6. 分类头（MLP Head）： 最终通过一个多层感知机（MLP）分类头输出图像所属的类别。\n相对于 Transformer ，Vision Transformer (ViT) 的主要区别在于： 1. 增加了一个 Patchify 步骤，将图像划分为若干小块并转化为序列输入； 2. 将原本的 正余弦位置编码（sinusoidal position embedding） 替换为 可学习的位置嵌入（learned position embedding）； 3. 在最后额外添加了一个 分类头（classification head），用于完成图像分类任务。\n我们之前已经学习过了什么是 Transformer 建议忘记了的同学再去回顾一下，我们就不多重复了。 我们首先来看如何进行Patch Embedding"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#patch-embedding",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#patch-embedding",
-    "title": "Vision-Transformer",
-    "section": "8.1 Patch Embedding",
-    "text": "8.1 Patch Embedding\n\nThe standard Transformer receives as input a 1D sequence of token embeddings. To handle 2D images, we reshape the image \\(x \\in \\mathbb{R}^{H \\times W \\times C}\\) into a sequence of flattened 2D patches\\(x \\in \\mathbb{R}^{N \\times (P^{2} \\times C)}\\), where (\\(H, W\\)) is the resolution of the original image, \\(C\\) is the number of channels, (\\(P, P\\)) is the resolution of each image patch, and \\(N = HW/P^{2}\\) is the resulting number of patches, which also serves as the effective input sequence length for the Transformer. The Transformer uses constant latent vector size \\(D\\) through all of its layers, so we flatten the patches and map to \\(D\\) dimensions with a trainable linear projection. We refer to the output of this projection as the patch embeddings.  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.3 \n\n在Transformer 这一篇，我们了解到，它是作用于Sequence Modeling的，很显然，Image 不是 Sequence的。很直观的第一种想法就是，将图片直接展开，从二维 (\\(3, H, W\\)) 展开成一维的 (\\(3, H \\times W\\)). 这样我们就得到的图片的Sequence Model。如下图@fig-flat-image所示\n\n\n\n\n\n\nFigure 2\n\n\n\n这种方法有一种明显的问题就是：Sequence的长度太长，举个例子，对于 \\(3\\times 256 \\times 256\\) 的图片，我们有 \\(256 \\times 256 = 65,336\\) 个tokens，通过这种方法，所需要的训练时长很长。并且它没有用到图片的一个特性：相邻的pixel 之间，是有很高的correlation的。所以我们很自然的想到：如果把相邻的pixels和在一组，组成一个patch，这样不就既减少了tokens的数量，又用到了pixel之间的correlation。这就是Vision Transformer 的Patch Embedding。 这样我们就得到了。 接下来我们只需要用，一个MLP，将我们展开的patch，映射到 \\(D\\)- dimension的空间，这样我们就可以传入Transformer 模型了。\n接下来我们来看看代码怎么实现：\n# Load Image and resize it to certain size\nimage_path = IMAGE_PATN\nimg_bgr = cv2.imread(image_path)\nimg_resized = cv2.resize(img_bgr, (IMAGE_SIZE, IMAGE_SIZE), interpolation=cv2.INTER_AREA)\nimg = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB) \n\n# Patchify \npatches = einops.rearrange(\n     img, \"(h ph) (w pw) c -&gt; (h w) ph pw c\", ph=PATCH_SIZE, pw=PATCH_SIZE\n)\n通过这个Patchify只有，我们得到将图片Patch到了\n\n\n分成了不同的小Patch。\n接下来我们要做的就是，将这些Patch 展开，然后传入一个MLP，\nflat_patch = einops.rearrange(\n     patches, \"n ph pw c -&gt; n (ph pw c)\"\n)\n\n\nmlp = nn.Linear(PATCH_SIZE * PATCH_SIZE * 3, d_model)\npatch_embedding = mlp(flat_patch)\n同这种方式，我们就可以见图片转化为Transformer可以接受的vector。不过在实际操作中，我们并不会用以上的方式，因为上面的方式实现起来比较慢，我们可以将Patch 和 Linear Project和在一起。\n\n\n\n\n\n\nTip\n\n\n\n将几个tensor 的operation操作合成一个的方法，叫做kernel fusion，这是一种提高训练和推理素的方法\n\n\n在实际的代码中，我们用Convolution Layer 代替 Patch + Flatten+ Linear 的方法. 如果我们用一个 卷积层，参数设置为： • kernel_size = PATCH_SIZE （卷积核覆盖一个 patch） • stride = PATCH_SIZE （不重叠地移动，相当于切 patch） • in_channels = 3（RGB） • out_channels = d_model\n那么卷积会： 1. 把输入图片分成 PATCH_SIZE x PATCH_SIZE 的不重叠块（因为 stride = kernel_size）。 2. 对每个 patch 做一次线性映射（因为卷积本质上就是对局部区域做加权求和，相当于 Linear）。 3. 输出的 shape 自动就是 (batch, num_patches, d_model)。\n这正好等价于 切 patch + flatten + Linear 的组合。\n代码如下：\nclass PatchEmbedding(nn.Module):\n    def __init__(self, config: ModelConfig):\n        super().__init__()\n\n        self.conv = nn.Conv2d(\n            in_channels=config.num_channels,\n            out_channels=config.hidden_dim,\n            kernel_size=config.patch_size,\n            stride=config.patch_size,\n            padding=\"valid\" if config.patch_size == 16 else \"same\",\n        )\n\n    def forward(self, imgs: torch.Tensor) -&gt; torch.Tensor:\n        \"\"\"\n        imgs: (batch_size, num_channels, height, width)\n        Returns: (batch_size,  num_patches_height, num_patches_width, hidden_dim)\n        \"\"\"\n        # (B, C, H, W) -&gt; (B, hidden_dim, H', W')\n        x = self.conv(imgs)\n\n        # (B, hidden_dim, H', W') -&gt; (B, hidden_dim, H' * W')\n        x = x.flatten(2)\n\n        # (B, hidden_dim, H' * W') -&gt; (B, H' * W', hidden_dim)\n        x = x.transpose(1, 2)\n        return x\n用卷积的好处，除了可以更高效的实现Patch Embedding，代码更加简洁之外，我们还可以通过改变 stride 来使一些Patch overlapping，获得一个多尺度的结构，"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "0.1 Patch Embedding",
+    "text": "0.1 Patch Embedding\n\nThe standard Transformer receives as input a 1D sequence of token embeddings. To handle 2D images, we reshape the image \\(x \\in \\mathbb{R}^{H \\times W \\times C}\\) into a sequence of flattened 2D patches\\(x \\in \\mathbb{R}^{N \\times (P^{2} \\times C)}\\), where (\\(H, W\\)) is the resolution of the original image, \\(C\\) is the number of channels, (\\(P, P\\)) is the resolution of each image patch, and \\(N = HW/P^{2}\\) is the resulting number of patches, which also serves as the effective input sequence length for the Transformer. The Transformer uses constant latent vector size \\(D\\) through all of its layers, so we flatten the patches and map to \\(D\\) dimensions with a trainable linear projection. We refer to the output of this projection as the patch embeddings.  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.3 \n\n在Transformer 这一篇，我们了解到，它是作用于Sequence Modeling的，很显然，Image 不是 Sequence的。很直观的第一种想法就是，将图片直接展开，从二维 (\\(3, H, W\\)) 展开成一维的 (\\(3 \\times H \\times W\\)). 这样我们就得到的图片的Sequence Model。如下图@fig-flat-image所示\n\n\n\n\n\n\nFigure 2\n\n\n\n这种方法有一种明显的问题就是：Sequence的长度太长，举个例子，对于 \\(3\\times 256 \\times 256\\) 的图片，我们有 \\(256 \\times 256 = 65,336\\) 个tokens，通过这种方法，所需要的训练时长很长。并且它没有用到图片的一个特性：相邻的pixel 之间，是有很高的correlation的。所以我们很自然的想到：如果把相邻的pixels和在一组，组成一个patch，这样不就既减少了tokens的数量，又用到了pixel之间的correlation。这就是Vision Transformer 的Patch Embedding。 这样我们就得到了。 接下来我们只需要用，一个MLP，将我们展开的patch，映射到 \\(D\\)- dimension的空间，这样我们就可以传入Transformer 模型了。\n接下来我们来看看代码怎么实现：\n# Load Image and resize it to certain size\nimage_path = IMAGE_PATN\nimg_bgr = cv2.imread(image_path)\nimg_resized = cv2.resize(img_bgr, (IMAGE_SIZE, IMAGE_SIZE), interpolation=cv2.INTER_AREA)\nimg = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB) \n\n# Patchify \npatches = einops.rearrange(\n     img, \"(h ph) (w pw) c -&gt; (h w) ph pw c\", ph=PATCH_SIZE, pw=PATCH_SIZE\n)\n通过这个Patchify只有，我们得到将图片Patch到了\n\n\n分成了不同的小Patch。\n接下来我们要做的就是，将这些Patch 展开，然后传入一个MLP，\nflat_patch = einops.rearrange(\n     patches, \"n ph pw c -&gt; n (ph pw c)\"\n)\n\n\nmlp = nn.Linear(PATCH_SIZE * PATCH_SIZE * 3, d_model)\npatch_embedding = mlp(flat_patch)\n同这种方式，我们就可以见图片转化为Transformer可以接受的vector。不过在实际操作中，我们并不会用以上的方式，因为上面的方式实现起来比较慢，我们可以将Patch 和 Linear Project和在一起。\n\n\n\n\n\n\nTip\n\n\n\n将几个tensor 的operation操作合成一个的方法，叫做 kernel fusion，这是一种提高训练和推理素的方法, 在工程中很常见，我们之后将要学习的 Flash Attention (Dao et al. 2022) 就会运用到这种方法\n\n\n在实际的代码中，我们用Convolution Layer 代替 Patch + Flatten+ Linear 的方法. 如果我们用一个 卷积层，参数设置为： • kernel_size = PATCH_SIZE （卷积核覆盖一个 patch） • stride = PATCH_SIZE （不重叠地移动，相当于切 patch） • in_channels = 3（RGB） • out_channels = d_model\n那么卷积会： 1. 把输入图片分成 PATCH_SIZE x PATCH_SIZE 的不重叠块（因为 stride = kernel_size）。 2. 对每个 patch 做一次线性映射（因为卷积本质上就是对局部区域做加权求和，相当于 Linear）。 3. 输出的 shape 自动就是 (batch, num_patches, d_model)。\n这正好等价于 切 patch + flatten + Linear 的组合。\n代码如下：\nclass PatchEmbedding(nn.Module):\n    def __init__(self, config: ModelConfig):\n        super().__init__()\n\n        self.conv = nn.Conv2d(\n            in_channels=config.num_channels,\n            out_channels=config.hidden_dim,\n            kernel_size=config.patch_size,\n            stride=config.patch_size,\n            padding=\"valid\" if config.patch_size == 16 else \"same\",\n        )\n\n    def forward(self, imgs: torch.Tensor) -&gt; torch.Tensor:\n        \"\"\"\n        imgs: (batch_size, num_channels, height, width)\n        Returns: (batch_size,  num_patches_height, num_patches_width, hidden_dim)\n        \"\"\"\n        # (B, C, H, W) -&gt; (B, hidden_dim, H', W')\n        x = self.conv(imgs)\n\n        # (B, hidden_dim, H', W') -&gt; (B, hidden_dim, H' * W')\n        x = x.flatten(2)\n\n        # (B, hidden_dim, H' * W') -&gt; (B, H' * W', hidden_dim)\n        x = x.transpose(1, 2)\n        return x\n用卷积的好处，除了可以更高效的实现Patch Embedding，代码更加简洁之外，我们还可以通过改变 stride 来使一些Patch overlapping，获得一个多尺度的结构，"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#position-encoding",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#position-encoding",
-    "title": "Vision-Transformer",
-    "section": "8.2 Position Encoding",
-    "text": "8.2 Position Encoding\n将图片转化为 Transformer 的输入之后，接下来Transformer中的另一个组件就是传入 Position Information。我们知道在Transformer 中，他们用的是 sine-cosine position embedding，在那篇文章中，我们也提到了，还存在其他不同的Position Encoding的办法，ViT 用的就是另一种办法，Learned Position Embedding。Learned Position Embedding的方法很简单，也很好理解，对于每一个位置，我们给他一个index，将这个index传入一个 Embedding Matrix， 我们就得到一个Position Embedding。不过与Token Embedding不同的是，我们会用到所有的Position，也整个matrix， 所以我们不用定index，直接定义整个Embedding，然后将它传入Transformer中。\nclass PositionalEncoding(nn.Module):\n    def __init__(self, config: ModelConfig):\n        super().__init__()\n\n        self.positional_embedding = nn.Parameter(\n            torch.randn(\n                1,\n                (config.image_size // config.patch_size) ** 2 + 1,\n                config.hidden_dim,\n            )\n        )\n\n        self.cls_token = nn.Parameter(torch.randn(1, 1, config.hidden_dim))\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        x: (batch_size, num_patches, hidden_dim)\n        Returns: (batch_size, num_patches, hidden_dim)\n        \"\"\"\n        # Add positional encoding to the input tensor\n        batch_size = x.size(0)\n\n        pos_embedding = self.positional_embedding.expand(batch_size, -1, -1)\n        cls_token = self.cls_token.expand(batch_size, -1, -1)\n\n        x = torch.cat((cls_token, x), dim=1)\n        return x + pos_embedding\n为什么ViT要用Learned Position Embedding呢？在ViT这篇文章中，他们尝试过不同的Position Embedding，比如：\n\nNo Positional Information\n1-dimensional Positional Embedding\n2-dimensional Positional Embedding\nRelative Positional Embedding\n\n发现，除了No Positional Information之外，其余3种在Image Classification中的表现，都是差不多的。\n\n\n\n\n\n\nFigure 3\n\n\n\n论文中表示，可能是因为所需要的 Position的信息较小，对于不同种类的Position Embedding的方法，学习这个Position Information的能力，都是差不多的。\n\nWe speculate that since our Transformer encoder operates on patch-level inputs, as opposed to pixel-level, the differences in how to encode spatial information is less important. More precisely, in patch-level inputs, the spatial dimensions are much smaller than the original pixel-level inputs, e.g., \\(14 \\times 14\\) as opposed to \\(224 \\times 224\\), and learning to represent the spatial relations in this resolution is equally easy for these different positional encoding strategies.  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.18 \n\n不过，尽管Position的方法不重要，但是不同的训练参数，还是会影响到学习到的Position Information, 下图所示：\n\n\n\n\n\n\nFigure 4\n\n\n\n\n8.2.1 Extending Position Encoding\n当我们有了一个Pre-Training的模型，我们想用它Fine-Tuning到一个不同图片大小的数据库，我们改怎么做呢，第一个方法当然是，Resize 我们的图片，到ViT Pre-training的图片大小，但是，这个能导致较大的图片，失去很多细节。如果我们想保持图片的大小不变，同时让模型训练，我们就需要Extend Position Encoding，因为当Patch Size不变，图片大小变了的话，产生的Number of Patches 也是会改变的，这样，就是损失一些信息。我们需要做的是，找到一种方法，增大或者减小Position的数量。 这就是所谓的Position Interpolation。\n2D interpolation of the pre-trained position embeddings • ViT 在预训练时，通常用固定输入分辨率（比如 224×224） → 生成固定数量的 patch（比如 16×16 patch → 196 个 patch）。 • 但在 fine-tuning 时，输入图片可能大小不一样，比如 384×384，这时 patch 数量就变了。 • 这会导致原本的 位置编码 (position embeddings) 和新的 patch 数量对不上。 • 解决办法：对预训练好的位置编码做 二维插值 (2D interpolation)，根据 patch 在原图中的空间位置，把位置编码拉伸/缩放到新的分辨率。\n\nThe Vision Transformer can handle arbitrary sequence lengths (up to memory constraints), however, the pre-trained position embeddings may no longer be meaningful. We therefore perform 2D interpolation of the pre-trained position embeddings, according to their location in the original image  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.4 \n\ndef interpolate_pos_encoding(self, x, w, h):\n    npatch = x.shape[1] - 1\n    N = self.pos_embed.shape[1] - 1\n    if npatch == N and w == h:\n        return self.pos_embed\n    class_pos_embed = self.pos_embed[:, 0]\n    patch_pos_embed = self.pos_embed[:, 1:]\n    dim = x.shape[-1]\n    w0 = w // self.patch_embed.patch_size\n    h0 = h // self.patch_embed.patch_size\n    \n    patch_pos_embed = F.interpolate(\n        patch_pos_embed.reshape(\n            1, \n            int(math.sqrt(N)), \n            int(math.sqrt(N)), \n            dim\n        ).permute(0, 3, 1, 2),\n        scale_factor=(w0 / math.sqrt(N), h0 / math.sqrt(N)),\n        mode='bicubic',\n    )\n    patch_pos_embed = patch_pos_embed.permute(0, 2, 3, 1).view(1, -1, dim)\n    return torch.cat((class_pos_embed.unsqueeze(0), patch_pos_embed), dim=1)"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "0.2 Position Encoding",
+    "text": "0.2 Position Encoding\n将图片转化为 Transformer 的输入之后，接下来Transformer中的另一个组件就是传入 Position Information。我们知道在Transformer 中，他们用的是 sine-cosine position embedding，在那篇文章中，我们也提到了，还存在其他不同的Position Encoding的办法，ViT 用的就是另一种办法，Learned Position Embedding。Learned Position Embedding的方法很简单，也很好理解，对于每一个位置，我们给他一个index，将这个index传入一个 Embedding Matrix， 我们就得到一个Position Embedding。不过与Token Embedding不同的是，我们会用到所有的Position，也整个matrix， 所以我们不用定index，直接定义整个Embedding，然后将它传入Transformer中。\nclass PositionalEncoding(nn.Module):\n    def __init__(self, config: ModelConfig):\n        super().__init__()\n\n        self.positional_embedding = nn.Parameter(\n            torch.randn(\n                1,\n                (config.image_size // config.patch_size) ** 2 + 1,\n                config.hidden_dim,\n            )\n        )\n\n        self.cls_token = nn.Parameter(torch.randn(1, 1, config.hidden_dim))\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        x: (batch_size, num_patches, hidden_dim)\n        Returns: (batch_size, num_patches, hidden_dim)\n        \"\"\"\n        # Add positional encoding to the input tensor\n        batch_size = x.size(0)\n\n        pos_embedding = self.positional_embedding.expand(batch_size, -1, -1)\n        cls_token = self.cls_token.expand(batch_size, -1, -1)\n\n        x = torch.cat((cls_token, x), dim=1)\n        return x + pos_embedding\n为什么ViT要用Learned Position Embedding呢？在ViT这篇文章中，他们尝试过不同的Position Embedding，比如：\n\nNo Positional Information\n1-dimensional Positional Embedding\n2-dimensional Positional Embedding\nRelative Positional Embedding\n\n发现，除了No Positional Information之外，其余3种在Image Classification中的表现，都是差不多的。\n\n\n\n\n\n\nFigure 3\n\n\n\n论文中表示，可能是因为所需要的 Position的信息较小，对于不同种类的Position Embedding的方法，学习这个Position Information的能力，都是差不多的。\n\nWe speculate that since our Transformer encoder operates on patch-level inputs, as opposed to pixel-level, the differences in how to encode spatial information is less important. More precisely, in patch-level inputs, the spatial dimensions are much smaller than the original pixel-level inputs, e.g., \\(14 \\times 14\\) as opposed to \\(224 \\times 224\\), and learning to represent the spatial relations in this resolution is equally easy for these different positional encoding strategies.  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.18 \n\n不过，尽管Position的方法不重要，但是不同的训练参数，还是会影响到学习到的Position Information, 下图所示：\n\n\n\n\n\n\nFigure 4\n\n\n\n\n0.2.1 Extending Position Encoding\n当我们有了一个Pre-Training的模型，我们想用它Fine-Tuning到一个不同图片大小的数据库，我们改怎么做呢，第一个方法当然是，Resize 我们的图片，到ViT Pre-training的图片大小，但是，这个能导致较大的图片，失去很多细节。如果我们想保持图片的大小不变，同时让模型训练，我们就需要Extend Position Encoding，因为当Patch Size不变，图片大小变了的话，产生的Number of Patches 也是会改变的，这样，就是损失一些信息。我们需要做的是，找到一种方法，增大或者减小Position的数量。 这就是所谓的Position Interpolation。\n2D interpolation of the pre-trained position embeddings • ViT 在预训练时，通常用固定输入分辨率（比如 224×224） → 生成固定数量的 patch（比如 16×16 patch → 196 个 patch）。 • 但在 fine-tuning 时，输入图片可能大小不一样，比如 384×384，这时 patch 数量就变了。 • 这会导致原本的 位置编码 (position embeddings) 和新的 patch 数量对不上。 • 解决办法：对预训练好的位置编码做 二维插值 (2D interpolation)，根据 patch 在原图中的空间位置，把位置编码拉伸/缩放到新的分辨率。\n\nThe Vision Transformer can handle arbitrary sequence lengths (up to memory constraints), however, the pre-trained position embeddings may no longer be meaningful. We therefore perform 2D interpolation of the pre-trained position embeddings, according to their location in the original image  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.4 \n\ndef interpolate_pos_encoding(self, x, w, h):\n    npatch = x.shape[1] - 1\n    N = self.pos_embed.shape[1] - 1\n    if npatch == N and w == h:\n        return self.pos_embed\n    class_pos_embed = self.pos_embed[:, 0]\n    patch_pos_embed = self.pos_embed[:, 1:]\n    dim = x.shape[-1]\n    w0 = w // self.patch_embed.patch_size\n    h0 = h // self.patch_embed.patch_size\n    \n    patch_pos_embed = F.interpolate(\n        patch_pos_embed.reshape(\n            1, \n            int(math.sqrt(N)), \n            int(math.sqrt(N)), \n            dim\n        ).permute(0, 3, 1, 2),\n        scale_factor=(w0 / math.sqrt(N), h0 / math.sqrt(N)),\n        mode='bicubic',\n    )\n    patch_pos_embed = patch_pos_embed.permute(0, 2, 3, 1).view(1, -1, dim)\n    return torch.cat((class_pos_embed.unsqueeze(0), patch_pos_embed), dim=1)"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#cls-tokens-mlp-head",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#cls-tokens-mlp-head",
-    "title": "Vision-Transformer",
-    "section": "8.3 [CLS] Tokens & MLP Head",
-    "text": "8.3 [CLS] Tokens & MLP Head\n在 Transformer 这一节，我们了解到：每输入一个token，Transformer会输出对应的token。这就是说，对于每个patch，Transformer会输出对应的Tokens，那么，我们应该选择哪一个token作为我们图片的表示呢。 BERT (Devlin et al. 2019)， 用了一个 [CLS], 来表示一个句子。同理，我们也可以添加一个 [CLS] token, 来表示一张图片。同时，对于 [CLS] token, 我们也要在给他一个表示位置的信息。这就是为什么在Position Encoding上，我们有 (config.image_size // config.patch_size) ** 2 + 1, 位置信息，其中 +1 就是 [CLS] 的位置信息。 总结一下 [CLS] token 的作用就是用来聚合所有的Patch的消息，然后用来Image 的Representation。\n我们想一下，除了加一个 [CLS] token，之外，我们还有其他办法来表示图片吗。有一种很自然的方法就是，将所有的patch的消息收集起来，然后去一个平均值来表示这个图片。类似于传统的ConvNet(e.g. ResNet) 我们可以通过 AvgPooling 来实现。 不过论文中提到， 对于两种不同的Image Representation，需要有不同的Learning Rate 来训练这个网络。\nOther content \n有了Image Represent之后，我们只需要将这个传入一个简单的MLP，我们就可以得到一个Classifier。MLP的输入是hidden dim，输入则是我们Number of Classes。不同的Index 表示不同的Classses。\n\nAn initial attempt at using only image-patch embeddings, globally average-pooling (GAP) them, followed by a linear classifier—just like ResNet’s final feature map—performed very poorly. However, we found that this is neither due to the extra token, nor to the GAP operation. Instead, the difference in performance is fully explained by the requirement for a different learning-rate,  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.17 \n\n\nBoth during pre-training and fine-tuning, a classification head is attached to \\(\\mathrm{z}_{L}^{0}\\). The classification head is implemented by a MLP with one hidden layer at pre-training time and by a single linear layer at fine-tuning time.  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.3 \n\nclass ClassifierHead(nn.Module):\n    def __init__(self, config: ModelConfig):\n        super().__init__()\n        \n        self.fc1 = nn.Linear(config.hidden_dim, config.mlp_dim)\n        self.fc2 = nn.Linear(config.mlp_dim, config.num_classes)\n        self.dropout = nn.Dropout(config.dropout_rate)\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        x: (batch_size, num_patches, hidden_dim)\n        Returns: (batch_size, num_classes)\n        \"\"\"\n        # Use the CLS token for classification\n        cls_token = x[:, 0, :]\n        x = F.relu(self.fc1(cls_token))\n        \n        x = self.dropout(x)\n        x = self.fc2(x)\n\n        return x"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "0.3 [CLS] Tokens & MLP Head",
+    "text": "0.3 [CLS] Tokens & MLP Head\n在 Transformer 这一节，我们了解到：每输入一个token，Transformer会输出对应的token。这就是说，对于每个patch，Transformer会输出对应的Tokens，那么，我们应该选择哪一个token作为我们图片的表示呢。 BERT (Devlin et al. 2019)， 用了一个 [CLS], 来表示一个句子。同理，我们也可以添加一个 [CLS] token, 来表示一张图片。同时，对于 [CLS] token, 我们也要在给他一个表示位置的信息。这就是为什么在Position Encoding上，我们有 (config.image_size // config.patch_size) ** 2 + 1, 位置信息，其中 +1 就是 [CLS] 的位置信息。 总结一下 [CLS] token 的作用就是用来聚合所有的Patch的消息，然后用来Image 的Representation。\n我们想一下，除了加一个 [CLS] token，之外，我们还有其他办法来表示图片吗。有一种很自然的方法就是，将所有的patch的消息收集起来，然后去一个平均值来表示这个图片。类似于传统的ConvNet(e.g. ResNet) 我们可以通过 AvgPooling 来实现。 不过论文中提到， 对于两种不同的Image Representation，需要有不同的Learning Rate 来训练这个网络。\nOther content \n有了Image Represent之后，我们只需要将这个传入一个简单的MLP，我们就可以得到一个Classifier。MLP的输入是hidden dim，输入则是我们Number of Classes。不同的Index 表示不同的Classses。\n\nAn initial attempt at using only image-patch embeddings, globally average-pooling (GAP) them, followed by a linear classifier—just like ResNet’s final feature map—performed very poorly. However, we found that this is neither due to the extra token, nor to the GAP operation. Instead, the difference in performance is fully explained by the requirement for a different learning-rate,  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.17 \n\n\nBoth during pre-training and fine-tuning, a classification head is attached to \\(\\mathrm{z}_{L}^{0}\\). The classification head is implemented by a MLP with one hidden layer at pre-training time and by a single linear layer at fine-tuning time.  An Image is Worth 16x16 Words- Transformers for Image Recognition at Scale, p.3 \n\nclass ClassifierHead(nn.Module):\n    def __init__(self, config: ModelConfig):\n        super().__init__()\n        \n        self.fc1 = nn.Linear(config.hidden_dim, config.mlp_dim)\n        self.fc2 = nn.Linear(config.mlp_dim, config.num_classes)\n        self.dropout = nn.Dropout(config.dropout_rate)\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        x: (batch_size, num_patches, hidden_dim)\n        Returns: (batch_size, num_classes)\n        \"\"\"\n        # Use the CLS token for classification\n        cls_token = x[:, 0, :]\n        x = F.relu(self.fc1(cls_token))\n        \n        x = self.dropout(x)\n        x = self.fc2(x)\n\n        return x"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#transformer-encoder-block",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#transformer-encoder-block",
-    "title": "Vision-Transformer",
-    "section": "8.4 Transformer Encoder Block",
-    "text": "8.4 Transformer Encoder Block\n至此，我们已经讲完了ViT与Transformer的主要不同之处。接下来，就是Transformer的Encoder。 \n这部分，和Transformer原本的Encoder很类似，只不过有几处不同：\n\nPre-Norm: 在ViT同，输入先进行一个LayerNorm，然后在传入MHA或者MLP中，反观在Transformer原本的Encoder中，我们是先将MHA或者MLP的输出与输入加在一起，之后再进行一个Normalization。这叫做Post-Norm\nMLP的实现：在Transformer Encoder中，用的是 ReLU, 而在ViT中，用的是 GELU\n\n除此之外，其他部分都是一样的。一下是ViT Encoder的实现：\nclass EncoderBlock(nn.Module):\n    def __init__(self, config: ModelConfig):\n        super().__init__()\n        \n        self.norm1 = LayerNorm(config.hidden_dim)\n        self.mha = MHA(config)\n        \n        self.norm2 = LayerNorm(config.hidden_dim)\n        self.ffn = FFN(config)\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        x: (batch_size, num_patches, hidden_dim)\n        Returns: (batch_size, num_patches, hidden_dim)\n        \"\"\"\n        # Multi-head attention\n        redisual = x\n        x = self.norm1(x)\n        x = redisual + self.mha(x)\n\n        # Feed-forward network\n        redisual = x\n        x = self.norm2(x)\n        x = x + self.ffn(x)\n\n        return x"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "0.4 Transformer Encoder Block",
+    "text": "0.4 Transformer Encoder Block\n至此，我们已经讲完了ViT与Transformer的主要不同之处。接下来，就是Transformer的Encoder。 \n这部分，和Transformer原本的Encoder很类似，只不过有几处不同：\n\nPre-Norm: 在ViT同，输入先进行一个LayerNorm，然后在传入MHA或者MLP中，反观在Transformer原本的Encoder中，我们是先将MHA或者MLP的输出与输入加在一起，之后再进行一个Normalization。这叫做Post-Norm\nMLP的实现：在Transformer Encoder中，用的是 ReLU, 而在ViT中，用的是 GELU\n\n除此之外，其他部分都是一样的。一下是ViT Encoder的实现：\nclass EncoderBlock(nn.Module):\n    def __init__(self, config: ModelConfig):\n        super().__init__()\n        \n        self.norm1 = LayerNorm(config.hidden_dim)\n        self.mha = MHA(config)\n        \n        self.norm2 = LayerNorm(config.hidden_dim)\n        self.ffn = FFN(config)\n\n    def forward(self, x: torch.Tensor):\n        \"\"\"\n        x: (batch_size, num_patches, hidden_dim)\n        Returns: (batch_size, num_patches, hidden_dim)\n        \"\"\"\n        # Multi-head attention\n        redisual = x\n        x = self.norm1(x)\n        x = redisual + self.mha(x)\n\n        # Feed-forward network\n        redisual = x\n        x = self.norm2(x)\n        x = x + self.ffn(x)\n\n        return x"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#cnn-vs.-vit-inductive-bias",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#cnn-vs.-vit-inductive-bias",
-    "title": "Vision-Transformer",
-    "section": "8.5 CNN vs. ViT： Inductive bias",
-    "text": "8.5 CNN vs. ViT： Inductive bias\n至此，我们已经介绍完了Vision Transformer，我们来从Inductive Bias 的方面，看看 CNN 和 ViT 有什么不同\n\n\n\n\n\n\n什么是Inductive Bias\n\n\n\n在深度学习里，Inductive Bias（归纳偏置）是指模型在学习之前，因结构或设计而自带的假设或先验。\n\n\n对于图像来说，常见的先验就是：\n\n局部像素是相关的（locality）\n相邻区域的模式有规律（2D neighborhood）\n物体无论出现在图像哪里，识别方式应该一样（translation equivariance）\n\n🔹 2. CNN 的结构怎么体现这些偏置？ 1. 局部性 (Locality) • 卷积核（例如 3×3）只和局部像素打交道，而不是全图。 • 这意味着模型“相信”图像的重要特征来自局部邻域，而不是遥远区域。 2. 二维邻域结构 (2D structure) • 卷积操作是沿着 图像的二维网格进行的，天然利用了图像的行列结构。 • 这和文本（序列 1D）不一样，CNN 明确知道输入是 2D 排列的。 3. 平移等变性 (Translation equivariance) • 卷积核的参数在整张图共享。 • 所以猫在左上角还是右下角，卷积核都能检测到“猫耳朵”。 • 这让 CNN 自动具有“识别位置无关”的能力。\n这些性质不是模型通过训练学出来的，而是因为 卷积操作本身的数学结构就带来的： • kernel 的局部连接 → 局部性 • kernel 滑动覆盖全图 → 平移等变性 • 操作在二维空间定义 → 邻域结构 • 所以，哪怕你不给 CNN 喂太多数据，它也会利用这些偏置去学习特征。\n而对于 ViT 来说： ViT 的归纳偏置非常弱，几乎完全依赖数据和训练来学习。\n\nPatch 切分 (Patchification) • ViT 唯一的“图像先验”之一就是把输入图片切成 patch。 • 这一操作隐含了：图像是一个二维结构，可以被分块处理。\n位置编码 (Positional Embeddings) • Transformer 本身只处理序列，没有空间结构的概念。 • ViT 通过加位置编码告诉模型 patch 在图像中的相对位置。 • 在输入分辨率变化时，会做 二维插值 (2D interpolation) 来适配，这也是一种人工引入的 2D 先验。\n其他部分 • 除了以上两点，ViT 的注意力机制是 全局的 (global)，没有局部性约束。 • 没有像 CNN 那样内置的平移等变性或局部邻域结构。\n\n这样就是为什么ViT需要更多数据和计算才能学到同样的空间归纳规律。"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "0.5 CNN vs. ViT： Inductive bias",
+    "text": "0.5 CNN vs. ViT： Inductive bias\n至此，我们已经介绍完了Vision Transformer，我们来从Inductive Bias 的方面，看看 CNN 和 ViT 有什么不同\n\n\n\n\n\n\n什么是Inductive Bias\n\n\n\n在深度学习里，Inductive Bias（归纳偏置）是指模型在学习之前，因结构或设计而自带的假设或先验 ，比如 Convolution Layer, 它就是假设 相邻的pixel之间，是有一定联系的，因此可以用一个Kernel来将学习这些关系。\n\n\n对于图像来说，常见的先验就是：\n\n局部像素是相关的（locality）\n相邻区域的模式有规律（2D neighborhood）\n物体无论出现在图像哪里，识别方式应该一样（translation equivariance）\n\n🔹 2. CNN 的结构怎么体现这些偏置？ 1. 局部性 (Locality) • 卷积核（例如 3×3）只和局部像素打交道，而不是全图。 • 这意味着模型“相信”图像的重要特征来自局部邻域，而不是遥远区域。 2. 二维邻域结构 (2D structure) • 卷积操作是沿着 图像的二维网格进行的，天然利用了图像的行列结构。 • 这和文本（序列 1D）不一样，CNN 明确知道输入是 2D 排列的。 3. 平移等变性 (Translation equivariance) • 卷积核的参数在整张图共享。 • 所以猫在左上角还是右下角，卷积核都能检测到“猫耳朵”。 • 这让 CNN 自动具有“识别位置无关”的能力。\n这些性质不是模型通过训练学出来的，而是因为 卷积操作本身的数学结构就带来的： • kernel 的局部连接 → 局部性 • kernel 滑动覆盖全图 → 平移等变性 • 操作在二维空间定义 → 邻域结构 • 所以，哪怕你不给 CNN 喂太多数据，它也会利用这些偏置去学习特征。\n而对于 ViT 来说： ViT 的归纳偏置非常弱，几乎完全依赖数据和训练来学习。\n\nPatch 切分 (Patchification) • ViT 唯一的“图像先验”之一就是把输入图片切成 patch。 • 这一操作隐含了：图像是一个二维结构，可以被分块处理。\n位置编码 (Positional Embeddings) • Transformer 本身只处理序列，没有空间结构的概念。 • ViT 通过加位置编码告诉模型 patch 在图像中的相对位置。 • 在输入分辨率变化时，会做 二维插值 (2D interpolation) 来适配，这也是一种人工引入的 2D 先验。\n其他部分 • 除了以上两点，ViT 的注意力机制是 全局的 (global)，没有局部性约束。 • 没有像 CNN 那样内置的平移等变性或局部邻域结构。\n\n这样就是为什么ViT需要更多数据和计算才能学到同样的空间归纳规律。"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#vit-model-variants",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#vit-model-variants",
-    "title": "Vision-Transformer",
-    "section": "8.6 ViT Model Variants",
-    "text": "8.6 ViT Model Variants\nViT 有3种不同的基本变形， 如下图所示 \nViT的名字通常表示为: ViT-L/16: 意思是，ViT-Large，然后用的16 Patch Size。 需要注意的是，Patch Size越大，我们得到的tokens就越少，也就是需要更少的训练时实现。"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "0.6 ViT Model Variants",
+    "text": "0.6 ViT Model Variants\nViT 有3种不同的基本变形， 如下图所示\n\nViT的名字通常表示为: ViT-L/16: 意思是，ViT-Large，然后用的16 Patch Size。 需要注意的是，Patch Size越大，我们得到的tokens就越少，也就是需要更少的训练时实现, 但通常需要更大的图片来训练。"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#减少tokens",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#减少tokens",
-    "title": "Vision-Transformer",
-    "section": "10.1 减少Tokens",
-    "text": "10.1 减少Tokens\n\nPatch Merge\nPatch Shuffle"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "6.1 减少Tokens",
+    "text": "6.1 减少Tokens\n\nPatch Merge\nPatch Shuffle"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#vision-language-model",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#vision-language-model",
-    "title": "Vision-Transformer",
-    "section": "10.2 Vision Language Model",
-    "text": "10.2 Vision Language Model\n我们以及学习了ViT for computer Vision， Transformer for NLP， 接下来有什么办法让这两种模型结合起来呢？ CLIP (2021): 将 ViT 融合到 vision-language 预训练中。"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "6.2 Vision Language Model",
+    "text": "6.2 Vision Language Model\n我们以及学习了ViT for computer Vision， Transformer for NLP， 接下来有什么办法让这两种模型结合起来呢？ CLIP (2021): 将 ViT 融合到 vision-language 预训练中。\nVideo Transformer [[]]\n(Dehghani et al. 2023)"
   },
   {
     "objectID": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#axial-attention轴向注意力",
     "href": "posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html#axial-attention轴向注意力",
-    "title": "Vision-Transformer",
-    "section": "11.1 Axial Attention（轴向注意力）",
-    "text": "11.1 Axial Attention（轴向注意力）\n在处理 图像或视频 这类高维输入时，如果直接对所有像素做 全局 self-attention，复杂度是 \\(\\mathcal{O}(H^2 W^2)\\) （\\(H, W\\) 是高和宽）。当图像很大时，这个代价太高。 核心想法：把二维 attention 拆成两次一维 attention（沿着图像的两个“轴”分别做）。 1. Row-wise Attention（行注意力） • 沿着水平方向（宽度轴 W）做注意力，每一行的像素互相关注。 • 复杂度：\\(\\mathcal{O}(H \\cdot W^2)\\)。 2. Column-wise Attention（列注意力） • 沿着垂直方向（高度轴 H）做注意力，每一列的像素互相关注。 • 复杂度： \\(\\mathcal{O}(W \\cdot H^2)\\)。\n组合起来，相当于在 H 和 W 两个轴上都做了全局依赖建模。\n\n\n\n\n\n\nFigure 5"
+    "title": "02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)",
+    "section": "2.1 Axial Attention（轴向注意力）",
+    "text": "2.1 Axial Attention（轴向注意力）\n在处理 图像或视频 这类高维输入时，如果直接对所有像素做 全局 self-attention，复杂度是 \\(\\mathcal{O}(H^2 W^2)\\) （\\(H, W\\) 是高和宽）。当图像很大时，这个代价太高。 核心想法：把二维 attention 拆成两次一维 attention（沿着图像的两个“轴”分别做）。 1. Row-wise Attention（行注意力） • 沿着水平方向（宽度轴 W）做注意力，每一行的像素互相关注。 • 复杂度：\\(\\mathcal{O}(H \\cdot W^2)\\)。 2. Column-wise Attention（列注意力） • 沿着垂直方向（高度轴 H）做注意力，每一列的像素互相关注。 • 复杂度： \\(\\mathcal{O}(W \\cdot H^2)\\)。\n组合起来，相当于在 H 和 W 两个轴上都做了全局依赖建模。\n\n\n\n\n\n\nFigure 5"
   },
   {
     "objectID": "posts/PapersWithCode/17 VQ-VAE/VQ_VAE.html",
@@ -1208,7 +1208,7 @@
     "href": "posts/PapersWithCode/100_Papers_index.html",
     "title": "100 Papers with Code",
     "section": "",
-    "text": "Note\n\n\n\n Due to the large number of papers included in this series. I will mainly write in Chinese to speed up the writing process. If you have any questions or suggestions, please feel free to contact me. Or if you would like to contribute translations of any of the articles into English or other languages, please let me know! \n\n\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n01: Attention is all you need (Transformer)\n\n\n\nTransformer\n\nAttention\n\nNLP\n\nArchitecture\n\n\n\nTransformer 是一种基于自注意力机制的深度学习架构，能够并行处理序列，在语言、视觉和多模态任务中表现出色，并且作为 GPT、BERT 等大型语言模型（LLM）的核心基础，推动了当今生成式人工智能的快速发展。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n03: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows(Swin Transformer)\n\n\n\nComputer-Vision\n\n\n\nSwin Transformer 是一种使用层次化结构和滑动窗口自注意力机制的ViT模型，既保留了局部建模的高效性，又通过窗口偏移实现跨区域信息交互，可作为通用视觉骨干网络，适用于图像分类、目标检测和语义分割等多种视觉任务。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n04: Learning Transferable Visual Models From Natural Language Supervision(CLIP)\n\n\n\nMulti-Modality\n\nMustReadPaper\n\n\n\nCLIP（对比语言-图像预训练模型）是 一个视觉-语言模型，通过在数亿对图文数据上进行对比学习，学得联合表征，从而能够在零样本条件下完成多种视觉任务。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n05: Emerging Properties in Self-Supervised Vision Transformers(DINO)\n\n\n\nSelf-Supervised-Learning\n\nRepresentation-Learning\n\n\n\nThis is the DINO article\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n06: Auto-Encoding Variational Bayes(VAE)\n\n\n\nSelf-Supervised-Learning\n\nGenerative-Model\n\nRepresentation-Learning\n\n\n\nVAE（变分自动编码器）是一类结合概率图模型与神经网络的生成模型，它通过引入可参数化的近似后验 \\(q_\\phi(z|x)\\) 来摊销推断成本，并用最大化 ELBO 的方式同时学习数据的潜在表示与生成过程：其中重建项确保模型能从潜变量还原数据，KL 项则将潜空间约束为接近先验的连续结构。借助重参数化技巧，VAE 能在端到端训练中高效地学习一个平滑、可采样的潜空间，从而实现表示学习、插值、生成等功能，是现代深度生成模型的重要基础。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n07: Denoising Diffusion Probabilistic Models(DDPM)\n\n\nA comprehensive overview of Denoising Diffusion Probabilistic Models (DDPM) and their applications in generative modeling.\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n08: Scalable Diffusion Models with Transformers (DiT)\n\n\nA comprehensive overview of the DiT model architecture and its applications in scalable diffusion processes.\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nVision-Transformer\n\n\n\nComputer Vision\n\nTransformer\n\n\n\nVision Transformer (ViT) 通过将图像切分为 patch 并直接应用标准 Transformer，实现了在大规模数据下超越 CNN 的图像分类性能。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nVQ-VAE\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "Note\n\n\n\n Due to the large number of papers included in this series. I will mainly write in Chinese to speed up the writing process. If you have any questions or suggestions, please feel free to contact me. Or if you would like to contribute translations of any of the articles into English or other languages, please let me know! \n\n\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n01: Attention is all you need (Transformer)\n\n\n\nTransformer\n\nAttention\n\nNLP\n\nArchitecture\n\n\n\nTransformer 是一种基于自注意力机制的深度学习架构，能够并行处理序列，在语言、视觉和多模态任务中表现出色，并且作为 GPT、BERT 等大型语言模型（LLM）的核心基础，推动了当今生成式人工智能的快速发展。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n02: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale (Vision-Transformer)\n\n\n\nComputer Vision\n\nTransformer\n\n\n\nVision Transformer (ViT) 通过将图像切分为 patch 并直接应用标准 Transformer，实现了在大规模数据下超越 CNN 的图像分类性能。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n03: Training data-efficient image transformers & distillation through attention (DeiT)\n\n\n\nComputer Vision\n\nTransformer\n\nKnowledge Distillation\n\n\n\nTraining data-efficient image transformers & distillation through attention（DeiT）提出了一种通过知识蒸馏（distillation token 与 attention-based distillation）显著提升 Vision Transformer 数据效率的方法，使 ViT 能在中小规模数据集上高效训练并达到与 CNN 可比的性能。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)\n\n\n\nComputer Vision\n\nAttention\n\nTransformer\n\n\n\nSwin Transformer 是一种使用层次化结构和滑动窗口自注意力机制的ViT模型，既保留了局部建模的高效性，又通过窗口偏移实现跨区域信息交互，可作为通用视觉骨干网络，适用于图像分类、目标检测和语义分割等多种视觉任务。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n05: ViViT: A Video Vision Transformer(ViViT)\n\n\n\nComputer Vision\n\nTransformer\n\n\n\nViViT: A Video Vision Transformer提出将 Vision Transformer 系统性扩展到视频建模，通过时空分解与高效注意力设计直接对视频序列进行建模，在视频分类等任务上取得强性能与良好可扩展性。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n06: Learning Transferable Visual Models From Natural Language Supervision (CLIP)\n\n\n\nMulti Modality\n\nRepresentation Learning\n\n\n\n一种通过对齐图像与自然语言文本的对比学习框架，在海量图文对上训练统一表示，从而获得强零样本泛化能力的视觉模型。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n07: Emerging Properties in Self-Supervised Vision Transformers (DINO)\n\n\n\nSelf Supervised Learning\n\nRepresentation Learning\n\n\n\n一种无需标签的自监督学习方法，通过教师–学生自蒸馏训练 Vision Transformer，自发涌现出语义一致的全局表示与清晰的注意力分割能力。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n08: Auto-Encoding Variational Bayes (VAE)\n\n\n\nSelf Supervised Learning\n\nGenerative Model\n\nRepresentation Learning\n\n\n\nVAE（变分自动编码器）是一类结合概率图模型与神经网络的生成模型，它通过引入可参数化的近似后验 \\(q_\\phi(z|x)\\) 来摊销推断成本，并用最大化 ELBO 的方式同时学习数据的潜在表示与生成过程：其中重建项确保模型能从潜变量还原数据，KL 项则将潜空间约束为接近先验的连续结构。借助重参数化技巧，VAE 能在端到端训练中高效地学习一个平滑、可采样的潜空间，从而实现表示学习、插值、生成等功能，是现代深度生成模型的重要基础。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n09: Masked Autoencoders Are Scalable Vision Learners(MAE)\n\n\n\nSelf Supervised Learning\n\nRepresentation Learning\n\nAutoEncoder\n\n\n\n一种通过随机遮挡大比例图像 patch 并重建缺失内容进行自监督学习的方法，使 Vision Transformer 能以更高效率和更好可扩展性学习通用视觉表示。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n10: Conditional Image Generation with PixelCNN Decoders (Pixel Gated CNN)\n\n\n\nGenerative Model\n\n\n\n一种基于像素级自回归建模的条件图像生成方法，通过引入门控卷积（Gated CNN）在给定条件（如类别或上下文）下逐像素生成高质量图像。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n11: Neural Discrete Representation Learning (VQ_VAE)\n\n\n\nRepresentation Learning\n\nSelf Supervised Learning\n\n\n\n一种通过离散化潜在表示并使用码本进行重构的生成模型，将连续表示转为离散符号，从而学习高质量、可组合的视觉表示并支持高效生成。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n15: High-Resolution Image Synthesis with Latent Diffusion Models (Latent Diffusion Model)\n\n\n\nGenerative Model\n\n\n\n一种在低维潜在空间中进行扩散建模的生成方法，在显著降低计算成本的同时，实现高分辨率、高质量的图像生成。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n16: Scalable Diffusion Models with Transformers (DiT)\n\n\n\nGenerative Model\n\nDiffusion Model\n\n\n\n一种将 Transformer 架构引入扩散模型的生成方法，通过序列化建模与规模化训练，在大模型与大数据设置下实现更强的生成质量与可扩展性。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/PapersWithCode/07-ddpm/DDPM.html",
@@ -1510,5 +1510,383 @@
     "title": "Chapter 01: Introduction to the Deep Learning",
     "section": "3.3 Deep Neural Networks",
     "text": "3.3 Deep Neural Networks\n随着计算能力的提升和大规模数据集的出现，深度神经网络（Deep Neural Networks, DNNs）在21世纪初得到了广泛关注。2006年，Hinton等人提出了深度置信网络（Deep Belief Networks, DBNs），通过无监督预训练来初始化深度神经网络的参数，从而缓解了梯度消失问题。随后，卷积神经网络（Convolutional Neural Networks, CNNs）在图像识别任务中取得了突破性进展，特别是2012年AlexNet在ImageNet竞赛中的胜利，标志着深度学习的崛起。其基本的概念与FFNN类似，只不过引入了卷积层（Convolutional Layer）和池化层（Pooling Layer），从而更好地处理图像数据。\n随着深度学习的发展，不同的技术的提出，比如Auto-Differentiation 等，使得训练深度神经网络变得更加高效和便捷。由此也催生出了许多不同的模型架构，如循环神经网络（Recurrent Neural Networks, RNNs），Transformer于处理序列数据，生成对抗网络（Generative Adversarial Networks, GANs）用于生成任务等。\n可以看到，人工智能的成功不是一蹴而就的，而是经历了多个阶段的发展和积累。每一个重要的突破都离不开前人的努力和创新。通过了解深度学习的发展历史，我们可以更好地理解其现状和未来趋势，为进一步的学习和研究打下坚实的基础。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#mlp-width",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#mlp-width",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "3.1 MLP Width",
+    "text": "3.1 MLP Width\nMLP的宽度通常设置为模型维度的4倍，例如对于一个512维的模型，MLP的宽度通常设置为2048。 这种设计可以提供足够的表达能力，同时不会过度增加计算开销。 当然，我们在之前提到过， 如果使用Gated Activation, 那么MLP的宽度通常设置为 \\(\\frac{8}{3}\\) 倍的模型维度。基本上目前主流的大语言模型都是采用这个比例。\n除了Gated Activation之外， 也有一些模型使用更宽的MLP， 例如 T5 使用了 64 倍的MLP宽度， 但是这种设计会显著增加计算开销， 因此需要权衡模型性能与计算资源。\n至于为什么选择4倍或者 \\(\\frac{8}{3}\\) 倍的MLP宽度， 主要是基于经验和实验结果。 研究表明，这些比例可以在保持模型性能的同时，提供足够的表达能力。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#attention-heads",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#attention-heads",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "3.2 Attention Heads",
+    "text": "3.2 Attention Heads\n模型的Head Dim 通常设置为 d_model / num_heads， 也就是说，Head Dim 与模型维度成反比。 常见的Head Dim设置包括64、128等。不过，Head Dim 不一定就是d_model / num_heads。 不过并没有实验表明，Head Dim 过大或者过小会显著影响模型性能。 因此，在实际应用中，通常根据计算资源和模型规模来选择Head Dim。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#aspect-ratio",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#aspect-ratio",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "3.3 Aspect Ratio",
+    "text": "3.3 Aspect Ratio\nAspect Ratio 指的是模型的深度（n_layer）与宽度（d_model）之比。 研究表明，较高的Aspect Ratio（即更深的模型）通常可以提供更好的性能，特别是在处理复杂任务时。 然而，过深的模型也可能导致训练困难和过拟合问题。\n\n不过过深的模型也会带来一些挑战，例如Parallelism和训练稳定性问题。 因此，在选择Aspect Ratio时，需要权衡模型性能与训练稳定性。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#vocabulary-size",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#vocabulary-size",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "3.4 Vocabulary Size",
+    "text": "3.4 Vocabulary Size\n词表大小（Vocabulary Size）是指模型在训练和推理过程中使用的唯一单词或子词的数量。 词表大小的选择对于模型的性能和计算效率有着重要影响。对于单一个语言的模型，常见的词表大小范围在30,000到100,000之间。 对于多语言模型，词表大小通常更大，以覆盖更多的语言和词汇。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#regularization",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#regularization",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "3.5 Regularization",
+    "text": "3.5 Regularization\n正则化技术用于防止模型过拟合，提高模型的泛化能力。但是许多人提出了一个问题， 大模型是否还需要正则化？ 当模型足够大时， 它们似乎并不容易过拟合， 因此正则化的必要性受到质疑。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#grouped-query-attention-gqa-multi-query-attention-mqa",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#grouped-query-attention-gqa-multi-query-attention-mqa",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "5.1 Grouped Query Attention (GQA) / Multi-Query Attention (MQA)",
+    "text": "5.1 Grouped Query Attention (GQA) / Multi-Query Attention (MQA)"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#sparse-sliding-window-attention",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#sparse-sliding-window-attention",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "5.2 Sparse / Sliding Window Attention",
+    "text": "5.2 Sparse / Sliding Window Attention\n\nChild et al. (2019)"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#sliding-window-attention",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#sliding-window-attention",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "5.3 Sliding Window Attention",
+    "text": "5.3 Sliding Window Attention"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#interleaved-attention",
+    "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#interleaved-attention",
+    "title": "Lecture 03: LM Model Architecture & Hyperparameters",
+    "section": "5.4 Interleaved Attention",
+    "text": "5.4 Interleaved Attention"
+  },
+  {
+    "objectID": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html",
+    "href": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html",
+    "title": "Chapter 02: Probabilities & Information Theory",
+    "section": "",
+    "text": "在深度学习中，我们经常会遇到不确定性的问题。概率论为我们提供了一套工具，用于量化和处理这种不确定性。信息论则帮助我们理解信息的传递和存储方式。在本章中介绍了这些基本概念，为后续章节的学习打下了坚实的基础。其中，不确定可以大致分为两类：\n我们可以使用概率论和信息论的工具来量化和处理这些不确定性，从而提升模型的性能和鲁棒性。首先我们如何定义 Probability 呢？从频率学派（Frequentist View）的角度来看，概率可以被定义为在大量重复实验中某一事件发生的频率。假设我们有一个随机变量 \\(X\\)，它可以取值 \\(x_1, x_2, \\ldots, x_n\\)，那么事件 \\(X = x_i\\) 的概率可以表示为：\\[\nP(X = x_i) = \\lim_{N \\to \\infty} \\frac{N_i}{N}\n\\]其中，\\(N\\) 是实验的总次数，\\(N_i\\) 是事件 \\(X = x_i\\) 发生的次数。 这种定义强调了概率的客观性，即概率是通过实际观察和实验得出的。然而，在实际应用中，我们往往无法进行无限次的实验，因此我们需要使用统计方法来估计概率分布。 另一方面，贝叶斯学派（Bayesian View）则将概率视为对事件发生的不确定性的主观度量。根据贝叶斯观点，概率反映了我们对某一事件发生的信念程度，而不是仅仅依赖于频率。贝叶斯定理是贝叶斯学派的核心，它描述了如何根据新的证据更新我们的信念。贝叶斯定理可以表示为：\\[\nP(A|B) = \\frac{P(B|A) \\cdot P(A)}{P(B)}\n\\]其中，\\(P(A|B)\\) 是在事件 \\(B\\) 发生的条件下事件 \\(A\\) 发生的概率，\\(P(B|A)\\) 是在事件 \\(A\\) 发生的条件下事件 \\(B\\) 发生的概率，\\(P(A)\\) 是事件 \\(A\\) 的先验概率，\\(P(B)\\) 是事件 \\(B\\) 的边际概率。 贝叶斯方法允许我们结合先验知识和观察数据，从而更灵活地处理不确定性问题。在深度学习中，贝叶斯方法被广泛应用于模型选择、参数估计和不确定性量化等方面。\n接下来，我们具体来看一下概率论"
+  },
+  {
+    "objectID": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html#sum-rule",
+    "href": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html#sum-rule",
+    "title": "Chapter 02: Probabilities & Information Theory",
+    "section": "1.1 Sum Rule",
+    "text": "1.1 Sum Rule\nSum Rule 用于计算联合概率分布中的边际概率。假设我们有两个随机变量 \\(X\\) 和 \\(Y\\)，它们的联合概率分布为 \\(P(X, Y)\\)。根据 Sum Rule，我们可以通过对另一个变量进行求和来计算边际概率： \\[\nP(X) = \\sum_{y} P(X, Y = y)\n\\]\n对于连续随机变量，我们使用积分来代替求和：\n\\[\nP(X) = \\int P(X, Y = y) dy\n\\]\nSum Rule 的直观理解是，通过考虑所有可能的 \\(Y\\) 的取值，我们可以得到 \\(X\\) 的总概率。"
+  },
+  {
+    "objectID": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html#product-rule",
+    "href": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html#product-rule",
+    "title": "Chapter 02: Probabilities & Information Theory",
+    "section": "1.2 Product Rule",
+    "text": "1.2 Product Rule\nProduct Rule 用于计算联合概率分布中的条件概率。根据 Product Rule，联合概率可以表示为条件概率和边际概率的乘积： \\[\nP(X, Y) = P(X|Y) \\cdot P(Y)\n\\] 同样地，我们也可以交换 \\(X\\) 和 \\(Y\\) 的位置： \\[\nP(X, Y) = P(Y|X) \\cdot P(X)\n\\]\nProduct Rule 的直观理解是，联合事件 \\(X\\) 和 \\(Y\\) 的概率可以通过先计算 \\(Y\\) 发生的概率，然后在 \\(Y\\) 已经发生的条件下计算 \\(X\\) 发生的概率来得到。\n当然，结合 Sum Rule 和 Product Rule，我们可以推导出更多复杂的概率关系，例如贝叶斯定理。"
+  },
+  {
+    "objectID": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html#bayes-theorem",
+    "href": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html#bayes-theorem",
+    "title": "Chapter 02: Probabilities & Information Theory",
+    "section": "1.3 Bayes’ Theorem",
+    "text": "1.3 Bayes’ Theorem\n贝叶斯定理是概率论中的一个重要定理，它描述了如何根据新的证据更新我们的信念。贝叶斯定理可以表示为： \\[\nP(A|B) = \\frac{P(B|A) \\cdot P(A)}{P(B)}\n\\] 其中，\\(P(A|B)\\) 是在事件 \\(B\\) 发生的条件下事件 \\(A\\) 发生的概率，\\(P(B|A)\\) 是在事件 $A 发生的条件下事件 \\(B\\) 发生的概率，\\(P(A)\\) 是事件 \\(A\\) 的先验概率，\\(P(B)\\) 是事件 \\(B\\) 的边际概率。 贝叶斯定理允许我们结合先验知识和观察数据，从而更灵活地处理不确定性问题。\n好的，这种概念很抽象，我们通过一个简单的例子来理解贝叶斯定理的应用。"
+  },
+  {
+    "objectID": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html#medical-screening-example",
+    "href": "posts/LearningNotes/DLFaC/Chapter02/Chapter02.html#medical-screening-example",
+    "title": "Chapter 02: Probabilities & Information Theory",
+    "section": "1.4 Medical Screening Example",
+    "text": "1.4 Medical Screening Example\n假设我们有一个医疗测试，用于检测某种疾病。设事件 \\(D\\) 表示“患有疾病”，事件 \\(T\\) 表示“测试结果为阳性”。已知以下信息：\n\n该疾病在总体中的患病率为 \\(P(D) = 0.01\\)（即 1% 的人患有该疾病）。\n测试的灵敏度（即患病者测试为阳性的概率）为 \\(P(T|D) = 0.99\\)。\n测试的特异度（即未患病者测试为阴性的概率）为 \\(P(T^c|D^c) = 0.95\\)，其中 \\(T^c\\) 表示测试结果为阴性，\\(D^c\\) 表示未患病。\n因此，未患病者测试为阳性的概率为 \\(P(T|D^c) = 1 - P(T^c|D^c) = 0.05\\)。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/03-deit/DeiT.html",
+    "href": "posts/PapersWithCode/03-deit/DeiT.html",
+    "title": "03: Training data-efficient image transformers & distillation through attention (DeiT)",
+    "section": "",
+    "text": "1 Preliminary\n  2 DeiT\n  \n  2.1 Experiment\n  \n  3 Summary\n  4 Key Concepts\n  5 Q & A\n  6 Related resource & Further Reading"
+  },
+  {
+    "objectID": "posts/PapersWithCode/03-deit/DeiT.html#experiment",
+    "href": "posts/PapersWithCode/03-deit/DeiT.html#experiment",
+    "title": "03: Training data-efficient image transformers & distillation through attention (DeiT)",
+    "section": "2.1 Experiment",
+    "text": "2.1 Experiment"
+  },
+  {
+    "objectID": "posts/LearningNotes/DLFaC/Chapter02/Chapter 02.html",
+    "href": "posts/LearningNotes/DLFaC/Chapter02/Chapter 02.html",
+    "title": "",
+    "section": "",
+    "text": "These two simple rules form the basis for all of the probabilistic machinery that we will use throughout this book.  Deep Learning Foundations and Concepts, p. 8 \n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "",
+    "text": "1 Swin-Transformer\n  \n  1.1 Window Multi-Head-Attention (W-MHA)\n  1.2 Shifted Window Multi-Head-Attention (SW-MHA)\n  1.3 Consecutive Swin Transformer Block\n  1.4 Patch Merge\n  1.5 Relative Position Encoding\n  \n  1.5.1 Fine-Tuning in different image size\n  \n  1.6 Others\n  1.7 Downstream Tasks\n  \n  1.7.1 Image Classification\n  \n  1.8 Object Detection & Semantic segmentation\n  1.9 Training Details\n  \n  1.9.1 DropPath\n  1.9.2 Gradient Checkpoint\n  \n  1.10 Swin V2\n  \n  1.10.1 Post normalization\n  1.10.2 Scaled cosine attention\n  1.10.3 Log-spaced Continuous Position Bias(Log-CPB)\n  \n  \n  2 Summary\n  3 Key Concepts\n  4 Q & A\n  5 Related resource & Further Reading\n# Preliminary"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#window-multi-head-attention-w-mha",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#window-multi-head-attention-w-mha",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.1 Window Multi-Head-Attention (W-MHA)",
+    "text": "1.1 Window Multi-Head-Attention (W-MHA)\nW-MHA 的核心思想是：\n\n把图像划分成固定大小的窗口（window），比如 7×7 patch 的窗口。\n在窗口内的 token 之间做局部自注意力，而不是在整张图像的所有 token 之间做全局注意力。\n每个窗口独立计算 Multi-Head Attention → 降低计算量，并且我们可以并行的计算\n\n这样一来：\n\n单个窗口 token 数量固定 = \\(M^{2}\\)（如 7×7=49）。\n注意力计算复杂度从 \\(\\mathcal{O}((hw)^{2}C)\\) 降低为 \\(\\mathcal{O}(M^{2}hwC)\\)，其中 \\(M \\ll \\sqrt{ N }\\)。\n\n除了降低计算复杂度之外，W-MHA，还有保留CNN 在图像处理中强大的一点是 局部感受野 和 平移不变性。\n\nW-MHA 通过窗口限制，使得注意力机制也具备类似的局部归纳偏置（inductive bias），适合图像建模。\n\n\nFor efficient modeling, we propose to compute self-attention within local windows. The windows are arranged to evenly partition the image in a non-overlapping manner.  Swin Transformer Hierarchical Vision Transformer using Shifted Windows, p.4"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#shifted-window-multi-head-attention-sw-mha",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#shifted-window-multi-head-attention-sw-mha",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.2 Shifted Window Multi-Head-Attention (SW-MHA)",
+    "text": "1.2 Shifted Window Multi-Head-Attention (SW-MHA)\nW-MHA 很好，但是它存在的一个问题就是：\n\n窗口之间是相互独立的，缺少跨窗口的信息交流。这会导致，模型只能看见局部，不能获得全局的信息。\n\n\nThe window-based self-attention module lacks connections across windows, which limits its modeling power. To introduce cross-window connections while maintaining the efficient computation of non-overlapping windows, we propose a shifted window partitioning approach which alternates between two partitioning configurations in consecutive Swin Transformer blocks.  Swin Transformer Hierarchical Vision Transformer using Shifted Windows, p.4 \n\n为了解决这个问题，Swin- Transformer提出来 Shifted Window Mulit-Head-Attention (SW-MHA) 窗口位置相对前一层平移，比如 7×7 窗口 → 平移 3 个 patch。 这样，新的窗口会跨越原来的边界，token 会和相邻窗口的 token 一起计算注意力。 相当于强制跨窗口交互，让信息可以在不同区域之间流动。\n 如上如所示，我们将Window通过向左上角移动，通过给图片增加Padding来，但是这种办法显然会增加计算的复杂度。Swin Transformer用了一种很聪明的办法，叫做 Cycling Shift，这种方法就是将将一个张量或图像在某个维度上做 平移，但不是把移出去的部分丢掉，而是 重新从另一边补回来。就像“环形队列”或“钟表走一圈又回到起点”。 如下图所示 \n可以看到，通过Cycling Shift，我们得到的每个window的内容，和之前是一样的，但是所需要的Window的数量，小了很多，这也就意味着，所需要的时间复杂度，也小了很多。\n\n不过Cycling Shift也有一个问题，就是同一个窗口里面，可能有来自不同图片的信息，这些信息在原图片上不是相邻的，自然不应该相互交流信息。我们可以将图片，抽象成下图的形式。组织Attention交流，很自然的一种方法是利用Mask，就像Transformer里的Causal Mask一样。但是，这个Mask长什么样子呢\n\n我们可以看一下Mask，如下图所示，有颜色的区域表示Mask == 1， 在此为了更好的"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#consecutive-swin-transformer-block",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#consecutive-swin-transformer-block",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.3 Consecutive Swin Transformer Block",
+    "text": "1.3 Consecutive Swin Transformer Block\n\nSwin Transformer is built by replacing the standard multi-head self attention (MSA) module in a Transformer block by a module based on shifted windows (described in Section 3.2), with other layers kept the same. As illustrated in Figure 3(b), a Swin Transformer block consists of a shifted window based MSA module, followed by a 2-layer MLP with GELU nonlinearity in between. A LayerNorm (LN) layer is applied before each MSA module and each MLP, and a residual connection is applied after each module  Swin Transformer Hierarchical Vision Transformer using Shifted Windows, p.4 \n\n\n\\[\n\\begin{split}\n\\hat{z}^l &= \\text{W-MSA} \\left( \\text{LN} \\left( z^{l-1} \\right) \\right) + z^{l-1} \\\\\nz^l &= \\text{MLP} \\left( \\text{LN} \\left( \\hat{z}^l \\right) \\right) + \\hat{z}^l \\\\\n\\hat{z}^{l+1} &= \\text{SW-MSA} \\left( \\text{LN} \\left( z^l \\right) \\right) + z^l \\\\\nz^{l+1} &= \\text{MLP} \\left( \\text{LN} \\left( \\hat{z}^{l+1} \\right) \\right) + \\hat{z}^{l+1}\n\\end{split}\n\\]\n将W-MSA 和 SW-MSA叠在一起，就得到了Transformer Block，当然，还有一个MLP，Layer Normalization，在此就不赘述了。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#patch-merge",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#patch-merge",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.4 Patch Merge",
+    "text": "1.4 Patch Merge\n讲完了W-MHA，和SW-MHA，我们就理解了Swin- Transformer中最难理解，也是最终的部分，接下来我们看看其他简单的部分。 Patch Merge , 图中绿色的部分，逐步降低 token 数量（降采样），同时增加特征维度的操作。这类似于CNN中的操作，随着层数的增加，分辨率逐步降低、通道数逐步增加，这样既减少了计算量，又能提取层级特征。具体的实现：\n\n分组：将相邻的 2×2 patch 合并成一个新的 patch。\n\n假设输入特征大小为 (H, W, C)。\n每 2×2 的 patch → 合并为 1 个新 token。\n新特征图大小变为 (H/2, W/2, 4C)。\n\n线性变换:\n\n将合并后的 4C 维特征通过一个 线性层 (Linear Projection)，降到 2C 维。\n输出维度翻倍（2C），以补偿分辨率减半带来的信息损失。 🔹 为什么提出 Patch Merging\n\n\n分层表示 (Hierarchical Representation) • 模仿 CNN 的金字塔结构，从局部细节逐步聚合到全局语义。 • 有利于下游任务（检测、分割）中不同尺度的目标建模。\n计算效率 • token 数量逐层减少 → Attention 的复杂度大幅下降。 • 保证模型可扩展到大分辨率图像。\n语义信息聚合 • 通过合并相邻 patch，模型能把更大感受野的信息整合到新的 token 中。\n\n\nx = x.view(B, H, W, C)\n\nx0 = x[:, 0::2, 0::2, :]  # (B, H/2, W/2, C)\nx1 = x[:, 1::2, 0::2, :]  # (B, H/2, W/2, C)\nx2 = x[:, 0::2, 1::2, :]  # (B, H/2, W/2, C)\nx3 = x[:, 1::2, 1::2, :]  # (B, H/2, W/2, C)\n\nx = torch.cat([x0, x1, x2, x3], -1)  # (B, H/2, W/2, 4*C)\nx = x.view(B, -1, 4 * C)  # (B, H/2*W/2, 4*C)\n\nx = self.reduction(x)  # (B, H/2*W/2, 2*C)"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#relative-position-encoding",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#relative-position-encoding",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.5 Relative Position Encoding",
+    "text": "1.5 Relative Position Encoding\n与Transformer 和 Vision-Transformer 中不同的是，Swin Transformer利用的是Relative Position Encoding。\n\\[\n\\text{Attention}(Q, K, V) = \\text{Softmax}\\left( \\frac{QK^{T}}{\\sqrt{ d }} +B\\right) V\n\\]\n1.  定义偏置表 (relative_position_bias_table)\n•   大小是 (2*Wh-1) * (2*Ww-1, num_heads)\n•   意味着窗口内的任意两个 token 的相对位置 (dx, dy)，都有一个可学习的偏置值（每个 head 一份）。\n•   例如窗口是 7×7 → 相对位置范围是 [-6,6]，所以表大小是 13×13=169，每个位置存一组偏置\n\n\n2.  计算相对位置索引 (relative_position_index)\n•   首先生成窗口内每个 token 的坐标。\n•   然后做差，得到任意两个 token 的相对坐标 (dx, dy)。\n•   再映射成表的索引（通过移位和哈希成一个整数 index）。\n•   结果是一个 (Wh*Ww, Wh*Ww) 的矩阵，每个元素存两个 token 之间在 bias 表里的索引。\n\n\n•   在图像里，相对位置比绝对位置更重要：\n•   比如一个像素的左邻和右邻很相似，无论这个像素在图像的哪个地方。\n\\[\n\\begin{tabular}\n\\Xhline{1.0pt}\n& \\multicolumn{2}{c|}{ImageNet} & \\multicolumn{2}{c|}{COCO} & \\multicolumn{1}{c}{ADE20k} \\\\\n& top-1 & top-5  & AP$^\\text{box}$ & AP$^\\text{mask}$ & mIoU \\\\\n\\hline\nno pos. & 80.1 & 94.9 & 49.2 & 42.6  & 43.8 \\\\\nabs. pos. & 80.5 & 95.2 & 49.0 & 42.4  & 43.2 \\\\\nabs.+rel. pos. & 81.3 & 95.6 & 50.2 & 43.4 & 44.0\\\\\nrel. pos. w/o app. & 79.3 & 94.7 & 48.2 & 41.9 & 44.1 \\\\\nrel. pos. & \\textbf{81.3} & \\textbf{95.6} & \\textbf{50.5} & \\textbf{43.7} & \\textbf{46.1} \\\\\n\\Xhline{1.0pt}\n\\end{tabular}\n\\]\n\n1.5.1 Fine-Tuning in different image size\n和 Vision-Transformer 一样，当输入的图片和训练时不一样，我们可以通过 bi-cubic interpolation 来增大Relative Position\n\nThe learnt relative position bias in pre-training can be also used to initialize a model for fine-tuning with a different window size through bi-cubic interpolation  Swin Transformer Hierarchical Vision Transformer using Shifted Windows, p.5 \n\n\\[\n\\begin{table}\n    \\centering\n\\small\n\\addtolength{\\tabcolsep}{-4.0pt}\n\\begin{tabular}\n\\Xhline{1.0pt}\n\\multirow{2}{*}{method} & \\multicolumn{4}{c|}{MSA in a stage (ms)} & \\multicolumn{3}{c}{Arch. (FPS)} \\\\\n& S1 & S2 & S3 & S4 & T & S & B \\\\\n\\hline\nsliding window (naive) & 122.5 & 38.3 & 12.1 & 7.6 & 183 & 109 & 77 \\\\\nsliding window (kernel)  & 7.6 & 4.7 & 2.7 & 1.8 & 488 & 283 & 187 \\\\\n\\hline\nPerformer~\\cite{choromanski2020performer} & 4.8 & 2.8 & 1.8 & 1.5 & 638 & 370 & 241 \\\\\n\\hline\nwindow (w/o shifting) & 2.8 & 1.7 & 1.2 & 0.9 & 770 & 444 & 280 \\\\\n\\hline\nshifted window (padding) & 3.3 & 2.3 & 1.9 & 2.2 & 670 & 371 & 236 \\\\\nshifted window (cyclic)  & 3.0 & 1.9 & 1.3 & 1.0 & 755 & 437 & 278 \\\\\n\\Xhline{1.0pt}\n\\end{tabular}\n    \\caption{Real speed of different self-attention computation methods and implementations on a V100 GPU. }\n    \\label{tab:ablation-selfatt-efficient}\n\\normalsize\n\\end{table}\n\\]"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#others",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#others",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.6 Others",
+    "text": "1.6 Others\n除了以上几个，Swin Transformer 中还有其他Component，比如 ：\n\nPatch Embedding\nLinear Projection\nFeedForward\nLayer Normalization 在此，就不赘述了，有需要的同学，请参考前一篇 Vision-Transformer， 或者 Transformer"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#downstream-tasks",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#downstream-tasks",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.7 Downstream Tasks",
+    "text": "1.7 Downstream Tasks\n当一场图片传入Swin Transformer， 它可以提取出图片的特征。 \\[\n\\mathrm{z} = f_{\\theta}(\\mathrm{x}), \\quad \\text{where}\\ \\mathrm{x} \\in \\mathbb{R}^{3\\times H \\times W}, \\mathrm{z} \\in \\mathbb{R}^{H'W' \\times C}\n\\]\n一张图片转化成了 \\(H'W'\\) 个特征，每个特征的大小为 $C。\nSwin Transformer 可以有当作基本的backbone，在此基础上，我们可以对下游进行不同的任务，比如：\n\nImage Classification\nObject Detection\nSemantic segmentation\n\n接下来，我们将如何用Swin Transformer在不同的任务中\n\n\n1.7.1 Image Classification\n对于 \\(\\mathrm{z}\\) 的 hidden states，我们可以进行一个Average Pooling，对于每一个特征求均值，然后再将这个传入一个分类头，就可以得到我们Classification了。与 Vision-Transformer 不同的是，Swin Transformer 没有 [CLS] token 来当收集全部的信息。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#object-detection-semantic-segmentation",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#object-detection-semantic-segmentation",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.8 Object Detection & Semantic segmentation",
+    "text": "1.8 Object Detection & Semantic segmentation\nBackbone (Swin Transformer)：\n\nStage 1: [N, C1, H/4, W/4]\nStage 2: [N, C2, H/8, W/8]\nStage 3: [N, C3, H/16, W/16]\nStage 4: [N, C4, H/32, W/32]\n\n可以得到 FPN(Lin et al. 2017) to create a pyramid of feature maps suitable for detection.\n{P2: [N, C, H/4, W/4], \n P3: [N, C, H/8, W/8], \n P4: [N, C, H/16, W/16], \n P5: [N, C, H/32, W/32]}\n有了这些FPN 之后，我们可以结合不同的算法，来进行不同的任务，比如\n例子 1：目标检测 (Object Detection)\n以 Swin Transformer + Faster R-CNN (Ren et al. 2016) 为例： 1. 输入图像：一张 800×1333 的 COCO 数据集图片。\n3.  FPN (特征金字塔网络)：将多尺度特征融合，形成统一的金字塔特征。\n4.  RPN (Region Proposal Network)：在特征图上生成候选区域。\n5.  RoI Head：对候选区域进行分类 (车、人、狗…) 和边框回归。\n6.  输出：预测结果，例如：\n•   “一辆车” → 边框 (x1,y1,x2,y2) + 类别 “car”\n•   “一个人” → 边框 + 类别 “person”\n 👉 在 COCO 数据集上，Swin-T + Faster R-CNN比 ResNet-50 + Faster R-CNN 的 mAP 提高约 5~6 个点。\n语义分割 (Semantic Segmentation)  以 Swin Transformer + UPerNet(Xiao et al. 2018)为例： 1. 输入图像：一张 512×512 的 ADE20K 数据集图片。 2. Backbone (Swin Transformer)：同样输出 1/4, 1/8, 1/16, 1/32 四个尺度特征。 3. FPN/UPerNet Head： • 将多层特征融合，对应不同语义层级。 • 利用融合后的特征生成像素级预测。 4. 预测图 (segmentation map)：大小 512×512，每个像素属于一个类别。 • [0,0] 像素 → “sky” • [100,150] 像素 → “building” • [200,300] 像素 → “road” 5. 输出：完整的语义分割图，每个像素都有类别标签。\n👉 在 ADE20K 上，Swin-L + UPerNet 的 mIoU 达到 53.5+，比传统 CNN backbone 提升显著。 具体的实现细节，等到以后我们阅读到关于Segmentation的内容在，再来实现"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#training-details",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#training-details",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.9 Training Details",
+    "text": "1.9 Training Details\n\nWe employ an AdamW optimizer for 300 epochs using a cosine decay learning rate scheduler and 20 epochs of linear warm-up. A batch size of 1024, an initial learning rate of 0.001, and a weight decay of 0.05 are used. We include most of the augmentation and regularization strategies of in training, except for repeated augmentation and EMA, which do not enhance performance.  Swin Transformer Hierarchical Vision Transformer using Shifted Windows, p.5 \n\n\n1.9.1 DropPath\n论文中还用到了 DropPath 来当作一种 Regularization。 DropPath 也称之为 Stochastic Depth (Huang et al. 2016) , 它是一种应用在Residual Network， 在训练过程中，随机丢弃整个 残差分支 (residual branch) 或 整个路径 (path)。减少过拟合，同时让模型学会依赖不同深度的路径，提升训练稳定性。 \n与Dropout 不同的是， Dropout 丢弃的是单个神经元的输出， 而DropPath 丢弃的是整个残差分支 / 整层 Block\n\n\n\n\n\n\n\n\n特性\nDropout (经典)\nDropPath (Stochastic Depth)\n\n\n\n\n丢弃对象\n单个神经元的输出\n整个残差分支 / 整层 Block\n\n\n应用粒度\n逐元素 (element-wise)\n层级 (layer-wise)\n\n\n使用场景\n全连接层、CNN、RNN 等\n残差网络、Transformer 等\n\n\n推理阶段效果\n不丢弃，使用缩放补偿\n不丢弃，保留完整路径\n\n\n作用\n减少神经元过拟合\n防止深层网络过拟合、提升稳定性\n\n\n\ndef drop_path(x, drop_prob: float = 0.0, training: bool = False):\n    if drop_prob == 0.0 or not training:\n        return x\n    keep_prob = 1 - drop_prob\n    shape = (x.shape[0],) + (1,) * (x.ndim - 1)  # work with diff dim tensors, not just 2D ConvNets\n    random_tensor = keep_prob + torch.rand(shape, dtype=x.dtype, device=x.device)\n    random_tensor.floor_()  # binarize\n    output = x.div(keep_prob) * random_tensor\n    return output\n\n\nclass DropPath(nn.Module):\n    def __init__(self, drop_prob=None):\n        super().__init__()\n        self.drop_prob = drop_prob\n\n    def forward(self, x):\n        return drop_path(x, self.drop_prob, self.training)\n        \n\nclass SwinTransformerBlock(nn.Module):\n    def __init__(self):\n        ...\n        self.drop_path = DropPath(drop_path) if drop_path &gt; 0.0 else nn.Identity()\n        \n    \n    def forward(self, x):\n        shortcut = x \n        ... # Attention \n        x = shortcut + self.drop_path(x)\n        \n        shortcut = x \n        ... # FFN\n        x = shortcut + self.drop_path(x)\n        \n        ...\n        \n        return x \n\n📝 TAKEAWAY DropPath（也叫 Stochastic Depth）是一种正则化方法，它在训练时随机跳过（丢弃）整个网络层或分支的计算，以减少过拟合并提高模型的泛化能力。\n\n\n\n1.9.2 Gradient Checkpoint\n在此，我们在介绍一个训练方法，用于加速训练，叫做Gradient Checkpoint又叫做Activation Checkpoint， 用PyTorh实现，是很容易的 的，我们只需要call utils.checkpoint\n正常训练流程： 在前向传播（forward）时，每一层的中间激活值（activation）都会保存下来，以便反向传播（backward）时用来计算梯度。 问题是：保存所有中间激活值会消耗大量显存（GPU memory）。 • Gradient Checkpoint 的思路： 并不是保存所有激活值，而是只在部分关键节点（checkpoint）保存激活。 对于未保存的激活值，在反向传播时重新再跑一次前向计算来得到它们，从而节省显存。\n换句话说：用计算换显存。\n🔹 工作机制 1. 在前向传播时： • 模型被切分成若干块（segments）。 • 只保存每一块的输入，丢弃中间的激活。 2. 在反向传播时： • 需要用到梯度时，重新对那一块做一次 forward 来恢复激活。 • 然后正常计算梯度。\n•   增加计算开销：因为要在 backward 时重新做一次 forward。\n•   一般会带来 20%～30% 额外的训练时间。\nimport torch\nfrom torch import nn\nfrom torch.utils.checkpoint import checkpoint\n\nclass MyModule(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.layer1 = nn.Linear(1024, 1024)\n        self.layer2 = nn.Linear(1024, 1024)\n\n    def forward(self, x):\n        def custom_forward(*inputs):\n            return self.layer2(self.layer1(*inputs))\n        \n        # 对这部分使用 checkpoint\n        x = checkpoint(custom_forward, x)\n        return x\n\n📝 TAKEAWAY Gradient Checkpointing 是一种 用额外计算换显存 的方法，通过在前向传播时少存激活，反向传播时重算，能让大模型在有限显存下完成训练。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#swin-v2",
+    "href": "posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html#swin-v2",
+    "title": "04: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows (Swin-Transformer)",
+    "section": "1.10 Swin V2",
+    "text": "1.10 Swin V2\n“Swin V2” (Liu et al. 2022) 是在原始 Swin Transformer 的基础上，为了更好地 扩展模型容量（更多参数）、处理高分辨率输入 以及 提高训练稳定性 所做的一系列改进。 在视觉任务中，Transformer 模型若要变得更强（更多参数、更高分辨率输入、更多层数）就会遇到几个挑战： 1. 训练不稳定：随着模型变深、通道变宽，内部激活的幅度可能急剧增长，导致梯度、数值不稳定。 2. 分辨率迁移问题：模型在低分辨率下预训练（例如 224×224）后，用在高分辨率（例如 1,536×1,536）或不同窗口尺寸时表现会下降。 3. 对标注数据的过度依赖：大模型需要大量标注数据才能训练得好。\nSwin V2 就是为了克服这些障碍，支持训练超大模型（如 30 亿参数级别），同时能处理大尺寸输入 \n\n1.10.1 Post normalization\nclass SwinTransformerBlock(nn.Module):\n    def __init__(self):\n        ...\n        self.drop_path = DropPath(drop_path) if drop_path &gt; 0.0 else nn.Identity()\n        \n    \n    def forward(self, x):\n        shortcut = x \n        ... # Attention \n        x = shortcut + self.drop_path(self.norm1(x))\n        \n        shortcut = x \n        ... # FFN\n        x = x + self.drop_path(self.norm2(self.mlp(x)))\n        \n        ...\n        \n        return x \n\n\n1.10.2 Scaled cosine attention\nclass WindowAttention:\n    def __init__(self,):\n    \n        ...\n        self.logit_scale = nn.Parameter(torch.log(10 * torch.ones((num_heads, 1, 1))), requires_grad=True)\n        ...\n    \n    \n    def forward(self, x):\n        attn = (F.normalize(q, dim=-1) @ F.normalize(k, dim=-1).transpose(-2, -1))\n        logit_scale = torch.clamp(self.logit_scale, max=torch.log(torch.tensor(1. / 0.01))).exp()\n        attn = attn * logit_scale\n\n\n1.10.3 Log-spaced Continuous Position Bias(Log-CPB)\nlog-spaced continuous position bias approach to address the issue in transferring across window resolutions\n\\[\n\\begin{split}\n\\widehat{\\Delta x} &= \\operatorname{sign}(x) \\cdot \\log(1 + |\\Delta x|) \\\\\n\\widehat{\\Delta y} &= \\operatorname{sign}(y) \\cdot \\log(1 + |\\Delta y|)\n\\end{split}\n\\]\nself.cpb_mlp = nn.Sequential(nn.Linear(2, 512, bias=True),\n                             nn.ReLU(inplace=True),\n                             nn.Linear(512, num_heads, bias=False))\n                             \ndef forward(self, x):\n    relative_position_bias_table = self.cpb_mlp(self.relative_coords_table).view(-1, self.num_heads)"
+  },
+  {
+    "objectID": "posts/PapersWithCode/05-vivit/ViViT.html",
+    "href": "posts/PapersWithCode/05-vivit/ViViT.html",
+    "title": "05: ViViT: A Video Vision Transformer(ViViT)",
+    "section": "",
+    "text": "1 Preliminary\n  2 ViViT\n  \n  2.1 Experiment\n  \n  3 Summary\n  4 Key Concepts\n  5 Q & A\n  6 Related resource & Further Reading"
+  },
+  {
+    "objectID": "posts/PapersWithCode/05-vivit/ViViT.html#experiment",
+    "href": "posts/PapersWithCode/05-vivit/ViViT.html#experiment",
+    "title": "05: ViViT: A Video Vision Transformer(ViViT)",
+    "section": "2.1 Experiment",
+    "text": "2.1 Experiment"
+  },
+  {
+    "objectID": "posts/PapersWithCode/09-mae/MAE.html",
+    "href": "posts/PapersWithCode/09-mae/MAE.html",
+    "title": "09: Masked Autoencoders Are Scalable Vision Learners(MAE)",
+    "section": "",
+    "text": "1 MAE\n  \n  1.1 Experiment\n  \n  2 Summary\n  3 Key Concepts\n  4 Q & A\n  5 Related resource & Further Reading\n  6 Preliminary\n  7 MAE\n  8 Summary\n  9 Key Concepts\n  10 Q & A\n  11 Related resource & Further Reading\n# Preliminary"
+  },
+  {
+    "objectID": "posts/PapersWithCode/09-mae/MAE.html#experiment",
+    "href": "posts/PapersWithCode/09-mae/MAE.html#experiment",
+    "title": "09: Masked Autoencoders Are Scalable Vision Learners(MAE)",
+    "section": "1.1 Experiment",
+    "text": "1.1 Experiment"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html",
+    "href": "posts/PapersWithCode/08-vae/VAE.html",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "",
+    "text": "1 VAE\n  \n  1.1 Experiment\n  \n  2 Summary\n  3 Key Concepts\n  4 Q & A\n  5 Related resource & Further Reading\n  6 Preliminary\n  \n  6.1 Latent Variable Models\n  6.2 AutoEncoder\n  6.3 KL-Divergence\n  6.4 Variational Inference\n  \n  7 VAE\n  \n  7.1 Re-parameterization Trick\n  7.2 Amortized Inference\n  7.3 Experiements\n  \n  8 Summary\n  9 Key Concepts\n  10 Q & A\n  11 Related resource & Further Reading\n# Preliminary"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html#experiment",
+    "href": "posts/PapersWithCode/08-vae/VAE.html#experiment",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "1.1 Experiment",
+    "text": "1.1 Experiment"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html#latent-variable-models",
+    "href": "posts/PapersWithCode/08-vae/VAE.html#latent-variable-models",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "6.1 Latent Variable Models",
+    "text": "6.1 Latent Variable Models\n在深度学习中，我们经常处理 高维、复杂、带噪声的真实世界数据：图像、语音、文本…… 这些数据的背后，其实常常有一些 未被直接观测到的隐藏结构 —— 这就是 “Latent Variables”（潜变量）。\n想象一下，你看一张人脸照片。照片是观测变量（observed variable）。 但是让这张脸“看起来像某个人”的，是一些不能直接看到的因素： • 光照（lighting） • 情绪（expression） • 姿态（pose） • 脸部特征（identity） • 背景（background）\n这些因素虽然没有在数据中显式标注，却真实存在，并决定了我们看到的图像。 潜变量模型的目标，就是用数学方式把这些“隐藏因素”建模出来。\n\nLatent Variable Model（LVM）是一类 假设观测数据是由一些隐藏变量生成的概率模型。 比如我们看到的数据\\(\\mathrm{x} \\in \\mathbb{R}^{d}\\), 那它有相对应的隐藏变量 \\(z \\in \\mathbb{R}^{k}\\) 其中 \\(k \\ll d\\) . \\(z\\) 是我们观察不到的，也就是所谓的 Latent Variable.\n在使用Latent Variable Model时，我们有两个关键的任务： 1. Inference: 根据 \\(\\mathrm{x}\\) 我们来推断出 \\(\\mathrm{z}\\) 是什么，比如，给定一张人脸的照片，这个模型需要找出 - 这张脸是男生还是女生 - 表情是开心还是悲伤 - 是什么样的姿势 在数学上，就是求后验分布 \\(p(\\mathrm{z} | \\mathrm{x})\\) 2. Generation: 通过 \\(\\mathrm{z}\\)， 我们来生成一个 \\(\\mathrm{x}\\)。 这个就是生成模型。\nLatent Variable Model 是现代生成式模型的基石，基本上所有的生成式模型，比如 GAN， DDPM， Flow Model 等，都是以Latent Variable Model为基础，在此条件下，通过不同求 Latent Variable 的方法，来解决这种问题。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html#autoencoder",
+    "href": "posts/PapersWithCode/08-vae/VAE.html#autoencoder",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "6.2 AutoEncoder",
+    "text": "6.2 AutoEncoder\n\nAutoEncoder 是一种Self-Supervised Learning 的方法。 它可以让神经网络学会压缩，并且在还原数据，通过这种方法，我们可以学习到的低纬度的Latent Variable \\(\\mathrm{z}\\)。 AutoEncoder 也可以看作是Latent Variable Model的一种学习方法。 AutoEncoder 也通常用在Representation Learning 表征学习。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html#kl-divergence",
+    "href": "posts/PapersWithCode/08-vae/VAE.html#kl-divergence",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "6.3 KL-Divergence",
+    "text": "6.3 KL-Divergence\nKL 散度（Kullback–Leibler Divergence）是用来衡量两个概率分布之间差异的一种度量方法。定义如下: \\[\nD_{KL}(Q \\| P) = \\mathbb{E}_{x \\sim Q}\\left[ \\log \\frac{Q(x)}{P(x)} \\right]\n\\]\n直观的解释KL-Divergence就是: - 如果数据 \\(x\\) 是从 \\(Q\\) 分布中来的，但如果我们用 \\(P\\) 分布 来解释这些数据，会损失多少信息量\n对于高斯分布（Gaussian Distribution），我们KL- Divergence有以下的形式：\n$$\nD_{KL}(Q | P) = $$\n如果是Diagonal Gaussian， 那么KL-Divergence 可以简化为： $$ D_{KL}(q ,|, p)\n_{i=1}^{d} $$\n\\[\nD_{KL}(q(\\mathbf{z}) \\ \\| \\  \\mathcal{N}(0, I)) =\n\\frac{1}{2}\n\\sum_{i=1}^{d}\n\\left(\n\\mu_{q,i}^2 + \\sigma_{q,i}^2 - \\log \\sigma_{q,i}^2 - 1\n\\right)\n\\]\n需要注意的一个点是，KL-Divergence是不对称的， \\[\nD_{KL}(Q \\| P) \\neq D_{KL}(P \\| Q)\n\\]\n为什么我们要强调这一点，是因为： 对于不同位置的Q，P我们所求的是不一样的，简单来说，就是用 \\(\\|\\) 后面的分布，来approximate \\(\\|\\) 前面的分布，具体如下图。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html#variational-inference",
+    "href": "posts/PapersWithCode/08-vae/VAE.html#variational-inference",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "6.4 Variational Inference",
+    "text": "6.4 Variational Inference\nVariational Inference（VI，变分推断）是一种用可优化、易计算的分布来近似一个难以求解的后验分布，通过最小化两者之间的 KL 距离，从而实现高效概率推断的方法。 在 Latent Variable 模型中，我们想求： \\[\np (\\mathrm{z} | \\mathrm{x}) = \\frac{p(\\mathrm{x}, \\mathrm{z})}{p(\\mathrm{x})}\n\\]\n通常 \\(p(\\mathrm{x})\\) 是不可求的，因为: \\[\np(\\mathrm{x}) = \\int p(\\mathrm{x}, \\mathrm{z}) d\\mathrm{z}\n\\] 通常是不可能直接求的。因此我们采取一种 “曲线救国” 的方式： 我们不去计算真正的后验，而是找一个 可计算并且可优化的分布来近似它： \\[\nq(z | x) \\approx p(z | x)\n\\] 实现起来也是很简单的 1. 选一个可计算的分布族 （Variational Family） 2. 让它尽可能的接近真实的后验： \\[\n\\underset{\\phi}{\\min}  D_{KL}(q_{\\phi}(z | x ) \\| p(z | x))\n\\]\n直观的来说，Variational Inference 就是：不过不断拉升，旋转，一个椭圆型 \\(q\\), 来使它尽可能的可以和云朵形状的 \\(p\\) 来重叠"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html#re-parameterization-trick",
+    "href": "posts/PapersWithCode/08-vae/VAE.html#re-parameterization-trick",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "7.1 Re-parameterization Trick",
+    "text": "7.1 Re-parameterization Trick\n 如上图可见，\\(z\\) 是由 \\(x, \\phi\\) 决定的。通过这种方式，那么我们改取怎么样的 \\(g_{\\phi}(x, \\epsilon)\\) 呢。文章中给出了3个基本的方法： 1. 方法1 2. 2 3. c\n\n\n\n\n\n\nREINFORCE\n\n\n\n对于 Re-Parametrization Trick是针对 \\(z\\) 是 Continuous的情况，如果 \\(z\\) 是离散（Discrete) 的 那么我们则可以使用 REINFOCE 的方法。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html#amortized-inference",
+    "href": "posts/PapersWithCode/08-vae/VAE.html#amortized-inference",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "7.2 Amortized Inference",
+    "text": "7.2 Amortized Inference\n还有一个比较容易被忽略的一点就是，VAE 还运用了Amortized Inference。什么意思呢？\n传统的变分推断中，我们需要为每一个观测样本 x 单独优化一个变分分布 q(z|x) 的参数，这意味着每来一个新样本都要重新做一遍变分优化，成本非常高。而在 VAE 中，我们不再为每个样本单独优化后验，而是训练一个 共享的推断网络（Encoder） 来预测 q_(z|x) 的参数。也就是说，模型通过学习一个函数 f_(x) 来一次性“摊销”所有样本的推断成本，使得对任意新样本 x，只需一次前向传播就能得到近似后验，不再需要昂贵的 per-sample 优化。这种方式极大地提升了推断效率，也让变分推断能够在深度学习规模上落地。\n也就是用神经网络来一次性学习后验\n 将上面的几个结合起来，我们就得到的了 Auto-Encoding VB Algorithm。\n## 和 AutoEncoder的关系"
+  },
+  {
+    "objectID": "posts/PapersWithCode/08-vae/VAE.html#experiements",
+    "href": "posts/PapersWithCode/08-vae/VAE.html#experiements",
+    "title": "08: Auto-Encoding Variational Bayes (VAE)",
+    "section": "7.3 Experiements",
+    "text": "7.3 Experiements\nVAE Loss can be defined as this one:\nclass VAELoss(nn.Module):\n    def __init__(self, rec_loss=\"bce\", kl_beta=1.0):\n        super().__init__()\n\n        self.rec_loss = rec_loss.lower()\n        self.kl_beta = kl_beta\n\n        self.eval()\n\n    def forward(self, x, x_recon, mu, logvar):\n        B = x.shape[0]\n        if self.rec_loss == \"bce\":\n            rec = F.binary_cross_entropy(x_recon, x, reduction=\"sum\")\n        elif self.rec_loss == \"mse\":\n            rec = F.mse_loss(x_recon, x, reduction=\"sum\")\n\n        # KL divergence: D_KL(q(z|x) || p(z))\n        kl = 0.5 * torch.sum(logvar.exp() + mu.pow(2) - logvar - 1)\n\n        total = (rec + self.kl_beta * kl) / B\n\n        return total, {\n            \"recon\": rec.detach().cpu() / B,\n            \"kl\": kl.detach().cpu() / B,\n        }\nThe Loss curve and illustration examples:"
+  },
+  {
+    "objectID": "posts/PapersWithCode/10-pixel-gated-cnn/Pixel Gated CNN.html",
+    "href": "posts/PapersWithCode/10-pixel-gated-cnn/Pixel Gated CNN.html",
+    "title": "10: Conditional Image Generation with PixelCNN Decoders (Pixel Gated CNN)",
+    "section": "",
+    "text": "1 Pixel Gated CNN\n  \n  1.1 Experiment\n  \n  2 Summary\n  3 Key Concepts\n  4 Q & A\n  5 Related resource & Further Reading\n# Preliminary"
+  },
+  {
+    "objectID": "posts/PapersWithCode/10-pixel-gated-cnn/Pixel Gated CNN.html#experiment",
+    "href": "posts/PapersWithCode/10-pixel-gated-cnn/Pixel Gated CNN.html#experiment",
+    "title": "10: Conditional Image Generation with PixelCNN Decoders (Pixel Gated CNN)",
+    "section": "1.1 Experiment",
+    "text": "1.1 Experiment"
+  },
+  {
+    "objectID": "posts/PapersWithCode/07-dino/DINO.html",
+    "href": "posts/PapersWithCode/07-dino/DINO.html",
+    "title": "07: Emerging Properties in Self-Supervised Vision Transformers (DINO)",
+    "section": "",
+    "text": "On this page\n   \n  \n  1 Preliminary\n  2 DINO\n  3 Summary\n  4 Key Concepts\n  5 Q & A\n  6 Related resource & Further Reading\n  \n\n\n\n1 Preliminary\n\n\n2 DINO\n\n\n3 Summary\n\n\n4 Key Concepts\n\n\n5 Q & A\n\n\n6 Related resource & Further Reading\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "posts/PapersWithCode/06-clip/CLIP.html",
+    "href": "posts/PapersWithCode/06-clip/CLIP.html",
+    "title": "06: Learning Transferable Visual Models From Natural Language Supervision (CLIP)",
+    "section": "",
+    "text": "On this page\n   \n  \n  1 Preliminary\n  2 CLIP\n  3 Summary\n  4 Key Concepts\n  5 Q & A\n  6 Related resource & Further Reading\n  \n\n\n\n1 Preliminary\n\n\n2 CLIP\n\n\n3 Summary\n\n\n4 Key Concepts\n\n\n5 Q & A\n\n\n6 Related resource & Further Reading\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html",
+    "href": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html",
+    "title": "11: Neural Discrete Representation Learning (VQ_VAE)",
+    "section": "",
+    "text": "1 VQ_VAE\n  \n  1.1 Experiment\n  \n  2 Summary\n  3 Key Concepts\n  4 Q & A\n  5 Related resource & Further Reading\n  6 Preliminary\n  7 VQ_VAE\n  \n  7.1 Experiment\n  \n  8 Summary\n  9 Key Concepts\n  10 Q & A\n  11 Related resource & Further Reading\n  12 Preliminary\n  \n  12.1 Vector Quantization\n  12.2 Straight Through Estimator\n  \n  13 VQ_VAE\n  14 Summary\n  15 Key Concepts\n  16 Q & A\n  17 Related resource & Further Reading\n  18 VQ_VAE\n  19 Summary\n  20 Key Concepts\n  21 Q & A\n  22 Related resource & Further Reading\n# Preliminary"
+  },
+  {
+    "objectID": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html#experiment",
+    "href": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html#experiment",
+    "title": "11: Neural Discrete Representation Learning (VQ_VAE)",
+    "section": "1.1 Experiment",
+    "text": "1.1 Experiment"
+  },
+  {
+    "objectID": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html#experiment-1",
+    "href": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html#experiment-1",
+    "title": "11: Neural Discrete Representation Learning (VQ_VAE)",
+    "section": "7.1 Experiment",
+    "text": "7.1 Experiment"
+  },
+  {
+    "objectID": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html#vector-quantization",
+    "href": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html#vector-quantization",
+    "title": "11: Neural Discrete Representation Learning (VQ_VAE)",
+    "section": "12.1 Vector Quantization",
+    "text": "12.1 Vector Quantization\n向量量化（Vector Quantization）是一种把连续的向量转换为离散的“索引” 的方法。通过这个索引，在字典（codebook）中找到一个与其最相近的一个向量，这个字典也叫做： - CodeBook - Embedding Table - Centroids 这时，每个向量就变成了一个离散的编号（Index） 用数学表达就是： 我们有: - A vector \\(z \\in \\mathbb{R}^{d}\\) - A codebook \\(E \\in \\mathbb{R}^{K \\times d}\\), 其中 有 \\(K\\) 个索引\n我们通过比较 \\(z\\) 和 \\(K\\) 个向量中，找到最近的一个向量\n\\[\n\\text{quantized}(z) = e_{k} \\quad \\text{where}\\ k = \\underset{j}{\\operatorname{arg\\min}}   \\|z - e_{j} \\|^{2}\n\\]\nimport torch\n\ndef quantize(embedding_table: torch.Tensor, z: torch.Tensor):\n    \"\"\"\n    embedding_table: (K, D)\n    z: (B, D)\n    \"\"\"\n    # (B, 1, D) - (1, K, D) → (B, K, D)\n    diff = z.unsqueeze(1) - embedding_table.unsqueeze(0)\n\n    # (B, K, D) -&gt; (B, K)\n    distances = torch.linalg.norm(diff, dim=2)\n\n    #  (B, K) -&gt; (B,)\n    indices = distances.argmin(dim=1)\n\n    # Gather quantized embeddings → (B, D)\n    q = embedding_table[indices]\n\n    return q, indices\n\n\nK, D = 512, 64\nB = 8\n\ncodebook = torch.randn(K, D)\nz = torch.randn(B, D)\n\nq, idx = quantize(codebook, z)\nassert q.shape == (B, D)\nassert idx.shape == (B,)"
+  },
+  {
+    "objectID": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html#straight-through-estimator",
+    "href": "posts/PapersWithCode/11-vq-vae/VQ_VAE.html#straight-through-estimator",
+    "title": "11: Neural Discrete Representation Learning (VQ_VAE)",
+    "section": "12.2 Straight Through Estimator",
+    "text": "12.2 Straight Through Estimator\nK, D = 512, 64\nB = 8\n\nembedding_table = torch.randn(K, D)\nz_enc = torch.randn(B, D, requires_grad=True)\nassert z_enc.grad is None\n\nz_k, _ = quantize(embedding_table, z_enc)\n\n# STE\nz_k = z_enc + (z_k - z_enc).detach()\nz_k.retain_grad()\n\nloss = (z_k**2).mean()\nloss.backward()\n\nassert z_k.grad is not None\nassert z_enc.grad is not None\nassert torch.allclose(z_enc.grad, z_k.grad)"
+  },
+  {
+    "objectID": "posts/PapersWithCode/15-stable-diffusion/Latent Diffusion Model.html",
+    "href": "posts/PapersWithCode/15-stable-diffusion/Latent Diffusion Model.html",
+    "title": "15: High-Resolution Image Synthesis with Latent Diffusion Models (Latent Diffusion Model)",
+    "section": "",
+    "text": "1 Latent Diffusion Model\n  \n  1.1 Experiment\n  \n  2 Summary\n  3 Key Concepts\n  4 Q & A\n  5 Related resource & Further Reading\n# Preliminary"
+  },
+  {
+    "objectID": "posts/PapersWithCode/15-stable-diffusion/Latent Diffusion Model.html#experiment",
+    "href": "posts/PapersWithCode/15-stable-diffusion/Latent Diffusion Model.html#experiment",
+    "title": "15: High-Resolution Image Synthesis with Latent Diffusion Models (Latent Diffusion Model)",
+    "section": "1.1 Experiment",
+    "text": "1.1 Experiment"
+  },
+  {
+    "objectID": "posts/PapersWithCode/16-dit/DiT.html",
+    "href": "posts/PapersWithCode/16-dit/DiT.html",
+    "title": "16: Scalable Diffusion Models with Transformers (DiT)",
+    "section": "",
+    "text": "1 DiT\n  2 Preliminary\n  3 DiT\n  \n  3.1 Experiment\n  \n  4 Summary\n  5 Key Concepts\n  6 Q & A\n  7 Related resource & Further Reading\n  8 Summary\n  9 Key Concepts\n  10 Q & A\n  11 Related resource & Further Reading\n# Preliminary"
+  },
+  {
+    "objectID": "posts/PapersWithCode/16-dit/DiT.html#experiment",
+    "href": "posts/PapersWithCode/16-dit/DiT.html#experiment",
+    "title": "16: Scalable Diffusion Models with Transformers (DiT)",
+    "section": "3.1 Experiment",
+    "text": "3.1 Experiment"
   }
 ]

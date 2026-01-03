@@ -395,13 +395,32 @@ window.Quarto = {
   </ul></li>
   <li><a href="#normalization-types" id="toc-normalization-types" class="nav-link" data-scroll-target="#normalization-types"><span class="header-section-number">2.1.2</span> Normalization Types</a></li>
   </ul></li>
-  <li><a href="#activations" id="toc-activations" class="nav-link" data-scroll-target="#activations"><span class="header-section-number">2.2</span> Activations</a></li>
-  <li><a href="#serial-parallel-mlp" id="toc-serial-parallel-mlp" class="nav-link" data-scroll-target="#serial-parallel-mlp"><span class="header-section-number">2.3</span> Serial &amp; Parallel MLP</a></li>
-  <li><a href="#position-encoding" id="toc-position-encoding" class="nav-link" data-scroll-target="#position-encoding"><span class="header-section-number">2.4</span> Position Encoding</a></li>
+  <li><a href="#activations" id="toc-activations" class="nav-link" data-scroll-target="#activations"><span class="header-section-number">2.2</span> Activations</a>
+  <ul>
+  <li><a href="#gated-activationsglu" id="toc-gated-activationsglu" class="nav-link" data-scroll-target="#gated-activationsglu"><span class="header-section-number">2.2.1</span> Gated Activations(*GLU)</a></li>
   </ul></li>
-  <li><a href="#hyper-parameters" id="toc-hyper-parameters" class="nav-link" data-scroll-target="#hyper-parameters"><span class="header-section-number">3</span> Hyper-Parameters</a></li>
+  <li><a href="#serial-parallel-mlp" id="toc-serial-parallel-mlp" class="nav-link" data-scroll-target="#serial-parallel-mlp"><span class="header-section-number">2.3</span> Serial &amp; Parallel MLP</a></li>
+  <li><a href="#position-encoding" id="toc-position-encoding" class="nav-link" data-scroll-target="#position-encoding"><span class="header-section-number">2.4</span> Position Encoding</a>
+  <ul>
+  <li><a href="#rotary-position-embedding-rope" id="toc-rotary-position-embedding-rope" class="nav-link" data-scroll-target="#rotary-position-embedding-rope"><span class="header-section-number">2.4.1</span> Rotary Position Embedding (RoPE)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#hyper-parameters" id="toc-hyper-parameters" class="nav-link" data-scroll-target="#hyper-parameters"><span class="header-section-number">3</span> Hyper-Parameters</a>
+  <ul>
+  <li><a href="#mlp-width" id="toc-mlp-width" class="nav-link" data-scroll-target="#mlp-width"><span class="header-section-number">3.1</span> MLP Width</a></li>
+  <li><a href="#attention-heads" id="toc-attention-heads" class="nav-link" data-scroll-target="#attention-heads"><span class="header-section-number">3.2</span> Attention Heads</a></li>
+  <li><a href="#aspect-ratio" id="toc-aspect-ratio" class="nav-link" data-scroll-target="#aspect-ratio"><span class="header-section-number">3.3</span> Aspect Ratio</a></li>
+  <li><a href="#vocabulary-size" id="toc-vocabulary-size" class="nav-link" data-scroll-target="#vocabulary-size"><span class="header-section-number">3.4</span> Vocabulary Size</a></li>
+  <li><a href="#regularization" id="toc-regularization" class="nav-link" data-scroll-target="#regularization"><span class="header-section-number">3.5</span> Regularization</a></li>
+  </ul></li>
   <li><a href="#stability-tricks" id="toc-stability-tricks" class="nav-link" data-scroll-target="#stability-tricks"><span class="header-section-number">4</span> Stability Tricks</a></li>
-  <li><a href="#attentions" id="toc-attentions" class="nav-link" data-scroll-target="#attentions"><span class="header-section-number">5</span> Attentions</a></li>
+  <li><a href="#attentions" id="toc-attentions" class="nav-link" data-scroll-target="#attentions"><span class="header-section-number">5</span> Attentions</a>
+  <ul>
+  <li><a href="#grouped-query-attention-gqa-multi-query-attention-mqa" id="toc-grouped-query-attention-gqa-multi-query-attention-mqa" class="nav-link" data-scroll-target="#grouped-query-attention-gqa-multi-query-attention-mqa"><span class="header-section-number">5.1</span> Grouped Query Attention (GQA) / Multi-Query Attention (MQA)</a></li>
+  <li><a href="#sparse-sliding-window-attention" id="toc-sparse-sliding-window-attention" class="nav-link" data-scroll-target="#sparse-sliding-window-attention"><span class="header-section-number">5.2</span> Sparse / Sliding Window Attention</a></li>
+  <li><a href="#sliding-window-attention" id="toc-sliding-window-attention" class="nav-link" data-scroll-target="#sliding-window-attention"><span class="header-section-number">5.3</span> Sliding Window Attention</a></li>
+  <li><a href="#interleaved-attention" id="toc-interleaved-attention" class="nav-link" data-scroll-target="#interleaved-attention"><span class="header-section-number">5.4</span> Interleaved Attention</a></li>
+  </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6</span> Summary</a></li>
   </ul>
 </nav>
@@ -570,6 +589,7 @@ Figure&nbsp;4
 <li>Sandwich Norm: 将 Normalization 放置在每个子层的输入和输出之间。</li>
 <li>Double Norm: 在每个子层的输入和输出都进行归一化。</li>
 </ul>
+<p>从这些实验结果来看，我们可以得出结论： - 尽量保持Residual Connection两端的信号稳定是非常重要的, 这可以保证梯度在网络中顺利传播。</p>
 </section>
 </section>
 <section id="normalization-types" class="level3" data-number="2.1.2">
@@ -580,30 +600,191 @@ Figure&nbsp;4
 <li>RMSNorm<span class="citation" data-cites="RootMeanSquareLayer2020zhang">(<a href="#ref-RootMeanSquareLayer2020zhang" role="doc-biblioref"><strong>RootMeanSquareLayer2020zhang?</strong></a>)</span>: 只使用均方根（Root Mean Square）来进行归一化，省略了均值的计算，减少了计算开销。 RMSNorm 在某些情况下可以提供与 LayerNorm 相似的性能，但计算更高效。</li>
 </ul>
 <p>原始的Transformer中使用的是LayerNorm， 但是现代大语言模型中，RMSNorm被广泛采用， 例如在 LLaMA<span class="citation" data-cites="Llama2023touvron">(<a href="#ref-Llama2023touvron" role="doc-biblioref"><strong>Llama2023touvron?</strong></a>)</span>、GPT-3<span class="citation" data-cites="LanguageModelsAre2020brown">(<a href="#ref-LanguageModelsAre2020brown" role="doc-biblioref"><strong>LanguageModelsAre2020brown?</strong></a>)</span>、PaLM<span class="citation" data-cites="ScalingLanguageModels2022chowdhery">(<a href="#ref-ScalingLanguageModels2022chowdhery" role="doc-biblioref"><strong>ScalingLanguageModels2022chowdhery?</strong></a>)</span> 等模型中都使用了 RMSNorm。</p>
+<p>RMSNorm的存在的优势是，</p>
+<ul>
+<li>计算效率更高： 由于 RMSNorm 省略了均值的计算，因此在计算上更加高效，特别是在大规模模型中，这种效率提升尤为显著。</li>
+<li>性能相似： 实验表明，在许多任务中，RMSNorm 可以提供与 LayerNorm 相似的性能，尤其是在大语言模型中。</li>
+</ul>
 </section>
 </section>
 <section id="activations" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="activations"><span class="header-section-number">2.2</span> Activations</h2>
+<p>Activation Functions给模型引入了非线性，使得神经网络能够学习复杂的函数映射关系。 常见的激活函数包括ReLU、Sigmoid、Tanh等。</p>
+<p><img src="./assets/activations.png" class="img-fluid"></p>
+<p>现代LLM中，最常见的激活函数是 Gated Activations家族，例如 SwiGLU，接下来，我们看看这些架构</p>
+<section id="gated-activationsglu" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="gated-activationsglu"><span class="header-section-number">2.2.1</span> Gated Activations(*GLU)</h3>
+<p>Gated Activations 通过引入门控机制，允许模型在前馈神经网络中动态调整信息流，从而提高模型的表达能力和性能。在传统的FFN中，输入通过两个线性变换和一个非线性激活函数进行处理。而在 Gated Activations 中，输入被分成两部分，一部分通过激活函数处理，另一部分通过门控机制进行调节，最终两部分的输出进行元素级乘法操作。用数学公式表示为:</p>
+<p><span class="math display">\[
+\text{FF} = \textcolor{red}{\max (0, XW_1 )} \ctimes (XW_2 )
+\]</span></p>
+<p>Gated Activations 主要改变的就是红色部分，用数学表达就是： <span class="math display">\[
+\text{Gated FF} = \textcolor{red}{(\max (0, XW_1 ) \odot XV )}W_2
+\]</span></p>
+<p>常见的 Gated Activations 包括:</p>
+<ul>
+<li>GeGLU:</li>
+</ul>
+<p><span class="math display">\[
+\text{GeGLU: } \quad \text{Gated FF} = (\text{GELU}(XW_1 ) \odot XV )W_2
+\]</span></p>
+<ul>
+<li>SwiGLU: <span class="math display">\[
+\text{SwiGLU: } \quad \text{Gated FF} = (\text{SiLU}(XW_1 ) \odot XV )W_2
+\]</span></li>
+</ul>
+<p>实验表明，Gated Activations 在许多任务中都优于传统的激活函数，特别是在大语言模型中，例如 LLaMA<span class="citation" data-cites="Llama2023touvron">(<a href="#ref-Llama2023touvron" role="doc-biblioref"><strong>Llama2023touvron?</strong></a>)</span> 和 GPT-4<span class="citation" data-cites="GPT4TechnicalReport2023openai">(<a href="#ref-GPT4TechnicalReport2023openai" role="doc-biblioref"><strong>GPT4TechnicalReport2023openai?</strong></a>)</span> 等模型中都采用了 SwiGLU 作为前馈神经网络的激活函数。</p>
+<p>不过需要主要的一点是，Gated Activation引入了一个额外的线性变换矩阵V，这会增加模型的参数量和计算开销。 因此，在实际应用中，为了保持模型数量的不变，通常我们将 <span class="math inline">\(d_ff\)</span> 设定为 <span class="math inline">\(\frac{8}{3} d_{model}\)</span>， 这样就可以在引入Gated Activation的同时，保持模型的参数量不变。</p>
+</section>
 </section>
 <section id="serial-parallel-mlp" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="serial-parallel-mlp"><span class="header-section-number">2.3</span> Serial &amp; Parallel MLP</h2>
+<p>传统的Transformer Block是串行的结构 <a href="#fig-lecture03-overview" class="quarto-xref">Figure&nbsp;1</a>， 即先经过Attention模块， 然后再经过MLP模块。 这种设计虽然简单，但在某些情况下可能会限制模型的表达能力。有研究提出了并行的MLP设计，将Attention和MLP模块并行处理，然后将它们的输出进行融合。这种设计可以提高模型的表达能力和计算效率。 用数学公式表示为:</p>
+<p><span class="math display">\[
+y = x + \text{MLP}(Norm(x)) + \text{Attention}(Norm(x))
+\]</span></p>
+<p>通过并行这两层，可以让模型训练的更快速，同时可以减少模型的参数，比如Norm层只需要一层。</p>
+<p>不过，目前主流的大语言模型仍然采用串行的Transformer Block设计，但并行的MLP设计为未来的模型架构提供了一个有趣的方向。</p>
 </section>
 <section id="position-encoding" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="position-encoding"><span class="header-section-number">2.4</span> Position Encoding</h2>
+<p>位置编码 (Positional Encoding) 用于引入序列中单词的位置信息，因为自注意力机制本身不具备顺序信息。 传统的Transformer使用的是绝对位置编码，例如正弦和余弦函数编码<span class="citation" data-cites="AttentionAllYou2023vaswani">(<a href="#ref-AttentionAllYou2023vaswani" role="doc-biblioref">Vaswani et al. 2023</a>)</span>。常见的位置编码方法包括:</p>
+<ul>
+<li>Absolute Position Encoding: 使用固定的编码方式为每个位置分配一个唯一的向量表示。</li>
+<li>Relative Position Encoding<span class="citation" data-cites="SelfAttentionWithRelative2021shaw">(<a href="#ref-SelfAttentionWithRelative2021shaw" role="doc-biblioref"><strong>SelfAttentionWithRelative2021shaw?</strong></a>)</span>: 通过计算单词之间的相对位置来引入位置信息，增强模型对序列中单词相对关系的理解能力。</li>
+<li>Rotary Position Embedding (RoPE)<span class="citation" data-cites="RoFormerEnhancedTransformer2021su">(<a href="#ref-RoFormerEnhancedTransformer2021su" role="doc-biblioref"><strong>RoFormerEnhancedTransformer2021su?</strong></a>)</span>: 通过旋转位置向量来引入位置信息，增强模型对长距离依赖关系的捕捉能力。</li>
+</ul>
+<p>接下来我们重点介绍 RoPE。</p>
+<section id="rotary-position-embedding-rope" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="rotary-position-embedding-rope"><span class="header-section-number">2.4.1</span> Rotary Position Embedding (RoPE)</h3>
+<div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/rope.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5
+</figcaption>
+</figure>
+</div>
+<p>RoPE 通过对查询和键的向量进行旋转来引入位置信息。 具体来说，RoPE 将位置编码表示为一个旋转矩阵，然后将查询和键的向量与该旋转矩阵相乘，从而引入位置信息。 用数学公式表示为:</p>
+<p><span class="math display">\[
+\text{RoPE}(Q, K, P) = (Q R(P), K R(P))
+\]</span> 其中，<span class="math inline">\(R(P)\)</span> 是位置编码对应的旋转矩阵。</p>
+<p>用数学表示就是： <span class="math display">\[
+R_{\Theta,m}^{d} \mathbf{x}
+=
+\begin{pmatrix}
+x_1\\
+x_2\\
+x_3\\
+x_4\\
+\vdots\\
+x_{d-1}\\
+x_d
+\end{pmatrix}
+\otimes
+\begin{pmatrix}
+\cos(m\theta_{1})\\
+\cos(m\theta_{1})\\
+\cos(m\theta_{2})\\
+\cos(m\theta_{2})\\
+\vdots\\
+\cos\!\big(m\theta_{d/2}\big)\\
+\cos\!\big(m\theta_{d/2}\big)
+\end{pmatrix}
++
+\begin{pmatrix}
+- x_2\\
+x_1\\
+- x_4\\
+x_3\\
+\vdots\\
+- x_d\\
+x_{d-1}
+\end{pmatrix}
+\otimes
+\begin{pmatrix}
+\sin(m\theta_{1})\\
+\sin(m\theta_{1})\\
+\sin(m\theta_{2})\\
+\sin(m\theta_{2})\\
+\vdots\\
+\sin\!\big(m\theta_{d/2}\big)\\
+\sin\!\big(m\theta_{d/2}\big)
+\end{pmatrix}
+\]</span></p>
+<p>我非常推荐以下的视频，它很清楚的介绍了RoPE以及它的扩展，有兴趣的同学可以前去查看： <iframe width="100%" height="600" src="https://www.youtube.com/embed/SMBkImDWOyQ?si=t1pYhOoRD5J0RZOW" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></p>
+</section>
 </section>
 </section>
 <section id="hyper-parameters" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Hyper-Parameters</h1>
+<p>训练神经网络就像是炼丹，超参数的选择对于模型的性能有着至关重要的影响。 以下是一些常见的超参数及其选择原则:</p>
+<section id="mlp-width" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="mlp-width"><span class="header-section-number">3.1</span> MLP Width</h2>
+<p>MLP的宽度通常设置为模型维度的4倍，例如对于一个512维的模型，MLP的宽度通常设置为2048。 这种设计可以提供足够的表达能力，同时不会过度增加计算开销。 当然，我们在之前提到过， 如果使用Gated Activation, 那么MLP的宽度通常设置为 <span class="math inline">\(\frac{8}{3}\)</span> 倍的模型维度。基本上目前主流的大语言模型都是采用这个比例。</p>
+<p>除了Gated Activation之外， 也有一些模型使用更宽的MLP， 例如 T5 使用了 64 倍的MLP宽度， 但是这种设计会显著增加计算开销， 因此需要权衡模型性能与计算资源。</p>
+<p>至于为什么选择4倍或者 <span class="math inline">\(\frac{8}{3}\)</span> 倍的MLP宽度， 主要是基于经验和实验结果。 研究表明，这些比例可以在保持模型性能的同时，提供足够的表达能力。</p>
+<p><img src="./assets/hyper-ffn.png" class="img-fluid"></p>
+</section>
+<section id="attention-heads" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="attention-heads"><span class="header-section-number">3.2</span> Attention Heads</h2>
+<p>模型的Head Dim 通常设置为 <code>d_model / num_heads</code>， 也就是说，Head Dim 与模型维度成反比。 常见的Head Dim设置包括64、128等。不过，Head Dim 不一定就是<code>d_model / num_heads</code>。 不过并没有实验表明，Head Dim 过大或者过小会显著影响模型性能。 因此，在实际应用中，通常根据计算资源和模型规模来选择Head Dim。</p>
+</section>
+<section id="aspect-ratio" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="aspect-ratio"><span class="header-section-number">3.3</span> Aspect Ratio</h2>
+<p>Aspect Ratio 指的是模型的深度（n_layer）与宽度（d_model）之比。 研究表明，较高的Aspect Ratio（即更深的模型）通常可以提供更好的性能，特别是在处理复杂任务时。 然而，过深的模型也可能导致训练困难和过拟合问题。</p>
+<p><img src="./assets/aspect-ratio.png" class="img-fluid"></p>
+<p>不过过深的模型也会带来一些挑战，例如Parallelism和训练稳定性问题。 因此，在选择Aspect Ratio时，需要权衡模型性能与训练稳定性。</p>
+</section>
+<section id="vocabulary-size" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="vocabulary-size"><span class="header-section-number">3.4</span> Vocabulary Size</h2>
+<p>词表大小（Vocabulary Size）是指模型在训练和推理过程中使用的唯一单词或子词的数量。 词表大小的选择对于模型的性能和计算效率有着重要影响。对于单一个语言的模型，常见的词表大小范围在30,000到100,000之间。 对于多语言模型，词表大小通常更大，以覆盖更多的语言和词汇。</p>
+<p><img src="./assets/vocab_size.png" class="img-fluid"></p>
+</section>
+<section id="regularization" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="regularization"><span class="header-section-number">3.5</span> Regularization</h2>
+<p>正则化技术用于防止模型过拟合，提高模型的泛化能力。但是许多人提出了一个问题， 大模型是否还需要正则化？ 当模型足够大时， 它们似乎并不容易过拟合， 因此正则化的必要性受到质疑。</p>
+</section>
 </section>
 <section id="stability-tricks" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Stability Tricks</h1>
+<p>在训练大语言模型时，稳定性是一个重要的考虑因素。</p>
+<p><img src="./assets/stable_trick.png" class="img-fluid"></p>
+<p>我们希望Loss 曲线尽可能的平滑， 类似于橙色曲线，而不希望出现剧烈的波动， 类似于蓝色曲线。 为了实现这一目标， 研究人员提出了一些稳定性技巧。不过我们先来看看为什么会出现不稳定的情况。</p>
+<p>其中一个主要原因是由于注意力机制中的点积操作。 在计算注意力权重时，查询和键的点积可能会导致数值过大或过小，并且将这些值传递给Softmax函数时，可能导致值的极端分布，从而引发训练不稳定。</p>
+<p>在这种情况下，很自然的想到对点积结果进行归一化处理，从而缓解数值不稳定的问题。 下面我们介绍几种常见的稳定性技巧。</p>
+<ul>
+<li>QK-Norm： 对查询和键进行归一化处理，确保它们的范数为1，从而稳定点积结果。 用数学公式表示为:</li>
+<li>Logit-soft-capping: 对注意力权重的对数进行截断，防止极端值影响Softmax计算。</li>
+<li>z-loss: 在计算交叉熵损失时，添加一个正则化项，鼓励模型输出的logits保持在一个合理的范围内，从而提高训练稳定性。</li>
+</ul>
 </section>
 <section id="attentions" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Attentions</h1>
+<p>Attention 机制是 Transformer 的核心组件之一。 在大语言模型中，注意力机制的设计对于模型的性能和计算效率有着重要影响。 下面介绍几种常见的注意力机制设计:</p>
+<section id="grouped-query-attention-gqa-multi-query-attention-mqa" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="grouped-query-attention-gqa-multi-query-attention-mqa"><span class="header-section-number">5.1</span> Grouped Query Attention (GQA) / Multi-Query Attention (MQA)</h2>
+<p><img src="./assets/gqa.png" class="img-fluid"></p>
+</section>
+<section id="sparse-sliding-window-attention" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sparse-sliding-window-attention"><span class="header-section-number">5.2</span> Sparse / Sliding Window Attention</h2>
+<p><img src="./assets/sparse-slding.png" class="img-fluid"></p>
+<p><span class="citation" data-cites="GeneratingLongSequences2019child">Child et al. (<a href="#ref-GeneratingLongSequences2019child" role="doc-biblioref">2019</a>)</span></p>
+</section>
+<section id="sliding-window-attention" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sliding-window-attention"><span class="header-section-number">5.3</span> Sliding Window Attention</h2>
+</section>
+<section id="interleaved-attention" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="interleaved-attention"><span class="header-section-number">5.4</span> Interleaved Attention</h2>
+<p><img src="./assets/interleave.png" class="img-fluid"></p>
+</section>
 </section>
 <section id="summary" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Summary</h1>
-<p>这节课的信息量还是比较大的，建议大家多看几遍，主要的就是全面的介绍了现代大语言模型的架构设计与超参数选择原则。 理解这些内容对于后续学习大模型的训练与优化非常重要。</p>
+<p>这节课的信息量还是比较大的，建议大家多看几遍，主要的就是全面的介绍了现代大语言模型的架构设计与超参数选择原则。 理解这些内容对于后续学习大模型的训练与优化非常重要。 这节课就是简单的介绍了现代LLM的基础选择，由于时间原因， 许多内容都没有深入展开， 比如稳定性技巧， 以及各种Attention的设计。 后续我会专门写一些文章来介绍这些内容， 大家可以持续关注我的博客。</p>
+<p>完成了这三节Lecture之后，我们可以实现 Assignment 1了， 大家可以参考我的代码实现: <a href="">CS336-Assignment1</a></p>
 
 
 
@@ -612,6 +793,9 @@ Figure&nbsp;4
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-LayerNormalization2016ba" class="csl-entry" role="listitem">
 Ba, Jimmy Lei, Jamie Ryan Kiros, and Geoffrey E. Hinton. 2016. <span>“Layer <span>Normalization</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1607.06450">https://doi.org/10.48550/arXiv.1607.06450</a>.
+</div>
+<div id="ref-GeneratingLongSequences2019child" class="csl-entry" role="listitem">
+Child, Rewon, Scott Gray, Alec Radford, and Ilya Sutskever. 2019. <span>“Generating <span>Long Sequences</span> with <span>Sparse Transformers</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1904.10509">https://doi.org/10.48550/arXiv.1904.10509</a>.
 </div>
 <div id="ref-TransformersTearsImproving2019nguyen" class="csl-entry" role="listitem">
 Nguyen, Toan Q., and Julian Salazar. 2019. <span>“Transformers Without <span>Tears</span>: <span>Improving</span> the <span>Normalization</span> of <span>Self-Attention</span>,”</span> November. <a href="https://doi.org/10.5281/zenodo.3525484">https://doi.org/10.5281/zenodo.3525484</a>.

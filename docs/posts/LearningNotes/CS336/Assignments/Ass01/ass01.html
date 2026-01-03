@@ -336,6 +336,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#bpe-algorithm-recap" id="toc-bpe-algorithm-recap" class="nav-link" data-scroll-target="#bpe-algorithm-recap"><span class="header-section-number">1.1</span> BPE Algorithm Recap</a></li>
   </ul></li>
+  <li><a href="#part-02-language-model-implementation" id="toc-part-02-language-model-implementation" class="nav-link" data-scroll-target="#part-02-language-model-implementation"><span class="header-section-number">2</span> Part 02: Language Model Implementation</a></li>
   </ul>
 </nav>
 </nav>
@@ -383,9 +384,17 @@ ul.task-list li input[type="checkbox"] {
 <section id="bpe-algorithm-recap" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="bpe-algorithm-recap"><span class="header-section-number">1.1</span> BPE Algorithm Recap</h2>
 <p>回顾一下BPE算法的基本步骤： 1. <strong>Initialization</strong>: 将输入文本视为字节序列，每个字节作为一个token。初始化词汇表包含所有可能的字节（0-255）。 2. <strong>Count Pairs</strong>: 统计文本中所有相邻字节对的出现频率。 3. <strong>Merge Pairs</strong>: 找到出现频率最高的字节对，并将其合并为一个新的token，更新文本和词汇表。 4. <strong>Repeat</strong>: 重复步骤2和3，直到达到预定的合并次数</p>
-
-
 </section>
+</section>
+<section id="part-02-language-model-implementation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Part 02: Language Model Implementation</h1>
+<p>在本部分中，我们将实现一个简单的语言模型，使用我们在第一部分中实现的BPE进行tokenization。我们将使用PyTorch来定义和训练模型。</p>
+<p>对于Transformer模型不熟悉的同学，我非常推荐 Andrej Karpathy 的下面这个视频：</p>
+<iframe width="100%" height="600" src="https://www.youtube.com/embed/l8pRSuU81PU?si=k_vFn8tse1QE7Njj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
+</iframe>
+<p>在视频中，Andrej Karpathy 详细讲解了GPT-2的实现细节， 包括Transformer的架构设计、注意力机制、位置编码等内容。 在理解了GPT-2的基础上，我们可以更好的理解Assignment 01 的内容。</p>
+
+
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
