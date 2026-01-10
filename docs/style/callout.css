@@ -2,7 +2,10 @@
   border-left: 4px solid #4b8bbe;
   background-color: #f0f8ff;
   padding: 1em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
   border-radius: 6px;
+  color: #0a3d4d;
 }
 
 .callout-paper > .callout-header::before {
@@ -49,15 +52,3 @@
 }
 
 
-.callout-paper {
-  border-left: 4px solid #4b8bbe;
-  background-color: #f0f8ff;
-  padding: 1em;
-  border-radius: 6px;
-  
-}
-
-.callout-paper > .callout-header::before {
-  content: "📄";
-  margin-right: 0.5em;
-}
