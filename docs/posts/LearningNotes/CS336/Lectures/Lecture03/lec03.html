@@ -64,9 +64,9 @@ div.csl-indent {
 <link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../../site_libs/bootstrap/bootstrap-859f99caab0bec132077bcc433b53446.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../../site_libs/bootstrap/bootstrap-dark-970c7fc97ae78f6c1e7458e7c69915e7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../../site_libs/bootstrap/bootstrap-859f99caab0bec132077bcc433b53446.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-fbbeaaf328af8ff1529676461fadd25d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-dark-7ed90440e877b8b887f97eb7d64998ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../../site_libs/bootstrap/bootstrap-fbbeaaf328af8ff1529676461fadd25d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
@@ -130,6 +130,7 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../../../../../style/styles.css">
 <link rel="stylesheet" href="../../../../../style/callout.css">
+<link rel="stylesheet" href="../../../../../style/toc.css">
 <meta property="og:title" content="Lecture 03: LM Model Architecture &amp; Hyperparameters">
 <meta property="og:description" content="Lecture03 介绍了现代大语言模型的核心架构与超参数设计。课程对比了原始 Transformer 与主流 LLaMA-like 架构，总结了 pre-norm、RMSNorm、SwiGLU、RoPE 等关键设计的经验共识，并结合大量近期模型实践，讲解了 MLP 宽度比例、注意力头配置、模型深宽比与词表规模等超参数选择原则。同时还介绍了 z-loss、QK-Norm、MQA/GQA 等用于提升训练稳定性和推理效率的关键技巧。">
 <meta property="og:image" content="./assets/lec03-overview.png">
@@ -335,7 +336,7 @@ window.Quarto = {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../../../posts/PapersWithCode/100_Papers_index.html"> 
-<span class="menu-text">100 Papers with Code</span></a>
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-learning-notes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -378,7 +379,7 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
