@@ -598,9 +598,9 @@ Figure&nbsp;4
 <p>除了 Normalization 的位置设计之外，Normalization 的形式也是一个重要的设计选择。 常见的 Normalization 形式包括:</p>
 <ul>
 <li>LayerNorm<span class="citation" data-cites="LayerNormalization2016ba">(<a href="#ref-LayerNormalization2016ba" role="doc-biblioref">Ba, Kiros, and Hinton 2016</a>)</span>: 对每个样本的特征维度进行归一化，适用于序列数据。</li>
-<li>RMSNorm<span class="citation" data-cites="RootMeanSquareLayer2020zhang">(<a href="#ref-RootMeanSquareLayer2020zhang" role="doc-biblioref"><strong>RootMeanSquareLayer2020zhang?</strong></a>)</span>: 只使用均方根（Root Mean Square）来进行归一化，省略了均值的计算，减少了计算开销。 RMSNorm 在某些情况下可以提供与 LayerNorm 相似的性能，但计算更高效。</li>
+<li>RMSNorm<span class="citation" data-cites="RootMeanSquare2019zhang">(<a href="#ref-RootMeanSquare2019zhang" role="doc-biblioref">Zhang and Sennrich 2019</a>)</span>: 只使用均方根（Root Mean Square）来进行归一化，省略了均值的计算，减少了计算开销。 RMSNorm 在某些情况下可以提供与 LayerNorm 相似的性能，但计算更高效。</li>
 </ul>
-<p>原始的Transformer中使用的是LayerNorm， 但是现代大语言模型中，RMSNorm被广泛采用， 例如在 LLaMA<span class="citation" data-cites="Llama2023touvron">(<a href="#ref-Llama2023touvron" role="doc-biblioref"><strong>Llama2023touvron?</strong></a>)</span>、GPT-3<span class="citation" data-cites="LanguageModelsAre2020brown">(<a href="#ref-LanguageModelsAre2020brown" role="doc-biblioref"><strong>LanguageModelsAre2020brown?</strong></a>)</span>、PaLM<span class="citation" data-cites="ScalingLanguageModels2022chowdhery">(<a href="#ref-ScalingLanguageModels2022chowdhery" role="doc-biblioref"><strong>ScalingLanguageModels2022chowdhery?</strong></a>)</span> 等模型中都使用了 RMSNorm。</p>
+<p>原始的Transformer中使用的是LayerNorm， 但是现代大语言模型中，RMSNorm被广泛采用， 例如在 LLaMA、GPT-4、PaLM 等模型中都使用了 RMSNorm。</p>
 <p>RMSNorm的存在的优势是，</p>
 <ul>
 <li>计算效率更高： 由于 RMSNorm 省略了均值的计算，因此在计算上更加高效，特别是在大规模模型中，这种效率提升尤为显著。</li>
@@ -634,7 +634,7 @@ Figure&nbsp;4
 \text{SwiGLU: } \quad \text{Gated FF} = (\text{SiLU}(XW_1 ) \odot XV )W_2
 \]</span></li>
 </ul>
-<p>实验表明，Gated Activations 在许多任务中都优于传统的激活函数，特别是在大语言模型中，例如 LLaMA<span class="citation" data-cites="Llama2023touvron">(<a href="#ref-Llama2023touvron" role="doc-biblioref"><strong>Llama2023touvron?</strong></a>)</span> 和 GPT-4<span class="citation" data-cites="GPT4TechnicalReport2023openai">(<a href="#ref-GPT4TechnicalReport2023openai" role="doc-biblioref"><strong>GPT4TechnicalReport2023openai?</strong></a>)</span> 等模型中都采用了 SwiGLU 作为前馈神经网络的激活函数。</p>
+<p>实验表明，Gated Activations 在许多任务中都优于传统的激活函数，特别是在大语言模型中，例如 LLaMA 和 GPT-4 等模型中都采用了 SwiGLU 作为前馈神经网络的激活函数。</p>
 <p>不过需要主要的一点是，Gated Activation引入了一个额外的线性变换矩阵V，这会增加模型的参数量和计算开销。 因此，在实际应用中，为了保持模型数量的不变，通常我们将 <span class="math inline">\(d_ff\)</span> 设定为 <span class="math inline">\(\frac{8}{3} d_{model}\)</span>， 这样就可以在引入Gated Activation的同时，保持模型的参数量不变。</p>
 </section>
 </section>
@@ -652,8 +652,8 @@ y = x + \text{MLP}(Norm(x)) + \text{Attention}(Norm(x))
 <p>位置编码 (Positional Encoding) 用于引入序列中单词的位置信息，因为自注意力机制本身不具备顺序信息。 传统的Transformer使用的是绝对位置编码，例如正弦和余弦函数编码<span class="citation" data-cites="AttentionAllYou2023vaswani">(<a href="#ref-AttentionAllYou2023vaswani" role="doc-biblioref">Vaswani et al. 2023</a>)</span>。常见的位置编码方法包括:</p>
 <ul>
 <li>Absolute Position Encoding: 使用固定的编码方式为每个位置分配一个唯一的向量表示。</li>
-<li>Relative Position Encoding<span class="citation" data-cites="SelfAttentionWithRelative2021shaw">(<a href="#ref-SelfAttentionWithRelative2021shaw" role="doc-biblioref"><strong>SelfAttentionWithRelative2021shaw?</strong></a>)</span>: 通过计算单词之间的相对位置来引入位置信息，增强模型对序列中单词相对关系的理解能力。</li>
-<li>Rotary Position Embedding (RoPE)<span class="citation" data-cites="RoFormerEnhancedTransformer2021su">(<a href="#ref-RoFormerEnhancedTransformer2021su" role="doc-biblioref"><strong>RoFormerEnhancedTransformer2021su?</strong></a>)</span>: 通过旋转位置向量来引入位置信息，增强模型对长距离依赖关系的捕捉能力。</li>
+<li>Relative Position Encoding: 通过计算单词之间的相对位置来引入位置信息，增强模型对序列中单词相对关系的理解能力。</li>
+<li>Rotary Position Embedding (RoPE)<span class="citation" data-cites="RoFormerEnhancedTransformer2023su">(<a href="#ref-RoFormerEnhancedTransformer2023su" role="doc-biblioref">Su et al. 2023</a>)</span>: 通过旋转位置向量来引入位置信息，增强模型对长距离依赖关系的捕捉能力。</li>
 </ul>
 <p>接下来我们重点介绍 RoPE。</p>
 <section id="rotary-position-embedding-rope" class="level3" data-number="2.4.1">
@@ -793,16 +793,22 @@ x_{d-1}
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-LayerNormalization2016ba" class="csl-entry" role="listitem">
-Ba, Jimmy Lei, Jamie Ryan Kiros, and Geoffrey E. Hinton. 2016. <span>“Layer <span>Normalization</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1607.06450">https://doi.org/10.48550/arXiv.1607.06450</a>.
+Ba, Jimmy Lei, Jamie Ryan Kiros, and Geoffrey E. Hinton. 2016. <span>“Layer <span>Normalization</span>.”</span> July 21, 2016. <a href="https://doi.org/10.48550/arXiv.1607.06450">https://doi.org/10.48550/arXiv.1607.06450</a>.
 </div>
 <div id="ref-GeneratingLongSequences2019child" class="csl-entry" role="listitem">
-Child, Rewon, Scott Gray, Alec Radford, and Ilya Sutskever. 2019. <span>“Generating <span>Long Sequences</span> with <span>Sparse Transformers</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1904.10509">https://doi.org/10.48550/arXiv.1904.10509</a>.
+Child, Rewon, Scott Gray, Alec Radford, and Ilya Sutskever. 2019. <span>“Generating <span>Long Sequences</span> with <span>Sparse Transformers</span>.”</span> April 23, 2019. <a href="https://doi.org/10.48550/arXiv.1904.10509">https://doi.org/10.48550/arXiv.1904.10509</a>.
 </div>
 <div id="ref-TransformersTearsImproving2019nguyen" class="csl-entry" role="listitem">
-Nguyen, Toan Q., and Julian Salazar. 2019. <span>“Transformers Without <span>Tears</span>: <span>Improving</span> the <span>Normalization</span> of <span>Self-Attention</span>,”</span> November. <a href="https://doi.org/10.5281/zenodo.3525484">https://doi.org/10.5281/zenodo.3525484</a>.
+Nguyen, Toan Q., and Julian Salazar. 2019. <span>“Transformers Without <span>Tears</span>: <span>Improving</span> the <span>Normalization</span> of <span>Self-Attention</span>.”</span> <a href="https://doi.org/10.5281/zenodo.3525484">https://doi.org/10.5281/zenodo.3525484</a>.
+</div>
+<div id="ref-RoFormerEnhancedTransformer2023su" class="csl-entry" role="listitem">
+Su, Jianlin, Yu Lu, Shengfeng Pan, Ahmed Murtadha, Bo Wen, and Yunfeng Liu. 2023. <span>“<span>RoFormer</span>: <span>Enhanced Transformer</span> with <span>Rotary Position Embedding</span>.”</span> November 8, 2023. <a href="https://doi.org/10.48550/arXiv.2104.09864">https://doi.org/10.48550/arXiv.2104.09864</a>.
 </div>
 <div id="ref-AttentionAllYou2023vaswani" class="csl-entry" role="listitem">
-Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, and Illia Polosukhin. 2023. <span>“Attention <span>Is All You Need</span>.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>.
+Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, and Illia Polosukhin. 2023. <span>“Attention <span>Is All You Need</span>.”</span> August 2, 2023. <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>.
+</div>
+<div id="ref-RootMeanSquare2019zhang" class="csl-entry" role="listitem">
+Zhang, Biao, and Rico Sennrich. 2019. <span>“Root <span>Mean Square Layer Normalization</span>.”</span> October 16, 2019. <a href="https://doi.org/10.48550/arXiv.1910.07467">https://doi.org/10.48550/arXiv.1910.07467</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

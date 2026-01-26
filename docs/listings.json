@@ -16,11 +16,11 @@
   {
     "listing": "/posts/Blogs/blogs_index.html",
     "items": [
+      "/posts/Blogs/LLM-RL/post.html",
       "/posts/Blogs/KL-Divergence/post.html",
       "/posts/Blogs/Learnings-in-DeepLearning/post.html",
       "/posts/Blogs/Position-Embedding/post.html",
       "/posts/Blogs/Diffusion-Models/Diffusion-Model.html",
-      "/posts/Blogs/LLM-Alignment/post.html",
       "/posts/Blogs/LLM-Inference/post.html",
       "/posts/Blogs/LLM-Architecture/LLM-Architecture.html",
       "/posts/Blogs/Speed-up-training/post.html"
@@ -57,7 +57,8 @@
       "/posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html",
       "/posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html",
       "/posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html",
-      "/posts/LearningNotes/CS336/Assignments/Ass01/ass01.html"
+      "/posts/LearningNotes/CS336/Assignments/Ass01/ass01.html",
+      "/posts/LearningNotes/CS336/Assignments/Ass05/ass05.html"
     ]
   }
 ]

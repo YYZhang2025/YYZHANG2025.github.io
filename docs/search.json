@@ -74,14 +74,14 @@
     "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#normalization",
     "title": "Lecture 03: LM Model Architecture & Hyperparameters",
     "section": "2.1 Normalization",
-    "text": "2.1 Normalization\n\n为什么需要 Normalization？\nNormalization 技术在深度学习中起到了稳定训练过程和加速收敛的作用。 它通过调整神经网络层的输入分布，减少了内部协变量偏移 (Internal Covariate Shift)，从而使得模型在训练过程中更加稳定。此外，Normalization 还可以帮助缓解梯度消失和梯度爆炸问题，提高模型的泛化能力。\n\n\n2.1.1 Position of Normalization\n\n2.1.1.1 Post-Norm\n在Transformer中，Normalization放置在Sublayer之后，也就是所谓的 Post-Norm 结构。用数学公式表示为:\n\\[\n\\text{Post-Norm: } \\quad \\text{Norm}(x + \\text{Sublayer}(x))\n\\tag{1}\\]\n然而，(Ba, Kiros, and Hinton 2016) 指出，Post-Norm存在以下的问题:\n\n梯度不稳定，特别是在初始化阶段： 论文使用平均场理论分析指出，在 Post-Norm 结构 下（即 LayerNorm 放在残差连接之后），靠近输出层的参数在初始化时梯度期望值很大。 这会导致训练初期梯度爆炸，从而影响模型的稳定性和收敛速度。\n依赖复杂的 warm-up 超参数调优： 由于 Post-Norm 结构在训练初期容易出现梯度不稳定的问题，因此需要使用复杂的学习率 warm-up 策略来缓解这一问题。 这增加了模型训练的复杂性和调优难度。\n\n\nSpecifically, we prove with mean field theory that at initialization, for the original-designed Post-LN Transformer, which places the layer normalization between the residual blocks, the expected gradients of the parameters near the output layer are large. Therefore, using a large learning rate on those gradients makes the training unstable. The warm-up stage is practically helpful for avoiding this problem.  On Layer Normalization in the Transformer Architecture P.1 \n\n\n\n2.1.1.2 Pre-Norm\n为了缓解 Post-Norm 的问题，(Ba, Kiros, and Hinton 2016) 提出了 Pre-Norm 结构，即将 Normalization 放置在 Sublayer 之前。 用数学公式表示为:\n\\[\n\\text{Pre-Norm: } \\quad x + \\text{Sublayer}(\\text{Norm}(x))\n\\tag{2}\\]\n下图展示了 Post-Norm 与 Pre-Norm 结构的对比:\n\n\n\n\n\n\nFigure 2: Post Norm 与 Pre-Norm 结构对比。\n\n\n\nPre-Norm 有以下优点:\n\n提高训练稳定性： Pre-Norm 结构通过在每个子层之前进行归一化，减少了梯度爆炸和梯度消失的风险，从而提高了训练的稳定性。\n简化超参数调优： 由于 Pre-Norm 结构在训练过程中更加稳定，因此不再需要复杂的学习率 warm-up 策略，简化了模型的训练过程和超参数调优。\n\n\nWe show in our experiments that Pre-LN Transformers without the warm-up stage can reach comparable results with baselines while requiring significantly less training time and hyper-parameter tuning on a wide range of applications.  On Layer Normalization in the Transformer Architecture P.1 \n\n接下来我们来看一下为什么Pre-Norm能有这么多的好处：\n\nGradient Attenuation\n\n\n\n\n\n\n\nFigure 3: 上图展示了 Pre-Norm 与 Post-Norm Transformer 在梯度行为上的差异。可以看到，在初始化阶段，Post-Norm 会导致靠近输出层的梯度期望值显著增大，而底层梯度被明显削弱，呈现出严重的梯度失衡（gradient attenuation across layers），从而使训练过程极不稳定，必须依赖学习率 warm-up 进行缓解。相比之下，Pre-Norm 在初始化时各层梯度规模保持一致且稳定，避免了梯度衰减与爆炸问题。\n\n\n\n\nGradient Spike / Noise\n\n实验表明 (Nguyen and Salazar 2019)\n\n\n\n\n\n\nFigure 4\n\n\n\n\nPost-norm produces noisy gradients with many sharp spikes, even towards the end of training. On the other hand, Pre-norm has fewer noisy gradients with smaller sizes, even without warmup.  Transformers without Tears: Improving the Normalization of Self-Attention P.6 \n\n\n\n2.1.1.3 Other Positions\n除了 Pre-Norm 和 Post-Norm 之外，还有一些其他的 Normalization 位置设计，例如:\n\nSandwich Norm: 将 Normalization 放置在每个子层的输入和输出之间。\nDouble Norm: 在每个子层的输入和输出都进行归一化。\n\n从这些实验结果来看，我们可以得出结论： - 尽量保持Residual Connection两端的信号稳定是非常重要的, 这可以保证梯度在网络中顺利传播。\n\n\n\n2.1.2 Normalization Types\n除了 Normalization 的位置设计之外，Normalization 的形式也是一个重要的设计选择。 常见的 Normalization 形式包括:\n\nLayerNorm(Ba, Kiros, and Hinton 2016): 对每个样本的特征维度进行归一化，适用于序列数据。\nRMSNorm(RootMeanSquareLayer2020zhang?): 只使用均方根（Root Mean Square）来进行归一化，省略了均值的计算，减少了计算开销。 RMSNorm 在某些情况下可以提供与 LayerNorm 相似的性能，但计算更高效。\n\n原始的Transformer中使用的是LayerNorm， 但是现代大语言模型中，RMSNorm被广泛采用， 例如在 LLaMA(Llama2023touvron?)、GPT-3(LanguageModelsAre2020brown?)、PaLM(ScalingLanguageModels2022chowdhery?) 等模型中都使用了 RMSNorm。\nRMSNorm的存在的优势是，\n\n计算效率更高： 由于 RMSNorm 省略了均值的计算，因此在计算上更加高效，特别是在大规模模型中，这种效率提升尤为显著。\n性能相似： 实验表明，在许多任务中，RMSNorm 可以提供与 LayerNorm 相似的性能，尤其是在大语言模型中。"
+    "text": "2.1 Normalization\n\n为什么需要 Normalization？\nNormalization 技术在深度学习中起到了稳定训练过程和加速收敛的作用。 它通过调整神经网络层的输入分布，减少了内部协变量偏移 (Internal Covariate Shift)，从而使得模型在训练过程中更加稳定。此外，Normalization 还可以帮助缓解梯度消失和梯度爆炸问题，提高模型的泛化能力。\n\n\n2.1.1 Position of Normalization\n\n2.1.1.1 Post-Norm\n在Transformer中，Normalization放置在Sublayer之后，也就是所谓的 Post-Norm 结构。用数学公式表示为:\n\\[\n\\text{Post-Norm: } \\quad \\text{Norm}(x + \\text{Sublayer}(x))\n\\tag{1}\\]\n然而，(Ba, Kiros, and Hinton 2016) 指出，Post-Norm存在以下的问题:\n\n梯度不稳定，特别是在初始化阶段： 论文使用平均场理论分析指出，在 Post-Norm 结构 下（即 LayerNorm 放在残差连接之后），靠近输出层的参数在初始化时梯度期望值很大。 这会导致训练初期梯度爆炸，从而影响模型的稳定性和收敛速度。\n依赖复杂的 warm-up 超参数调优： 由于 Post-Norm 结构在训练初期容易出现梯度不稳定的问题，因此需要使用复杂的学习率 warm-up 策略来缓解这一问题。 这增加了模型训练的复杂性和调优难度。\n\n\nSpecifically, we prove with mean field theory that at initialization, for the original-designed Post-LN Transformer, which places the layer normalization between the residual blocks, the expected gradients of the parameters near the output layer are large. Therefore, using a large learning rate on those gradients makes the training unstable. The warm-up stage is practically helpful for avoiding this problem.  On Layer Normalization in the Transformer Architecture P.1 \n\n\n\n2.1.1.2 Pre-Norm\n为了缓解 Post-Norm 的问题，(Ba, Kiros, and Hinton 2016) 提出了 Pre-Norm 结构，即将 Normalization 放置在 Sublayer 之前。 用数学公式表示为:\n\\[\n\\text{Pre-Norm: } \\quad x + \\text{Sublayer}(\\text{Norm}(x))\n\\tag{2}\\]\n下图展示了 Post-Norm 与 Pre-Norm 结构的对比:\n\n\n\n\n\n\nFigure 2: Post Norm 与 Pre-Norm 结构对比。\n\n\n\nPre-Norm 有以下优点:\n\n提高训练稳定性： Pre-Norm 结构通过在每个子层之前进行归一化，减少了梯度爆炸和梯度消失的风险，从而提高了训练的稳定性。\n简化超参数调优： 由于 Pre-Norm 结构在训练过程中更加稳定，因此不再需要复杂的学习率 warm-up 策略，简化了模型的训练过程和超参数调优。\n\n\nWe show in our experiments that Pre-LN Transformers without the warm-up stage can reach comparable results with baselines while requiring significantly less training time and hyper-parameter tuning on a wide range of applications.  On Layer Normalization in the Transformer Architecture P.1 \n\n接下来我们来看一下为什么Pre-Norm能有这么多的好处：\n\nGradient Attenuation\n\n\n\n\n\n\n\nFigure 3: 上图展示了 Pre-Norm 与 Post-Norm Transformer 在梯度行为上的差异。可以看到，在初始化阶段，Post-Norm 会导致靠近输出层的梯度期望值显著增大，而底层梯度被明显削弱，呈现出严重的梯度失衡（gradient attenuation across layers），从而使训练过程极不稳定，必须依赖学习率 warm-up 进行缓解。相比之下，Pre-Norm 在初始化时各层梯度规模保持一致且稳定，避免了梯度衰减与爆炸问题。\n\n\n\n\nGradient Spike / Noise\n\n实验表明 (Nguyen and Salazar 2019)\n\n\n\n\n\n\nFigure 4\n\n\n\n\nPost-norm produces noisy gradients with many sharp spikes, even towards the end of training. On the other hand, Pre-norm has fewer noisy gradients with smaller sizes, even without warmup.  Transformers without Tears: Improving the Normalization of Self-Attention P.6 \n\n\n\n2.1.1.3 Other Positions\n除了 Pre-Norm 和 Post-Norm 之外，还有一些其他的 Normalization 位置设计，例如:\n\nSandwich Norm: 将 Normalization 放置在每个子层的输入和输出之间。\nDouble Norm: 在每个子层的输入和输出都进行归一化。\n\n从这些实验结果来看，我们可以得出结论： - 尽量保持Residual Connection两端的信号稳定是非常重要的, 这可以保证梯度在网络中顺利传播。\n\n\n\n2.1.2 Normalization Types\n除了 Normalization 的位置设计之外，Normalization 的形式也是一个重要的设计选择。 常见的 Normalization 形式包括:\n\nLayerNorm(Ba, Kiros, and Hinton 2016): 对每个样本的特征维度进行归一化，适用于序列数据。\nRMSNorm(Zhang and Sennrich 2019): 只使用均方根（Root Mean Square）来进行归一化，省略了均值的计算，减少了计算开销。 RMSNorm 在某些情况下可以提供与 LayerNorm 相似的性能，但计算更高效。\n\n原始的Transformer中使用的是LayerNorm， 但是现代大语言模型中，RMSNorm被广泛采用， 例如在 LLaMA、GPT-4、PaLM 等模型中都使用了 RMSNorm。\nRMSNorm的存在的优势是，\n\n计算效率更高： 由于 RMSNorm 省略了均值的计算，因此在计算上更加高效，特别是在大规模模型中，这种效率提升尤为显著。\n性能相似： 实验表明，在许多任务中，RMSNorm 可以提供与 LayerNorm 相似的性能，尤其是在大语言模型中。"
   },
   {
     "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#activations",
     "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#activations",
     "title": "Lecture 03: LM Model Architecture & Hyperparameters",
     "section": "2.2 Activations",
-    "text": "2.2 Activations\nActivation Functions给模型引入了非线性，使得神经网络能够学习复杂的函数映射关系。 常见的激活函数包括ReLU、Sigmoid、Tanh等。\n\n现代LLM中，最常见的激活函数是 Gated Activations家族，例如 SwiGLU，接下来，我们看看这些架构\n\n2.2.1 Gated Activations(*GLU)\nGated Activations 通过引入门控机制，允许模型在前馈神经网络中动态调整信息流，从而提高模型的表达能力和性能。在传统的FFN中，输入通过两个线性变换和一个非线性激活函数进行处理。而在 Gated Activations 中，输入被分成两部分，一部分通过激活函数处理，另一部分通过门控机制进行调节，最终两部分的输出进行元素级乘法操作。用数学公式表示为:\n\\[\n\\text{FF} = \\textcolor{red}{\\max (0, XW_1 )} \\ctimes (XW_2 )\n\\]\nGated Activations 主要改变的就是红色部分，用数学表达就是： \\[\n\\text{Gated FF} = \\textcolor{red}{(\\max (0, XW_1 ) \\odot XV )}W_2\n\\]\n常见的 Gated Activations 包括:\n\nGeGLU:\n\n\\[\n\\text{GeGLU: } \\quad \\text{Gated FF} = (\\text{GELU}(XW_1 ) \\odot XV )W_2\n\\]\n\nSwiGLU: \\[\n\\text{SwiGLU: } \\quad \\text{Gated FF} = (\\text{SiLU}(XW_1 ) \\odot XV )W_2\n\\]\n\n实验表明，Gated Activations 在许多任务中都优于传统的激活函数，特别是在大语言模型中，例如 LLaMA(Llama2023touvron?) 和 GPT-4(GPT4TechnicalReport2023openai?) 等模型中都采用了 SwiGLU 作为前馈神经网络的激活函数。\n不过需要主要的一点是，Gated Activation引入了一个额外的线性变换矩阵V，这会增加模型的参数量和计算开销。 因此，在实际应用中，为了保持模型数量的不变，通常我们将 \\(d_ff\\) 设定为 \\(\\frac{8}{3} d_{model}\\)， 这样就可以在引入Gated Activation的同时，保持模型的参数量不变。"
+    "text": "2.2 Activations\nActivation Functions给模型引入了非线性，使得神经网络能够学习复杂的函数映射关系。 常见的激活函数包括ReLU、Sigmoid、Tanh等。\n\n现代LLM中，最常见的激活函数是 Gated Activations家族，例如 SwiGLU，接下来，我们看看这些架构\n\n2.2.1 Gated Activations(*GLU)\nGated Activations 通过引入门控机制，允许模型在前馈神经网络中动态调整信息流，从而提高模型的表达能力和性能。在传统的FFN中，输入通过两个线性变换和一个非线性激活函数进行处理。而在 Gated Activations 中，输入被分成两部分，一部分通过激活函数处理，另一部分通过门控机制进行调节，最终两部分的输出进行元素级乘法操作。用数学公式表示为:\n\\[\n\\text{FF} = \\textcolor{red}{\\max (0, XW_1 )} \\ctimes (XW_2 )\n\\]\nGated Activations 主要改变的就是红色部分，用数学表达就是： \\[\n\\text{Gated FF} = \\textcolor{red}{(\\max (0, XW_1 ) \\odot XV )}W_2\n\\]\n常见的 Gated Activations 包括:\n\nGeGLU:\n\n\\[\n\\text{GeGLU: } \\quad \\text{Gated FF} = (\\text{GELU}(XW_1 ) \\odot XV )W_2\n\\]\n\nSwiGLU: \\[\n\\text{SwiGLU: } \\quad \\text{Gated FF} = (\\text{SiLU}(XW_1 ) \\odot XV )W_2\n\\]\n\n实验表明，Gated Activations 在许多任务中都优于传统的激活函数，特别是在大语言模型中，例如 LLaMA 和 GPT-4 等模型中都采用了 SwiGLU 作为前馈神经网络的激活函数。\n不过需要主要的一点是，Gated Activation引入了一个额外的线性变换矩阵V，这会增加模型的参数量和计算开销。 因此，在实际应用中，为了保持模型数量的不变，通常我们将 \\(d_ff\\) 设定为 \\(\\frac{8}{3} d_{model}\\)， 这样就可以在引入Gated Activation的同时，保持模型的参数量不变。"
   },
   {
     "objectID": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#serial-parallel-mlp",
@@ -95,7 +95,7 @@
     "href": "posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html#position-encoding",
     "title": "Lecture 03: LM Model Architecture & Hyperparameters",
     "section": "2.4 Position Encoding",
-    "text": "2.4 Position Encoding\n位置编码 (Positional Encoding) 用于引入序列中单词的位置信息，因为自注意力机制本身不具备顺序信息。 传统的Transformer使用的是绝对位置编码，例如正弦和余弦函数编码(Vaswani et al. 2023)。常见的位置编码方法包括:\n\nAbsolute Position Encoding: 使用固定的编码方式为每个位置分配一个唯一的向量表示。\nRelative Position Encoding(SelfAttentionWithRelative2021shaw?): 通过计算单词之间的相对位置来引入位置信息，增强模型对序列中单词相对关系的理解能力。\nRotary Position Embedding (RoPE)(RoFormerEnhancedTransformer2021su?): 通过旋转位置向量来引入位置信息，增强模型对长距离依赖关系的捕捉能力。\n\n接下来我们重点介绍 RoPE。\n\n2.4.1 Rotary Position Embedding (RoPE)\n\n\n\n\n\n\nFigure 5\n\n\n\nRoPE 通过对查询和键的向量进行旋转来引入位置信息。 具体来说，RoPE 将位置编码表示为一个旋转矩阵，然后将查询和键的向量与该旋转矩阵相乘，从而引入位置信息。 用数学公式表示为:\n\\[\n\\text{RoPE}(Q, K, P) = (Q R(P), K R(P))\n\\] 其中，\\(R(P)\\) 是位置编码对应的旋转矩阵。\n用数学表示就是： \\[\nR_{\\Theta,m}^{d} \\mathbf{x}\n=\n\\begin{pmatrix}\nx_1\\\\\nx_2\\\\\nx_3\\\\\nx_4\\\\\n\\vdots\\\\\nx_{d-1}\\\\\nx_d\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\cos(m\\theta_{1})\\\\\n\\cos(m\\theta_{1})\\\\\n\\cos(m\\theta_{2})\\\\\n\\cos(m\\theta_{2})\\\\\n\\vdots\\\\\n\\cos\\!\\big(m\\theta_{d/2}\\big)\\\\\n\\cos\\!\\big(m\\theta_{d/2}\\big)\n\\end{pmatrix}\n+\n\\begin{pmatrix}\n- x_2\\\\\nx_1\\\\\n- x_4\\\\\nx_3\\\\\n\\vdots\\\\\n- x_d\\\\\nx_{d-1}\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\sin(m\\theta_{1})\\\\\n\\sin(m\\theta_{1})\\\\\n\\sin(m\\theta_{2})\\\\\n\\sin(m\\theta_{2})\\\\\n\\vdots\\\\\n\\sin\\!\\big(m\\theta_{d/2}\\big)\\\\\n\\sin\\!\\big(m\\theta_{d/2}\\big)\n\\end{pmatrix}\n\\]\n我非常推荐以下的视频，它很清楚的介绍了RoPE以及它的扩展，有兴趣的同学可以前去查看："
+    "text": "2.4 Position Encoding\n位置编码 (Positional Encoding) 用于引入序列中单词的位置信息，因为自注意力机制本身不具备顺序信息。 传统的Transformer使用的是绝对位置编码，例如正弦和余弦函数编码(Vaswani et al. 2023)。常见的位置编码方法包括:\n\nAbsolute Position Encoding: 使用固定的编码方式为每个位置分配一个唯一的向量表示。\nRelative Position Encoding: 通过计算单词之间的相对位置来引入位置信息，增强模型对序列中单词相对关系的理解能力。\nRotary Position Embedding (RoPE)(Su et al. 2023): 通过旋转位置向量来引入位置信息，增强模型对长距离依赖关系的捕捉能力。\n\n接下来我们重点介绍 RoPE。\n\n2.4.1 Rotary Position Embedding (RoPE)\n\n\n\n\n\n\nFigure 5\n\n\n\nRoPE 通过对查询和键的向量进行旋转来引入位置信息。 具体来说，RoPE 将位置编码表示为一个旋转矩阵，然后将查询和键的向量与该旋转矩阵相乘，从而引入位置信息。 用数学公式表示为:\n\\[\n\\text{RoPE}(Q, K, P) = (Q R(P), K R(P))\n\\] 其中，\\(R(P)\\) 是位置编码对应的旋转矩阵。\n用数学表示就是： \\[\nR_{\\Theta,m}^{d} \\mathbf{x}\n=\n\\begin{pmatrix}\nx_1\\\\\nx_2\\\\\nx_3\\\\\nx_4\\\\\n\\vdots\\\\\nx_{d-1}\\\\\nx_d\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\cos(m\\theta_{1})\\\\\n\\cos(m\\theta_{1})\\\\\n\\cos(m\\theta_{2})\\\\\n\\cos(m\\theta_{2})\\\\\n\\vdots\\\\\n\\cos\\!\\big(m\\theta_{d/2}\\big)\\\\\n\\cos\\!\\big(m\\theta_{d/2}\\big)\n\\end{pmatrix}\n+\n\\begin{pmatrix}\n- x_2\\\\\nx_1\\\\\n- x_4\\\\\nx_3\\\\\n\\vdots\\\\\n- x_d\\\\\nx_{d-1}\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\sin(m\\theta_{1})\\\\\n\\sin(m\\theta_{1})\\\\\n\\sin(m\\theta_{2})\\\\\n\\sin(m\\theta_{2})\\\\\n\\vdots\\\\\n\\sin\\!\\big(m\\theta_{d/2}\\big)\\\\\n\\sin\\!\\big(m\\theta_{d/2}\\big)\n\\end{pmatrix}\n\\]\n我非常推荐以下的视频，它很清楚的介绍了RoPE以及它的扩展，有兴趣的同学可以前去查看："
   },
   {
     "objectID": "posts/LearningNotes/CS336/Assignments/Ass01/ass01.html",
@@ -1166,7 +1166,7 @@
     "href": "posts/Blogs/blogs_index.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "From Entropy to KL Divergence: A Comprehensive Guide\n\n\n\nMathematics\n\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications in various fields such as machine learning, data science, and artificial intelligence. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n5 min\n\n951 words\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\n\nDeep Learning\n\nSummary\n\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n14 min\n\n2,766 words\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as in the Image and Video to unify the position encoding.\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n16 min\n\n3,174 words\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\n\nGenerative-Model\n\nDiffusion-Model\n\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic differential equations and how this connects to Flow Matching. We then highlight key model variants such as Stable Diffusion and Movie Gen, discussing their architectures and applications. Finally, we broaden the scope to examine how diffusion models are being adapted beyond image generation, including diffusion policies in reinforcement learning and their emerging role in large language models (LLMs).\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n26 min\n\n5,001 words\n\n\n\n\n\n\n\nLLM Part3: Alignment\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different alignment techniques for LLMs, including how to effectively align them with human values and intentions. We will explore techniques such as reinforcement learning from human feedback (RLHF), and more. By the end, you will have a solid understanding of how to align LLMs for your own applications.\n\n\n\n\n\n2025-10-10\n\n\nYuyang Zhang\n\n2 min\n\n380 words\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n\n2025-10-01\n\n\nYuyang Zhang\n\n1 min\n\n88 words\n\n\n\n\n\n\n\nLLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n\n2025-09-25\n\n\nYuyang Zhang\n\n28 min\n\n5,428 words\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "Reinforcement Learning in LLM\n\n\n\nTransformer\n\nLarge Language Model\n\nReinforcement Learning\n\n\n\nIn this blog, we will explore how reinforcement learning is applied in large language models (LLMs) to enhance their performance and adaptability. It will start with mapping LLMs to the RL framework, then we will dive into different RL algorithms used in LLMs (RLHF), such as PPO and DPO. Than we will explore the the RLVR technique and explore the algorithms such as GRPO, GSPO, DAPO, SAPO and the most SOTA GDPO. Than we will discuss current LLM-RL training framework such as Verl. Finally, we will discuss the challenges and future directions of applying RL in LLMs.\n\n\n\n\n\n2026-01-25\n\n\nYuyang Zhang\n\n1 min\n\n69 words\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\n\nMathematics\n\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications in various fields such as machine learning, data science, and artificial intelligence. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n5 min\n\n951 words\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\n\nDeep Learning\n\nSummary\n\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n14 min\n\n2,766 words\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as in the Image and Video to unify the position encoding.\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n16 min\n\n3,174 words\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\n\nGenerative-Model\n\nDiffusion-Model\n\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic differential equations and how this connects to Flow Matching. We then highlight key model variants such as Stable Diffusion and Movie Gen, discussing their architectures and applications. Finally, we broaden the scope to examine how diffusion models are being adapted beyond image generation, including diffusion policies in reinforcement learning and their emerging role in large language models (LLMs).\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n26 min\n\n5,001 words\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n\n2025-10-01\n\n\nYuyang Zhang\n\n1 min\n\n88 words\n\n\n\n\n\n\n\nLLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n\n2025-09-25\n\n\nYuyang Zhang\n\n28 min\n\n5,428 words\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/Projects/Qwen3-VL/Qwen3-VL.html",
@@ -1341,7 +1341,7 @@
     "href": "posts/LearningNotes/CS336/index.html",
     "title": "CS336: LLM from Scratch Lecture Notes and Assignments",
     "section": "",
-    "text": "Note\n\n\n\n Due to the time constraint, these notes may contain errors or omissions. And to speed up the writing process, I only wrote the notes in CHINESES. If you are interested in collaborating to improve these notes,or transalting to different languages, please feel free to contact me. \n\n\n\n\n\nRelated Resources:\n\nLecture Website: CS336 LLM from Scratch\nLecture Recordings: YouTube Playlist\nMy Solution Repo: GitHub\n\n\n\nAbout this Course:\n\nThis course has 17 Lectures and 5 Assignments in total.\nIt might take around 200 hours to finish all the lectures and assignments.\n\n\n\n\n\n\nLecture Notes for CS336\n\n\n\n\n\n\n\n\n\n\nLecture 01: Introduction & Tokenization\n\n\nLecture01介绍了课程的大纲以及LLM的现状和基本概念。在课程的后半段介绍了Language Modeling的第一步，即Tokenization的基本概念和常用方法。着重介绍了Byte Pair Encoding (BPE)算法的原理和实现。在学习完Lecture 01后，我们可以开始尝试Assignment 01的第一部分，即BPE-Tokenization的实现\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 02: PyTorch Basics & Resource Accounts\n\n\nLecture02 介绍了PyTorch的基本概念和使用方法。可以将这节课当作一个review，复习一下之前学过的PyTorch知识点。同时，课程中介绍了一个 einops 的库，可以简化张量操作的代码编写。这节课也介绍了不同数据类型（如FP32, FP16, BF16等）在深度学习中的应用和优缺点。并且通过计算这些数据类型在内存中的占用，帮助我们理解为什么有些数据类型更适合在有限资源下进行训练, 并且在什么情况下需要应用混合精度训练（Mixed Precision Training），什么情况下需要用高精度的数据类型。在课程的最后，还介绍了不同的Optimizer（如SGD, Adam等）的基本原理和使用场景\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 03: LM Model Architecture & Hyperparameters\n\n\nLecture03 介绍了现代大语言模型的核心架构与超参数设计。课程对比了原始 Transformer 与主流 LLaMA-like 架构，总结了 pre-norm、RMSNorm、SwiGLU、RoPE 等关键设计的经验共识，并结合大量近期模型实践，讲解了 MLP 宽度比例、注意力头配置、模型深宽比与词表规模等超参数选择原则。同时还介绍了 z-loss、QK-Norm、MQA/GQA 等用于提升训练稳定性和推理效率的关键技巧。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 04: Introduction to MoE\n\n\nLecture 04 介绍了 MoE（Mixture of Experts）的基本概念和原理。从模型架构、路由机制、训练方法等方面进行了详细讲解，并讨论了 MoE 在自然语言处理中的应用和优势。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n\n\n\nAssignments\n\n\n\n\n\n\n\n\n\n\nAssignment 01: Tokenization & Language Modeling\n\n\nAssignment 01 要求我们实现一个简单的语言模型训练流程，涵盖数据预处理、模型定义、训练和评估等步骤。通过这个作业，我们将巩固对自然语言处理基础概念的理解，并掌握使用PyTorch进行深度学习模型开发的基本技能\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n Back to top"
+    "text": "Note\n\n\n\n Due to the time constraint, these notes may contain errors or omissions. And to speed up the writing process, I only wrote the notes in CHINESES. If you are interested in collaborating to improve these notes,or transalting to different languages, please feel free to contact me. \n\n\n\n\n\nRelated Resources:\n\nLecture Website: CS336 LLM from Scratch\nLecture Recordings: YouTube Playlist\nMy Solution Repo: GitHub\n\n\n\nAbout this Course:\n\nThis course has 17 Lectures and 5 Assignments in total.\nIt might take around 200 hours to finish all the lectures and assignments.\n\n\n\n\n\n\nLecture Notes for CS336\n\n\n\n\n\n\n\n\n\n\nLecture 01: Introduction & Tokenization\n\n\nLecture01介绍了课程的大纲以及LLM的现状和基本概念。在课程的后半段介绍了Language Modeling的第一步，即Tokenization的基本概念和常用方法。着重介绍了Byte Pair Encoding (BPE)算法的原理和实现。在学习完Lecture 01后，我们可以开始尝试Assignment 01的第一部分，即BPE-Tokenization的实现\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 02: PyTorch Basics & Resource Accounts\n\n\nLecture02 介绍了PyTorch的基本概念和使用方法。可以将这节课当作一个review，复习一下之前学过的PyTorch知识点。同时，课程中介绍了一个 einops 的库，可以简化张量操作的代码编写。这节课也介绍了不同数据类型（如FP32, FP16, BF16等）在深度学习中的应用和优缺点。并且通过计算这些数据类型在内存中的占用，帮助我们理解为什么有些数据类型更适合在有限资源下进行训练, 并且在什么情况下需要应用混合精度训练（Mixed Precision Training），什么情况下需要用高精度的数据类型。在课程的最后，还介绍了不同的Optimizer（如SGD, Adam等）的基本原理和使用场景\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 03: LM Model Architecture & Hyperparameters\n\n\nLecture03 介绍了现代大语言模型的核心架构与超参数设计。课程对比了原始 Transformer 与主流 LLaMA-like 架构，总结了 pre-norm、RMSNorm、SwiGLU、RoPE 等关键设计的经验共识，并结合大量近期模型实践，讲解了 MLP 宽度比例、注意力头配置、模型深宽比与词表规模等超参数选择原则。同时还介绍了 z-loss、QK-Norm、MQA/GQA 等用于提升训练稳定性和推理效率的关键技巧。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 04: Introduction to MoE\n\n\nLecture 04 介绍了 MoE（Mixture of Experts）的基本概念和原理。从模型架构、路由机制、训练方法等方面进行了详细讲解，并讨论了 MoE 在自然语言处理中的应用和优势。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n\n\n\nAssignments\n\n\n\n\n\n\n\n\n\n\nAssignment 01: Tokenization & Language Modeling\n\n\nAssignment 01 要求我们实现一个简单的语言模型训练流程，涵盖数据预处理、模型定义、训练和评估等步骤。通过这个作业，我们将巩固对自然语言处理基础概念的理解，并掌握使用PyTorch进行深度学习模型开发的基本技能\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nEnvironment\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n Back to top"
   },
   {
     "objectID": "posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html",
@@ -2287,5 +2287,208 @@
     "title": "Lecture 04: Introduction to MoE",
     "section": "2.3 Training Objectives",
     "text": "2.3 Training Objectives\n如果说 Routing Function 解决的是“每个 token 去哪些专家”，那 Training Objectives 解决的是更现实的问题：“每个专家到底学什么”。在 MoE 里，单纯靠主任务 loss(Next token Prediction Loss) 往往不够.如果你只用语言模型的主损失（next-token loss）去训 MoE，router 很容易把所有 token 都送去同一个专家。结果是：一个专家变成“万能专家”，其它专家几乎从不被激活（dead experts），你白白存了一堆参数，性能也会变差。\n因此，课堂上也在反复强调的一点是：\n\n\n\n\n\n\nImportant\n\n\n\nMoE 的 forward 很简单，难点在于训练时如何避免 expert collapse，并让专家使用更均匀、更有效率。\n\n\n接下来，我们来看看这个训练问题难在哪里，以及有哪些常用的解决方法。\n\n2.3.1 The Challenge of MoE Training\nMoE 的优势在于，在训练时，我们只需要根据Router来选择激活部分（Top-k）专家进行计算，而不是所有专家都参与计算。这种稀疏激活的方式，可以大幅减少每一步的计算量（FLOPs），从而提升训练效率。但是，这种稀疏激活的方式也带来的挑战是：Top-K是不可微的，这使得我们无法直接使用梯度下降法来优化模型参数。因此，研究员们提出了几种方法来解决这个问题。\n\n2.3.1.1 RL Based Optimization\n一种思路是使用强化学习（Reinforcement Learning, RL）的方法来优化路由器的参数。\n\n\n\n\n\n\nRL 101\n\n\n\n对于不熟悉强化学习的同学，简单介绍一下。强化学习是一种机器学习方法，它通过与环境的交互来学习最优策略。在强化学习中，智能体（Agent）通过观察环境状态（State），选择动作（Action），并根据环境反馈的奖励（Reward）来调整策略，从而最大化累积奖励。 在交互的过程中，Agent所产生的动作通常是离散的（Discrete Action），这就导致了强化学习中的一个核心问题：如何在离散动作空间中进行有效的策略优化。常用的方法包括策略梯度（Policy Gradient）和Q-learning等。 因此，我们可以将MoE的路由问题视作一个强化学习问题，通过设计合适的奖励函数，来引导路由器学习更优的路由策略。\n\n\n但是，强化学习的方法通常比较复杂，且训练过程不稳定（Gradient Estimation Variance较大），因此在实际应用中并不常用。\n\n\n2.3.1.2 Stochastic Approximation\n另一种思路是使用随机近似（Stochastic Approximation）的方法来优化路由器的参数。具体来说，在 router 打分（logits）里注入噪声/扰动，让 top-K 的选择在训练早期“偶尔换路”，从而更像 bandit 的探索策略。其中一个经典的例子就是 Stochastic Jittering. 它通过在路由器的打分中添加高斯噪声，从而实现对专家的随机选择。接下来我们来看一下Stochastic Jittering的具体实现细节。\n\n2.3.1.2.1 Stochastic Jittering\nStochastic Jittering 的实现步骤如下：\n\nRouter 计算：对于每个 token 的 hidden state \\(h_i\\)，通过一个线性层计算每个专家的分数： \\[\ns_{i,j} = W_g h_i + b_g\n\\tag{5}\\]\n添加噪声：在每个专家的分数中添加高斯噪声： \\[\n\\tilde{s}_{i,j} = s_{i,j} + \\epsilon_{i,j}, \\quad \\epsilon_{i,j} \\sim \\mathcal{N}(0, \\sigma(x_i)^2)\n\\tag{6}\\]\nTop-K 选择：对于每个 token，选择添加噪声后的分数最高的 K 个专家： \\[\ng_{i, j} = \\begin{cases}\n\\tilde{s}_{i, j}, \\quad \\tilde{s}_{i, j} \\in \\text{Top-K}(\\tilde{s}_i) \\\\\n0, \\quad \\text{otherwise}\n\\end{cases}\n\\tag{7}\\]\n\n其中，\\(\\sigma(x_i)\\) 是噪声的标准差, 它是一个可学习的函数，通常通过一个小的神经网络来实现。通过调整噪声的大小，可以控制路由器的探索程度，从而提升模型的训练效果。\n那么这个Stochastic Jittering解决了什么问题呢？ 它其实解决了类似于“探索与利用”（Exploration vs. Exploitation）的问题。在MoE的训练过程中，我们希望路由器能够既能利用当前的知识（选择表现好的专家），又能探索新的可能性（尝试其他专家）。这于 \\(\\epsilon_{i,j} \\sim \\mathcal{N}(0, \\sigma(x_i)^2)\\) 中的噪声注入机制相呼应，通过在路由器的打分中添加噪声，可以让路由器在训练早期“偶尔换路”，从而更像 bandit 的探索策略。\n但是，它显然没有解决Top-K选择的不可微问题，并且，噪声的引入也可能导致训练过程的不稳定：\n\n噪声过大：可能导致路由器选择的专家过于随机，每个专家不够专门化，影响模型性能。\n噪声过小：可能无法有效促进探索，路由器仍然倾向于选择少数几个专家，导致专家崩溃（Expert Collapse）。\n\n\n\n\n\n\n\nNote\n\n\n\n课上还提到对 logits做乘法噪声（Multiplicative Perturbation），也是类似的思路，但是也有类似的问题。\n\n\n\n\n\n2.3.1.3 Auxiliary / Heuristic Balancing Losses\n既然MoE训练的难点在于避免专家崩溃（Expert Collapse），那么一个直接的思路就是在主任务损失（Cross Entropy Loss）之外，添加一些辅助损失（Auxiliary Losses）来鼓励专家的均衡使用。这样做的好处是，可以直接引导模型学习更均衡的专家使用策略，从而提升整体性能。在这里，我们介绍两种常用的辅助损失：Load Balancing Loss 和 Z-Loss。\n\n2.3.1.3.1 Load Balancing Loss\nLoad Balancing Loss 是Switch Transformer(Fedus, Zoph, and Shazeer 2022)中提出的一种辅助损失，旨在鼓励路由器均衡地使用所有专家。具体来说，它通过计算每个专家被选择的频率，并与理想的均衡分布进行比较，从而计算出负载均衡损失。其公式如下： $$\nL_{} = N _{i=1}^{N} f_i P_i $${#eq-load-balancing-loss}\n其中：\n\n\\(f_i\\) 是专家 \\(i\\) 被选择的频率, 定义为： \\[\nf_i = \\frac{1}{T} \\sum_{x \\in \\mathcal{B}} \\mathbb{1} \\{\\text{argmax } p(x) = i\\}\n\\tag{8}\\] \\(\\mathcal{B}\\) 是当前批次的样本集合，\\(T\\) 是token 的数量，\\(\\mathbb{1}\\) 是指示函数，当专家 \\(i\\) 被选择时取值为1，否则为0。直观来说：expert i 实际上“承担”了多少负载。\n\\(P_i\\) 是专家 \\(i\\) 的平均路由概率，定义为： \\[\nP_i = \\frac{1}{T} \\sum_{x \\in \\mathcal{B}} p_i(x)\n\\tag{9}\\] 其中，\\(p_i(x)\\) 是路由器对专家 \\(i\\) 的输出分数。直观来说：router “本来倾向”把多少概率分给 expert i。\n\n直观来看：如果某个 expert 实际拿了很多 tokens (\\(f_i\\) 很大），同时 router 还继续给它很高概率（\\(P_i\\) 很大），那么它的负载均衡损失就会很大，从而促使路由器减少对该专家的选择。反之亦然。\n通过最小化负载均衡损失，可以鼓励路由器均衡地使用所有专家，从而提升模型的训练效果。具体来说： - 如果某个专家被选择的次数远高于平均水平，那么它的负载均衡损失就会很大，从而促使路由器减少对该专家的选择。 - 反之，如果某个专家被选择的次数远低于平均水平，那么它的负载均衡损失也会很大，从而促使路由器增加对该专家的选择。\n\n\n\n\n\n\nDeepseek 根据上面的 Load Balancing Loss 设计了一个改进版本。它们提出：\n\n\n- Per-expert Balancing Loss：将上述的负载均衡损失，拓展为Top-K专家的情况。 - Per-Device Balancing Loss：在分布式训练中，考虑每个计算设备上的专家负载均衡。\n\n\n我们来看看Per-Device Balancing Loss做的是什么。 我们知道，在分布式训练中，不同的计算设备上可能会有不同数量的专家。如果某个设备上的专家被选择的次数远高于平均水平，那么这个GPU很可能过载，甚至损坏，从而影响整体训练效率。而有些设备上的专家可能几乎没有被选择，导致资源浪费。因此，DeepSeek提出了Per-Device Balancing Loss，旨在鼓励每个计算设备上的专家均衡使用。其公式如下： \\[\nL_{\\text{device}} = \\beta \\cdot D \\cdot \\sum_{d=1}^{D} f_d P_d\n\\tag{10}\\]\n\n\n其中： - \\(D\\) 是计算设备的数量。 - \\(f_d\\) 是设备 \\(d\\) 上的专家被选择的频率， - \\(P_d\\) 是设备 \\(d\\) 上的专家的平均路由概率。\n\n\n&gt;Per-expert 保证“专家别死”，Per-device 保证“GPU 别爆”。\n\n\n\nDeepSeek V3 还提出了另一种改进版本，它们称作Auxiliary Loss Free Balancing，其核心思想是：不再主要依赖 \\(\\mathcal{L}_{\\text{ExpBal}}\\) 来做负载均衡，而是通过调整路由器的偏置项（Bias）来实现均衡使用专家。具体来说：\n\\[\ng_{i,j} = \\being{cases}\ns_{i,j} + b_j, \\quad s_{i,j} \\in \\text{Top-K}(s_i) \\\\\n0, \\quad \\text{otherwise}\n\\end{cases}\n\\tag{11}\\]\n直观来看：\n\n如果 expert i 最近拿到 token 太小 → 增大\\(b_i\\) → 它更容易进入 top-K\n如果 expert i 拿到的 token 太多 → 减小 \\(b_i\\) → 它更不容易被选中\n\n这是一种在线控制/在线学习式的负载均衡：用规则更新 \\(b_i\\)， 而不是​通过梯度下降去学习 \\(P_i\\) ​\n\n\n\n\n\n\nFigure 9: 我们看到，不加负载均衡损失时，某些专家几乎没有被选择（Dead Experts）。而加入负载均衡损失后，专家的使用更加均衡。\n\n\n\n\n\n2.3.1.3.2 Z-Loss\nZ-Loss 是另一种常用的辅助损失，旨在鼓励路由器的输出分布更加均匀。其公式如下： \\[\nL_{z} = \\sum_{i} \\left( \\frac{p_i}{\\sum_{j} p_j} - \\frac{1}{E} \\right)^2\n\\tag{12}\\] 其中，\\(p_i\\) 是路由器对专家 \\(i\\) 的输出分数，\\(E\\) 是专家的总数。通过最小化这个损失，可以鼓励路由器的输出分布更加均匀，从而提升模型的训练效果。\n\n\n\n2.3.1.4 Loss Combination\n在实际应用中，MoE模型的总损失通常由主任务损失（Cross Entropy Loss）和辅助损失（Load Balancing Loss 和 Z-Loss）组成： \\[\nL_{total} = L_{CE} + \\lambda_{load} L_{load} + \\lambda_{z} L_{z}\n\\tag{13}\\] 其中，\\(L_{CE}\\) 是主任务损失，\\(L_{load}\\) 是负载均衡损失，\\(L_{z}\\) 是Z-Loss，\\(\\lambda_{load}\\) 和 \\(\\lambda_{z}\\)\n\n\n\n2.3.2 System Side\n在MoE模型的实现中，系统层面的优化也是非常重要的。由于MoE模型通常包含大量的专家，因此在分布式训练中，需要考虑如何高效地管理和调度这些专家，以提升训练效率和模型性能。但是，它们也带来了系统实现上的挑战，比如：\n\n每个 token 只激活少数专家（top-K）才能省 FLOPs，但专家往往分散在不同 GPU/节点上，于是训练要频繁做 all-to-all dispatch + all-to-all gather（把 token 发给对应专家算，再收回来合并）。这类通信是否划算取决于专家 FFN 计算是否“够大够重”，能否 amortize 通信成本。\n\n\n\n2.3.3 Fine-tuning MoE\nMoE fine-tune 更难：更容易不稳定（blow up）+ 更容易过拟合（train–val gap 大）。\n\n\n2.3.4 Upcycling\nMoE 的另一个有趣应用是“Upcycling”（回收利用）。具体来说，先训练好一个 dense Transformer，再把其中的 FFN/MLP 复制成多份专家（experts），加上一个 router，让模型从这一刻起变成 MoE；继续训练一段时间，就能用较低成本得到“总参数更大、推理仍稀疏激活”的 MoE。它解决了“从零训练 MoE 太慢太难”的问题。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "",
+    "text": "1 Preliminary\n  \n  1.1 Online Softmax\n  1.2 Recomputing\n  1.3 GPU’s Memory Model\n  1.4 Tiling\n  1.5 Matrix Calculus Cheatsheet\n  \n  2 Flash Attention\n  \n  2.1 Experiment\n  \n  3 Summary\n  4 Key Concepts\n  5 Q & A\n  6 Related resource & Further Reading\n  \n  6.1 Tiling Q，K， V\n  6.2 Online Softmax for Attention\n  6.3 Recomputing for Backward Pass\n  6.4 Kernel-Fusion"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#online-softmax",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#online-softmax",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "1.1 Online Softmax",
+    "text": "1.1 Online Softmax\nOnline Softmax（也叫 streaming softmax / one-pass softmax statistics）指的是：你不需要先把整行 logits \\(s_1,\\dots,s_D\\) 全部存下来再做 softmax，而是一边读入（或一边计算）logits，一边更新必要的统计量，最后得到 softmax 的归一化因子；在需要输出概率时再用这些统计量把每个 logit 变成概率。\n我们知道，对于一行向量 \\(s \\in \\mathbb{R}^{D}\\), 对于数值稳定的Softmax，我们要先减去它的 max value，这就导致了，对于计算softmax值，我们需要遍历3次这个数组。而Online Softmax则在保持原来的遍历两步的基础上，同时保持Max Softmax的特性。\n要实现这个概念的核心做法就：在遍历过程中，维护两个变量： - m：当前遍历过的logits的最大值 - l：当前遍历过的logits的归一化因子（即 \\(\\sum_{j=1}^{i} \\exp(s_j - m)\\)）\n具体的更新公式如下：\n\\[\n\\begin{split}\nm_{new} & = \\max(m, s_i) \\\\\nl & = l \\cdot \\exp(m - m_{new}) + \\exp(s_i - m_{new}) \\\\\nm & = m_{new}\n\\end{split}\n\\]\n下面是Python的实现代码：\ndef online_softmax(x):\n    m, l = float(\"-inf\"), 0.0\n\n    for i in range(len(x)):\n        m_new = max(m, x[i])\n        l = l * math.exp(m - m_new) + math.exp(x[i] - m_new)\n        m = m_new\n\n    softmax_values = [0.0] * len(x)\n    for i in range(len(x)):\n        softmax_values[i] = math.exp(x[i] - m) / l\n    return softmax_values\n\n至于为什么这个方法是正确的，我们可以通过数学归纳法来证明： - Base Case: 当只遍历了第一个元素 \\(s_1\\) 时，显然 \\(m = s_1\\)，\\(l = \\exp(s_1 - s_1) = 1\\)，此时 softmax 计算正确。 - Inductive Step: 假设在遍历到第 \\(i-1\\) 个元素时，\\(m\\) 和 \\(l\\) 已经正确地反映了前 \\(i-1\\) 个元素的最大值和归一化因子。现在考虑第 \\(i\\) 个元素 \\(s_i\\)： - 如果 \\(s_i &gt; m\\)，则新的最大值 \\(m_{new} = s_i\\)，归一化因子更新为： \\[\n      l_{new} = l \\cdot \\exp(m - s_i) + \\exp(s_i - s_i) = l \\cdot \\exp(m - s_i) + 1\n      \\] - 如果 \\(s_i \\leq m\\)，则最大值保持不变 \\(m_{new} = m\\)，归一化因子更新为： \\[\n     l_{new} = l \\cdot \\exp(m - m) + \\exp(s_i - m) = l + \\exp(s_i - m)\n     \\] 我们知道 \\(\\ell\\) 到遇到第 \\(i\\) 个元素时，在加上第 \\(i\\) 个元素的贡献之前，要根据当前的最大值进行调整，重新缩放之前的和，以确保数值稳定性。\n\n在这两种情况下，更新后的 \\(m_{new}\\) 和 \\(l_{new}\\) 仍然正确地反映了前 \\(i\\) 个元素的最大值和归一化因子。因此，通过数学归纳法，我们证明了该在线算法在遍历完整个数组后，能够正确计算出 softmax 的归一化因子。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#recomputing",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#recomputing",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "1.2 Recomputing",
+    "text": "1.2 Recomputing\nRecomputing 是一种以计算换内存的技术，它的核心思想是：在前向传播时，不保存某些中间结果，而是在反向传播时重新计算这些结果，从而节省内存空间。\n我们知道，在反向传播时，需要用到前向传播中的一些中间结果来计算梯度。如果我们在前向传播时保存了所有的中间结果，那么会占用大量的内存空间。通过 Recomputing，我们可以选择性地不保存某些中间结果，而是在反向传播时重新计算它们。举个例子：假如我们有一个MLP层\\(y=W_2\\cdot \\sigma(W_1 \\cdot x)\\)，常规的做法是，在前向传播时，保存 \\(h=W_1 \\cdot x\\) 和 \\(a=\\sigma(W_1 \\cdot x)\\) 的结果，以便在反向传播时计算梯度：\\(\\frac{\\partial L}{\\partial W_2} = d y \\, a^\\top\\) 和 \\(\\frac{\\partial L}{\\partial W_1} = (W_2^\\top d y) \\odot \\sigma'(a) \\, x^\\top\\)。但是，如果我们使用 Recomputing，我们可以选择不保存 \\(a = W_1 \\cdot x\\) 和 \\(\\sigma(a)\\)，而是在反向传播时重新计算它们。这样，我们就节省了内存空间，但需要额外的计算时间来重新计算这些中间结果。\n这种技术的好处就是，减少了内存的使用，同时降低了读写内存的带宽需求，从而提升了整体的计算效率。\n通过PyTorch 的 torch.autograd.Function，我们可以很方便地实现 Recomputing。下面是一个简单的例子："
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#gpus-memory-model",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#gpus-memory-model",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "1.3 GPU’s Memory Model",
+    "text": "1.3 GPU’s Memory Model\n在理解 Flash Attention 之前，我们需要先了解一下 GPU 的内存模型。在这里，主要介绍一下 GPU 的几种主要内存类型：\n\nHigh Bandwidth Memory (HBM): 这是 GPU 上的主要内存类型，具有高带宽和较低的延迟。HBM 通常用于存储大规模的数据，如模型参数和输入数据。\nSRAM: 这是 GPU 上的片上内存，具有非常高的带宽和低延迟。SRAM 通常用于存储临时数据，如中间计算结果。(SRAM 还可以细分成 L1 Cache 和 L2 Cache， Register， Shared Memory 等在这里我们统称为 SRAM)\n\n因此我们希望，尽可能多的计算在 SRAM 上完成，减少对 HBM 的读写，从而提升整体的计算效率。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#tiling",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#tiling",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "1.4 Tiling",
+    "text": "1.4 Tiling"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#matrix-calculus-cheatsheet",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#matrix-calculus-cheatsheet",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "1.5 Matrix Calculus Cheatsheet",
+    "text": "1.5 Matrix Calculus Cheatsheet\n在这里介绍一些常用的矩阵微积分公式，以便我们在后续的推导中使用：\n\n\n\n\n\n\n\\(O=PV, \\text{where } O \\in \\mathbb{R}^{m \\times n}, P \\in \\mathbb{R}^{m \\times k},  V \\in \\mathbb{R}^{k \\times n}\\)\n\n\n\\[\n\\frac{\\partial L}{\\partial P} = \\frac{\\partial L}{\\partial O} V^\\top, \\quad \\frac{\\partial L}{\\partial V} = P^\\top \\frac{\\partial L}{\\partial O}\n\\]\n\n\n\n\\(P = \\text{softmax}(S), \\text{where } P \\in \\mathbb{R}^{m \\times n}, S \\in \\mathbb{R}^{m \\times n}\\)\n\\[\n\\frac{\\partial L}{\\partial S} = P \\odot \\left( \\frac{\\partial L}{\\partial P} - \\text{row\\_sum}\\left(P \\odot \\frac{\\partial L}{\\partial P}\\right) \\right)\n\\]\n其中：\\(\\odot\\) 表示逐元素乘法，\\(\\text{row\\_sum}(\\cdot)\\) 表示对每一行求和并广播。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#experiment",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#experiment",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "2.1 Experiment",
+    "text": "2.1 Experiment"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#tiling-qk-v",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#tiling-qk-v",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "6.1 Tiling Q，K， V",
+    "text": "6.1 Tiling Q，K， V\nFlash Attention 首先将 Q，K，V 按块（tiling）加载到片上内存（SRAM/Shared Memory）中进行计算。假设我们有一个注意力矩阵 \\(A = \\text{softmax}(QK^\\top)V\\)，其中 \\(Q \\in \\mathbb{R}^{N \\times D}\\)，\\(K \\in \\mathbb{R}^{M \\times D}\\)，\\(V \\in \\mathbb{R}^{M \\times D}\\)。我们可以将 \\(Q\\) 分成 \\(N_b\\) 个块，每个块大小为 \\(B_n \\times D\\)，将 \\(K\\) 和 \\(V\\) 分成 \\(M_b\\) 个块，每个块大小为 \\(B_m \\times D\\)。这样，我们可以将注意力矩阵的计算分解为多个小块的计算，从而减少对 HBM 的读写。\n不过，这里有一个问题就是softmax的计算：它需要一整行的logits才能计算出归一化因子，而Flash Attention是按块计算的，没法一次性拿到整行logits。那么Flash Attention是如何解决这个问题的呢？答案就是：Online Softmax。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#online-softmax-for-attention",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#online-softmax-for-attention",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "6.2 Online Softmax for Attention",
+    "text": "6.2 Online Softmax for Attention\nFlash Attention 使用 Online Softmax 来计算注意力矩阵的 softmax 部分。具体来说，Flash Attention 在计算每个块的注意力时，维护两个变量：m 和 l，分别表示当前块的最大值和归一化因子。在计算每个块的注意力时，Flash Attention 会更新 m 和 l，从而实现在线计算 softmax 的归一化因子。\n具体来说，假设我们正在计算第 \\(i\\) 个块的注意力，我们有：\n\\[\nS_{i,j} = Q_i K_j^\\top\n\\]\n然后，我们使用 Online Softmax 的更新公式来更新 m 和 l：\n\\[\n\\begin{split}\nm_{new} & = \\max(m, \\max(S_{i,j})) \\\\\nl & = l \\cdot \\exp(m - m_{new}) + \\sum_{k} \\exp(S_{i,j,k} - m_{new}) \\\\\nm & = m_{new}\n\\end{split}\n\\]\n通过这种方式，Flash Attention 可以在不保存完整注意力矩阵的情况下，计算出正确的 softmax 归一化因子。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#recomputing-for-backward-pass",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#recomputing-for-backward-pass",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "6.3 Recomputing for Backward Pass",
+    "text": "6.3 Recomputing for Backward Pass\n我们知道，在反向传播时，需要用到前向传播中的一些中间结果来计算梯度。如果我们在前向传播时保存了所有的中间结果，那么会占用大量的内存空间。Flash Attention 通过 Recomputing 技术，选择性地不保存某些中间结果，而是在反向传播时重新计算它们，从而节省内存空间。具体来说，Flash Attention 在前向传播时，不保存完整的注意力矩阵 \\(S\\) 和 softmax 矩阵 \\(P\\)，而是在反向传播时重新计算它们。这样，Flash Attention 就节省了大量的内存空间，同时降低了读写内存的带宽需求，从而提升了整体的计算效率。\n具体来说，假设我们有一个注意力矩阵 \\(A = PV\\)，其中 \\(P = \\text{softmax}(S)\\)。在反向传播时，我们需要计算 \\(\\frac{\\partial L}{\\partial Q}\\)，\\(\\frac{\\partial L}{\\partial K}\\) 和 \\(\\frac{\\partial L}{\\partial V}\\)。Flash Attention 通过重新计算 \\(S\\) 和 \\(P\\) 来实现这一点：\n\\[\n\\begin{split}\n\\frac{\\partial L}{\\partial V} & = P^\\top \\frac{\\partial L}{\\partial A} \\\\\n\\frac{\\partial L}{\\partial P} & = \\frac{\\partial L}{\\partial A} V^\\top \\\\\n\\frac{\\partial L}{\\partial S} & = P \\odot \\left( \\frac{\\partial L}{\\partial P} - \\text{row\\_sum}\\left(P \\odot \\frac{\\partial L}{\\partial P}\\right) \\right) \\\\\n\\frac{\\partial L}{\\partial Q} & = \\frac{\\partial L}{\\partial S} K \\\\\n\\frac{\\partial L}{\\partial K} & = Q^\\top \\frac{\\partial L}{\\partial S}\n\\end{split}\n\\]\n通过这种方式，Flash Attention 在反向传播时重新计算了必要的中间结果，从而节省了内存空间，同时降低了读写内存的带宽需求。"
+  },
+  {
+    "objectID": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#kernel-fusion",
+    "href": "posts/PapersWithCode/17-flash-attention/Flash Attention.html#kernel-fusion",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)",
+    "section": "6.4 Kernel-Fusion",
+    "text": "6.4 Kernel-Fusion\nFlash Attention 通过将多个计算步骤融合到一个 GPU kernel 中，减少了内存读写的开销，从而提升了整体的计算效率。具体来说，Flash Attention 将 QKᵀ 的计算、softmax 的计算和与 V 的乘法计算融合到一个 kernel 中，从而减少了中间结果的存储和读取。通过这种方式，Flash Attention 可以在一个 kernel 中完成所有的计算，从而减少了内存读写的开销。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Assignments/Ass05/ass05.html",
+    "href": "posts/LearningNotes/CS336/Assignments/Ass05/ass05.html",
+    "title": "1 Environment",
+    "section": "",
+    "text": "Dataset https://huggingface.co/datasets/nlile/hendrycks-MATH-benchmark\n\n1 Environment\nInstall code\ngit clone https://github.com/YYZhang2025/Stanford-CS336.git\ncd Stanford-CS336/assignment5-alignment\nInstall package\npip install uv \nuv sync --no-install-package flash-attn\nuv sync\nsource .venv/bin/activate\n\nhf download YuYangZhang/Reasoning-Dataset  --repo-type dataset --local-dir data\n\npython download_model.py \\\n  --repo-id Qwen/Qwen2.5-Math-1.5B \\\n  --save-dir models/Qwen2.5-Math-1.5B \\\n  --method snapshot --no-symlinks --verify\necho \"WANDB_API_KEY=cce4a87f1433d97af85ab9f18df5253a95f3e4b5\" &gt;&gt; .env\n\n\n2 Supervised Fine Tuning\npython train_sft.py\n\npython cs336_alignment/eval.py\n\n\n3 Expert Iteration\nThis is the fireture {#fig-some}\n\n\n4 GRPO\n\\[\n\\mathcal{N} = a\n\\tag{1}\\]\nThis is the conent (Equation 1)\n\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html",
+    "href": "posts/Blogs/LLM-RL/post.html",
+    "title": "Reinforcement Learning in LLM",
+    "section": "",
+    "text": "1 Review of Reinforcement Learning\n  2 Mapping LLM Post Training as RL Problems\n  3 Reinforcement Learning from Human Feedback(RLHF)\n  \n  3.1 PPO\n  3.2 DPO\n  3.3 REINFORCE Leave One-Out (RLOO)\n  3.4 ReMax\n  3.5 REINFORCE++\n  \n  4 Reinforcement Learning from Verified Rewards(RLVR)\n  \n  4.1 GRPO\n  4.2 Dr.GRPO\n  4.3 DAPO\n  4.4 GSPO\n  4.5 CISPO\n  4.6 SAPO\n  4.7 GDPO\n  \n  5 LLM-RL in Practice\n  \n  5.1 TRL: Transformer Reinforcement Learning\n  5.2 Verl: Volcano Engine Reinforcement Learning for LLMs\n  5.3 OpenRLHF\n  5.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)\n  \n  6 Challenges & Further Direction\n  7 Summary"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#ppo",
+    "href": "posts/Blogs/LLM-RL/post.html#ppo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "3.1 PPO",
+    "text": "3.1 PPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#dpo",
+    "href": "posts/Blogs/LLM-RL/post.html#dpo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "3.2 DPO",
+    "text": "3.2 DPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#reinforce-leave-one-out-rloo",
+    "href": "posts/Blogs/LLM-RL/post.html#reinforce-leave-one-out-rloo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "3.3 REINFORCE Leave One-Out (RLOO)",
+    "text": "3.3 REINFORCE Leave One-Out (RLOO)"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#remax",
+    "href": "posts/Blogs/LLM-RL/post.html#remax",
+    "title": "Reinforcement Learning in LLM",
+    "section": "3.4 ReMax",
+    "text": "3.4 ReMax"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#reinforce",
+    "href": "posts/Blogs/LLM-RL/post.html#reinforce",
+    "title": "Reinforcement Learning in LLM",
+    "section": "3.5 REINFORCE++",
+    "text": "3.5 REINFORCE++"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#grpo",
+    "href": "posts/Blogs/LLM-RL/post.html#grpo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.1 GRPO",
+    "text": "4.1 GRPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#dr.grpo",
+    "href": "posts/Blogs/LLM-RL/post.html#dr.grpo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.2 Dr.GRPO",
+    "text": "4.2 Dr.GRPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#dapo",
+    "href": "posts/Blogs/LLM-RL/post.html#dapo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.3 DAPO",
+    "text": "4.3 DAPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#gspo",
+    "href": "posts/Blogs/LLM-RL/post.html#gspo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.4 GSPO",
+    "text": "4.4 GSPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#cispo",
+    "href": "posts/Blogs/LLM-RL/post.html#cispo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.5 CISPO",
+    "text": "4.5 CISPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#sapo",
+    "href": "posts/Blogs/LLM-RL/post.html#sapo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.6 SAPO",
+    "text": "4.6 SAPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#gdpo",
+    "href": "posts/Blogs/LLM-RL/post.html#gdpo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.7 GDPO",
+    "text": "4.7 GDPO"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#trl-transformer-reinforcement-learning",
+    "href": "posts/Blogs/LLM-RL/post.html#trl-transformer-reinforcement-learning",
+    "title": "Reinforcement Learning in LLM",
+    "section": "5.1 TRL: Transformer Reinforcement Learning",
+    "text": "5.1 TRL: Transformer Reinforcement Learning\nLink"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#verl-volcano-engine-reinforcement-learning-for-llms",
+    "href": "posts/Blogs/LLM-RL/post.html#verl-volcano-engine-reinforcement-learning-for-llms",
+    "title": "Reinforcement Learning in LLM",
+    "section": "5.2 Verl: Volcano Engine Reinforcement Learning for LLMs",
+    "text": "5.2 Verl: Volcano Engine Reinforcement Learning for LLMs\nLink"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#openrlhf",
+    "href": "posts/Blogs/LLM-RL/post.html#openrlhf",
+    "title": "Reinforcement Learning in LLM",
+    "section": "5.3 OpenRLHF",
+    "text": "5.3 OpenRLHF\nLink"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#swift-scalable-lightweight-infrastructure-for-fine-tuning",
+    "href": "posts/Blogs/LLM-RL/post.html#swift-scalable-lightweight-infrastructure-for-fine-tuning",
+    "title": "Reinforcement Learning in LLM",
+    "section": "5.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)",
+    "text": "5.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)\nLink"
   }
 ]
