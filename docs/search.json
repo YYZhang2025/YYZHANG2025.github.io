@@ -1166,7 +1166,7 @@
     "href": "posts/Blogs/blogs_index.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "Reinforcement Learning in LLM\n\n\n\nTransformer\n\nLarge Language Model\n\nReinforcement Learning\n\n\n\nIn this blog, we will explore how reinforcement learning is applied in large language models (LLMs) to enhance their performance and adaptability. It will start with mapping LLMs to the RL framework, then we will dive into different RL algorithms used in LLMs (RLHF), such as PPO and DPO. Than we will explore the the RLVR technique and explore the algorithms such as GRPO, GSPO, DAPO, SAPO and the most SOTA GDPO. Than we will discuss current LLM-RL training framework such as Verl. Finally, we will discuss the challenges and future directions of applying RL in LLMs.\n\n\n\n\n\n2026-01-25\n\n\nYuyang Zhang\n\n1 min\n\n69 words\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\n\nMathematics\n\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications in various fields such as machine learning, data science, and artificial intelligence. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n5 min\n\n951 words\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\n\nDeep Learning\n\nSummary\n\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n14 min\n\n2,766 words\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as in the Image and Video to unify the position encoding.\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n16 min\n\n3,174 words\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\n\nGenerative-Model\n\nDiffusion-Model\n\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic differential equations and how this connects to Flow Matching. We then highlight key model variants such as Stable Diffusion and Movie Gen, discussing their architectures and applications. Finally, we broaden the scope to examine how diffusion models are being adapted beyond image generation, including diffusion policies in reinforcement learning and their emerging role in large language models (LLMs).\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n26 min\n\n5,001 words\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n\n2025-10-01\n\n\nYuyang Zhang\n\n1 min\n\n88 words\n\n\n\n\n\n\n\nLLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n\n2025-09-25\n\n\nYuyang Zhang\n\n28 min\n\n5,428 words\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "Reinforcement Learning in LLM\n\n\n\nTransformer\n\nLarge Language Model\n\nReinforcement Learning\n\n\n\nIn this blog, we will explore how reinforcement learning is applied in large language models (LLMs) to enhance their performance and adaptability. It will start with mapping LLMs to the RL framework, then we will dive into different RL algorithms used in LLMs (RLHF), such as PPO and DPO. Than we will explore the the RLVR(Reinforcement Learning with Verifiable Rewards) technique and explore the algorithms such as GRPO, GSPO, DAPO, SAPO and the most SOTA GDPO. Than we will discuss current LLM-RL training framework such as Verl. Finally, we will discuss the challenges and future directions of applying RL in LLMs.\n\n\n\n\n\n2026-01-25\n\n\nYuyang Zhang\n\n23 min\n\n4,530 words\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\n\nMathematics\n\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications in various fields such as machine learning, data science, and artificial intelligence. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n5 min\n\n951 words\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\n\nDeep Learning\n\nSummary\n\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n14 min\n\n2,766 words\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as in the Image and Video to unify the position encoding.\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n16 min\n\n3,174 words\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\n\nGenerative-Model\n\nDiffusion-Model\n\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic differential equations and how this connects to Flow Matching. We then highlight key model variants such as Stable Diffusion and Movie Gen, discussing their architectures and applications. Finally, we broaden the scope to examine how diffusion models are being adapted beyond image generation, including diffusion policies in reinforcement learning and their emerging role in large language models (LLMs).\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n26 min\n\n5,001 words\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\n\nLarge Language Model\n\nInference\n\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n\n2025-10-01\n\n\nYuyang Zhang\n\n1 min\n\n88 words\n\n\n\n\n\n\n\nLLM Part1: Architecture\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.\n\n\n\n\n\n2025-09-25\n\n\nYuyang Zhang\n\n28 min\n\n5,428 words\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n14 min\n\n2,648 words\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/Projects/Qwen3-VL/Qwen3-VL.html",
@@ -2377,118 +2377,209 @@
     "href": "posts/Blogs/LLM-RL/post.html",
     "title": "Reinforcement Learning in LLM",
     "section": "",
-    "text": "1 Review of Reinforcement Learning\n  2 Mapping LLM Post Training as RL Problems\n  3 Reinforcement Learning from Human Feedback(RLHF)\n  \n  3.1 PPO\n  3.2 DPO\n  3.3 REINFORCE Leave One-Out (RLOO)\n  3.4 ReMax\n  3.5 REINFORCE++\n  \n  4 Reinforcement Learning from Verified Rewards(RLVR)\n  \n  4.1 GRPO\n  4.2 Dr.GRPO\n  4.3 DAPO\n  4.4 GSPO\n  4.5 CISPO\n  4.6 SAPO\n  4.7 GDPO\n  \n  5 LLM-RL in Practice\n  \n  5.1 TRL: Transformer Reinforcement Learning\n  5.2 Verl: Volcano Engine Reinforcement Learning for LLMs\n  5.3 OpenRLHF\n  5.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)\n  \n  6 Challenges & Further Direction\n  7 Summary"
+    "text": "1 Preliminaries\n  \n  1.1 Entropy\n  1.2 KL-Divergence\n  1.3 Monte Carlo Estimation\n  1.4 Varaince Reduction Trick\n  1.5 Importance Sampling\n  \n  2 Notations\n  3 Review of Reinforcement Learning\n  \n  3.1 On Policy vs Off Policy\n  \n  4 Mapping LLM Post Training as RL Problems\n  \n  4.1 State, Action, Policy in LLM\n  4.2 Reward Design Challenges in LLM\n  \n  5 Reinforcement Learning from Human Feedback(RLHF)\n  \n  5.1 PPO\n  5.2 DPO\n  5.3 REINFORCE Leave One-Out (RLOO)\n  5.4 ReMax\n  5.5 REINFORCE++\n  \n  6 Reinforcement Learning from Verified Rewards(RLVR)\n  \n  6.1 GRPO\n  6.2 Dr.GRPO\n  6.3 DAPO\n  6.4 GSPO\n  6.5 CISPO\n  6.6 SAPO\n  6.7 GDPO\n  \n  7 LLM-RL in Practice\n  \n  7.1 TRL: Transformer Reinforcement Learning\n  7.2 verl: Volcano Engine Reinforcement Learning for LLMs\n  7.3 OpenRLHF\n  7.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)\n  \n  8 Challenges & Further Direction\n  9 Summary"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#ppo",
     "href": "posts/Blogs/LLM-RL/post.html#ppo",
     "title": "Reinforcement Learning in LLM",
-    "section": "3.1 PPO",
-    "text": "3.1 PPO"
+    "section": "5.1 PPO",
+    "text": "5.1 PPO\nFollowing the foundational work of InstructGPT (Ouyang et al. 2022), Proximal Policy Optimization (PPO)(Schulman et al. 2017) has become one of the most widely used algorithms for implementing RLHF in large language models. We can see the PPO algorithm in the Figure 2. It has several steps:\n\nCollecting Human Feedback: Initially, the LLM generates responses to a set of prompts. Human evaluators then review these responses and provide feedback, typically in the form of rankings or ratings. This feedback serves as the basis for training a reward model.\nTraining a Reward Model: A separate reward model is trained to predict the human feedback based on the generated responses. This model learns to assign higher scores to responses that align better with human preferences\nFine-Tuning with PPO: The LLM is then fine-tuned using the PPO algorithm, which optimizes the policy (the LLM) to maximize the expected reward as predicted by the reward model. PPO uses a clipped objective function to ensure that policy updates are not too large, maintaining stability during training.\n\nHere we just focus on the step 3, the PPO fine-tuning process. The PPO algorithm can be summarized as follows:\n\n\n\\begin{algorithm} \\caption{Proximal Policy Optimization (PPO) for RLHF (LLMs)} \\begin{algorithmic} \\Require Initial policy $\\pi_{\\theta_{old}}$ with parameters $\\theta_{old}$ \\Require Reward model $R_{\\phi}$ trained on human feedback \\Require Reference policy $\\pi_{\\text{ref}}$ (e.g., SFT model) \\Require Value function (critic) $V_{\\psi}$ with parameters $\\psi$ \\Require Clipping parameter $\\epsilon$, KL coefficient $\\beta$ \\Require Discount $\\gamma$, GAE parameter $\\lambda$ \\Require Number of PPO epochs $K$, minibatch size $m$ \\Require Learning rates $\\alpha_{\\theta}, \\alpha_{\\psi}$ \\While{not converged} \\State Sample a batch of prompts $\\{x_i\\}_{i=1}^{B}$ \\State Roll out $\\pi_{\\theta_{old}}$ to get responses $\\{y_i\\}$ with token actions $\\{a_{i,t}\\}_{t=1}^{T_i}$ \\State Compute old log-probs $\\ell^{old}_{i,t} \\gets \\log \\pi_{\\theta_{old}}(a_{i,t}\\mid x_i, a_{i,&lt;t})$ \\State Compute ref log-probs $\\ell^{ref}_{i,t} \\gets \\log \\pi_{\\text{ref}}(a_{i,t}\\mid x_i, a_{i,&lt;t})$ \\State Compute sequence reward $r^{RM}_i \\gets R_{\\phi}(x_i, y_i)$ \\Comment{Define per-timestep rewards with KL penalty (token-level) + terminal reward} \\For{$i = 1$ \\textbf{to} $B$} \\For{$t = 1$ \\textbf{to} $T_i$} \\State $\\text{kl}_{i,t} \\gets \\ell^{old}_{i,t} - \\ell^{ref}_{i,t}$ \\State $r_{i,t} \\gets -\\beta \\cdot \\text{kl}_{i,t}$ \\EndFor \\State $r_{i,T_i} \\gets r_{i,T_i} + r^{RM}_i$ \\Comment{terminal reward added at last token} \\EndFor \\For{$i = 1$ \\textbf{to} $B$} \\Comment{Compute advantages via GAE using critic $V_{\\psi}$} \\State $A_{i,T_i+1} \\gets 0$ \\For{$t = T_i$ \\textbf{down to} $1$} \\State $\\delta_{i,t} \\gets r_{i,t} + \\gamma V_{\\psi}(s_{i,t+1}) - V_{\\psi}(s_{i,t})$ \\State $A_{i,t} \\gets \\delta_{i,t} + \\gamma \\lambda A_{i,t+1}$ \\State $\\hat{R}_{i,t} \\gets A_{i,t} + V_{\\psi}(s_{i,t})$ \\Comment{return/target} \\EndFor \\EndFor \\For{$epoch = 1$ \\textbf{to} $K$} \\Comment{Optimize policy and value for $K$ epochs over minibatches} \\State Shuffle all token positions $(i,t)$ and split into minibatches of size $m$ \\For{\\textbf{each} minibatch $\\mathcal{M}$} \\State $\\ell_{i,t} \\gets \\log \\pi_{\\theta}(a_{i,t}\\mid s_{i,t}) \\quad \\forall (i,t)\\in\\mathcal{M}$ \\State $\\rho_{i,t} \\gets \\exp(\\ell_{i,t} - \\ell^{old}_{i,t})$ \\State $\\tilde{\\rho}_{i,t} \\gets \\text{clip}(\\rho_{i,t}, 1-\\epsilon, 1+\\epsilon)$ \\State $L^{\\text{clip}}(\\theta) \\gets -\\mathbb{E}_{(i,t)\\in\\mathcal{M}}\\left[\\min(\\rho_{i,t}A_{i,t}, \\tilde{\\rho}_{i,t}A_{i,t})\\right]$ \\State $L^{V}(\\psi) \\gets \\mathbb{E}_{(i,t)\\in\\mathcal{M}}\\left[(V_{\\psi}(s_{i,t}) - \\hat{R}_{i,t})^2\\right]$ \\State $\\theta \\gets \\theta - \\alpha_{\\theta}\\nabla_{\\theta} L^{\\text{clip}}(\\theta)$ \\State $\\psi \\gets \\psi - \\alpha_{\\psi}\\nabla_{\\psi} L^{V}(\\psi)$ \\EndFor \\EndFor \\State $\\theta_{old} \\gets \\theta$ \\Comment{sync old policy for next rollout} \\EndWhile \\end{algorithmic} \\end{algorithm}"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#dpo",
     "href": "posts/Blogs/LLM-RL/post.html#dpo",
     "title": "Reinforcement Learning in LLM",
-    "section": "3.2 DPO",
-    "text": "3.2 DPO"
+    "section": "5.2 DPO",
+    "text": "5.2 DPO\nDirect Preference Optimization (DPO) (Rafailov et al. 2024) is a novel approach for fine-tuning large language models using human feedback without the need for a separate reward model.\n\n\n\n\n\n\nFigure 3: Overview of the Direct Preference Optimization (DPO) process. DPO directly optimizes the policy using human preference data by adjusting the model’s logits based on the preference between pairs of responses, eliminating the need for a separate reward model."
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#reinforce-leave-one-out-rloo",
     "href": "posts/Blogs/LLM-RL/post.html#reinforce-leave-one-out-rloo",
     "title": "Reinforcement Learning in LLM",
-    "section": "3.3 REINFORCE Leave One-Out (RLOO)",
-    "text": "3.3 REINFORCE Leave One-Out (RLOO)"
+    "section": "5.3 REINFORCE Leave One-Out (RLOO)",
+    "text": "5.3 REINFORCE Leave One-Out (RLOO)"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#remax",
     "href": "posts/Blogs/LLM-RL/post.html#remax",
     "title": "Reinforcement Learning in LLM",
-    "section": "3.4 ReMax",
-    "text": "3.4 ReMax"
+    "section": "5.4 ReMax",
+    "text": "5.4 ReMax"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#reinforce",
     "href": "posts/Blogs/LLM-RL/post.html#reinforce",
     "title": "Reinforcement Learning in LLM",
-    "section": "3.5 REINFORCE++",
-    "text": "3.5 REINFORCE++"
+    "section": "5.5 REINFORCE++",
+    "text": "5.5 REINFORCE++"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#grpo",
     "href": "posts/Blogs/LLM-RL/post.html#grpo",
     "title": "Reinforcement Learning in LLM",
-    "section": "4.1 GRPO",
-    "text": "4.1 GRPO"
+    "section": "6.1 GRPO",
+    "text": "6.1 GRPO"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#dr.grpo",
     "href": "posts/Blogs/LLM-RL/post.html#dr.grpo",
     "title": "Reinforcement Learning in LLM",
-    "section": "4.2 Dr.GRPO",
-    "text": "4.2 Dr.GRPO"
+    "section": "6.2 Dr.GRPO",
+    "text": "6.2 Dr.GRPO"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#dapo",
     "href": "posts/Blogs/LLM-RL/post.html#dapo",
     "title": "Reinforcement Learning in LLM",
-    "section": "4.3 DAPO",
-    "text": "4.3 DAPO"
+    "section": "6.3 DAPO",
+    "text": "6.3 DAPO"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#gspo",
     "href": "posts/Blogs/LLM-RL/post.html#gspo",
     "title": "Reinforcement Learning in LLM",
-    "section": "4.4 GSPO",
-    "text": "4.4 GSPO"
+    "section": "6.4 GSPO",
+    "text": "6.4 GSPO"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#cispo",
     "href": "posts/Blogs/LLM-RL/post.html#cispo",
     "title": "Reinforcement Learning in LLM",
-    "section": "4.5 CISPO",
-    "text": "4.5 CISPO"
+    "section": "6.5 CISPO",
+    "text": "6.5 CISPO"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#sapo",
     "href": "posts/Blogs/LLM-RL/post.html#sapo",
     "title": "Reinforcement Learning in LLM",
-    "section": "4.6 SAPO",
-    "text": "4.6 SAPO"
+    "section": "6.6 SAPO",
+    "text": "6.6 SAPO"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#gdpo",
     "href": "posts/Blogs/LLM-RL/post.html#gdpo",
     "title": "Reinforcement Learning in LLM",
-    "section": "4.7 GDPO",
-    "text": "4.7 GDPO"
+    "section": "6.7 GDPO",
+    "text": "6.7 GDPO"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#trl-transformer-reinforcement-learning",
     "href": "posts/Blogs/LLM-RL/post.html#trl-transformer-reinforcement-learning",
     "title": "Reinforcement Learning in LLM",
-    "section": "5.1 TRL: Transformer Reinforcement Learning",
-    "text": "5.1 TRL: Transformer Reinforcement Learning\nLink"
+    "section": "7.1 TRL: Transformer Reinforcement Learning",
+    "text": "7.1 TRL: Transformer Reinforcement Learning\nLink"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#verl-volcano-engine-reinforcement-learning-for-llms",
     "href": "posts/Blogs/LLM-RL/post.html#verl-volcano-engine-reinforcement-learning-for-llms",
     "title": "Reinforcement Learning in LLM",
-    "section": "5.2 Verl: Volcano Engine Reinforcement Learning for LLMs",
-    "text": "5.2 Verl: Volcano Engine Reinforcement Learning for LLMs\nLink"
+    "section": "7.2 verl: Volcano Engine Reinforcement Learning for LLMs",
+    "text": "7.2 verl: Volcano Engine Reinforcement Learning for LLMs\nLink"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#openrlhf",
     "href": "posts/Blogs/LLM-RL/post.html#openrlhf",
     "title": "Reinforcement Learning in LLM",
-    "section": "5.3 OpenRLHF",
-    "text": "5.3 OpenRLHF\nLink"
+    "section": "7.3 OpenRLHF",
+    "text": "7.3 OpenRLHF\nLink"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html#swift-scalable-lightweight-infrastructure-for-fine-tuning",
     "href": "posts/Blogs/LLM-RL/post.html#swift-scalable-lightweight-infrastructure-for-fine-tuning",
     "title": "Reinforcement Learning in LLM",
-    "section": "5.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)",
-    "text": "5.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)\nLink"
+    "section": "7.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)",
+    "text": "7.4 SWIFT (Scalable lightWeight Infrastructure for Fine-Tuning)\nLink"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#entropy",
+    "href": "posts/Blogs/LLM-RL/post.html#entropy",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.1 Entropy",
+    "text": "1.1 Entropy"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#kl-divergence",
+    "href": "posts/Blogs/LLM-RL/post.html#kl-divergence",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.2 KL-Divergence",
+    "text": "1.2 KL-Divergence\nThe Kullback-Leibler (KL) Divergence is a measure of how one probability distribution diverges from a second, expected probability distribution. In reinforcement learning, KL-Divergence is often used to quantify the difference between two policies, which is useful for policy optimization and regularization. The KL-Divergence from distribution \\(P\\) to distribution \\(Q\\) is defined as: \\[\nD_{KL}(P || Q) = \\sum_{x} P(x) \\log \\frac{P(x)}{Q(x)}\n\\tag{3}\\]\nFor continuous distributions, the KL-Divergence is defined as: \\[\nD_{KL}(P || Q) = \\int P(x) \\log \\frac{P(x)}{Q(x)} dx\n\\tag{4}\\]\nThe KL-Divergence has several important properties:\n\nNon-negativity: \\(D_{KL}(P || Q) \\geq 0\\), with equality if and only if \\(P = Q\\) almost everywhere.\nAsymmetry: \\(D_{KL}(P || Q) \\neq D_{KL}(Q || P)\\) in general.\n\ndef compute_kl_divergence(P: torch.Tensor, Q: torch.Tensor) -&gt; torch.Tensor:\n    kl_div = torch.sum(P * torch.log(P / Q))\n    return kl_div\n\n\n\n\n\n\nNote\n\n\n\nFor those who want to dive deeper into Entropy and KL-Divergence, I highly recommend to check out my previous blog: From Entropy to KL Divergence: A Comprehensive Guide"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#monte-carlo-estimation",
+    "href": "posts/Blogs/LLM-RL/post.html#monte-carlo-estimation",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.3 Monte Carlo Estimation",
+    "text": "1.3 Monte Carlo Estimation"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#varaince-reduction-trick",
+    "href": "posts/Blogs/LLM-RL/post.html#varaince-reduction-trick",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.4 Varaince Reduction Trick",
+    "text": "1.4 Varaince Reduction Trick\nOne thing to note about Monte Carlo estimation is that it can suffer from high variance, especially when the function being estimated has high variability or when the number of samples is limited. To mitigate this issue, various variance reduction techniques can be employed, such as:\n\nControl Variates: This technique involves introducing a control variate, which is a function with a known expectation that is correlated with the function of interest. By adjusting the estimate using the control variate, we can reduce the variance of the estimator.\nAntithetic Variates: This method involves generating pairs of negatively correlated samples to reduce variance. By averaging the results from these pairs, we can achieve a more stable estimate.\n\nWe can also subtract a baseline from the function being estimated to reduce variance without introducing bias. For example, when estimating the expected return in reinforcement learning, we can subtract a baseline value \\(b\\) from the return: \\[\n\\mathbb{E}_{x \\sim p(x)}[f(x)] = \\mathbb{E}_{x \\sim p(x)}[f(x) - b] + b\n\\tag{7}\\]\nWhere \\(b\\) is a constant or a function that does not depend on \\(x\\). This adjustment helps to center the estimates around the baseline, reducing variance while maintaining the unbiasedness of the estimator."
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#importance-sampling",
+    "href": "posts/Blogs/LLM-RL/post.html#importance-sampling",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.5 Importance Sampling",
+    "text": "1.5 Importance Sampling"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#sec-monte-carlo",
+    "href": "posts/Blogs/LLM-RL/post.html#sec-monte-carlo",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.3 Monte Carlo Estimation",
+    "text": "1.3 Monte Carlo Estimation"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#sec-monte-carlo-estimation",
+    "href": "posts/Blogs/LLM-RL/post.html#sec-monte-carlo-estimation",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.3 Monte Carlo Estimation",
+    "text": "1.3 Monte Carlo Estimation\nIn the practice of machine learning and reinforcement learning, we often encounter situations where we need to compute expectations of functions with respect to complex probability distributions. Monte Carlo estimation is a powerful technique that allows us to approximate these expectations using random sampling. The basic idea is to draw samples from the target distribution and use them to compute an empirical average of the function of interest. Due to the law of large numbers, this empirical average converges to the true expectation as the number of samples increases.\nFor example, suppose we want to estimate the expectation of a function \\(f(x)\\) with respect to a probability distribution \\(p(x)\\): \\[\n\\begin{split}\n\\mathbb{E}_{x \\sim p(x)}[f(x)] & = \\int f(x) p(x) dx \\\\\n& \\approx \\frac{1}{N} \\sum_{i=1}^{N} f(x^{(i)}) \\quad \\text{where } x^{(i)} \\sim p(x)\n\\end{split}\n\\tag{5}\\]\nThis is the foundation of many algorithms in reinforcement learning, where we need to estimate expected returns, value functions, and policy gradients based on sampled trajectories.\nFor the KL-Divergence between two distributions \\(P\\) and \\(Q\\), we can use Monte Carlo estimation to approximate it as follows: \\[\nD_{KL}(P || Q) = \\mathbb{E}_{x \\sim P} \\left[ \\log \\frac{P(x)}{Q(x)} \\right] \\approx \\frac{1}{N} \\sum_{i=1}^{N} \\log \\frac{P(x^{(i)})}{Q(x^{(i)})} \\quad \\text{where } x^{(i)} \\sim P(x)\n\\tag{6}\\]"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#sec-important-sampling",
+    "href": "posts/Blogs/LLM-RL/post.html#sec-important-sampling",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.5 Importance Sampling",
+    "text": "1.5 Importance Sampling\nWhen we want to estimate an expectation with respect to a target distribution \\(p(x)\\), but we can only sample from a different distribution \\(q(x)\\) (known as the proposal distribution), we can use importance sampling to correct for the discrepancy between the two distributions. The key idea is to reweight the samples drawn from the proposal distribution by the ratio of the target and proposal densities. The expectation of a function \\(f(x)\\) with respect to the target distribution \\(p(x)\\) can be expressed as: \\[\n\\mathbb{E}_{x \\sim p(x)}[f(x)] = \\int f(x) p(x) dx = \\int f(x) \\frac{p(x)}{q(x)} q(x) dx = \\mathbb{E}_{x \\sim q(x)}\\left[ f(x) \\frac{p(x)}{q(x)} \\right]\n\\tag{8}\\]\nUsing Monte Carlo estimation, we can approximate this expectation using samples drawn from the proposal distribution \\(q(x)\\): \\[\n\\mathbb{E}_{x \\sim p(x)}[f(x)] \\approx \\frac{1}{N} \\sum_{i=1}^{N} f(x^{(i)}) \\frac{p(x^{(i)})}{q(x^{(i)})} \\quad \\text{where } x^{(i)} \\sim q(x)\n\\tag{9}\\]\nwhere \\(\\frac{p(x^{(i)})}{q(x^{(i)})}\\) is known as the importance weight / importance ratio. Importance sampling is particularly useful in reinforcement learning when we want to evaluate or improve a policy using data collected from a different policy."
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#on-policy-vs-off-policy",
+    "href": "posts/Blogs/LLM-RL/post.html#on-policy-vs-off-policy",
+    "title": "Reinforcement Learning in LLM",
+    "section": "3.1 On Policy vs Off Policy",
+    "text": "3.1 On Policy vs Off Policy\nSo far, we have discussed policy gradient methods in the context of on-policy learning, where the policy used to collect data (trajectories) is the same as the policy being optimized. However, there are also off-policy methods, where the data is collected using a different policy (behavior policy) than the one being optimized (target policy). The goal of off-policy methods is to leverage data collected from various policies to improve learning efficiency and stability. The main idea behind off-policy learning is to use importance sampling (Section 1.5) to correct for the distribution mismatch between the behavior policy and the target policy.\nLet’s re-write the policy gradient using importance sampling, what we have is the state action reward pairs collected from the old policy \\(\\pi_{\\theta_{old}}\\), but we want to optimize the new policy \\(\\pi_{\\theta}\\):\n\\[\n\\begin{split}\n\\nabla_{\\theta} J(\\pi_{\\theta}) & = \\mathbb{E}_{\\tau \\sim \\pi_{\\theta}} \\left[ \\nabla_{\\theta} \\log \\pi_{\\theta}(\\tau) \\sum_{t=0}^{T} r_t \\right] \\\\\n& = \\mathbb{E}_{\\tau \\sim \\pi_{\\theta_{old}}} \\left[ \\underbrace{\\frac{\\pi_{\\theta}(\\tau)}{\\pi_{\\theta_{old}}(\\tau)}}_{\\text{Importance Ratio}} \\nabla_{\\theta} \\log \\pi_{\\theta}(\\tau) \\sum_{t=0}^{T} r_t \\right]\n\\end{split}\n\\tag{27}\\]\nLet’s expand the importance ratio: \\[\n\\frac{\\pi_{\\theta}(\\tau)}{\\pi_{\\theta_{old}}(\\tau)} = \\prod_{t=0}^{T} \\frac{\\pi_{\\theta}(a_t | s_t)}{\\pi_{\\theta_{old}}(a_t | s_t)}\n\\tag{28}\\]\nPlugging this back to Equation 27, we have: \\[\n\\begin{split}\n\\nabla_{\\theta} J(\\pi_{\\theta})\n&= \\mathbb{E}_{\\tau \\sim \\pi_{\\theta_{old}}} \\left[ \\left( \\prod_{t=0}^{T} \\frac{\\pi_{\\theta}(a_t | s_t)}{\\pi_{\\theta_{old}}(a_t | s_t)} \\right) \\left( \\nabla_{\\theta} \\log \\pi_{\\theta}(\\tau) \\sum_{t=0}^{T} r_t \\right) \\right] \\\\\n& \\approx \\frac{1}{N} \\sum_{i=1}^{N} \\left[ \\left( \\prod_{t=0}^{T} \\frac{\\pi_{\\theta}(a_t^{(i)} | s_t^{(i)})}{\\pi_{\\theta_{old}}(a_t^{(i)} | s_t^{(i)})} \\right) \\left( \\sum_{t=0}^{T} \\nabla_{\\theta} \\log \\pi_{\\theta}(a_t^{(i)} | s_t^{(i)}) \\right) A^{(i)} \\right]\n\\end{split}\n\\tag{29}\\]\nThere are several challenges with off-policy policy gradient methods:\n\n\n\\begin{algorithm} \\caption{REINFORCE (Monte Carlo Policy Gradient)} \\begin{algorithmic} \\Require Policy $\\pi_\\theta(a \\mid s)$ with parameters $\\theta$ \\Require Learning rate $\\alpha$ \\While{not converged} \\State Sample a trajectory $\\tau = (s_0, a_0, r_0, \\dots, s_T, a_T, r_T)$ by running $\\pi_\\theta$ \\For{$t = 0$ \\textbf{to} $T$} \\State $R_t \\gets \\sum_{t' = t}^{T} r_{t'}$ \\Comment{Reward-to-go} \\State $\\theta \\gets \\theta + \\alpha \\, \\nabla_\\theta \\log \\pi_\\theta(a_t \\mid s_t) \\, R_t$ \\EndFor \\EndWhile \\end{algorithmic} \\end{algorithm}\n\n\nAs we can see, this algorithm Algorithm 1 to more"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#sec-entropy",
+    "href": "posts/Blogs/LLM-RL/post.html#sec-entropy",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.1 Entropy",
+    "text": "1.1 Entropy\nEntropy is a measure of uncertainty or randomness in a probability distribution. In the context of reinforcement learning, entropy is often used to encourage exploration by promoting diverse action selection. The entropy of a discrete probability distribution \\(p(x)\\) is defined as:\n\\[\nH(p) = - \\sum_{x} p(x) \\log p(x)\n\\tag{1}\\]\nFor continuous distributions, the entropy is defined as: \\[\nH(p) = - \\int p(x) \\log p(x) dx\n\\tag{2}\\]\nOne thing to note is that:\n\nHigher entropy indicates more uncertainty and exploration\nLower entropy indicates more certainty and exploitation\n\nFor the discrete case, the entropy is maximized when the distribution is uniform \\(p(x) = \\frac{1}{|X|}\\), i.e., all outcomes are equally likely. In contrast, the entropy is minimized (zero) when the distribution is deterministic, i.e., one outcome has probability 1 and all others have probability 0."
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#sec-kl-divergence",
+    "href": "posts/Blogs/LLM-RL/post.html#sec-kl-divergence",
+    "title": "Reinforcement Learning in LLM",
+    "section": "1.2 KL-Divergence",
+    "text": "1.2 KL-Divergence\nThe Kullback-Leibler (KL) Divergence is a measure of how one probability distribution diverges from a second, expected probability distribution. In reinforcement learning, KL-Divergence is often used to quantify the difference between two policies, which is useful for policy optimization and regularization. The KL-Divergence from distribution \\(P\\) to distribution \\(Q\\) is defined as: \\[\nD_{KL}(P || Q) = \\sum_{x} P(x) \\log \\frac{P(x)}{Q(x)}\n\\tag{3}\\]\nFor continuous distributions, the KL-Divergence is defined as: \\[\nD_{KL}(P || Q) = \\int P(x) \\log \\frac{P(x)}{Q(x)} dx\n\\tag{4}\\]\nThe KL-Divergence has several important properties:\n\nNon-negativity: \\(D_{KL}(P || Q) \\geq 0\\), with equality if and only if \\(P = Q\\) almost everywhere.\nAsymmetry: \\(D_{KL}(P || Q) \\neq D_{KL}(Q || P)\\) in general.\n\ndef compute_kl_divergence(P: torch.Tensor, Q: torch.Tensor) -&gt; torch.Tensor:\n    kl_div = torch.sum(P * torch.log(P / Q))\n    return kl_div\n\n\n\n\n\n\nNote\n\n\n\nFor those who want to dive deeper into Entropy and KL-Divergence, I highly recommend to check out my previous blog: From Entropy to KL Divergence: A Comprehensive Guide"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#state-action-policy-in-llm",
+    "href": "posts/Blogs/LLM-RL/post.html#state-action-policy-in-llm",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.1 State, Action, Policy in LLM",
+    "text": "4.1 State, Action, Policy in LLM\nIn the context of large language models (LLMs), we can map the components of reinforcement learning (RL) to the LLM fine-tuning process as follows:\n\nState (\\(s_t\\)): The state at time step \\(t\\) can be defined as the current context or input to the LLM. This includes the text generated so far, any preceding prompts, and potentially other relevant information such as metadata or user preferences. The state encapsulates all the information that the model has access to when generating the next token.\nAction (\\(a_t\\)): The action at time step \\(t\\) corresponds to the token or word generated by the LLM. The action space is typically the vocabulary of the language model, and the model selects an action based on its current policy (i.e., the probability distribution over the vocabulary given the current state).\nPolicy (\\(\\pi_{\\theta}\\)): The policy in the context of LLMs is represented by the language model itself, parameterized by \\(\\theta\\). The policy defines the probability distribution over actions (tokens) given the current state (context). The policy can be expressed as \\(\\pi_{\\theta}(a_t | s_t)\\), which gives the probability of generating token \\(a_t\\) given the context \\(s_t\\).\nReward (\\(r_t\\)): The reward at time step \\(t\\) is a scalar value that indicates the quality of the generated token in the context of the overall text generation task. Rewards can be derived from various sources, such as human feedback, automated evaluation metrics, or other criteria that reflect the desired behavior of the LLM. The reward signal guides the learning process by providing feedback on the effectiveness of the generated tokens.\n\nOne thing good about LLM is that the environment dynamics (transition probabilities) are known and deterministic. Given a state \\(s_t\\) and an action \\(a_t\\), the next state \\(s_{t+1}\\) is simply the concatenation of the current context with the newly generated token \\(s_{t + 1} = (s_t, a_t)\\). This simplifies the RL formulation, as we do not need to learn or estimate the environment dynamics.\nBecause of this, we can focus on optimizing the policy (the LLM) directly based on the reward signals without worrying about modeling the environment transitions.\nFor example, at the begin of training, we have text(prompt) like: “The capital of France is”, this is our initial state \\(s_0\\).\n\n\\(s_0\\) = “The capital of France is”\n\\(a_0 \\sim \\text{softmax}(f_{\\theta}(s_0))\\) = ” Paris”\n\\(s_1 = (s_0, a_0)\\) = “The capital of France is Paris”\n\\(a_1 \\sim \\text{softmax}(f_{\\theta}(s_1))\\) = “.”\n\\(s_2 = (s_1, a_1)\\) = “The capital of France is Paris.”\n…\n\nThis process continues until the model generates a complete response or reaches a predefined stopping criterion, when the &lt;eos&gt; token is generated or the max length is reached. In the end, we got trajectory/episode/rollout \\(\\tau = (s_0, a_0,  s_1, a_1,  ..., s_T, a_T)\\)."
+  },
+  {
+    "objectID": "posts/Blogs/LLM-RL/post.html#reward-design-challenges-in-llm",
+    "href": "posts/Blogs/LLM-RL/post.html#reward-design-challenges-in-llm",
+    "title": "Reinforcement Learning in LLM",
+    "section": "4.2 Reward Design Challenges in LLM",
+    "text": "4.2 Reward Design Challenges in LLM\nIn reinforcement learning for large language models (LLMs), the reward function plays a crucial role in guiding the model’s learning process. The reward function defines the objectives and desired behaviors that the LLM should exhibit during text generation. However, designing effective reward functions for LLMs can be challenging:\n\nSparse Rewards: In many cases, rewards may only be provided at the end of a generated sequence, making it difficult to attribute credit to individual token (action) generations.\nAmbiguous Objectives: The desired behavior of LLMs can be complex and multifaceted, making it hard to define a single reward function that captures all aspects of quality.\nHuman Feedback: When using human feedback as a reward signal, it can be noisy, inconsistent, and expensive to obtain.\nScalability: As LLMs generate long sequences, computing rewards for every token can be computationally expensive.\nExploration vs. Exploitation: Balancing the need for exploration (trying new token generations) and exploitation (generating high-reward tokens) is crucial for effective learning.\n\nIn the following sections, we will explore specific RL algorithms that have been applied to LLM fine-tuning, including Reinforcement Learning from Human Feedback (RLHF) and Reinforcement Learning from Verified Rewards (RLVR). We will discuss how these algorithms leverage the RL framework to improve the performance and alignment of LLMs with human preferences"
   }
 ]

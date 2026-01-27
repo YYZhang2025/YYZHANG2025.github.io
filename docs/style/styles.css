@@ -22,7 +22,9 @@
 /* Allow synthetic bold/italic when a real face at that weight/style is missing */
 html { font-synthesis: weight style; }
 /* Ensure strong/b tags request true bold (700) */
-b, strong { font-weight: 800; color:cadetblue; }
+b, strong { font-weight: 900 !important; color:#5f9ea0 ; } 
+/* Ensure em/i tags request true italic */
+i, em { font-style: italic;  color: #7fb5b7}
 
 
 body {
@@ -62,9 +64,8 @@ h2 {
 }
 
 
-
 h3 {
-  font-size: 1.4rem !important;
+  font-size: 1.2rem !important;
   font-weight: 600;
 }
 
@@ -131,4 +132,20 @@ pre code span[data-code-line].line-highlight {
   padding: 0 1em;
   border-left: 3px solid rgba(158, 247, 247, 0.55);
 }
+
+
+
+
+/* ✅ Pseudocode styling */
+/* pseudocode.js comments */
+.ps-root .ps-comment{
+  font-style: italic;        /* 斜体 */
+  white-space: pre-wrap;     /* 保留注释里的空格（可选） */
+}
+
+/* ✅最稳：用伪元素在 comment 前强行加空格 */
+.ps-root .ps-comment::before{
+  content: "\00a0\00a0\00a0\00a0\00a0";     /* 两个 &nbsp;，你想更宽就多写几个 */
+}
+/* End Pseudocode styling */
 
