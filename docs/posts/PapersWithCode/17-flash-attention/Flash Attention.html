@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="">
+<meta name="author" content="Yuyang Zhang">
+<meta name="description" content="FlashAttention 是一IO-aware的exact Attention 实现：它把 QKᵀ 和 softmax 的计算按块（tiling）搬进片上 SRAM/共享内存，用在线 softmax（维护 running max 与 sum 的 log-sum-exp 归一化）在不保存完整注意力矩阵的情况下完成计算，并且通过Recomputing的技术，从而显著减少 HBM 读写、降低显存占用并加速。">
 
-<title>CS336: LLM from Scratch Lecture Notes and Assignments</title>
+<title>FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -32,8 +68,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../../">
 <link href="../../.././style/icon.avif" rel="icon">
-<script src="../../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../../../site_libs/quarto-html/popper.min.js"></script>
@@ -45,12 +79,10 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-ecadc1139ce0a2f29c2951f0f3572b5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-859f99caab0bec132077bcc433b53446.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-970c7fc97ae78f6c1e7458e7c69915e7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-859f99caab0bec132077bcc433b53446.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
-<script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
-<link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -78,99 +110,8 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-lectures .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-lectures'] = new List('listing-lectures', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-assignments .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-assignments'] = new List('listing-assignments', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-<script>
-    MathJax = {
-        loader: {
-        load: ['[tex]/boldsymbol']
-        },
-        tex: {
-        tags: "all",
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        displayMath: [['$$','$$'], ['\\[','\\]']],
-        processEscapes: true,
-        processEnvironments: true,
-        packages: {
-            '[+]': ['boldsymbol']
-        }
-        }
-    };
-</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-    <style type="text/css">
-    .ps-root .ps-algorithm {
-      border-top: 2px solid;
-      border-bottom: 2px solid;
-    }
-    .pseudocode-container {
-      text-align: left;
-    }
-    </style>
-  
-      <style type="text/css">
-      .ps-algorithm > .ps-line {
-        text-align: left;
-      }
-      </style>
-    
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -205,8 +146,9 @@ window.Quarto = {
 <link rel="stylesheet" href="../../../style/styles.css">
 <link rel="stylesheet" href="../../../style/callout.css">
 <link rel="stylesheet" href="../../../style/toc.css">
-<meta property="og:title" content="CS336: LLM from Scratch Lecture Notes and Assignments">
-<meta property="og:image" content="../../../posts/LearningNotes/CS336/Assignments/Ass01/assets/cover.png">
+<meta property="og:title" content="FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(Flash Attention)">
+<meta property="og:description" content="FlashAttention 是一IO-aware的exact Attention 实现：它把 QKᵀ 和 softmax 的计算按块（tiling）搬进片上 SRAM/共享内存，用在线 softmax（维护 running max 与 sum 的 log-sum-exp 归一化）在不保存完整注意力矩阵的情况下完成计算，并且通过Recomputing的技术，从而显著减少 HBM 读写、降低显存占用并加速。">
+<meta property="og:image" content="./assets/cover.png">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -443,31 +385,75 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">CS336: LLM from Scratch Lecture Notes and Assignments</h1>
+          <h1 class="quarto-secondary-nav-title">FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(<tag style="color:blue">Flash Attention</tag>)</h1>
         </a>     
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#preliminary" id="toc-preliminary" class="nav-link active" data-scroll-target="#preliminary"><span class="header-section-number">1</span> Preliminary</a>
+  <ul>
+  <li><a href="#online-softmax" id="toc-online-softmax" class="nav-link" data-scroll-target="#online-softmax"><span class="header-section-number">1.1</span> Online Softmax</a></li>
+  <li><a href="#recomputing" id="toc-recomputing" class="nav-link" data-scroll-target="#recomputing"><span class="header-section-number">1.2</span> Recomputing</a></li>
+  <li><a href="#gpus-memory-model" id="toc-gpus-memory-model" class="nav-link" data-scroll-target="#gpus-memory-model"><span class="header-section-number">1.3</span> GPU’s Memory Model</a></li>
+  <li><a href="#tiling" id="toc-tiling" class="nav-link" data-scroll-target="#tiling"><span class="header-section-number">1.4</span> Tiling</a></li>
+  <li><a href="#matrix-calculus-cheatsheet" id="toc-matrix-calculus-cheatsheet" class="nav-link" data-scroll-target="#matrix-calculus-cheatsheet"><span class="header-section-number">1.5</span> Matrix Calculus Cheatsheet</a></li>
+  </ul></li>
+  <li><a href="#flash-attention" id="toc-flash-attention" class="nav-link" data-scroll-target="#flash-attention"><span class="header-section-number">2</span> Flash Attention</a>
+  <ul>
+  <li><a href="#experiment" id="toc-experiment" class="nav-link" data-scroll-target="#experiment"><span class="header-section-number">2.1</span> Experiment</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">3</span> Summary</a></li>
+  <li><a href="#key-concepts" id="toc-key-concepts" class="nav-link" data-scroll-target="#key-concepts"><span class="header-section-number">4</span> Key Concepts</a></li>
+  <li><a href="#q-a" id="toc-q-a" class="nav-link" data-scroll-target="#q-a"><span class="header-section-number">5</span> Q &amp; A</a></li>
+  <li><a href="#related-resource-further-reading" id="toc-related-resource-further-reading" class="nav-link" data-scroll-target="#related-resource-further-reading"><span class="header-section-number">6</span> Related resource &amp; Further Reading</a>
+  <ul>
+  <li><a href="#tiling-qk-v" id="toc-tiling-qk-v" class="nav-link" data-scroll-target="#tiling-qk-v"><span class="header-section-number">6.1</span> Tiling Q，K， V</a></li>
+  <li><a href="#online-softmax-for-attention" id="toc-online-softmax-for-attention" class="nav-link" data-scroll-target="#online-softmax-for-attention"><span class="header-section-number">6.2</span> Online Softmax for Attention</a></li>
+  <li><a href="#recomputing-for-backward-pass" id="toc-recomputing-for-backward-pass" class="nav-link" data-scroll-target="#recomputing-for-backward-pass"><span class="header-section-number">6.3</span> Recomputing for Backward Pass</a></li>
+  <li><a href="#kernel-fusion" id="toc-kernel-fusion" class="nav-link" data-scroll-target="#kernel-fusion"><span class="header-section-number">6.4</span> Kernel-Fusion</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">CS336: LLM from Scratch Lecture Notes and Assignments</h1>
+<h1 class="title d-none d-lg-block">FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness(<tag style="color:blue">Flash Attention</tag>)</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Transformer</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    FlashAttention 是一IO-aware的exact Attention 实现：它把 QKᵀ 和 softmax 的计算按块（tiling）搬进片上 SRAM/共享内存，用<strong>在线 softmax（维护 running max 与 sum 的 log-sum-exp 归一化）</strong>在不保存完整注意力矩阵的情况下完成计算，并且通过Recomputing的技术，从而显著减少 HBM 读写、降低显存占用并加速。
+  </div>
 </div>
 
 
+<div class="quarto-title-meta">
 
-<div class="quarto-title-meta column-page">
-
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
+  </div>
     
   
     
@@ -477,234 +463,179 @@ window.Quarto = {
 
 </header>
 
-
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><tag style="font-size:25px; "> Due to the time constraint, these notes may contain errors or omissions. And to speed up the writing process, I only wrote the notes in <strong>CHINESES</strong>. If you are interested in collaborating to improve these notes,or transalting to different languages, please feel free to <a href="mailto:zhangyuyang1211@gmail.com">contact me</a>. </tag></p>
-</div>
-</div>
-<div class="columns quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="column quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<p><u>Related Resources</u>:</p>
-<ul>
-<li>Lecture Website: <a href="https://stanford-cs336.github.io/spring2025/">CS336 LLM from Scratch</a></li>
-<li>Lecture Recordings: <a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOY23Y0BoGoBGgQ1zmU_MT_">YouTube Playlist</a></li>
-<li>My Solution Repo: <a href="https://github.com/YYZhang2025/Stanford-CS336">GitHub</a></li>
-</ul>
-</div>
-<div class="column quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<p><u>About this Course</u>:</p>
-<ul>
-<li>This course has <tag style="color:orange">17 Lectures</tag> and <tag style="color:orange">5 Assignments</tag> in total.</li>
-<li>It might take around <tag style="color:red">200 hours</tag> to finish all the lectures and assignments.</li>
-</ul>
-</div>
-</div>
-</div>
-<hr>
-<section id="lecture-notes-for-cs336" class="level1">
-<h1>Lecture Notes for CS336</h1>
-<div id="listing-lectures" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1766555165027" data-listing-reading-time-sort="4" data-listing-word-count-sort="756">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html" class="no-external">
-
-<p class="card-img-top"><img src="Lectures/Lecture01/assets/course-overview.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title" data-anchor-id="lecture-notes-for-cs336">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html" class="no-external"><strong>Lecture 01: Introduction &amp; Tokenization</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html" class="no-external">
-<p><em>Lecture01介绍了课程的大纲以及LLM的现状和基本概念。在课程的后半段介绍了Language Modeling的第一步，即Tokenization的基本概念和常用方法。着重介绍了<strong>Byte Pair Encoding (BPE)</strong>算法的原理和实现。在学习完Lecture 01后，我们可以开始尝试Assignment 01的第一部分，即BPE-Tokenization的实现</em></p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1766848674539" data-listing-reading-time-sort="7" data-listing-word-count-sort="1317">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html" class="no-external">
-
-<p class="card-img-top"><img src="Lectures/Lecture02/assets/float-represent.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html" class="no-external"><strong>Lecture 02: PyTorch Basics &amp; Resource Accounts</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html" class="no-external">
-<p><em>Lecture02 介绍了PyTorch的基本概念和使用方法。可以将这节课当作一个review，复习一下之前学过的PyTorch知识点。同时，课程中介绍了一个 <code>einops</code> 的库，可以简化张量操作的代码编写。这节课也介绍了不同数据类型（如<code>FP32</code>, <code>FP16</code>, <code>BF16</code>等）在深度学习中的应用和优缺点。并且通过计算这些数据类型在内存中的占用，帮助我们理解为什么有些数据类型更适合在有限资源下进行训练, 并且在什么情况下需要应用混合精度训练（Mixed Precision Training），什么情况下需要用高精度的数据类型。在课程的最后，还介绍了不同的Optimizer（如SGD, Adam等）的基本原理和使用场景</em></p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1768248950783" data-listing-reading-time-sort="4" data-listing-word-count-sort="624">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html" class="no-external">
-
-<p class="card-img-top"><img src="Lectures/Lecture03/assets/lec03-overview.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html" class="no-external"><strong>Lecture 03: LM Model Architecture &amp; Hyperparameters</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html" class="no-external">
-<p>Lecture03 介绍了现代大语言模型的核心架构与超参数设计。课程对比了原始 Transformer 与主流 LLaMA-like 架构，总结了 pre-norm、RMSNorm、SwiGLU、RoPE 等关键设计的经验共识，并结合大量近期模型实践，讲解了 MLP 宽度比例、注意力头配置、模型深宽比与词表规模等超参数选择原则。同时还介绍了 z-loss、QK-Norm、MQA/GQA 等用于提升训练稳定性和推理效率的关键技巧。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1768234252943" data-listing-reading-time-sort="4" data-listing-word-count-sort="760">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html" class="no-external">
-
-<p class="card-img-top"><img src="Lectures/Lecture04/assets/dense-fnn-vs-moe.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html" class="no-external"><strong>Lecture 04: Introduction to MoE</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html" class="no-external">
-<p>Lecture 04 介绍了 MoE（Mixture of Experts）的基本概念和原理。从模型架构、路由机制、训练方法等方面进行了详细讲解，并讨论了 MoE 在自然语言处理中的应用和优势。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1769766903748" data-listing-reading-time-sort="20" data-listing-word-count-sort="3980">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external"><strong>Lecture 15: LLM Alignment SFT &amp; RLHF(PPO, DPO)</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
-<p>Lecture 15主要介绍了LLM的对齐方法，重点讲解了监督微调（SFT）和强化学习（RLHF）两种技术。内容涵盖了SFT的数据集构建、算法实现，以及RLHF的奖励模型训练和PPO算法。此外，还介绍了DPO作为一种简化的偏好学习方法。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1769796232705" data-listing-reading-time-sort="19" data-listing-word-count-sort="3721">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
-
-<img loading="lazy" src="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/assets/lec16-grpo-ppo.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external"><strong>Lecture 16 &amp; 17: LLM Alignment SFT &amp; RLVR（GRPO）</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
-<p><em>这节介绍了PPO， 以及DPO所存在的问题，并且引出了Reinforcement Learning from Verified Rewards (RLVR)的新方法<strong>GRPO</strong>。内容包括Advantage Function、Length Normalization关键技术细节，并通过DeepSeek-R1、Kimi 1.5和Qwen3等案例展示了GRPO在实际中的应用。而Lecture17则通过一个排序任务的具体例子，详细讲解了GRPO算法的实现细节，包括数据生成、奖励函数设计、模型架构以及训练过程，在这里就把两节课合成一节课来写。</em></p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#preliminary" id="toc-preliminary"><span class="header-section-number">1</span> Preliminary</a>
+  <ul>
+  <li><a href="#online-softmax" id="toc-online-softmax"><span class="header-section-number">1.1</span> Online Softmax</a></li>
+  <li><a href="#recomputing" id="toc-recomputing"><span class="header-section-number">1.2</span> Recomputing</a></li>
+  <li><a href="#gpus-memory-model" id="toc-gpus-memory-model"><span class="header-section-number">1.3</span> GPU’s Memory Model</a></li>
+  <li><a href="#tiling" id="toc-tiling"><span class="header-section-number">1.4</span> Tiling</a></li>
+  <li><a href="#matrix-calculus-cheatsheet" id="toc-matrix-calculus-cheatsheet"><span class="header-section-number">1.5</span> Matrix Calculus Cheatsheet</a></li>
+  </ul></li>
+  <li><a href="#flash-attention" id="toc-flash-attention"><span class="header-section-number">2</span> Flash Attention</a>
+  <ul>
+  <li><a href="#experiment" id="toc-experiment"><span class="header-section-number">2.1</span> Experiment</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary"><span class="header-section-number">3</span> Summary</a></li>
+  <li><a href="#key-concepts" id="toc-key-concepts"><span class="header-section-number">4</span> Key Concepts</a></li>
+  <li><a href="#q-a" id="toc-q-a"><span class="header-section-number">5</span> Q &amp; A</a></li>
+  <li><a href="#related-resource-further-reading" id="toc-related-resource-further-reading"><span class="header-section-number">6</span> Related resource &amp; Further Reading</a>
+  <ul>
+  <li><a href="#tiling-qk-v" id="toc-tiling-qk-v"><span class="header-section-number">6.1</span> Tiling Q，K， V</a></li>
+  <li><a href="#online-softmax-for-attention" id="toc-online-softmax-for-attention"><span class="header-section-number">6.2</span> Online Softmax for Attention</a></li>
+  <li><a href="#recomputing-for-backward-pass" id="toc-recomputing-for-backward-pass"><span class="header-section-number">6.3</span> Recomputing for Backward Pass</a></li>
+  <li><a href="#kernel-fusion" id="toc-kernel-fusion"><span class="header-section-number">6.4</span> Kernel-Fusion</a></li>
+  </ul></li>
+  </ul>
+</nav>
+<p><img src="assets/Flash Attention-cover.png" class="img-fluid"></p>
+<section id="preliminary" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Preliminary</h1>
+<p>在开始之前，我们需要先了解一下以下几个概念，以便我们更好的理解Flash Attention</p>
+<section id="online-softmax" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="online-softmax"><span class="header-section-number">1.1</span> Online Softmax</h2>
+<p><strong>Online Softmax</strong>（也叫 <em>streaming softmax</em> / <em>one-pass softmax statistics</em>）指的是：你不需要先把整行 logits <span class="math inline">\(s_1,\dots,s_D\)</span> 全部存下来再做 softmax，而是<strong>一边读入（或一边计算）logits，一边更新必要的统计量</strong>，最后得到 softmax 的归一化因子；在需要输出概率时再用这些统计量把每个 logit 变成概率。</p>
+<p>我们知道，对于一行向量 <span class="math inline">\(s \in \mathbb{R}^{D}\)</span>, 对于数值稳定的Softmax，我们要先减去它的 <code>max</code> value，这就导致了，对于计算softmax值，我们需要遍历3次这个数组。而Online Softmax则在保持原来的遍历两步的基础上，同时保持Max Softmax的特性。</p>
+<p>要实现这个概念的核心做法就：在遍历过程中，维护两个变量： - <code>m</code>：当前遍历过的logits的最大值 - <code>l</code>：当前遍历过的logits的归一化因子（即 <span class="math inline">\(\sum_{j=1}^{i} \exp(s_j - m)\)</span>）</p>
+<p>具体的更新公式如下：</p>
+<p><span class="math display">\[
+\begin{split}
+m_{new} &amp; = \max(m, s_i) \\
+l &amp; = l \cdot \exp(m - m_{new}) + \exp(s_i - m_{new}) \\
+m &amp; = m_{new}
+\end{split}
+\]</span></p>
+<p>下面是Python的实现代码：</p>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> online_softmax(x):</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    m, l <span class="op">=</span> <span class="bu">float</span>(<span class="st">"-inf"</span>), <span class="fl">0.0</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(x)):</span>
+<span id="cb1-5"><a href="#cb1-5"></a>        m_new <span class="op">=</span> <span class="bu">max</span>(m, x[i])</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        l <span class="op">=</span> l <span class="op">*</span> math.exp(m <span class="op">-</span> m_new) <span class="op">+</span> math.exp(x[i] <span class="op">-</span> m_new)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>        m <span class="op">=</span> m_new</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    softmax_values <span class="op">=</span> [<span class="fl">0.0</span>] <span class="op">*</span> <span class="bu">len</span>(x)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(x)):</span>
+<span id="cb1-11"><a href="#cb1-11"></a>        softmax_values[i] <span class="op">=</span> math.exp(x[i] <span class="op">-</span> m) <span class="op">/</span> l</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="cf">return</span> softmax_values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<blockquote class="blockquote">
+<p>至于为什么这个方法是正确的，我们可以通过数学归纳法来证明： - <strong>Base Case</strong>: 当只遍历了第一个元素 <span class="math inline">\(s_1\)</span> 时，显然 <span class="math inline">\(m = s_1\)</span>，<span class="math inline">\(l = \exp(s_1 - s_1) = 1\)</span>，此时 softmax 计算正确。 - <strong>Inductive Step</strong>: 假设在遍历到第 <span class="math inline">\(i-1\)</span> 个元素时，<span class="math inline">\(m\)</span> 和 <span class="math inline">\(l\)</span> 已经正确地反映了前 <span class="math inline">\(i-1\)</span> 个元素的最大值和归一化因子。现在考虑第 <span class="math inline">\(i\)</span> 个元素 <span class="math inline">\(s_i\)</span>： - 如果 <span class="math inline">\(s_i &gt; m\)</span>，则新的最大值 <span class="math inline">\(m_{new} = s_i\)</span>，归一化因子更新为： <span class="math display">\[
+      l_{new} = l \cdot \exp(m - s_i) + \exp(s_i - s_i) = l \cdot \exp(m - s_i) + 1
+      \]</span> - 如果 <span class="math inline">\(s_i \leq m\)</span>，则最大值保持不变 <span class="math inline">\(m_{new} = m\)</span>，归一化因子更新为： <span class="math display">\[
+     l_{new} = l \cdot \exp(m - m) + \exp(s_i - m) = l + \exp(s_i - m)
+     \]</span> 我们知道 <span class="math inline">\(\ell\)</span> 到遇到第 <span class="math inline">\(i\)</span> 个元素时，在加上第 <span class="math inline">\(i\)</span> 个元素的贡献之前，要根据当前的最大值进行调整，重新缩放之前的和，以确保数值稳定性。</p>
+</blockquote>
+<p>在这两种情况下，更新后的 <span class="math inline">\(m_{new}\)</span> 和 <span class="math inline">\(l_{new}\)</span> 仍然正确地反映了前 <span class="math inline">\(i\)</span> 个元素的最大值和归一化因子。因此，通过数学归纳法，我们证明了该在线算法在遍历完整个数组后，能够正确计算出 softmax 的归一化因子。</p>
 </section>
-<section id="assignments" class="level1">
-<h1>Assignments</h1>
-<div id="listing-assignments" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1768156058876" data-listing-reading-time-sort="75" data-listing-word-count-sort="14987">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass01/ass01.html" class="no-external">
+<section id="recomputing" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="recomputing"><span class="header-section-number">1.2</span> Recomputing</h2>
+<p>Recomputing 是一种<strong>以计算换内存的技术</strong>，它的核心思想是：在前向传播时，不保存某些中间结果，而是在反向传播时重新计算这些结果，从而节省内存空间。</p>
+<p>我们知道，在反向传播时，需要用到前向传播中的一些中间结果来计算梯度。如果我们在前向传播时保存了所有的中间结果，那么会占用大量的内存空间。通过 Recomputing，我们可以选择性地不保存某些中间结果，而是在反向传播时重新计算它们。举个例子：假如我们有一个MLP层<span class="math inline">\(y=W_2\cdot \sigma(W_1 \cdot x)\)</span>，常规的做法是，在前向传播时，保存 <span class="math inline">\(h=W_1 \cdot x\)</span> 和 <span class="math inline">\(a=\sigma(W_1 \cdot x)\)</span> 的结果，以便在反向传播时计算梯度：<span class="math inline">\(\frac{\partial L}{\partial W_2} = d y \, a^\top\)</span> 和 <span class="math inline">\(\frac{\partial L}{\partial W_1} = (W_2^\top d y) \odot \sigma'(a) \, x^\top\)</span>。但是，如果我们使用 Recomputing，我们可以选择不保存 <span class="math inline">\(a = W_1 \cdot x\)</span> 和 <span class="math inline">\(\sigma(a)\)</span>，而是在反向传播时重新计算它们。这样，我们就节省了内存空间，但需要额外的计算时间来重新计算这些中间结果。</p>
+<p>这种技术的好处就是，减少了内存的使用，同时降低了读写内存的带宽需求，从而提升了整体的计算效率。</p>
+<p>通过PyTorch 的 <code>torch.autograd.Function</code>，我们可以很方便地实现 Recomputing。下面是一个简单的例子：</p>
+</section>
+<section id="gpus-memory-model" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="gpus-memory-model"><span class="header-section-number">1.3</span> GPU’s Memory Model</h2>
+<p>在理解 Flash Attention 之前，我们需要先了解一下 GPU 的内存模型。在这里，主要介绍一下 GPU 的几种主要内存类型：</p>
+<ul>
+<li>High Bandwidth Memory (HBM): 这是 GPU 上的主要内存类型，具有高带宽和较低的延迟。HBM 通常用于存储大规模的数据，如模型参数和输入数据。</li>
+<li>SRAM: 这是 GPU 上的片上内存，具有非常高的带宽和低延迟。SRAM 通常用于存储临时数据，如中间计算结果。(SRAM 还可以细分成 L1 Cache 和 L2 Cache， Register， Shared Memory 等在这里我们统称为 SRAM)</li>
+</ul>
+<p>因此我们希望，尽可能多的计算在 SRAM 上完成，减少对 HBM 的读写，从而提升整体的计算效率。</p>
+</section>
+<section id="tiling" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="tiling"><span class="header-section-number">1.4</span> Tiling</h2>
+<p><img src="assets/gpu-tiling-gif.gif" class="img-fluid"></p>
+</section>
+<section id="matrix-calculus-cheatsheet" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="matrix-calculus-cheatsheet"><span class="header-section-number">1.5</span> Matrix Calculus Cheatsheet</h2>
+<p>在这里介绍一些常用的矩阵微积分公式，以便我们在后续的推导中使用：</p>
+<table class="table">
+<colgroup>
+<col style="width: 6%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(O=PV, \text{where } O \in \mathbb{R}^{m \times n}, P \in \mathbb{R}^{m \times k},  V \in \mathbb{R}^{k \times n}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math display">\[
+\frac{\partial L}{\partial P} = \frac{\partial L}{\partial O} V^\top, \quad \frac{\partial L}{\partial V} = P^\top \frac{\partial L}{\partial O}
+\]</span></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(P = \text{softmax}(S), \text{where } P \in \mathbb{R}^{m \times n}, S \in \mathbb{R}^{m \times n}\)</span></p>
+<p><span class="math display">\[
+\frac{\partial L}{\partial S} = P \odot \left( \frac{\partial L}{\partial P} - \text{row\_sum}\left(P \odot \frac{\partial L}{\partial P}\right) \right)
+\]</span></p>
+<p>其中：<span class="math inline">\(\odot\)</span> 表示逐元素乘法，<span class="math inline">\(\text{row\_sum}(\cdot)\)</span> 表示对每一行求和并广播。</p>
+</section>
+</section>
+<section id="flash-attention" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Flash Attention</h1>
+<section id="experiment" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="experiment"><span class="header-section-number">2.1</span> Experiment</h2>
+</section>
+</section>
+<section id="summary" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Summary</h1>
+</section>
+<section id="key-concepts" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Key Concepts</h1>
+</section>
+<section id="q-a" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Q &amp; A</h1>
+</section>
+<section id="related-resource-further-reading" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Related resource &amp; Further Reading</h1>
+<p>可以说，Flash Attention是GPU技巧的集合。接下来，我们来一步一步看一下Flash Attention是如何利用这些技术的。</p>
+<section id="tiling-qk-v" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="tiling-qk-v"><span class="header-section-number">6.1</span> Tiling Q，K， V</h2>
+<p>Flash Attention 首先将 Q，K，V 按块（tiling）加载到片上内存（SRAM/Shared Memory）中进行计算。假设我们有一个注意力矩阵 <span class="math inline">\(A = \text{softmax}(QK^\top)V\)</span>，其中 <span class="math inline">\(Q \in \mathbb{R}^{N \times D}\)</span>，<span class="math inline">\(K \in \mathbb{R}^{M \times D}\)</span>，<span class="math inline">\(V \in \mathbb{R}^{M \times D}\)</span>。我们可以将 <span class="math inline">\(Q\)</span> 分成 <span class="math inline">\(N_b\)</span> 个块，每个块大小为 <span class="math inline">\(B_n \times D\)</span>，将 <span class="math inline">\(K\)</span> 和 <span class="math inline">\(V\)</span> 分成 <span class="math inline">\(M_b\)</span> 个块，每个块大小为 <span class="math inline">\(B_m \times D\)</span>。这样，我们可以将注意力矩阵的计算分解为多个小块的计算，从而减少对 HBM 的读写。</p>
+<p>不过，这里有一个问题就是softmax的计算：它需要一整行的logits才能计算出归一化因子，而Flash Attention是按块计算的，没法一次性拿到整行logits。那么Flash Attention是如何解决这个问题的呢？答案就是：<strong>Online Softmax</strong>。</p>
+</section>
+<section id="online-softmax-for-attention" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="online-softmax-for-attention"><span class="header-section-number">6.2</span> Online Softmax for Attention</h2>
+<p>Flash Attention 使用 Online Softmax 来计算注意力矩阵的 softmax 部分。具体来说，Flash Attention 在计算每个块的注意力时，维护两个变量：<code>m</code> 和 <code>l</code>，分别表示当前块的最大值和归一化因子。在计算每个块的注意力时，Flash Attention 会更新 <code>m</code> 和 <code>l</code>，从而实现在线计算 softmax 的归一化因子。</p>
+<p>具体来说，假设我们正在计算第 <span class="math inline">\(i\)</span> 个块的注意力，我们有：</p>
+<p><span class="math display">\[
+S_{i,j} = Q_i K_j^\top
+\]</span></p>
+<p>然后，我们使用 Online Softmax 的更新公式来更新 <code>m</code> 和 <code>l</code>：</p>
+<p><span class="math display">\[
+\begin{split}
+m_{new} &amp; = \max(m, \max(S_{i,j})) \\
+l &amp; = l \cdot \exp(m - m_{new}) + \sum_{k} \exp(S_{i,j,k} - m_{new}) \\
+m &amp; = m_{new}
+\end{split}
+\]</span></p>
+<p>通过这种方式，Flash Attention 可以在不保存完整注意力矩阵的情况下，计算出正确的 softmax 归一化因子。</p>
+</section>
+<section id="recomputing-for-backward-pass" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="recomputing-for-backward-pass"><span class="header-section-number">6.3</span> Recomputing for Backward Pass</h2>
+<p>我们知道，在反向传播时，需要用到前向传播中的一些中间结果来计算梯度。如果我们在前向传播时保存了所有的中间结果，那么会占用大量的内存空间。Flash Attention 通过 Recomputing 技术，选择性地不保存某些中间结果，而是在反向传播时重新计算它们，从而节省内存空间。具体来说，Flash Attention 在前向传播时，不保存完整的注意力矩阵 <span class="math inline">\(S\)</span> 和 softmax 矩阵 <span class="math inline">\(P\)</span>，而是在反向传播时重新计算它们。这样，Flash Attention 就节省了大量的内存空间，同时降低了读写内存的带宽需求，从而提升了整体的计算效率。</p>
+<p>具体来说，假设我们有一个注意力矩阵 <span class="math inline">\(A = PV\)</span>，其中 <span class="math inline">\(P = \text{softmax}(S)\)</span>。在反向传播时，我们需要计算 <span class="math inline">\(\frac{\partial L}{\partial Q}\)</span>，<span class="math inline">\(\frac{\partial L}{\partial K}\)</span> 和 <span class="math inline">\(\frac{\partial L}{\partial V}\)</span>。Flash Attention 通过重新计算 <span class="math inline">\(S\)</span> 和 <span class="math inline">\(P\)</span> 来实现这一点：</p>
+<p><span class="math display">\[
+\begin{split}
+\frac{\partial L}{\partial V} &amp; = P^\top \frac{\partial L}{\partial A} \\
+\frac{\partial L}{\partial P} &amp; = \frac{\partial L}{\partial A} V^\top \\
+\frac{\partial L}{\partial S} &amp; = P \odot \left( \frac{\partial L}{\partial P} - \text{row\_sum}\left(P \odot \frac{\partial L}{\partial P}\right) \right) \\
+\frac{\partial L}{\partial Q} &amp; = \frac{\partial L}{\partial S} K \\
+\frac{\partial L}{\partial K} &amp; = Q^\top \frac{\partial L}{\partial S}
+\end{split}
+\]</span></p>
+<p>通过这种方式，Flash Attention 在反向传播时重新计算了必要的中间结果，从而节省了内存空间，同时降低了读写内存的带宽需求。</p>
+</section>
+<section id="kernel-fusion" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="kernel-fusion"><span class="header-section-number">6.4</span> Kernel-Fusion</h2>
+<p>Flash Attention 通过将多个计算步骤融合到一个 GPU kernel 中，减少了内存读写的开销，从而提升了整体的计算效率。具体来说，Flash Attention 将 QKᵀ 的计算、softmax 的计算和与 V 的乘法计算融合到一个 kernel 中，从而减少了中间结果的存储和读取。通过这种方式，Flash Attention 可以在一个 kernel 中完成所有的计算，从而减少了内存读写的开销。</p>
 
-<img loading="lazy" src="../../../posts/LearningNotes/CS336/Assignments/Ass01/assets/cover.png" class="thumbnail-image">
 
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title" data-anchor-id="assignments">
-<a href="../../../posts/LearningNotes/CS336/Assignments/Ass01/ass01.html" class="no-external"><strong>Assignment 01: Tokenization &amp; Language Modeling</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass01/ass01.html" class="no-external">
-<p><em>Assignment 01 要求我们实现一个简单的语言模型训练流程，涵盖数据预处理、模型定义、训练和评估等步骤。通过这个作业，我们将巩固对自然语言处理基础概念的理解，并掌握使用PyTorch进行深度学习模型开发的基本技能</em></p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Assignments/Ass01/ass01.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1769782468043" data-listing-reading-time-sort="1" data-listing-word-count-sort="57">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">Environment</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">
-Dataset https://huggingface.co/datasets/nlile/hendrycks-MATH-benchmark
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-
-
-
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
@@ -1139,38 +1070,6 @@ Yuyang Zhang
 </div>
   </div>
 </footer>
-    <script type="text/javascript">
-    (function(d) {
-      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
-        let pseudocodeOptions = {
-          indentSize: el.dataset.indentSize,
-          commentDelimiter: el.dataset.commentDelimiter,
-          lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
-          lineNumberPunc: el.dataset.lineNumberPunc,
-          noEnd: el.dataset.noEnd.toLowerCase() === "true",
-          titlePrefix: el.dataset.captionPrefix
-        };
-        pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
-      });
-    })(document);
-    (function(d) {
-      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
-        let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
-        if (captionSpan !== null) {
-          let captionPrefix = el.dataset.captionPrefix + " ";
-          let captionNumber = "";
-          if (el.dataset.pseudocodeNumber) {
-            captionNumber = el.dataset.pseudocodeNumber + " ";
-            if (el.dataset.chapterLevel) {
-              captionNumber = el.dataset.chapterLevel + "." + captionNumber;
-            }
-          }
-          captionSpan.innerHTML = captionPrefix + captionNumber;
-        }
-      });
-    })(document);
-    </script>
-  
 
 
 

@@ -8,7 +8,7 @@
 
 <meta name="author" content="">
 
-<title>CS336: LLM from Scratch Lecture Notes and Assignments</title>
+<title>ass05</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,36 +21,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../">
-<link href="../../.././style/icon.avif" rel="icon">
-<script src="../../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-ecadc1139ce0a2f29c2951f0f3572b5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
-<script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
-<link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../.././style/icon.avif" rel="icon">
+<script src="../../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-dark-ecadc1139ce0a2f29c2951f0f3572b5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -78,63 +111,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-lectures .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-lectures'] = new List('listing-lectures', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-assignments .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-assignments'] = new List('listing-assignments', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <script>
@@ -202,11 +178,9 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../../../style/styles.css">
-<link rel="stylesheet" href="../../../style/callout.css">
-<link rel="stylesheet" href="../../../style/toc.css">
-<meta property="og:title" content="CS336: LLM from Scratch Lecture Notes and Assignments">
-<meta property="og:image" content="../../../posts/LearningNotes/CS336/Assignments/Ass01/assets/cover.png">
+<link rel="stylesheet" href="../../../../../style/styles.css">
+<link rel="stylesheet" href="../../../../../style/callout.css">
+<link rel="stylesheet" href="../../../../../style/toc.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -384,7 +358,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
+    <a class="nav-link" href="../../../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item compact">
@@ -400,15 +374,15 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Blogs/blogs_index.html"> 
+    <a class="nav-link" href="../../../../../posts/Blogs/blogs_index.html"> 
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="../../../../../posts/Projects/projects_index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/PapersWithCode/100_Papers_index.html"> 
+    <a class="nav-link" href="../../../../../posts/PapersWithCode/100_Papers_index.html"> 
 <span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -417,15 +391,15 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learning-notes">    
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/CS336/index.html">
+    <a class="dropdown-item" href="../../../../../posts/LearningNotes/CS336/index.html">
  <span class="dropdown-text">Stanford CS336: LLM from Scratch</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/DLFaC/index.html">
+    <a class="dropdown-item" href="../../../../../posts/LearningNotes/DLFaC/index.html">
  <span class="dropdown-text">DLFaC</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/LLM-Series/index.html">
+    <a class="dropdown-item" href="../../../../../posts/LearningNotes/LLM-Series/index.html">
  <span class="dropdown-text">LLM Model Series</span></a>
   </li>  
     </ul>
@@ -443,266 +417,72 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">CS336: LLM from Scratch Lecture Notes and Assignments</h1>
+          <h1 class="quarto-secondary-nav-title"></h1>
         </a>     
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#environment" id="toc-environment" class="nav-link active" data-scroll-target="#environment"><span class="header-section-number">1</span> Environment</a></li>
+  <li><a href="#supervised-fine-tuning" id="toc-supervised-fine-tuning" class="nav-link" data-scroll-target="#supervised-fine-tuning"><span class="header-section-number">2</span> Supervised Fine Tuning</a></li>
+  <li><a href="#expert-iteration" id="toc-expert-iteration" class="nav-link" data-scroll-target="#expert-iteration"><span class="header-section-number">3</span> Expert Iteration</a></li>
+  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">4</span> GRPO</a></li>
+  </ul>
+</nav>
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
-
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title d-none d-lg-block">CS336: LLM from Scratch Lecture Notes and Assignments</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta column-page">
-
-    
-  
-    
-  </div>
-  
 
 
-</header>
-
-
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><tag style="font-size:25px; "> Due to the time constraint, these notes may contain errors or omissions. And to speed up the writing process, I only wrote the notes in <strong>CHINESES</strong>. If you are interested in collaborating to improve these notes,or transalting to different languages, please feel free to <a href="mailto:zhangyuyang1211@gmail.com">contact me</a>. </tag></p>
-</div>
-</div>
-<div class="columns quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="column quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<p><u>Related Resources</u>:</p>
-<ul>
-<li>Lecture Website: <a href="https://stanford-cs336.github.io/spring2025/">CS336 LLM from Scratch</a></li>
-<li>Lecture Recordings: <a href="https://www.youtube.com/playlist?list=PLoROMvodv4rOY23Y0BoGoBGgQ1zmU_MT_">YouTube Playlist</a></li>
-<li>My Solution Repo: <a href="https://github.com/YYZhang2025/Stanford-CS336">GitHub</a></li>
-</ul>
-</div>
-<div class="column quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<p><u>About this Course</u>:</p>
-<ul>
-<li>This course has <tag style="color:orange">17 Lectures</tag> and <tag style="color:orange">5 Assignments</tag> in total.</li>
-<li>It might take around <tag style="color:red">200 hours</tag> to finish all the lectures and assignments.</li>
-</ul>
-</div>
-</div>
-</div>
-<hr>
-<section id="lecture-notes-for-cs336" class="level1">
-<h1>Lecture Notes for CS336</h1>
-<div id="listing-lectures" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1766555165027" data-listing-reading-time-sort="4" data-listing-word-count-sort="756">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html" class="no-external">
-
-<p class="card-img-top"><img src="Lectures/Lecture01/assets/course-overview.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title" data-anchor-id="lecture-notes-for-cs336">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html" class="no-external"><strong>Lecture 01: Introduction &amp; Tokenization</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html" class="no-external">
-<p><em>Lecture01介绍了课程的大纲以及LLM的现状和基本概念。在课程的后半段介绍了Language Modeling的第一步，即Tokenization的基本概念和常用方法。着重介绍了<strong>Byte Pair Encoding (BPE)</strong>算法的原理和实现。在学习完Lecture 01后，我们可以开始尝试Assignment 01的第一部分，即BPE-Tokenization的实现</em></p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1766848674539" data-listing-reading-time-sort="7" data-listing-word-count-sort="1317">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html" class="no-external">
-
-<p class="card-img-top"><img src="Lectures/Lecture02/assets/float-represent.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html" class="no-external"><strong>Lecture 02: PyTorch Basics &amp; Resource Accounts</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html" class="no-external">
-<p><em>Lecture02 介绍了PyTorch的基本概念和使用方法。可以将这节课当作一个review，复习一下之前学过的PyTorch知识点。同时，课程中介绍了一个 <code>einops</code> 的库，可以简化张量操作的代码编写。这节课也介绍了不同数据类型（如<code>FP32</code>, <code>FP16</code>, <code>BF16</code>等）在深度学习中的应用和优缺点。并且通过计算这些数据类型在内存中的占用，帮助我们理解为什么有些数据类型更适合在有限资源下进行训练, 并且在什么情况下需要应用混合精度训练（Mixed Precision Training），什么情况下需要用高精度的数据类型。在课程的最后，还介绍了不同的Optimizer（如SGD, Adam等）的基本原理和使用场景</em></p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1768248950783" data-listing-reading-time-sort="4" data-listing-word-count-sort="624">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html" class="no-external">
-
-<p class="card-img-top"><img src="Lectures/Lecture03/assets/lec03-overview.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html" class="no-external"><strong>Lecture 03: LM Model Architecture &amp; Hyperparameters</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html" class="no-external">
-<p>Lecture03 介绍了现代大语言模型的核心架构与超参数设计。课程对比了原始 Transformer 与主流 LLaMA-like 架构，总结了 pre-norm、RMSNorm、SwiGLU、RoPE 等关键设计的经验共识，并结合大量近期模型实践，讲解了 MLP 宽度比例、注意力头配置、模型深宽比与词表规模等超参数选择原则。同时还介绍了 z-loss、QK-Norm、MQA/GQA 等用于提升训练稳定性和推理效率的关键技巧。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1768234252943" data-listing-reading-time-sort="4" data-listing-word-count-sort="760">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html" class="no-external">
-
-<p class="card-img-top"><img src="Lectures/Lecture04/assets/dense-fnn-vs-moe.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html" class="no-external"><strong>Lecture 04: Introduction to MoE</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html" class="no-external">
-<p>Lecture 04 介绍了 MoE（Mixture of Experts）的基本概念和原理。从模型架构、路由机制、训练方法等方面进行了详细讲解，并讨论了 MoE 在自然语言处理中的应用和优势。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1769766903748" data-listing-reading-time-sort="20" data-listing-word-count-sort="3980">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external"><strong>Lecture 15: LLM Alignment SFT &amp; RLHF(PPO, DPO)</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
-<p>Lecture 15主要介绍了LLM的对齐方法，重点讲解了监督微调（SFT）和强化学习（RLHF）两种技术。内容涵盖了SFT的数据集构建、算法实现，以及RLHF的奖励模型训练和PPO算法。此外，还介绍了DPO作为一种简化的偏好学习方法。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1769796232705" data-listing-reading-time-sort="19" data-listing-word-count-sort="3721">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
-
-<img loading="lazy" src="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/assets/lec16-grpo-ppo.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external"><strong>Lecture 16 &amp; 17: LLM Alignment SFT &amp; RLVR（GRPO）</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
-<p><em>这节介绍了PPO， 以及DPO所存在的问题，并且引出了Reinforcement Learning from Verified Rewards (RLVR)的新方法<strong>GRPO</strong>。内容包括Advantage Function、Length Normalization关键技术细节，并通过DeepSeek-R1、Kimi 1.5和Qwen3等案例展示了GRPO在实际中的应用。而Lecture17则通过一个排序任务的具体例子，详细讲解了GRPO算法的实现细节，包括数据生成、奖励函数设计、模型架构以及训练过程，在这里就把两节课合成一节课来写。</em></p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
+<p>Dataset https://huggingface.co/datasets/nlile/hendrycks-MATH-benchmark</p>
+<section id="environment" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Environment</h1>
+<p>Install code</p>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/YYZhang2025/Stanford-CS336.git</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="bu">cd</span> Stanford-CS336/assignment5-alignment</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Install package</p>
+<div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">pip</span> install uv </span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">uv</span> sync <span class="at">--no-install-package</span> flash-attn</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="ex">uv</span> sync</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="ex">hf</span> download YuYangZhang/Reasoning-Dataset  <span class="at">--repo-type</span> dataset <span class="at">--local-dir</span> data</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="ex">python</span> download_model.py <span class="dt">\</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>  <span class="at">--repo-id</span> Qwen/Qwen2.5-Math-1.5B <span class="dt">\</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>  <span class="at">--save-dir</span> models/Qwen2.5-Math-1.5B <span class="dt">\</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>  <span class="at">--method</span> snapshot <span class="at">--no-symlinks</span> <span class="at">--verify</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="assignments" class="level1">
-<h1>Assignments</h1>
-<div id="listing-assignments" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1768156058876" data-listing-reading-time-sort="75" data-listing-word-count-sort="14987">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass01/ass01.html" class="no-external">
-
-<img loading="lazy" src="../../../posts/LearningNotes/CS336/Assignments/Ass01/assets/cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title" data-anchor-id="assignments">
-<a href="../../../posts/LearningNotes/CS336/Assignments/Ass01/ass01.html" class="no-external"><strong>Assignment 01: Tokenization &amp; Language Modeling</strong></a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass01/ass01.html" class="no-external">
-<p><em>Assignment 01 要求我们实现一个简单的语言模型训练流程，涵盖数据预处理、模型定义、训练和评估等步骤。通过这个作业，我们将巩固对自然语言处理基础概念的理解，并掌握使用PyTorch进行深度学习模型开发的基本技能</em></p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Assignments/Ass01/ass01.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1769782468043" data-listing-reading-time-sort="1" data-listing-word-count-sort="57">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">Environment</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">
-Dataset https://huggingface.co/datasets/nlile/hendrycks-MATH-benchmark
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-
+<section id="supervised-fine-tuning" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Supervised Fine Tuning</h1>
+<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python</span> train_sft.py</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="ex">python</span> cs336_alignment/eval.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="expert-iteration" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Expert Iteration</h1>
+<p>This is the fireture {#fig-some}</p>
+</section>
+<section id="grpo" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> GRPO</h1>
+<p><span id="eq-some"><span class="math display">\[
+\mathcal{N} = a
+\tag{1}\]</span></span></p>
+<p>This is the conent (<a href="#eq-some" class="quarto-xref">Equation&nbsp;1</a>)</p>
 
 
 </section>
@@ -1175,5 +955,5 @@ Yuyang Zhang
 
 
 
-<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+<script src="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
 </body></html>
