@@ -547,7 +547,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">2026-01-27</p>
+      <p class="date-modified">2026-01-28</p>
     </div>
   </div>
     
@@ -957,7 +957,7 @@ Q^{\pi}(s_t, a_t) = \mathbb{E}_{s_{t+1} \sim p} \left[ r_t + \gamma V^{\pi}(s_{t
 \end{split}
 \tag{29}\]</span></span></p>
 <p>There are several challenges with off-policy policy gradient methods:</p>
-<div id="algo-reinforce" class="pseudocode-container quarto-float" data-line-number="true" data-line-number-punc=":" data-pseudocode-number="1" data-comment-delimiter="//" data-no-end="false" data-indent-size="1.2em" data-caption-prefix="Algorithm">
+<div id="algo-reinforce" class="pseudocode-container quarto-float" data-line-number-punc=":" data-caption-prefix="Algorithm" data-no-end="false" data-line-number="true" data-comment-delimiter="//" data-pseudocode-number="1" data-indent-size="1.2em">
 <div class="pseudocode">
 \begin{algorithm} \caption{REINFORCE (Monte Carlo Policy Gradient)} \begin{algorithmic} \Require Policy $\pi_\theta(a \mid s)$ with parameters $\theta$ \Require Learning rate $\alpha$ \While{not converged} \State Sample a trajectory $\tau = (s_0, a_0, r_0, \dots, s_T, a_T, r_T)$ by running $\pi_\theta$ \For{$t = 0$ \textbf{to} $T$} \State $R_t \gets \sum_{t' = t}^{T} r_{t'}$ \Comment{Reward-to-go} \State $\theta \gets \theta + \alpha \, \nabla_\theta \log \pi_\theta(a_t \mid s_t) \, R_t$ \EndFor \EndWhile \end{algorithmic} \end{algorithm}
 </div>
@@ -1016,6 +1016,7 @@ Figure&nbsp;2: Overview of the RLHF process used in InstructGPT. The process inv
 </figcaption>
 </figure>
 </div>
+<p>Before diving into the RLHF algorithms, let’s first take a look at the data collection process for human feedback. The human feedback data is typically collected through the following steps:</p>
 <section id="ppo" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="ppo"><span class="header-section-number">5.1</span> PPO</h2>
 <p>Following the foundational work of InstructGPT <span class="citation" data-cites="TrainingLanguageModels2022ouyang">(<a href="#ref-TrainingLanguageModels2022ouyang" role="doc-biblioref">Ouyang et al. 2022</a>)</span>, Proximal Policy Optimization (PPO)<span class="citation" data-cites="ProximalPolicyOptimization2017schulman">(<a href="#ref-ProximalPolicyOptimization2017schulman" role="doc-biblioref">Schulman et al. 2017</a>)</span> has become one of the most widely used algorithms for implementing RLHF in large language models. We can see the PPO algorithm in the <a href="#fig-instruct-gpt-overview" class="quarto-xref">Figure&nbsp;2</a>. It has several steps:</p>
@@ -1025,7 +1026,7 @@ Figure&nbsp;2: Overview of the RLHF process used in InstructGPT. The process inv
 <li><strong>Fine-Tuning with PPO</strong>: The LLM is then fine-tuned using the PPO algorithm, which optimizes the policy (the LLM) to maximize the expected reward as predicted by the reward model. PPO uses a clipped objective function to ensure that policy updates are not too large, maintaining stability during training.</li>
 </ol>
 <p>Here we just focus on the step 3, the PPO fine-tuning process. The PPO algorithm can be summarized as follows:</p>
-<div id="algo-ppo" class="pseudocode-container quarto-float" data-line-number="true" data-line-number-punc=":" data-pseudocode-number="2" data-comment-delimiter="#" data-no-end="false" data-indent-size="1.2em" data-caption-prefix="Algorithm">
+<div id="algo-ppo" class="pseudocode-container quarto-float" data-line-number-punc=":" data-caption-prefix="Algorithm" data-no-end="false" data-line-number="true" data-comment-delimiter="#" data-pseudocode-number="2" data-indent-size="1.2em">
 <div class="pseudocode">
 \begin{algorithm} \caption{Proximal Policy Optimization (PPO) for RLHF (LLMs)} \begin{algorithmic} \Require Initial policy $\pi_{\theta_{old}}$ with parameters $\theta_{old}$ \Require Reward model $R_{\phi}$ trained on human feedback \Require Reference policy $\pi_{\text{ref}}$ (e.g., SFT model) \Require Value function (critic) $V_{\psi}$ with parameters $\psi$ \Require Clipping parameter $\epsilon$, KL coefficient $\beta$ \Require Discount $\gamma$, GAE parameter $\lambda$ \Require Number of PPO epochs $K$, minibatch size $m$ \Require Learning rates $\alpha_{\theta}, \alpha_{\psi}$ \While{not converged} \State Sample a batch of prompts $\{x_i\}_{i=1}^{B}$ \State Roll out $\pi_{\theta_{old}}$ to get responses $\{y_i\}$ with token actions $\{a_{i,t}\}_{t=1}^{T_i}$ \State Compute old log-probs $\ell^{old}_{i,t} \gets \log \pi_{\theta_{old}}(a_{i,t}\mid x_i, a_{i,&lt;t})$ \State Compute ref log-probs $\ell^{ref}_{i,t} \gets \log \pi_{\text{ref}}(a_{i,t}\mid x_i, a_{i,&lt;t})$ \State Compute sequence reward $r^{RM}_i \gets R_{\phi}(x_i, y_i)$ \Comment{Define per-timestep rewards with KL penalty (token-level) + terminal reward} \For{$i = 1$ \textbf{to} $B$} \For{$t = 1$ \textbf{to} $T_i$} \State $\text{kl}_{i,t} \gets \ell^{old}_{i,t} - \ell^{ref}_{i,t}$ \State $r_{i,t} \gets -\beta \cdot \text{kl}_{i,t}$ \EndFor \State $r_{i,T_i} \gets r_{i,T_i} + r^{RM}_i$ \Comment{terminal reward added at last token} \EndFor \For{$i = 1$ \textbf{to} $B$} \Comment{Compute advantages via GAE using critic $V_{\psi}$} \State $A_{i,T_i+1} \gets 0$ \For{$t = T_i$ \textbf{down to} $1$} \State $\delta_{i,t} \gets r_{i,t} + \gamma V_{\psi}(s_{i,t+1}) - V_{\psi}(s_{i,t})$ \State $A_{i,t} \gets \delta_{i,t} + \gamma \lambda A_{i,t+1}$ \State $\hat{R}_{i,t} \gets A_{i,t} + V_{\psi}(s_{i,t})$ \Comment{return/target} \EndFor \EndFor \For{$epoch = 1$ \textbf{to} $K$} \Comment{Optimize policy and value for $K$ epochs over minibatches} \State Shuffle all token positions $(i,t)$ and split into minibatches of size $m$ \For{\textbf{each} minibatch $\mathcal{M}$} \State $\ell_{i,t} \gets \log \pi_{\theta}(a_{i,t}\mid s_{i,t}) \quad \forall (i,t)\in\mathcal{M}$ \State $\rho_{i,t} \gets \exp(\ell_{i,t} - \ell^{old}_{i,t})$ \State $\tilde{\rho}_{i,t} \gets \text{clip}(\rho_{i,t}, 1-\epsilon, 1+\epsilon)$ \State $L^{\text{clip}}(\theta) \gets -\mathbb{E}_{(i,t)\in\mathcal{M}}\left[\min(\rho_{i,t}A_{i,t}, \tilde{\rho}_{i,t}A_{i,t})\right]$ \State $L^{V}(\psi) \gets \mathbb{E}_{(i,t)\in\mathcal{M}}\left[(V_{\psi}(s_{i,t}) - \hat{R}_{i,t})^2\right]$ \State $\theta \gets \theta - \alpha_{\theta}\nabla_{\theta} L^{\text{clip}}(\theta)$ \State $\psi \gets \psi - \alpha_{\psi}\nabla_{\psi} L^{V}(\psi)$ \EndFor \EndFor \State $\theta_{old} \gets \theta$ \Comment{sync old policy for next rollout} \EndWhile \end{algorithmic} \end{algorithm}
 </div>
@@ -1047,6 +1048,7 @@ Figure&nbsp;3: Overview of the Direct Preference Optimization (DPO) process. DPO
 </section>
 <section id="reinforce-leave-one-out-rloo" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="reinforce-leave-one-out-rloo"><span class="header-section-number">5.3</span> REINFORCE Leave One-Out (RLOO)</h2>
+<p>Rein</p>
 </section>
 <section id="remax" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="remax"><span class="header-section-number">5.4</span> ReMax</h2>

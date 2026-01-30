@@ -45,10 +45,12 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-fbbeaaf328af8ff1529676461fadd25d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-7ed90440e877b8b887f97eb7d64998ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-fbbeaaf328af8ff1529676461fadd25d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-ecadc1139ce0a2f29c2951f0f3572b5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -135,6 +137,40 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<script>
+    MathJax = {
+        loader: {
+        load: ['[tex]/boldsymbol']
+        },
+        tex: {
+        tags: "all",
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: {
+            '[+]': ['boldsymbol']
+        }
+        }
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -567,6 +603,50 @@ Yuyang Zhang
 </a>
 </div>
 </div>
+<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1769766903748" data-listing-reading-time-sort="20" data-listing-word-count-sort="3980">
+<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
+
+<p class="card-img-top"><img src="Lectures/Lecture15/assets/lec15-overview-post-training.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external"><strong>Lecture 15: LLM Alignment SFT &amp; RLHF(PPO, DPO)</strong></a>
+</h3>
+<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
+<p>Lecture 15主要介绍了LLM的对齐方法，重点讲解了监督微调（SFT）和强化学习（RLHF）两种技术。内容涵盖了SFT的数据集构建、算法实现，以及RLHF的奖励模型训练和PPO算法。此外，还介绍了DPO作为一种简化的偏好学习方法。</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
+<div class="listing-author">
+Yuyang Zhang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1769795975516" data-listing-reading-time-sort="19" data-listing-word-count-sort="3722">
+<div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
+
+<p class="card-img-top"><img src="Lectures/Lecture16&17/assets/rlvf-overview.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external"><strong>Lecture 16 &amp; 17: LLM Alignment SFT &amp; RLVR（GRPO）</strong></a>
+</h3>
+<div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
+<p><em>这节介绍了PPO， 以及DPO所存在的问题，并且引出了Reinforcement Learning from Verified Rewards (RLVR)的新方法<strong>GRPO</strong>。内容包括Advantage Function、Length Normalization关键技术细节，并通过DeepSeek-R1、Kimi 1.5和Qwen3等案例展示了GRPO在实际中的应用。而Lecture17则通过一个排序任务的具体例子，详细讲解了GRPO算法的实现细节，包括数据生成、奖励函数设计、模型架构以及训练过程，在这里就把两节课合成一节课来写。</em></p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
+<div class="listing-author">
+Yuyang Zhang
+</div>
+</a>
+</div>
+</div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div>
@@ -597,7 +677,7 @@ Yuyang Zhang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1768784718355" data-listing-reading-time-sort="1" data-listing-word-count-sort="60">
+<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1769782468043" data-listing-reading-time-sort="1" data-listing-word-count-sort="57">
 <div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Assignments/Ass05/ass05.html" class="no-external">
 
 <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
@@ -1059,6 +1139,38 @@ Yuyang Zhang
 </div>
   </div>
 </footer>
+    <script type="text/javascript">
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let pseudocodeOptions = {
+          indentSize: el.dataset.indentSize,
+          commentDelimiter: el.dataset.commentDelimiter,
+          lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+          lineNumberPunc: el.dataset.lineNumberPunc,
+          noEnd: el.dataset.noEnd.toLowerCase() === "true",
+          titlePrefix: el.dataset.captionPrefix
+        };
+        pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+      });
+    })(document);
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+        if (captionSpan !== null) {
+          let captionPrefix = el.dataset.captionPrefix + " ";
+          let captionNumber = "";
+          if (el.dataset.pseudocodeNumber) {
+            captionNumber = el.dataset.pseudocodeNumber + " ";
+            if (el.dataset.chapterLevel) {
+              captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+            }
+          }
+          captionSpan.innerHTML = captionPrefix + captionNumber;
+        }
+      });
+    })(document);
+    </script>
+  
 
 
 
