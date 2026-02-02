@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-c63974c8a2e158ef58e232271d598721.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-cd2b9353963d15deea8b43d5392acfc2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-c63974c8a2e158ef58e232271d598721.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-f0ac33174fd5d836d1f6e5db13984c20.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -133,6 +133,15 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E8EJCZTZG1"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-E8EJCZTZG1', { 'anonymize_ip': true});
+</script>
 <link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <script>
@@ -503,7 +512,10 @@ window.Quarto = {
   </ul></li>
   <li><a href="#reinforcement-learning-from-verified-rewardsrlvr" id="toc-reinforcement-learning-from-verified-rewardsrlvr" class="nav-link" data-scroll-target="#reinforcement-learning-from-verified-rewardsrlvr"><span class="header-section-number">6</span> Reinforcement Learning from Verified Rewards(RLVR)</a>
   <ul>
-  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">6.1</span> GRPO</a></li>
+  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">6.1</span> GRPO</a>
+  <ul>
+  <li><a href="#objective-function" id="toc-objective-function" class="nav-link" data-scroll-target="#objective-function"><span class="header-section-number">6.1.1</span> Objective Function</a></li>
+  </ul></li>
   <li><a href="#dr.grpo" id="toc-dr.grpo" class="nav-link" data-scroll-target="#dr.grpo"><span class="header-section-number">6.2</span> Dr.GRPO</a></li>
   <li><a href="#dapo" id="toc-dapo" class="nav-link" data-scroll-target="#dapo"><span class="header-section-number">6.3</span> DAPO</a></li>
   <li><a href="#gspo" id="toc-gspo" class="nav-link" data-scroll-target="#gspo"><span class="header-section-number">6.4</span> GSPO</a></li>
@@ -609,7 +621,10 @@ window.Quarto = {
   </ul></li>
   <li><a href="#reinforcement-learning-from-verified-rewardsrlvr" id="toc-reinforcement-learning-from-verified-rewardsrlvr"><span class="header-section-number">6</span> Reinforcement Learning from Verified Rewards(RLVR)</a>
   <ul>
-  <li><a href="#grpo" id="toc-grpo"><span class="header-section-number">6.1</span> GRPO</a></li>
+  <li><a href="#grpo" id="toc-grpo"><span class="header-section-number">6.1</span> GRPO</a>
+  <ul>
+  <li><a href="#objective-function" id="toc-objective-function"><span class="header-section-number">6.1.1</span> Objective Function</a></li>
+  </ul></li>
   <li><a href="#dr.grpo" id="toc-dr.grpo"><span class="header-section-number">6.2</span> Dr.GRPO</a></li>
   <li><a href="#dapo" id="toc-dapo"><span class="header-section-number">6.3</span> DAPO</a></li>
   <li><a href="#gspo" id="toc-gspo"><span class="header-section-number">6.4</span> GSPO</a></li>
@@ -663,16 +678,11 @@ D_{KL}(P || Q) = \int P(x) \log \frac{P(x)}{Q(x)} dx
 <div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> compute_kl_divergence(P: torch.Tensor, Q: torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
 <span id="cb1-2"><a href="#cb1-2"></a>    kl_div <span class="op">=</span> torch.<span class="bu">sum</span>(P <span class="op">*</span> torch.log(P <span class="op">/</span> Q))</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="cf">return</span> kl_div</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<div class="note foldable is-open">
+<div class="note-header foldable-header">
+<p>NOTE Further Reading about Entropy &amp; KL Divergence</p>
 </div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
+<div class="note-container foldable-content">
 <p>For those who want to dive deeper into Entropy and KL-Divergence, I highly recommend to check out my previous blog: <a href="https://yyzhang2025.github.io/posts/Blogs/KL-Divergence/post.html">From Entropy to KL Divergence: A Comprehensive Guide</a></p>
 </div>
 </div>
@@ -977,7 +987,7 @@ Q^{\pi}(s_t, a_t) = \mathbb{E}_{s_{t+1} \sim p} \left[ r_t + \gamma V^{\pi}(s_{t
 \end{split}
 \tag{29}\]</span></span></p>
 <p>There are several challenges with off-policy policy gradient methods:</p>
-<div id="algo-reinforce" class="pseudocode-container quarto-float" data-line-number-punc=":" data-line-number="true" data-pseudocode-number="1" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-comment-delimiter="//" data-no-end="false">
+<div id="algo-reinforce" class="pseudocode-container quarto-float" data-line-number="true" data-no-end="false" data-line-number-punc=":" data-caption-prefix="Algorithm" data-comment-delimiter="//" data-indent-size="1.2em" data-pseudocode-number="1">
 <div class="pseudocode">
 \begin{algorithm} \caption{REINFORCE (Monte Carlo Policy Gradient)} \begin{algorithmic} \Require Policy $\pi_\theta(a \mid s)$ with parameters $\theta$ \Require Learning rate $\alpha$ \While{not converged} \State Sample a trajectory $\tau = (s_0, a_0, r_0, \dots, s_T, a_T, r_T)$ by running $\pi_\theta$ \For{$t = 0$ \textbf{to} $T$} \State $R_t \gets \sum_{t' = t}^{T} r_{t'}$ \Comment{Reward-to-go} \State $\theta \gets \theta + \alpha \, \nabla_\theta \log \pi_\theta(a_t \mid s_t) \, R_t$ \EndFor \EndWhile \end{algorithmic} \end{algorithm}
 </div>
@@ -1046,7 +1056,7 @@ Figure&nbsp;2: Overview of the RLHF process used in InstructGPT. The process inv
 <li><strong>Fine-Tuning with PPO</strong>: The LLM is then fine-tuned using the PPO algorithm, which optimizes the policy (the LLM) to maximize the expected reward as predicted by the reward model. PPO uses a clipped objective function to ensure that policy updates are not too large, maintaining stability during training.</li>
 </ol>
 <p>Here we just focus on the step 3, the PPO fine-tuning process. The PPO algorithm can be summarized as follows:</p>
-<div id="algo-ppo" class="pseudocode-container quarto-float" data-line-number-punc=":" data-line-number="true" data-pseudocode-number="2" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-comment-delimiter="#" data-no-end="false">
+<div id="algo-ppo" class="pseudocode-container quarto-float" data-line-number="true" data-no-end="false" data-line-number-punc=":" data-caption-prefix="Algorithm" data-comment-delimiter="#" data-indent-size="1.2em" data-pseudocode-number="2">
 <div class="pseudocode">
 \begin{algorithm} \caption{Proximal Policy Optimization (PPO) for RLHF (LLMs)} \begin{algorithmic} \Require Initial policy $\pi_{\theta_{old}}$ with parameters $\theta_{old}$ \Require Reward model $R_{\phi}$ trained on human feedback \Require Reference policy $\pi_{\text{ref}}$ (e.g., SFT model) \Require Value function (critic) $V_{\psi}$ with parameters $\psi$ \Require Clipping parameter $\epsilon$, KL coefficient $\beta$ \Require Discount $\gamma$, GAE parameter $\lambda$ \Require Number of PPO epochs $K$, minibatch size $m$ \Require Learning rates $\alpha_{\theta}, \alpha_{\psi}$ \While{not converged} \State Sample a batch of prompts $\{x_i\}_{i=1}^{B}$ \State Roll out $\pi_{\theta_{old}}$ to get responses $\{y_i\}$ with token actions $\{a_{i,t}\}_{t=1}^{T_i}$ \State Compute old log-probs $\ell^{old}_{i,t} \gets \log \pi_{\theta_{old}}(a_{i,t}\mid x_i, a_{i,&lt;t})$ \State Compute ref log-probs $\ell^{ref}_{i,t} \gets \log \pi_{\text{ref}}(a_{i,t}\mid x_i, a_{i,&lt;t})$ \State Compute sequence reward $r^{RM}_i \gets R_{\phi}(x_i, y_i)$ \Comment{Define per-timestep rewards with KL penalty (token-level) + terminal reward} \For{$i = 1$ \textbf{to} $B$} \For{$t = 1$ \textbf{to} $T_i$} \State $\text{kl}_{i,t} \gets \ell^{old}_{i,t} - \ell^{ref}_{i,t}$ \State $r_{i,t} \gets -\beta \cdot \text{kl}_{i,t}$ \EndFor \State $r_{i,T_i} \gets r_{i,T_i} + r^{RM}_i$ \Comment{terminal reward added at last token} \EndFor \For{$i = 1$ \textbf{to} $B$} \Comment{Compute advantages via GAE using critic $V_{\psi}$} \State $A_{i,T_i+1} \gets 0$ \For{$t = T_i$ \textbf{down to} $1$} \State $\delta_{i,t} \gets r_{i,t} + \gamma V_{\psi}(s_{i,t+1}) - V_{\psi}(s_{i,t})$ \State $A_{i,t} \gets \delta_{i,t} + \gamma \lambda A_{i,t+1}$ \State $\hat{R}_{i,t} \gets A_{i,t} + V_{\psi}(s_{i,t})$ \Comment{return/target} \EndFor \EndFor \For{$epoch = 1$ \textbf{to} $K$} \Comment{Optimize policy and value for $K$ epochs over minibatches} \State Shuffle all token positions $(i,t)$ and split into minibatches of size $m$ \For{\textbf{each} minibatch $\mathcal{M}$} \State $\ell_{i,t} \gets \log \pi_{\theta}(a_{i,t}\mid s_{i,t}) \quad \forall (i,t)\in\mathcal{M}$ \State $\rho_{i,t} \gets \exp(\ell_{i,t} - \ell^{old}_{i,t})$ \State $\tilde{\rho}_{i,t} \gets \text{clip}(\rho_{i,t}, 1-\epsilon, 1+\epsilon)$ \State $L^{\text{clip}}(\theta) \gets -\mathbb{E}_{(i,t)\in\mathcal{M}}\left[\min(\rho_{i,t}A_{i,t}, \tilde{\rho}_{i,t}A_{i,t})\right]$ \State $L^{V}(\psi) \gets \mathbb{E}_{(i,t)\in\mathcal{M}}\left[(V_{\psi}(s_{i,t}) - \hat{R}_{i,t})^2\right]$ \State $\theta \gets \theta - \alpha_{\theta}\nabla_{\theta} L^{\text{clip}}(\theta)$ \State $\psi \gets \psi - \alpha_{\psi}\nabla_{\psi} L^{V}(\psi)$ \EndFor \EndFor \State $\theta_{old} \gets \theta$ \Comment{sync old policy for next rollout} \EndWhile \end{algorithmic} \end{algorithm}
 </div>
@@ -1081,6 +1091,45 @@ Figure&nbsp;3: Overview of the Direct Preference Optimization (DPO) process. DPO
 <h1 data-number="6"><span class="header-section-number">6</span> Reinforcement Learning from Verified Rewards(RLVR)</h1>
 <section id="grpo" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="grpo"><span class="header-section-number">6.1</span> GRPO</h2>
+<section id="objective-function" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="objective-function"><span class="header-section-number">6.1.1</span> Objective Function</h3>
+<p>The objective function of GRPO is defined as:</p>
+<p><span id="eq-grpo-objective-expectation"><span class="math display">\[
+\begin{split}
+\mathcal{J}_{\text{GRPO}}(\pi_\theta)
+&amp;=
+\mathbb{E}_{q \sim \mathcal{D}}
+\;\mathbb{E}_{o \sim \pi_{\theta_{\text{old}}}(\cdot\mid q)}
+\left[
+\sum_{t=1}^{|o|}
+\min \Big(
+\rho_t \hat{A}_{t},
+\text{clip}\big( \rho_t, 1 - \epsilon_{\text{clip}}, 1 + \epsilon_{\text{clip}} \big)\hat{A}_{t}
+\Big)
+\;-\;\beta \,\text{KL}\big(\pi_\theta \,\|\, \pi_{\text{ref}}\big)
+\right] \\
+&amp;\approx
+\frac{1}{B}\sum_{b=1}^{B}
+\left[
+\frac{1}{G}\sum_{i=1}^{G}
+\frac{1}{|o_{b,i}|}\sum_{t=1}^{|o_{b,i}|}
+\min \Big(
+\rho_{b,i,t} \hat{A}_{b,i,t},
+\text{clip}\big( \rho_{b,i,t}, 1 - \epsilon_{\text{clip}}, 1 + \epsilon_{\text{clip}} \big)\hat{A}_{b,i,t}
+\Big)
+\;-\;\beta \,\text{KL}\big(\pi_\theta \,\|\, \pi_{\text{ref}}\big)
+\right]
+\end{split}
+\tag{30}\]</span></span></p>
+<p>Where:</p>
+<p><span id="eq-grpo"><span class="math display">\[
+\mathcal{J}_{\text{GRPO}}(\pi_\theta) =
+\tag{31}\]</span></span></p>
+<p>其中：</p>
+<p><span id="eq-importance-ratio"><span class="math display">\[
+\rho(o_{i,t}) = \frac{\pi_\theta(o_{i,t}|q, o_{i,&lt;t})}{\pi_{\text{ref}}(o_{i,t}|q, o_{i,&lt;t})}
+\tag{32}\]</span></span></p>
+</section>
 </section>
 <section id="dr.grpo" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="dr.grpo"><span class="header-section-number">6.2</span> Dr.GRPO</h2>
