@@ -45,9 +45,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-ecadc1139ce0a2f29c2951f0f3572b5b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-0a335a5cb29f967b3907e839aa7e7d0b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-f0ac33174fd5d836d1f6e5db13984c20.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -155,6 +155,27 @@ ul.task-list li input[type="checkbox"] {
     };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".foldable-header").forEach(header => {
+    header.addEventListener("click", () => {
+      const block = header.closest(".foldable");
+      if (block) {
+        block.classList.toggle("is-open");
+      }
+    });
+
+    // 可访问性（键盘）
+    header.setAttribute("tabindex", "0");
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+});
+</script>
     <style type="text/css">
     .ps-root .ps-algorithm {
       border-top: 2px solid;
@@ -202,10 +223,10 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../../../style/styles.css">
 <link rel="stylesheet" href="../../../style/callout.css">
 <link rel="stylesheet" href="../../../style/toc.css">
 <meta property="og:title" content="CS336: LLM from Scratch Lecture Notes and Assignments">
+<meta property="og:description" content="">
 <meta property="og:image" content="../../../posts/LearningNotes/CS336/Assignments/Ass01/assets/cover.png">
 </head>
 
@@ -374,7 +395,7 @@ window.Quarto = {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
             <div id="quarto-search" class="" title="Search"></div>
@@ -449,46 +470,42 @@ window.Quarto = {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page">
+      <h1 class="title d-none d-lg-block">CS336: LLM from Scratch Lecture Notes and Assignments</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta column-page">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
   
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title d-none d-lg-block">CS336: LLM from Scratch Lecture Notes and Assignments</h1>
+
+
+
+
+<div class="note foldable is-open">
+<div class="note-header foldable-header">
+<p>Note</p>
 </div>
-
-
-
-<div class="quarto-title-meta column-page">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><tag style="font-size:25px; "> Due to the time constraint, these notes may contain errors or omissions. And to speed up the writing process, I only wrote the notes in <strong>CHINESES</strong>. If you are interested in collaborating to improve these notes,or transalting to different languages, please feel free to <a href="mailto:zhangyuyang1211@gmail.com">contact me</a>. </tag></p>
+<div class="note-container foldable-content">
+<p><tag style="font-size:25px; "> Due to the time constraint, these notes may contain errors or omissions. To speed up the writing process, I only wrote the notes in <strong>CHINESES</strong>. If you are interested in collaborating to improve these notes,or transalting to different languages, please feel free to <a href="mailto:zhangyuyang1211@gmail.com">contact me</a>. </tag></p>
 </div>
 </div>
 <div class="columns quarto-layout-panel" data-layout-ncol="2">
@@ -510,6 +527,20 @@ Note
 </div>
 </div>
 </div>
+<hr>
+<p>For those who have <tag style="color:orange">limited time</tag>, I recommend focusing on the following key lectures and assignments:</p>
+<ul>
+<li><strong>LECTURE 1, 2, 3, 4 &amp; Assignment01</strong>: After completing these, you will have a solid understanding of the fundamentals of LLMs, such as the <strong>Transformer Language Model architecture</strong>, <strong>attention mechanism</strong>, <strong>Mixture of Experts</strong>, and the training process of LLMs using autoregressive language modeling.</li>
+<li><strong>LECTURE 15, 16, 17 &amp; Assignment05</strong>: These cover advanced topics such as LLM aligment algorithms, such as <strong>SFT</strong>, RLHF(<strong>PPO</strong>, <strong>DPO</strong>), and RLVR(<strong>GRPO</strong>, <strong>Dr.GRPO</strong>). After completing these, you will understand how to align LLMs with human preferences and train a reasoning LLM.</li>
+<li><strong>LECTURE 5, 6, 7, 8 &amp; Assignment02</strong>: These focus on the hardware and parallelism techniques for training large models. After completing these, you will understand how to efficiently train large LLMs using distributed systems, such as <strong>data parallelism</strong>, <strong>model parallelism</strong>, and <strong>pipeline parallelism</strong>, and speed up the training process by leveraging the power of GPU, and undertand <strong>FlashAttention</strong> and its implementation.</li>
+<li>The remaining lectures and assignments are also important, but they can be studied at a later time based on your interests and needs. Those includes:
+<ul>
+<li>Lecture 9 &amp; 11: <strong>Scaling Laws</strong></li>
+<li>Lecture 10: <strong>Inference Optimization</strong></li>
+<li>Lecture 12 &amp;Assignment 03: <strong>Evaluation of LLMs</strong></li>
+<li>Lecture 13, 14 &amp; Assignment 04: <strong>Data Collection and Processing</strong></li>
+</ul></li>
+</ul>
 <hr>
 <section id="lecture-notes-for-cs336" class="level1">
 <h1>Lecture Notes for CS336</h1>
@@ -603,10 +634,10 @@ Yuyang Zhang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1769766903748" data-listing-reading-time-sort="20" data-listing-word-count-sort="3980">
+<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1769885590315" data-listing-reading-time-sort="21" data-listing-word-count-sort="4185">
 <div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
 
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+<p class="card-img-top"><img src="Lectures/Lecture15/assets/lec15-overview-post-training.png"  class="thumbnail-image card-img"/></p>
 
 </a></div>
 <div class="body">
@@ -614,7 +645,7 @@ Yuyang Zhang
 <a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external"><strong>Lecture 15: LLM Alignment SFT &amp; RLHF(PPO, DPO)</strong></a>
 </h3>
 <div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html" class="no-external">
-<p>Lecture 15主要介绍了LLM的对齐方法，重点讲解了监督微调（SFT）和强化学习（RLHF）两种技术。内容涵盖了SFT的数据集构建、算法实现，以及RLHF的奖励模型训练和PPO算法。此外，还介绍了DPO作为一种简化的偏好学习方法。</p>
+<p><tag style="font-style: italic; color: #999; opacity: 0.9;">Lecture15主要梳理 LLM 的后训练（<strong>Post-Training</strong>）主线：从监督微调（<strong>SFT</strong>）的数据与目标函数出发，解释为何SFT可以让模型获得一定的Instruct Following的能力，并系统介绍 RLHF 的奖励模型训练与 <strong>PPO</strong> 更新流程，进一步对比 <strong>DPO</strong>/<strong>SimPO</strong> 等将 RL 简化为监督学习的替代方案。最后总结 RLHF 的关键风险（<strong>reward hacking</strong>、<strong>model collapse</strong>），并说明为何需要走向可验证奖励的 RLVR 来提升推理能力与训练稳定性。</tag></p>
 </a></div>
 </div>
 <div class="metadata">
@@ -625,7 +656,7 @@ Yuyang Zhang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1769796232705" data-listing-reading-time-sort="19" data-listing-word-count-sort="3721">
+<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1770026253850" data-listing-reading-time-sort="19" data-listing-word-count-sort="3746">
 <div class="thumbnail"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
 
 <img loading="lazy" src="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/assets/lec16-grpo-ppo.png" class="thumbnail-image">
@@ -636,7 +667,7 @@ Yuyang Zhang
 <a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external"><strong>Lecture 16 &amp; 17: LLM Alignment SFT &amp; RLVR（GRPO）</strong></a>
 </h3>
 <div class="delink listing-description"><a href="../../../posts/LearningNotes/CS336/Lectures/Lecture16&amp;17/lec16.html" class="no-external">
-<p><em>这节介绍了PPO， 以及DPO所存在的问题，并且引出了Reinforcement Learning from Verified Rewards (RLVR)的新方法<strong>GRPO</strong>。内容包括Advantage Function、Length Normalization关键技术细节，并通过DeepSeek-R1、Kimi 1.5和Qwen3等案例展示了GRPO在实际中的应用。而Lecture17则通过一个排序任务的具体例子，详细讲解了GRPO算法的实现细节，包括数据生成、奖励函数设计、模型架构以及训练过程，在这里就把两节课合成一节课来写。</em></p>
+<p>这节介绍了PPO， 以及DPO所存在的问题，并且引出了Reinforcement Learning from Verified Rewards (RLVR)的新方法<strong>GRPO</strong>。内容包括Advantage Function、Length Normalization关键技术细节，并通过DeepSeek-R1、Kimi 1.5和Qwen3等案例展示了GRPO在实际中的应用。而Lecture17则通过一个排序任务的具体例子，详细讲解了GRPO算法的实现细节，包括数据生成、奖励函数设计、模型架构以及训练过程，在这里就把两节课合成一节课来写。</p>
 </a></div>
 </div>
 <div class="metadata">
