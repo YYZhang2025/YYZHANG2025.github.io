@@ -8,7 +8,7 @@
 
 <meta name="author" content="Yuyang Zhang">
 <meta name="dcterms.date" content="2025-12-02">
-<meta name="description" content="KL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications in various fields such as machine learning, data science, and artificial intelligence. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.">
+<meta name="description" content="KL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of entropy, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its mathematical formulation, how to approximate use three different Monte Carlo Estimator, and finally its applications in various fields such as classification, generative modeling, knowledge disllation, reinforcement learning, and large language model. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.">
 
 <title>From Entropy to KL Divergence: A Comprehensive Guide</title>
 <style>
@@ -58,7 +58,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -80,9 +100,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-f0ac33174fd5d836d1f6e5db13984c20.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-72fb95a7e850404da2b92bcc9a05531f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-e79cb663f6b69d529a269dc0a813b09c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-72fb95a7e850404da2b92bcc9a05531f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -213,7 +233,7 @@ window.Quarto = {
 <link rel="stylesheet" href="../../../style/callout.css">
 <link rel="stylesheet" href="../../../style/toc.css">
 <meta property="og:title" content="From Entropy to KL Divergence: A Comprehensive Guide">
-<meta property="og:description" content="KL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications in various fields such as machine learning, data science, and artificial intelligence. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.">
+<meta property="og:description" content="KL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of entropy, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its mathematical formulation, how to approximate use three different Monte Carlo Estimator, and finally its applications in various fields such as classification, generative modeling, knowledge disllation, reinforcement learning, and large language model. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.">
 <meta property="og:image" content="./assets/KL-asymmetric.png">
 </head>
 
@@ -464,23 +484,49 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#entropy" id="toc-entropy" class="nav-link active" data-scroll-target="#entropy"><span class="header-section-number">1</span> Entropy</a></li>
+  <li><a href="#entropy" id="toc-entropy" class="nav-link active" data-scroll-target="#entropy"><span class="header-section-number">1</span> Entropy</a>
+  <ul>
+  <li><a href="#maximum-entropy-principle" id="toc-maximum-entropy-principle" class="nav-link" data-scroll-target="#maximum-entropy-principle"><span class="header-section-number">1.1</span> Maximum Entropy Principle</a></li>
+  <li><a href="#applications-of-entropy" id="toc-applications-of-entropy" class="nav-link" data-scroll-target="#applications-of-entropy"><span class="header-section-number">1.2</span> Applications of Entropy</a></li>
+  </ul></li>
   <li><a href="#cross-entropy" id="toc-cross-entropy" class="nav-link" data-scroll-target="#cross-entropy"><span class="header-section-number">2</span> Cross-Entropy</a></li>
   <li><a href="#kl-divergence" id="toc-kl-divergence" class="nav-link" data-scroll-target="#kl-divergence"><span class="header-section-number">3</span> KL Divergence</a>
   <ul>
-  <li><a href="#monte-carlo-estimation-of-kl-divergence" id="toc-monte-carlo-estimation-of-kl-divergence" class="nav-link" data-scroll-target="#monte-carlo-estimation-of-kl-divergence"><span class="header-section-number">3.1</span> Monte Carlo Estimation of KL Divergence</a></li>
-  <li><a href="#control-variates" id="toc-control-variates" class="nav-link" data-scroll-target="#control-variates"><span class="header-section-number">3.2</span> Control Variates</a></li>
-  </ul></li>
-  <li><a href="#applications-of-kl-divergence" id="toc-applications-of-kl-divergence" class="nav-link" data-scroll-target="#applications-of-kl-divergence"><span class="header-section-number">4</span> Applications of KL Divergence</a>
+  <li><a href="#kl-divergence-properties" id="toc-kl-divergence-properties" class="nav-link" data-scroll-target="#kl-divergence-properties"><span class="header-section-number">3.1</span> KL Divergence Properties</a>
   <ul>
-  <li><a href="#kl-divergence-in-generative-models" id="toc-kl-divergence-in-generative-models" class="nav-link" data-scroll-target="#kl-divergence-in-generative-models"><span class="header-section-number">4.1</span> KL Divergence in Generative Models</a>
+  <li><a href="#asymmetry-of-kl-divergence" id="toc-asymmetry-of-kl-divergence" class="nav-link" data-scroll-target="#asymmetry-of-kl-divergence"><span class="header-section-number">3.1.1</span> Asymmetry of KL Divergence</a></li>
+  <li><a href="#non-negativity-of-kl-divergence" id="toc-non-negativity-of-kl-divergence" class="nav-link" data-scroll-target="#non-negativity-of-kl-divergence"><span class="header-section-number">3.1.2</span> Non-Negativity of KL Divergence</a></li>
+  </ul></li>
+  <li><a href="#monte-carlo-estimation" id="toc-monte-carlo-estimation" class="nav-link" data-scroll-target="#monte-carlo-estimation"><span class="header-section-number">3.2</span> Monte Carlo Estimation</a>
   <ul>
-  <li><a href="#variational-autoencoders-vaes" id="toc-variational-autoencoders-vaes" class="nav-link" data-scroll-target="#variational-autoencoders-vaes"><span class="header-section-number">4.1.1</span> Variational Autoencoders (VAEs)</a></li>
+  <li><a href="#naive-monte-carlo-estimation" id="toc-naive-monte-carlo-estimation" class="nav-link" data-scroll-target="#naive-monte-carlo-estimation"><span class="header-section-number">3.2.1</span> Naive Monte Carlo Estimation</a></li>
+  <li><a href="#variance-reduction" id="toc-variance-reduction" class="nav-link" data-scroll-target="#variance-reduction"><span class="header-section-number">3.2.2</span> Variance Reduction</a></li>
+  <li><a href="#control-variates" id="toc-control-variates" class="nav-link" data-scroll-target="#control-variates"><span class="header-section-number">3.2.3</span> Control Variates</a></li>
+  <li><a href="#mc-estimation-summary" id="toc-mc-estimation-summary" class="nav-link" data-scroll-target="#mc-estimation-summary"><span class="header-section-number">3.2.4</span> MC Estimation Summary</a></li>
   </ul></li>
-  <li><a href="#model-distillation" id="toc-model-distillation" class="nav-link" data-scroll-target="#model-distillation"><span class="header-section-number">4.2</span> Model Distillation</a></li>
-  <li><a href="#reinforcement-learning" id="toc-reinforcement-learning" class="nav-link" data-scroll-target="#reinforcement-learning"><span class="header-section-number">4.3</span> Reinforcement Learning</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">5</span> Conclusion</a></li>
+  <li><a href="#f-divergence" id="toc-f-divergence" class="nav-link" data-scroll-target="#f-divergence"><span class="header-section-number">4</span> <span class="math inline">\(f\)</span>-Divergence</a></li>
+  <li><a href="#applications-of-kl-divergence" id="toc-applications-of-kl-divergence" class="nav-link" data-scroll-target="#applications-of-kl-divergence"><span class="header-section-number">5</span> Applications of KL Divergence</a>
+  <ul>
+  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification"><span class="header-section-number">5.1</span> Classification</a></li>
+  <li><a href="#sec-kl-in-generative-model" id="toc-sec-kl-in-generative-model" class="nav-link" data-scroll-target="#sec-kl-in-generative-model"><span class="header-section-number">5.2</span> KL Divergence in Generative Models</a>
+  <ul>
+  <li><a href="#variational-autoencoders-vaes" id="toc-variational-autoencoders-vaes" class="nav-link" data-scroll-target="#variational-autoencoders-vaes"><span class="header-section-number">5.2.1</span> Variational Autoencoders (VAEs)</a></li>
+  <li><a href="#ddpm" id="toc-ddpm" class="nav-link" data-scroll-target="#ddpm"><span class="header-section-number">5.2.2</span> DDPM</a></li>
+  </ul></li>
+  <li><a href="#knowledge-distillation" id="toc-knowledge-distillation" class="nav-link" data-scroll-target="#knowledge-distillation"><span class="header-section-number">5.3</span> Knowledge Distillation</a>
+  <ul>
+  <li><a href="#dino" id="toc-dino" class="nav-link" data-scroll-target="#dino"><span class="header-section-number">5.3.1</span> DINO</a></li>
+  </ul></li>
+  <li><a href="#reinforcement-learning" id="toc-reinforcement-learning" class="nav-link" data-scroll-target="#reinforcement-learning"><span class="header-section-number">5.4</span> Reinforcement Learning</a>
+  <ul>
+  <li><a href="#trust-region-policy-optimization-trpo" id="toc-trust-region-policy-optimization-trpo" class="nav-link" data-scroll-target="#trust-region-policy-optimization-trpo"><span class="header-section-number">5.4.1</span> Trust Region Policy Optimization (TRPO)</a></li>
+  <li><a href="#proximal-policy-optimization-ppo" id="toc-proximal-policy-optimization-ppo" class="nav-link" data-scroll-target="#proximal-policy-optimization-ppo"><span class="header-section-number">5.4.2</span> Proximal Policy Optimization (PPO)</a></li>
+  </ul></li>
+  <li><a href="#sec-kl-in-llm" id="toc-sec-kl-in-llm" class="nav-link" data-scroll-target="#sec-kl-in-llm"><span class="header-section-number">5.5</span> LLM Post-Training with KL Divergence</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a></li>
   </ul>
 </nav>
 </nav>
@@ -502,7 +548,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    KL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications in various fields such as machine learning, data science, and artificial intelligence. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.
+    KL Divergence, also known as <em>Kullback-Leibler Divergence</em>, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of <strong>entropy</strong>, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its mathematical formulation, how to approximate use three different Monte Carlo Estimator, and finally its applications in various fields such as classification, generative modeling, knowledge disllation, reinforcement learning, and large language model. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.
   </div>
 </div>
 
@@ -526,7 +572,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Last modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">2025-12-02</p>
+      <p class="date-modified">2026-02-04</p>
     </div>
   </div>
     
@@ -540,164 +586,533 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#entropy" id="toc-entropy"><span class="header-section-number">1</span> Entropy</a></li>
+  <li><a href="#entropy" id="toc-entropy"><span class="header-section-number">1</span> Entropy</a>
+  <ul>
+  <li><a href="#maximum-entropy-principle" id="toc-maximum-entropy-principle"><span class="header-section-number">1.1</span> Maximum Entropy Principle</a></li>
+  <li><a href="#applications-of-entropy" id="toc-applications-of-entropy"><span class="header-section-number">1.2</span> Applications of Entropy</a></li>
+  </ul></li>
   <li><a href="#cross-entropy" id="toc-cross-entropy"><span class="header-section-number">2</span> Cross-Entropy</a></li>
   <li><a href="#kl-divergence" id="toc-kl-divergence"><span class="header-section-number">3</span> KL Divergence</a>
   <ul>
-  <li><a href="#monte-carlo-estimation-of-kl-divergence" id="toc-monte-carlo-estimation-of-kl-divergence"><span class="header-section-number">3.1</span> Monte Carlo Estimation of KL Divergence</a></li>
-  <li><a href="#control-variates" id="toc-control-variates"><span class="header-section-number">3.2</span> Control Variates</a></li>
-  </ul></li>
-  <li><a href="#applications-of-kl-divergence" id="toc-applications-of-kl-divergence"><span class="header-section-number">4</span> Applications of KL Divergence</a>
+  <li><a href="#kl-divergence-properties" id="toc-kl-divergence-properties"><span class="header-section-number">3.1</span> KL Divergence Properties</a>
   <ul>
-  <li><a href="#kl-divergence-in-generative-models" id="toc-kl-divergence-in-generative-models"><span class="header-section-number">4.1</span> KL Divergence in Generative Models</a>
+  <li><a href="#asymmetry-of-kl-divergence" id="toc-asymmetry-of-kl-divergence"><span class="header-section-number">3.1.1</span> Asymmetry of KL Divergence</a></li>
+  <li><a href="#non-negativity-of-kl-divergence" id="toc-non-negativity-of-kl-divergence"><span class="header-section-number">3.1.2</span> Non-Negativity of KL Divergence</a></li>
+  </ul></li>
+  <li><a href="#monte-carlo-estimation" id="toc-monte-carlo-estimation"><span class="header-section-number">3.2</span> Monte Carlo Estimation</a>
   <ul>
-  <li><a href="#variational-autoencoders-vaes" id="toc-variational-autoencoders-vaes"><span class="header-section-number">4.1.1</span> Variational Autoencoders (VAEs)</a></li>
+  <li><a href="#naive-monte-carlo-estimation" id="toc-naive-monte-carlo-estimation"><span class="header-section-number">3.2.1</span> Naive Monte Carlo Estimation</a></li>
+  <li><a href="#variance-reduction" id="toc-variance-reduction"><span class="header-section-number">3.2.2</span> Variance Reduction</a></li>
+  <li><a href="#control-variates" id="toc-control-variates"><span class="header-section-number">3.2.3</span> Control Variates</a></li>
+  <li><a href="#mc-estimation-summary" id="toc-mc-estimation-summary"><span class="header-section-number">3.2.4</span> MC Estimation Summary</a></li>
   </ul></li>
-  <li><a href="#model-distillation" id="toc-model-distillation"><span class="header-section-number">4.2</span> Model Distillation</a></li>
-  <li><a href="#reinforcement-learning" id="toc-reinforcement-learning"><span class="header-section-number">4.3</span> Reinforcement Learning</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion"><span class="header-section-number">5</span> Conclusion</a></li>
+  <li><a href="#f-divergence" id="toc-f-divergence"><span class="header-section-number">4</span> <span class="math inline">\(f\)</span>-Divergence</a></li>
+  <li><a href="#applications-of-kl-divergence" id="toc-applications-of-kl-divergence"><span class="header-section-number">5</span> Applications of KL Divergence</a>
+  <ul>
+  <li><a href="#classification" id="toc-classification"><span class="header-section-number">5.1</span> Classification</a></li>
+  <li><a href="#sec-kl-in-generative-model" id="toc-sec-kl-in-generative-model"><span class="header-section-number">5.2</span> KL Divergence in Generative Models</a>
+  <ul>
+  <li><a href="#variational-autoencoders-vaes" id="toc-variational-autoencoders-vaes"><span class="header-section-number">5.2.1</span> Variational Autoencoders (VAEs)</a></li>
+  <li><a href="#ddpm" id="toc-ddpm"><span class="header-section-number">5.2.2</span> DDPM</a></li>
+  </ul></li>
+  <li><a href="#knowledge-distillation" id="toc-knowledge-distillation"><span class="header-section-number">5.3</span> Knowledge Distillation</a>
+  <ul>
+  <li><a href="#dino" id="toc-dino"><span class="header-section-number">5.3.1</span> DINO</a></li>
+  </ul></li>
+  <li><a href="#reinforcement-learning" id="toc-reinforcement-learning"><span class="header-section-number">5.4</span> Reinforcement Learning</a>
+  <ul>
+  <li><a href="#trust-region-policy-optimization-trpo" id="toc-trust-region-policy-optimization-trpo"><span class="header-section-number">5.4.1</span> Trust Region Policy Optimization (TRPO)</a></li>
+  <li><a href="#proximal-policy-optimization-ppo" id="toc-proximal-policy-optimization-ppo"><span class="header-section-number">5.4.2</span> Proximal Policy Optimization (PPO)</a></li>
+  </ul></li>
+  <li><a href="#sec-kl-in-llm" id="toc-sec-kl-in-llm"><span class="header-section-number">5.5</span> LLM Post-Training with KL Divergence</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  <li><a href="#references" id="toc-references"><span class="header-section-number">7</span> References</a></li>
   </ul>
 </nav>
-<p>KL Divergence, one of the most important concepts in information theory and statistics, measures the difference between two probability distributions. It quantifies how much information is lost when one distribution is used to approximate another. It is widely used in various fields, including machine learning, data science, and artificial intelligence. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications.</p>
+<p>KL Divergence, one of the most important concepts in information theory and statistics, <u>measures the difference between two probability distributions.</u> It quantifies how much information is lost when one distribution is used to approximate another. It is widely used in various fields, including machine learning, data science, and artificial intelligence. In this blog post, we will explore the concept of KL Divergence, its mathematical formulation, and its applications.</p>
 <p>First, let’s start with the concept of entropy, which is the foundation of KL Divergence.</p>
 <section id="entropy" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Entropy</h1>
-<p>Entropy is a measure of uncertainty or randomness in a probability distribution. It quantifies the average amount of information required to describe the outcome of a random variable. The entropy <span class="math inline">\(H(P)\)</span> of a discrete probability distribution <span class="math inline">\(P\)</span> is defined as:</p>
+<p><span class="hilite-teal">Entropy is a measure of uncertainty or randomness in a probability distribution.</span> It quantifies the average amount of information required to describe the outcome of a random variable.</p>
+<p>First, let’s define what is the <strong>information</strong> content of an event. Intuitively, the information should have the following two properties:</p>
+<ol type="1">
+<li><u>The less likely an event is to occur, the more information it provides when it does occur.</u> Mathematically, this means that the information content should be <span class="hilite-blue">inversely proportional</span> to the probability of the event.</li>
+<li><u>The information content of independent events should be additive.</u> This means that if two events are independent, the total information content should be the sum of the individual information contents.</li>
+</ol>
+<p>Based on these properties, we can define the information content <span class="math inline">\(I(x)\)</span> of an event <span class="math inline">\(x\)</span> with probability <span class="math inline">\(P(x)\)</span> as:</p>
+<p><span id="eq-information-content"><span class="math display">\[
+I(x) = -\log P(x)
+\tag{1}\]</span></span></p>
+<p>The <em>negative logarithm</em> ensures that the information content is non-negative and satisfies the two properties mentioned above. One small note is that the base of the logarithm determines the unit of information. For example, if we use <span class="hilite-teal">base 2</span>, the unit is <span class="hilite-teal">bits</span>; if we use <span class="hilite-teal">base <span class="math inline">\(e\)</span></span>, the unit is <span class="hilite-teal">nats</span>. In the deep learning community, we often use <span class="hilite-teal">nats</span> as the unit of information.</p>
+<p>Ok, we have define the information content of an event. Now, we can define the entropy of a probability distribution, which is the average information content of all possible events in the distribution. When we say “average”, we mean the expectation over the distribution, so the entropy can be defined as:</p>
+<p><span id="eq-entropy-general"><span class="math display">\[
+H(P) = \mathbb{E}_{x \sim P} [I(x)] = \mathbb{E}_{x \sim P} [-\log P(x)]
+\tag{2}\]</span></span></p>
+<p>For the discrete case, the entropy is defined as:</p>
 <p><span id="eq-entropy-discrete"><span class="math display">\[
 H(P) = -\sum_{x} P(x) \log P(x)
-\tag{1}\]</span></span></p>
+\tag{3}\]</span></span></p>
 <p>where the sum is taken over all possible outcomes <span class="math inline">\(x\)</span> of the random variable.</p>
-<div id="7a37f09b" class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb1" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> entropy(p: torch.Tensor):</span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="cf">return</span> <span class="op">-</span>torch.<span class="bu">sum</span>(p <span class="op">*</span> torch.log(p <span class="op">+</span> <span class="fl">1e-10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> entropy(p: torch.Tensor, dim: <span class="bu">int</span> <span class="op">=</span> <span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="cf">return</span> <span class="op">-</span>torch.<span class="bu">sum</span>(p <span class="op">*</span> torch.log(p <span class="op">+</span> <span class="fl">1e-10</span>), dim<span class="op">=</span>dim)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For the continuous case, the entropy is defined as: <span id="eq-entropy-continuous"><span class="math display">\[
 H(P) = -\int P(x) \log P(x) dx
-\tag{2}\]</span></span></p>
-<p>where the integral is taken over the entire support of the random variable.</p>
+\tag{4}\]</span></span></p>
+<p>where the integral is taken over the entire support of the random variable. The entropy for continuous distributions is also known as <em>differential entropy</em>.</p>
+<div class="note foldable is-open">
+<div class="note-header foldable-header">
+<p>NOTE: Entropy in Physics</p>
+</div>
+<div class="note-container foldable-content">
+<p>The content of <strong>entropy was originally introduced as a thermodynamic quantity</strong> that measures the number of microscopic configurations (microstates) corresponding to a macroscopic state (macrostate).</p>
+<p>In physics, entropy is a quantitative measure of <strong>uncertainty over microscopic states</strong>, given limited macroscopic information.</p>
+<p>A physical system can be described at two levels:</p>
+<ul>
+<li><strong>Macroscopic state</strong>: observable quantities (temperature, pressure, energy)</li>
+<li><strong>Microscopic state</strong>: the exact configuration of all particles</li>
+</ul>
+<p>Many different microscopic configurations can correspond to the same macroscopic observation. Entropy measures <strong>how many possibilities remain unresolved</strong>.</p>
+<p>In statistical mechanics, this idea is captured by Boltzmann entropy: <span class="math display">\[
+S = k_B \log \Omega
+\]</span> where <span class="math inline">\(\Omega\)</span> is the number of microscopic states consistent with the observed constraints.</p>
+<p>This concept directly generalizes to probability distributions. When microstates are not equally likely, uncertainty is no longer determined by counting, but by <strong>averaging surprisal</strong>: <span class="math display">\[
+H(P) = -\sum_x P(x)\log P(x)
+\]</span></p>
+<p>From a modern perspective: - <strong>Thermodynamic entropy</strong> quantifies uncertainty over physical configurations - <strong>Shannon entropy</strong> quantifies uncertainty over random variables - Both arise from the same principle: <strong>maximum uncertainty subject to constraints</strong></p>
+<p>This principle is fundamental in machine learning: - Maximum entropy leads to exponential-family distributions - Many learning objectives can be derived from entropy maximization or entropy regularization - KL divergence, cross-entropy, and likelihood-based training all build on this foundation</p>
+<p>Thus, entropy provides a unifying abstraction that links <strong>physics, information theory, and modern deep learning objectives</strong>.</p>
+</div>
+</div>
+<section id="maximum-entropy-principle" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="maximum-entropy-principle"><span class="header-section-number">1.1</span> Maximum Entropy Principle</h2>
+<p>The maximum entropy principle states that, given a set of constraints, the probability distribution that best represents the current state of knowledge is the one with the maximum entropy. This principle is often used in statistical mechanics and machine learning to derive probability distributions that satisfy certain constraints while making the least amount of assumptions about the data.</p>
+<p>We can formulate the maximum entropy problem as follows: Given a set of constraints on the expected values of certain functions <span class="math inline">\(f_i(x)\)</span>, we want to find the probability distribution <span class="math inline">\(P(x)\)</span> that maximizes the entropy subject to these constraints:</p>
+<p><span id="eq-maximum-entropy"><span class="math display">\[
+\begin{split}
+\text{maximize} \quad &amp; H(P) = -\sum_{x} P(x) \log P(x) \\
+\text{subject to} \quad &amp; \sum_{x} P(x) f_i(x) = c_i, \quad i = 1, 2, \ldots, m \\
+&amp; \sum_{x} P(x) = 1 \\
+&amp; P(x) \geq 0, \quad \forall x
+\end{split}
+\tag{5}\]</span></span></p>
+<p>where <span class="math inline">\(c_i\)</span> are the expected values of the functions <span class="math inline">\(f_i(x)\)</span>. The solution to this optimization problem can be found using the method of Lagrange multipliers, leading to the following form for the maximum entropy distribution: <span id="eq-maximum-entropy-solution"><span class="math display">\[
+P(x) = \frac{1}{Z} \exp\left(-\sum_{i=1}^{m} \lambda_i f_i(x)\right)
+\tag{6}\]</span></span></p>
+<p>where <span class="math inline">\(\lambda_i\)</span> are the Lagrange multipliers and <span class="math inline">\(Z\)</span> is the partition function that normalizes the distribution. Solving for the Lagrange multipliers <span class="math inline">\(\lambda_i\)</span> allows us to find the maximum entropy distribution that satisfies the given constraints. The solution for <span class="math inline">\(\lambda_i\)</span> typically requires numerical methods, as it involves solving a system of equations derived from the constraints. Solve these equations to obtain the specific values of <span class="math inline">\(\lambda_i\)</span> that define the maximum entropy distribution. For the diescrete case, the partition function <span class="math inline">\(Z\)</span> is given by: <span id="eq-partition-function-discrete"><span class="math display">\[
+Z = \sum_{x} \exp\left(-\sum_{i=1}^{m} \lambda_i f_i(x)\right)
+\tag{7}\]</span></span></p>
+<p>For the continuous case, the partition function <span class="math inline">\(Z\)</span> is given by: <span id="eq-partition-function-continuous"><span class="math display">\[
+Z = \int \exp\left(-\sum_{i=1}^{m} \lambda_i f_i(x)\right) dx
+\tag{8}\]</span></span></p>
+<p>Solve the above, we can obtain the maximum entropy distribution that satisfies the given constraints:</p>
+<ul>
+<li><p>For the discrete case: <span id="eq-maximum-entropy-discrete"><span class="math display">\[
+P(x) = \frac{1}{\sum_{x} \exp\left(-\sum_{i=1}^{m} \lambda_i f_i(x)\right)} \exp\left(-\sum_{i=1}^{m} \lambda_i f_i(x)\right)
+\tag{9}\]</span></span></p></li>
+<li><p>For the continuous case: <span class="math display">\[
+P(x) = \frac{1}{\int \exp\left(-\sum_{i=1}^{m} \lambda_i f_i(x)\right) dx} \exp\left(-\sum_{i=1}^{m} \lambda_i f_i(x)\right)
+\]</span></p></li>
+</ul>
+</section>
+<section id="applications-of-entropy" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="applications-of-entropy"><span class="header-section-number">1.2</span> Applications of Entropy</h2>
+<p>Entropy and Maximum Entropy Principle have wide-ranging applications in various fields, for example: - Data Compression: Entropy is used to determine the optimal encoding scheme for data compression. The lower the entropy, the more compressible the data is. - Cryptography: Entropy is used to measure the randomness of cryptographic keys. Higher entropy keys are more secure against brute-force attacks. - Machine Learning: Entropy is used in decision tree algorithms to measure the impurity of a dataset. The goal is to minimize the entropy of the dataset after each split. - Information Theory: Entropy is a fundamental concept in information theory, where it is used to quantify the amount of information in a message.</p>
+<div class="tldr foldable is-open">
+<div class="tldr-header foldable-header">
+<p>TL;DR: Entropy</p>
+</div>
+<div class="tldr-container foldable-content">
+<p>Entropy is a measure of uncertainty in a probability distribution. It quantifies the average amount of information required to describe the outcome of a random variable. The categorical formula for entropy is uniforma distribution, for the continuous case, the entropy of a standard normal distribution is approximately 1.418 nats.</p>
+</div>
+</div>
+<p>For example, in the reinforcement learning, entropy regularization is often used to encourage exploration by adding an entropy term to the reward function. This helps to prevent the agent from getting stuck in local optima and promotes more diverse behavior.</p>
+</section>
 </section>
 <section id="cross-entropy" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Cross-Entropy</h1>
 <p>Cross-entropy measures the difference between two probability distributions. It quantifies the average number of bits needed to identify an event from a set of possibilities, given a predicted probability distribution <span class="math inline">\(Q\)</span> instead of the true distribution <span class="math inline">\(P\)</span>. The cross-entropy <span class="math inline">\(H(P, Q)\)</span> is defined as: <span id="eq-cross-entropy-discrete"><span class="math display">\[
 H(P, Q) = -\sum_{x} P(x) \log Q(x)
-\tag{3}\]</span></span></p>
+\tag{10}\]</span></span></p>
 <p>For the continuous case, the cross-entropy is defined as: <span id="eq-cross-entropy-continuous"><span class="math display">\[
 H(P, Q) = -\int P(x) \log Q(x) dx
-\tag{4}\]</span></span></p>
-<div id="579e7a7f" class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb2" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> cross_entropy(p: torch.Tensor, q: torch.Tensor):</span>
+\tag{11}\]</span></span></p>
+<div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> cross_entropy(p: torch.Tensor, q: torch.Tensor):</span>
 <span id="cb2-2"><a href="#cb2-2"></a>    <span class="cf">return</span> <span class="op">-</span>torch.<span class="bu">sum</span>(p <span class="op">*</span> torch.log(q <span class="op">+</span> <span class="fl">1e-10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
+<p>Look very similar to entropy (<a href="#eq-entropy-discrete" class="quarto-xref">Equation&nbsp;3</a>), right? The only difference is that in cross-entropy, we use the predicted distribution <span class="math inline">\(Q\)</span> instead of the true distribution <span class="math inline">\(P\)</span> in the logarithm term.</p>
 </section>
 <section id="kl-divergence" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> KL Divergence</h1>
-<p>KL Divergence measures the difference between two probability distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>. It quantifies the amount of information lost when <span class="math inline">\(Q\)</span> is used to approximate <span class="math inline">\(P\)</span>. The KL Divergence <span class="math inline">\(D_{KL}(P || Q)\)</span> is defined as: <span class="math display">\[
+<p>After understanding entropy and cross-entropy, we can now define KL Divergence.</p>
+<p>KL Divergence measures the difference between two probability distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>. It quantifies <span class="hilite-purple">the amount of information lost when <span class="math inline">\(Q\)</span> is used to approximate <span class="math inline">\(P\)</span>.</span> The KL Divergence <span class="math inline">\(D_{KL}(P || Q)\)</span> is defined as: <span class="math display">\[
 D_{KL}(P || Q) = \mathbb{E}_{x \sim P} \left[ \log \frac{P(x)}{Q(x)} \right]
 \]</span></p>
 <p>For the discrete case, the KL Divergence is defined as: <span id="eq-kl-divergence-discrete"><span class="math display">\[
 D_{KL}(P || Q) = \sum_{x} P(x) \log \frac{P(x)}{Q(x)}
-\tag{5}\]</span></span></p>
+\tag{12}\]</span></span></p>
 <p>For the continuous case, the KL Divergence is defined as:</p>
 <p><span id="eq-kl-divergence-continuous"><span class="math display">\[
 D_{KL}(P || Q) = \int P(x) \log \frac{P(x)}{Q(x)} dx
-\tag{6}\]</span></span></p>
-<div id="14288128" class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb3" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> kl_divergence(p: torch.Tensor, q: torch.Tensor):</span>
+\tag{13}\]</span></span></p>
+<p>Let’s expand the definition of KL Divergence to see its relationship with entropy and cross-entropy:</p>
+<p><span id="eq-kl-entropy-cross-entropy"><span class="math display">\[
+\begin{split}
+D_{KL}(P || Q) &amp; = \mathbb{E}_{x \sim P} \left[ \log \frac{P(x)}{Q(x)} \right] \\
+&amp; = - \underbrace{\mathbb{E}_{x \sim P}[-\log P(x)]}_{\text{Entropy } H(P)} + \underbrace{\mathbb{E}_{x \sim P}[-\log Q(x)]}_{\text{Cross-Entropy } H(P, Q)} \\
+&amp; = H(P, Q) - H(P)
+\end{split}
+\tag{14}\]</span></span></p>
+<p>We can see from <a href="#eq-kl-entropy-cross-entropy" class="quarto-xref">Equation&nbsp;14</a>, KL Divergence can be interpreted as the difference between cross-entropy and entropy. In other words, it measures how much more information is needed to encode samples from distribution <span class="math inline">\(P\)</span> using the code optimized for distribution <span class="math inline">\(Q\)</span> instead of the optimal code for <span class="math inline">\(P\)</span>.</p>
+<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> kl_divergence(p: torch.Tensor, q: torch.Tensor):</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="cf">return</span> torch.<span class="bu">sum</span>(p <span class="op">*</span> torch.log((p <span class="op">+</span> <span class="fl">1e-10</span>) <span class="op">/</span> (q <span class="op">+</span> <span class="fl">1e-10</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<p>KL Divergence has several important properties, each of which has significant implications in various applications:</p>
+<ol type="1">
+<li><strong>Asymmetry</strong>: KL Divergence is not symmetric, meaning that <span class="math inline">\(D_{KL}(P || Q) \neq D_{KL}(Q || P)\)</span>. This property reflects the fact that KL Divergence measures the information lost when approximating <span class="math inline">\(P\)</span> with <span class="math inline">\(Q\)</span>, and not vice versa.</li>
+<li><strong>Non-negativity</strong>: KL Divergence is always non-negative, i.e., <span class="math inline">\(D_{KL}(P || Q) \geq 0\)</span>, with equality if and only if <span class="math inline">\(P = Q\)</span> almost everywhere. This property is a consequence of Gibbs’ inequality.</li>
+<li><strong>Additivity</strong>: KL Divergence is additive for independent distributions. If <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span> are independent distributions, and <span class="math inline">\(Q_1\)</span> and <span class="math inline">\(Q_2\)</span> are independent distributions, then: <span class="math display">\[
+D_{KL}(P_1 \times P_2 || Q_1 \times Q_2) = D_{KL}(P_1 || Q_1) + D_{KL}(P_2 || Q_2)
+\]</span></li>
+<li><strong>Invariance under parameterization</strong>: KL Divergence is invariant under reparameterization of the distributions. If <span class="math inline">\(f\)</span> is a bijective function, then: <span class="math display">\[
+D_{KL}(P || Q) = D_{KL}(f(P) || f(Q))
+\]</span></li>
+</ol>
+<p>Let’s take a closer look at some of these properties.</p>
+<section id="kl-divergence-properties" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="kl-divergence-properties"><span class="header-section-number">3.1</span> KL Divergence Properties</h2>
+<section id="asymmetry-of-kl-divergence" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="asymmetry-of-kl-divergence"><span class="header-section-number">3.1.1</span> Asymmetry of KL Divergence</h3>
+<p>The fist property mentioned above is the asymmetry of KL Divergence. Let’s illustrate this with a simple example.</p>
+<div id="fig-kl-asymmetric" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kl-asymmetric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/KL-asymmetric.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kl-asymmetric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: As shown in the figure above, we have two probability distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>. When we compute the KL Divergence <span class="math inline">\(D_{KL}(P || Q)\)</span>, we are measuring how much information is lost when we use distribution <span class="math inline">\(Q\)</span> to approximate distribution <span class="math inline">\(P\)</span>. In this case, since <span class="math inline">\(Q\)</span> is quite different from <span class="math inline">\(P\)</span>, the KL Divergence is relatively large.
+</figcaption>
+</figure>
 </div>
 <p>One thing to note about KL Divergence is that it is asymmetric, meaning that <span class="math inline">\(D_{KL}(P || Q) \neq D_{KL}(Q || P)\)</span>. This asymmetry reflects the fact that KL Divergence measures the information lost when approximating <span class="math inline">\(P\)</span> with <span class="math inline">\(Q\)</span>, and not vice versa.</p>
-<p><img src="./assets/KL-asymmetric.png" class="img-fluid"></p>
+<p>So, <span class="math inline">\(D_{KL}(P || Q)\)</span> is known as the <strong>forward KL Divergence</strong>, while <span class="math inline">\(D_{KL}(Q || P)\)</span> is known as the <strong>reverse KL Divergence</strong>. The choice between using forward or reverse KL Divergence depends on the specific application and the properties of the distributions involved. We will dig deeper into this topic in the applications section (<a href="#sec-kl-in-llm" class="quarto-xref">Section&nbsp;5.5</a>) later.</p>
+<p>In one sentence:</p>
+<div class="highlight">
+<p>In the KL Divergence, we use the distribution in the first argument as the “true” distribution, and the second argument as the “approximate” distribution. In other words, <span class="math inline">\(P\)</span> is the ground truth, which is our data distribution, and <span class="math inline">\(Q\)</span> is the model distribution that we are using to approximate <span class="math inline">\(P\)</span>.</p>
+</div>
+</section>
+<section id="non-negativity-of-kl-divergence" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="non-negativity-of-kl-divergence"><span class="header-section-number">3.1.2</span> Non-Negativity of KL Divergence</h3>
 <p>Another important property of KL Divergence is that it is always non-negative, i.e., <span class="math inline">\(D_{KL}(P || Q) \geq 0\)</span>, with equality if and only if <span class="math inline">\(P = Q\)</span> almost everywhere. This property is a consequence of Gibbs’ inequality. We can prove this using Jensen’s inequality: <span class="math display">\[
 D_{KL}(P || Q) = \mathbb{E}_{x \sim P} \left[ -\log \frac{Q(x)}{P(x)} \right] \geq -\log \mathbb{E}_{x \sim P} \left[ \frac{Q(x)}{P(x)} \right] = \log 1 = 0
 \]</span></p>
-<section id="monte-carlo-estimation-of-kl-divergence" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="monte-carlo-estimation-of-kl-divergence"><span class="header-section-number">3.1</span> Monte Carlo Estimation of KL Divergence</h2>
-<p>In practice, we sometimes don’t known the true distribution P, but we have samples from it. In this case, we can estimate the KL Divergence using Monte Carlo sampling:</p>
-<div id="4819830a" class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb4" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> kl_divergence_mc(p_samples: torch.Tensor, q: Callable):</span>
-<span id="cb4-2"><a href="#cb4-2"></a>    p_log_probs <span class="op">=</span> torch.log(q(p_samples) <span class="op">+</span> <span class="fl">1e-10</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>    p_probs <span class="op">=</span> torch.ones_like(p_log_probs) <span class="op">/</span> <span class="bu">len</span>(p_samples)  <span class="co"># assuming uniform distribution over samples</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>    <span class="cf">return</span> torch.<span class="bu">sum</span>(p_probs <span class="op">*</span> (torch.log(p_probs <span class="op">+</span> <span class="fl">1e-10</span>) <span class="op">-</span> p_log_probs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>This is un-biased estimator of KL Divergence using samples from distribution <span class="math inline">\(P\)</span>. However, it may have high variance depending on the number of samples and the distributions involved.</p>
-<p>To reduce variance, we can use importance sampling:</p>
-<div id="4975a817" class="cell">
-<details class="code-fold">
-<summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb5" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> kl_divergence_importance_sampling(p_samples: torch.Tensor, p: Callable, q</span>
-<span id="cb5-2"><a href="#cb5-2"></a>):</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    q_log_probs <span class="op">=</span> torch.log(q(p_samples) <span class="op">+</span> <span class="fl">1e-10</span>)</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    p_log_probs <span class="op">=</span> torch.log(p(p_samples) <span class="op">+</span> <span class="fl">1e-10</span>)</span>
-<span id="cb5-5"><a href="#cb5-5"></a>    weights <span class="op">=</span> torch.exp(p_log_probs <span class="op">-</span> q_log_probs)</span>
-<span id="cb5-6"><a href="#cb5-6"></a>    weights <span class="op">=</span> weights <span class="op">/</span> torch.<span class="bu">sum</span>(weights)  <span class="co"># normalize weights</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">return</span> torch.<span class="bu">sum</span>(weights <span class="op">*</span> (p_log_probs <span class="op">-</span> q_log_probs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-<p>This method uses samples from distribution <span class="math inline">\(Q\)</span> and weights them according to the ratio of probabilities under <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>, leading to a lower variance estimate of KL Divergence.</p>
-<p>Another method is Control Variates</p>
+<p>Because the logarithm function is concave, we can apply Jensen’s inequality to obtain the above result. The equality holds if and only if <span class="math inline">\(P(x) = Q(x)\)</span> for all <span class="math inline">\(x\)</span> in the support of <span class="math inline">\(P\)</span>.</p>
+<p>This property is important because it ensures that KL Divergence is a valid measure of the difference between two probability distributions. If KL Divergence could be negative, it would not make sense as a measure of divergence.</p>
+<p>We will see the implications of this property in various applications of KL Divergence later (<a href="#sec-kl-in-generative-model" class="quarto-xref">Section&nbsp;5.2</a>).</p>
 </section>
-<section id="control-variates" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="control-variates"><span class="header-section-number">3.2</span> Control Variates</h2>
-<p>Control variates is a variance reduction technique that involves using a correlated variable with known expected value to reduce the variance of an estimator. In the context of KL Divergence estimation, we can use a control variate to improve the estimate:</p>
+</section>
+<section id="monte-carlo-estimation" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="monte-carlo-estimation"><span class="header-section-number">3.2</span> Monte Carlo Estimation</h2>
+<p>Knowing what is the KL Divergence and its properties, the next question is: how to estimate KL Divergence in practice? In the reality, we sometimes don’t have true distribution <span class="math inline">\(P\)</span>, what we have is <span class="math inline">\(\mathcal{D} = \{x_1, x_2, \ldots, x_N\}\)</span>, a set of samples drawn from distribution <span class="math inline">\(P\)</span>. But we want is use <span class="math inline">\(Q\)</span> to approximate <span class="math inline">\(P\)</span>, and we want to measure how good is the approximation using KL Divergence. Ok, what can we do? Well, we can use Monte Carlo estimation to estimate the KL Divergence using the samples from distribution <span class="math inline">\(P\)</span>. Why we need Monte Carlo estimation? We need MC estimation because:</p>
+<ol type="1">
+<li>The distribution <span class="math inline">\(P\)</span> or <span class="math inline">\(Q\)</span> may not have a closed-form expression, making it difficult to compute the KL Divergence analytically.</li>
+<li>The dimensionality of the data may be high, making numerical integration methods computationally expensive</li>
+<li>We may only have access to samples from the distribution <span class="math inline">\(P\)</span>, rather than the full distribution itself.</li>
+</ol>
+<p>In this section, we will explore the first two cases, where we have access to the full distribution <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>, but they may not have closed-form expressions or may be high-dimensional. For the third case, where we only have access to samples from distribution <span class="math inline">\(P\)</span>, we will discuss it in the next section (<a href="#sec-kl-in-generative-model" class="quarto-xref">Section&nbsp;5.2</a>).</p>
+<p>We will derive three Monte Carlo estimation methods for KL Divergence:</p>
+<ol type="1">
+<li>Naive Monte Carlo Estimation</li>
+<li>Importance Sampling</li>
+<li>Control Variates</li>
+</ol>
+<div id="fig-two-gaussian-distributions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-two-gaussian-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/two-gaussian-distributions.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-two-gaussian-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Two Gaussian distributions <span class="math inline">\(P = \mathcal{N}(0.1, 1.5)\)</span> and <span class="math inline">\(Q = \mathcal{N}(0, 2.2)\)</span> used for KL Divergence estimation examples.
+</figcaption>
+</figure>
+</div>
+<section id="naive-monte-carlo-estimation" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="naive-monte-carlo-estimation"><span class="header-section-number">3.2.1</span> Naive Monte Carlo Estimation</h3>
+<p>The Monte Carlo estimation of KL Divergence involves using samples drawn from distribution <span class="math inline">\(P\)</span> to estimate the expectation in the definition of KL Divergence. Given a set of samples <span class="math inline">\(\{x_1, x_2, \ldots, x_N\}\)</span> drawn from distribution <span class="math inline">\(P\)</span>, we can estimate the KL Divergence as follows:</p>
+<p><span id="eq-kl-monte-carlo-naive"><span class="math display">\[
+D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \log \frac{P(x_i)}{Q(x_i)}
+\tag{15}\]</span></span></p>
+<p>This is un-biased estimator of KL Divergence using samples from distribution <span class="math inline">\(P\)</span>. However, it may have high variance depending on the number of samples and the distributions involved.</p>
+<div id="fig-naive-mc-kl" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-naive-mc-kl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/2026-02-04-14-44-29.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-naive-mc-kl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: The example plot of naive Monte Carlo estimation of KL Divergence between two Gaussian distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> using different number of samples.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="variance-reduction" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="variance-reduction"><span class="header-section-number">3.2.2</span> Variance Reduction</h3>
+<p>WAIT! we just mentioned that KL divergence is non-negative, but in the above figure, we can see that the estimated KL Divergence is negative when using 10 samples. Why is that? The problem arise in the <span class="math inline">\(\log\)</span> term, when <span class="math inline">\(Q(x_i)\)</span> is bigger than <span class="math inline">\(P(x_i)\)</span>, the <span class="math inline">\(\log\)</span> term becomes negative, and when we average over all samples, the estimated KL Divergence can become negative. This is a limitation of the naive Monte Carlo estimation method, especially when the number of samples is small or when the distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> are very different.</p>
+<p>One way to address this issue is to write the KL Divergence as:</p>
+<p><span id="eq-kl-mc-estimator-2"><span class="math display">\[
+\widehat{D_{KL}}(P || Q) = \frac{1}{N} \sum_{i=1}^{N} \frac{1}{2} \left( \log \frac{P(x_i)}{Q(x_i)} \right)^2
+\tag{16}\]</span></span></p>
+<div class="note foldable is-open">
+<div class="note-header foldable-header">
+<p>NOTE Derive of <a href="#eq-kl-mc-estimator-2" class="quarto-xref">Equation&nbsp;16</a></p>
+</div>
+<div class="note-container foldable-content">
+<p>For those interested in the derivation of <a href="#eq-kl-mc-estimator-2" class="quarto-xref">Equation&nbsp;16</a>, here it is. Let’s define a new random variable <span class="math inline">\(r\)</span> as: <span class="math inline">\(r=\frac{Q}{P}\)</span>. Then, we can rewrite the KL Divergence as:</p>
 <p><span class="math display">\[
-D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \left( \log \frac{P(x_i)}{Q(x_i)} - c (g(x_i) - E[g(X)]) \right)
+D_{KL}(P || Q) = \mathbb{E}_{x \sim P} \left[ -\log r(x) \right]
+\]</span></p>
+<p>Now, we can use the Taylor expansion of the logarithm function around <span class="math inline">\(r=1\)</span> (i.e., when <span class="math inline">\(P \approx Q\)</span>): <span class="math display">\[
+-\log r \approx (1 - r) + \frac{(1 - r)^2}{2} + O((1 - r)^3)
+\]</span></p>
+<p>Taking the expectation with respect to <span class="math inline">\(P\)</span>, we have: <span class="math display">\[
+D_{KL}(P || Q) \approx \mathbb{E}_{x \sim P} \left[ (1 - r(x)) + \frac{(1 - r(x))^2}{2} \right]
+\]</span></p>
+<p>Since <span class="math inline">\(\mathbb{E}_{x \sim P}[1 - r(x)] = 0\)</span>, the first term vanishes, and we are left with: <span class="math display">\[
+D_{KL}(P || Q) \approx \frac{1}{2} \mathbb{E}_{x \sim P} \left[ (1 - r(x))^2 \right]
+\]</span> Expanding <span class="math inline">\((1 - r(x))^2\)</span>, we get: <span class="math display">\[
+(1 - r(x))^2 = \left(1 - \frac{Q(x)}{P(x)}\right)^2 = \left(\frac{P(x) - Q(x)}{P(x)}\right)^2 = \left(\frac{P(x)}{Q(x)} - 1\right)^2
+\]</span></p>
+<p>Substituting this back into the expectation, we have: <span class="math display">\[
+D_{KL}(P || Q) \approx \frac{1}{2} \mathbb{E}_{x \sim P} \left[ \left(\frac{P(x)}{Q(x)} - 1\right)^2 \right]
+\]</span></p>
+<p>In the begin, we assume that <span class="math inline">\(P \approx Q\)</span>, which means that <span class="math inline">\(\frac{P(x)}{Q(x)}\)</span> is close to 1. Therefore, we have <span class="math inline">\(\left(\frac{P(x)}{Q(x)} - 1\right)^2 \approx \left(\log \frac{P(x)}{Q(x)}\right)^2\)</span>. Plugging this approximation into the expectation, we get:</p>
+<p><span class="math display">\[
+D_{KL}(P || Q) \approx \frac{1}{2} \mathbb{E}_{x \sim P} \left[ \left(\log \frac{P(x)}{Q(x)}\right)^2 \right]
+\]</span></p>
+<p>We arrive at the estimator in <a href="#eq-kl-mc-estimator-2" class="quarto-xref">Equation&nbsp;16</a>. Notice that we ignore the -1 term in the expansion, as it does not affect the estimation of KL Divergence.</p>
+</div>
+</div>
+<div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/2026-02-04-15-45-16.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4
+</figcaption>
+</figure>
+</div>
+<p>Good, this is lower variance, but it is biased. So, is there any other way to reduce the variance while keeping the estimator unbiased?</p>
+</section>
+<section id="control-variates" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="control-variates"><span class="header-section-number">3.2.3</span> Control Variates</h3>
+<p>We known the naive version <a href="#eq-kl-monte-carlo-naive" class="quarto-xref">Equation&nbsp;15</a> is unbiased but high variance, while the second version <a href="#eq-kl-mc-estimator-2" class="quarto-xref">Equation&nbsp;16</a> is lower variance but biased. Is there any way to reduce the variance while keeping the estimator unbiased? Yes, we can use control variates to achieve this.</p>
+<p><a href="https://en.wikipedia.org/wiki/Control_variates">Control variates</a> is a <a href="https://en.wikipedia.org/wiki/Variance_reduction">variance reduction technique</a> that involves using a correlated variable with known expected value to reduce the variance of an estimator. In the context of KL Divergence estimation, we can use a control variate to improve the estimate:</p>
+<p><span class="math display">\[
+D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \left( \log \frac{P(x_i)}{Q(x_i)} -  \boxed{\lambda(g(x_i) - E[g(X)])} \right)
+\]</span></p>
+<p>As long as the term <span class="math inline">\(\lambda(g(x_i) - E[g(X)])\)</span> has zero mean under distribution <span class="math inline">\(P\)</span>, the estimator remains unbiased. Let’s first verify that the expectation of the control variate term is zero:</p>
+<p><span class="math display">\[
+\begin{split}
+\mathbb{E}_{x \sim P}[\lambda(g(x) - E[g(X)])] &amp; = \lambda \left( \mathbb{E}_{x \sim P}[g(x)] - E[g(X)] \right) \\
+&amp; = \lambda (\int P(x) g(x) dx - E[g(X)]) \\
+&amp; = 0
+\end{split}
+\]</span></p>
+<p>where <span class="math inline">\(\lambda\)</span> is a scaling factor that can be optimized to minimize the variance of the estimator, and <span class="math inline">\(g(x)\)</span> is a function that is correlated with the log-ratio term <span class="math inline">\(\log \frac{P(x)}{Q(x)}\)</span>. The choice of <span class="math inline">\(g(x)\)</span> is crucial for the effectiveness of the control variate method. A common choice for <span class="math inline">\(g(x)\)</span> is to use a function that approximates the log-ratio term, such as a linear or quadratic function. Plug in the <span class="math inline">\(g(x)\)</span> into the estimator, we have:</p>
+<p><span id="eq-kl-mc-control-variates"><span class="math display">\[
+D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \left(- \log g(x_i) -  \lambda\left(g(x_i) - 1 \right) \right)
+\tag{17}\]</span></span></p>
+<p><img src="./assets/logx_x_1.png" class="img-fluid"></p>
+<p>We see the <span class="math inline">\(x-1\)</span> is always greater than or equal to 0 when <span class="math inline">\(x \geq 1\)</span>, and less than or equal to 0 when <span class="math inline">\(x \leq 1\)</span>. Therefore, by choosing an appropriate <span class="math inline">\(\lambda\)</span>, we can reduce the variance of the estimator.</p>
+<p>We can take <span class="math inline">\(\lambda = 1\)</span> for simplicity, and the estimator becomes: <span class="math display">\[
+D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \left( g(x_i) - 1 - g(x_i) \right)
 \]</span></p>
 </section>
+<section id="mc-estimation-summary" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="mc-estimation-summary"><span class="header-section-number">3.2.4</span> MC Estimation Summary</h3>
+<p>In this section, we have explored three Monte Carlo estimation methods for KL Divergence:</p>
+<div id="tbl-kl-mc-estimation" class="hover quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[30, 60, 5, 5]">
+<figure class="quarto-float quarto-float-tbl figure">
+<div aria-describedby="tbl-kl-mc-estimation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-hover table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 60%">
+<col style="width: 5%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th style="text-align: left;">Form</th>
+<th>Unbiased</th>
+<th>Variance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Naive Monte Carlo</td>
+<td style="text-align: left;"><span class="math inline">\(\frac{1}{N} \sum_{i=1}^{N} \log \frac{P(x_i)}{Q(x_i)}\)</span></td>
+<td>Yes</td>
+<td>High</td>
+</tr>
+<tr class="even">
+<td>Squared Log Estimator</td>
+<td style="text-align: left;"><span class="math inline">\(\frac{1}{N} \sum_{i=1}^{N} \frac{1}{2}\left(\log \frac{P(x_i)}{Q(x_i)}\right)^2\)</span></td>
+<td>No</td>
+<td>Low</td>
+</tr>
+<tr class="odd">
+<td>Control Variates</td>
+<td style="text-align: left;"><span class="math inline">\(\frac{1}{N} \sum_{i=1}^{N}\!\left(\log \frac{P(x_i)}{Q(x_i)} - \lambda\big(g(x_i)-\mathbb{E}[g(X)]\big)\right)\)</span></td>
+<td>Yes</td>
+<td>Low</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl" id="tbl-kl-mc-estimation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Summary of Monte Carlo estimation methods for KL Divergence.
+</figcaption>
+</figure>
+</div>
 </section>
-<section id="applications-of-kl-divergence" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Applications of KL Divergence</h1>
+</section>
+</section>
+<section id="f-divergence" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> <span class="math inline">\(f\)</span>-Divergence</h1>
+<p>Before we dive into the applications of KL Divergence, let’s take a look at a more general class of divergence measures called <span class="math inline">\(f\)</span>-Divergence. KL Divergence is actually a special case of <span class="math inline">\(f\)</span>-Divergence.</p>
+<p><span class="math inline">\(f\)</span>-Divergence is a class of divergence measures that quantify the difference between two probability distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>. It is defined as:</p>
+<p><span id="eq-f-divergence"><span class="math display">\[
+D_f(P || Q) = \mathbb{E}_{x \sim Q} \left[ f\left( \frac{P(x)}{Q(x)} \right) \right]
+\tag{18}\]</span></span></p>
+<p>where <span class="math inline">\(f: (0, \infty) \to \mathbb{R}\)</span> is a convex function satisfying <span class="math inline">\(f(1) = 0\)</span>. Different choices of the function <span class="math inline">\(f\)</span> lead to different divergence measures. For example:</p>
+<ul>
+<li><strong>KL Divergence</strong>: <span class="math inline">\(f(t) = t \log t\)</span></li>
+<li><strong>Reverse KL Divergence</strong>: <span class="math inline">\(f(t) = -\log t\)</span></li>
+<li><strong>Jensen-Shannon Divergence</strong>: <span class="math inline">\(f(t) = \frac{1}{2} \left( t \log t + (1 - t) \log (1 - t) \right)\)</span></li>
+<li><strong>Total Variation Distance</strong>: <span class="math inline">\(f(t) = \frac{1}{2} |t - 1|\)</span></li>
+</ul>
+<p>The <span class="math inline">\(f\)</span>-Divergence framework provides a unified way to understand and analyze different divergence measures. The <span class="math inline">\(f\)</span>-Divergence has several important properties, including non-negativity, convexity, and invariance under reparameterization. These properties make <span class="math inline">\(f\)</span>-Divergence a useful tool in various applications, such as statistical inference, machine learning, and information theory.</p>
+</section>
+<section id="applications-of-kl-divergence" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Applications of KL Divergence</h1>
 <p>KL Divergence has numerous applications in various fields, including:</p>
 <ul>
-<li>Generative Models: KL Divergence is used in training generative models such as Variational Autoencoders (VAEs) to measure the difference between the learned distribution and the true data distribution.</li>
-<li>Model Distillation: KL Divergence is used to transfer knowledge from a large model (teacher) to a smaller model (student) by minimizing the KL Divergence between their output distributions.</li>
-<li>Reinforcement Learning: KL Divergence is used in policy optimization algorithms to ensure that the updated policy does not deviate too much from the previous policy.</li>
+<li><strong>Classification</strong>: KL Divergence is used as a loss function in classification tasks to measure the difference between the predicted probability distribution and the true distribution.</li>
+<li><strong>Generative Models</strong>: KL Divergence is used in training generative models such as Variational Autoencoders (VAEs) to measure the difference between the learned distribution and the true data distribution.</li>
+<li><strong>Model Distillation</strong>: KL Divergence is used to transfer knowledge from a large model (teacher) to a smaller model (student) by minimizing the KL Divergence between their output distributions.</li>
+<li><strong>Reinforcement Learning</strong>: KL Divergence is used in policy optimization algorithms to ensure that the updated policy does not deviate too much from the previous policy.</li>
+<li><strong>Large Language Models (LLMs)</strong>: KL Divergence is used in post-training techniques such as Reinforcement Learning from Human Feedback (RLHF) to fine-tune LLMs to better align with human preferences</li>
 </ul>
-<section id="kl-divergence-in-generative-models" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="kl-divergence-in-generative-models"><span class="header-section-number">4.1</span> KL Divergence in Generative Models</h2>
-<section id="variational-autoencoders-vaes" class="level3" data-number="4.1.1">
-<h3 data-number="4.1.1" class="anchored" data-anchor-id="variational-autoencoders-vaes"><span class="header-section-number">4.1.1</span> Variational Autoencoders (VAEs)</h3>
+<p>In this section, we will explore some of these applications in more detail.</p>
+<section id="classification" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="classification"><span class="header-section-number">5.1</span> Classification</h2>
+<p>In the classification tasks, KL Divergence is often used as a <span class="hilite-teal">loss function</span> to measure the difference between the predicted probability distribution and the true distribution (one-hot encoded labels):</p>
+<p><span id="eq-kl-classification"><span class="math display">\[
+\mathcal{L} = D_{KL}(P_{true} || P_{pred}) = \sum_{b}^{B} \sum_{i}^{C} P_{true}(x_{b,i}) \log \frac{P_{true}(x_{b,i})}{P_{pred}(x_{b,i} )}
+\tag{19}\]</span></span></p>
+<p>However, since the true distribution is often represented as one-hot vectors, this reduces to the cross-entropy loss commonly used in classification tasks:</p>
+<p><span class="math display">\[
+\mathcal{L} = - \sum_{b}^{B} P_{true}(x_{b}) \log P_{pred}(x_{b})
+\]</span></p>
+</section>
+<section id="sec-kl-in-generative-model" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-kl-in-generative-model"><span class="header-section-number">5.2</span> KL Divergence in Generative Models</h2>
+<p>The Monte Carlo estimation of KL Divergence involves using samples drawn from distribution <span class="math inline">\(P\)</span> to estimate the expectation in the definition of KL Divergence. Given a set of samples <span class="math inline">\(\{x_1, x_2, \ldots, x_N\}\)</span> drawn from distribution <span class="math inline">\(P\)</span>, we can estimate the KL Divergence as follows:</p>
+<p><span id="eq-kl-monte-carlo"><span class="math display">\[
+D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \log \frac{P(x_i)}{Q(x_i)}
+\tag{20}\]</span></span></p>
+<p>WAIT, WAIT, HOLD ON! In the above equation, we still have <span class="math inline">\(P(x_i)\)</span>, which we don’t have access to in practice. So, how can we estimate KL Divergence without knowing <span class="math inline">\(P(x_i)\)</span>? Let’s step back and think about why we need KL Divergence in the first place.</p>
+<div class="insight foldable is-open">
+<div class="insight-header foldable-header">
+<p>Insight: Why we need KL Divergence?</p>
+</div>
+<div class="insight-container foldable-content">
+<p>Ok, we have <span class="math inline">\(\mathcal{D}\)</span> and a model <span class="math inline">\(Q_\theta\)</span> that used to approximated the true distribution <span class="math inline">\(P\)</span>. We known the KL-Divergence <a href="#eq-kl-divergence-discrete" class="quarto-xref">Equation&nbsp;12</a> is the cross entropy minus entropy of <span class="math inline">\(P\)</span>, we don’t know the entropy of <span class="math inline">\(P\)</span>. BUT! we don’t care about the entropy of <span class="math inline">\(P\)</span>, because it is a constant with respect to our model <span class="math inline">\(Q_\theta\)</span>. So, when we are optimizing our model <span class="math inline">\(Q_\theta\)</span>, we can ignore the entropy term, and just focus on minimizing the cross-entropy term.</p>
+</div>
+</div>
+<p>Therefore, we can rewrite the Monte Carlo estimation of KL Divergence as: <span id="eq-kl-monte-carlo-simplified"><span class="math display">\[
+D_{KL}(P || Q) \approx - \frac{1}{N} \sum_{i=1}^{N} \log Q(x_i) + \text{constant}
+\tag{21}\]</span></span></p>
+<section id="variational-autoencoders-vaes" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="variational-autoencoders-vaes"><span class="header-section-number">5.2.1</span> Variational Autoencoders (VAEs)</h3>
 <p>In VAEs, KL Divergence is used to regularize the latent space by minimizing the divergence between the approximate posterior distribution and the prior distribution.</p>
 <p><span class="math display">\[
 \mathcal{L} = \mathbb{E}_{q(z|x)}[\log p(x|z)] - D_{KL}(q(z|x) || p(z))
 \]</span></p>
 </section>
+<section id="ddpm" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="ddpm"><span class="header-section-number">5.2.2</span> DDPM</h3>
+<p>Denosing Diffusion Probabilistic Models (DDPMs) <span class="citation" data-cites="DenoisingDiffusionProbabilistic2020ho">(<a href="#ref-DenoisingDiffusionProbabilistic2020ho" role="doc-biblioref">Ho, Jain, and Abbeel 2020</a>)</span> use KL Divergence to measure the difference between the forward diffusion process and the reverse denoising process. It can viewed as heriarchical VAEs.</p>
+<p><span class="math display">\[
+\mathcal{L} = \sum_{t=1}^{T} D_{KL}(q(x_{t-1}|x_t, x_0) \| p_\theta(x_{t-1}|x_t))
+\]</span></p>
 </section>
-<section id="model-distillation" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="model-distillation"><span class="header-section-number">4.2</span> Model Distillation</h2>
+</section>
+<section id="knowledge-distillation" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="knowledge-distillation"><span class="header-section-number">5.3</span> Knowledge Distillation</h2>
 <p>In model distillation, KL Divergence is used to align the output distributions of the teacher and student models.</p>
 <p><span class="math display">\[
 \mathcal{L} = D_{KL}(P_{teacher} || P_{student})
 \]</span></p>
+<section id="dino" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="dino"><span class="header-section-number">5.3.1</span> DINO</h3>
+<p>DINO <span class="citation" data-cites="SelfSupervisedLearningImages2023assran">(<a href="#ref-SelfSupervisedLearningImages2023assran" role="doc-biblioref">Assran et al. 2023</a>)</span> uses KL Divergence to align the output distributions of the teacher and student networks during self-supervised learning.</p>
+<div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/DINO illustration.gif" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Illustration of DINO framework. The student network learns to match the output distribution of the teacher network using KL Divergence.
+</figcaption>
+</figure>
+</div>
+<p>The loss function is defined as:</p>
+<p><span class="math display">\[
+\mathcal{L}_{\text{DINO}} = D_{KL}(P_{teacher}(x_i) || P_{student}(x_i))
+\]</span></p>
 </section>
-<section id="reinforcement-learning" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="reinforcement-learning"><span class="header-section-number">4.3</span> Reinforcement Learning</h2>
+</section>
+<section id="reinforcement-learning" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="reinforcement-learning"><span class="header-section-number">5.4</span> Reinforcement Learning</h2>
 <p>In reinforcement learning, KL Divergence is used to constrain policy updates to ensure stability. For example, the RL in the LLM (RLHF) uses KL Divergence to keep the updated policy close to the original policy.</p>
 <p><span class="math display">\[
 \mathcal{L} = \mathbb{E}_{s \sim \pi_{ref}} \left[ \frac{\pi_{new}(a|s)}{\pi_{ref}(a|s)} A(s, a) \right] - \beta D_{KL}(\pi_{new} || \pi_{ref})
 \]</span></p>
+<section id="trust-region-policy-optimization-trpo" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="trust-region-policy-optimization-trpo"><span class="header-section-number">5.4.1</span> Trust Region Policy Optimization (TRPO)</h3>
+</section>
+<section id="proximal-policy-optimization-ppo" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="proximal-policy-optimization-ppo"><span class="header-section-number">5.4.2</span> Proximal Policy Optimization (PPO)</h3>
+<p>PPO simplifies TRPO by using a clipped objective function to limit the policy update size, which can be interpreted as implicitly constraining the KL Divergence between the new and old policies.</p>
 </section>
 </section>
-<section id="conclusion" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Conclusion</h1>
+<section id="sec-kl-in-llm" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="sec-kl-in-llm"><span class="header-section-number">5.5</span> LLM Post-Training with KL Divergence</h2>
+<p>In the context of Large Language Models (LLMs), KL Divergence plays a crucial role in post-training techniques such as Reinforcement Learning from Human Feedback (RLHF). The goal of RLHF is to fine-tune a pre-trained language model to better align with human preferences</p>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Conclusion</h1>
 <p>KL Divergence is a powerful tool for measuring the difference between probability distributions. It has wide-ranging applications in machine learning, data science, and artificial intelligence. Understanding KL Divergence and its applications can help you build better models and improve your understanding of probabilistic systems.</p>
+</section>
+<section id="references" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> References</h1>
+<p>sd</p>
+
 
 
 </section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-SelfSupervisedLearningImages2023assran" class="csl-entry" role="listitem">
+Assran, Mahmoud, Quentin Duval, Ishan Misra, Piotr Bojanowski, Pascal Vincent, Michael Rabbat, Yann LeCun, and Nicolas Ballas. 2023. <span>“Self-<span>Supervised Learning</span> from <span>Images</span> with a <span>Joint-Embedding Predictive Architecture</span>.”</span> April 13, 2023. <a href="https://doi.org/10.48550/arXiv.2301.08243">https://doi.org/10.48550/arXiv.2301.08243</a>.
+</div>
+<div id="ref-DenoisingDiffusionProbabilistic2020ho" class="csl-entry" role="listitem">
+Ho, Jonathan, Ajay Jain, and Pieter Abbeel. 2020. <span>“Denoising <span>Diffusion Probabilistic Models</span>.”</span> December 16, 2020. <a href="https://doi.org/10.48550/arXiv.2006.11239">https://doi.org/10.48550/arXiv.2006.11239</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
