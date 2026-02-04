@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
+<meta name="description" content="在Assignment 05 我们将会实现SFT， Expert Iteration以及GRPO算法，对Qwen2.5-Math-1.5B模型进行微调，以提升其在MATH数据集上的表现。通过这些算法的实现，我们将深入理解LLM的对齐方法，并掌握如何应用这些技术来改进大型语言模型的性能。">
 
-<title>ass05</title>
+<title>Assignment 05: LLM Alignment: SFT, Expert Iteration, GRPO &amp; DPO</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -78,9 +79,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../../site_libs/bootstrap/bootstrap-dark-f0ac33174fd5d836d1f6e5db13984c20.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-51ad148c0f8c6e164aa005824741c6ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-dark-506b7cb43fad2afaa54227a45fe75876.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../../site_libs/bootstrap/bootstrap-51ad148c0f8c6e164aa005824741c6ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -210,6 +211,9 @@ window.Quarto = {
 
 <link rel="stylesheet" href="../../../../../style/callout.css">
 <link rel="stylesheet" href="../../../../../style/toc.css">
+<meta property="og:title" content="Assignment 05: LLM Alignment: SFT, Expert Iteration, GRPO &amp; DPO">
+<meta property="og:description" content="在Assignment 05 我们将会实现SFT， Expert Iteration以及GRPO算法，对Qwen2.5-Math-1.5B模型进行微调，以提升其在MATH数据集上的表现。通过这些算法的实现，我们将深入理解LLM的对齐方法，并掌握如何应用这些技术来改进大型语言模型的性能。">
+<meta property="og:image" content="./assets/cover.png">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -446,7 +450,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"></h1>
+          <h1 class="quarto-secondary-nav-title">Assignment 05: LLM Alignment: SFT, Expert Iteration, GRPO &amp; DPO</h1>
         </a>     
     </div>
   </nav>
@@ -459,10 +463,23 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#environment" id="toc-environment" class="nav-link active" data-scroll-target="#environment"><span class="header-section-number">1</span> Environment</a></li>
-  <li><a href="#supervised-fine-tuning" id="toc-supervised-fine-tuning" class="nav-link" data-scroll-target="#supervised-fine-tuning"><span class="header-section-number">2</span> Supervised Fine Tuning</a></li>
-  <li><a href="#expert-iteration" id="toc-expert-iteration" class="nav-link" data-scroll-target="#expert-iteration"><span class="header-section-number">3</span> Expert Iteration</a></li>
-  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">4</span> GRPO</a></li>
+  <li><a href="#dataset-preparation-model-download" id="toc-dataset-preparation-model-download" class="nav-link active" data-scroll-target="#dataset-preparation-model-download"><span class="header-section-number">1</span> Dataset Preparation &amp; Model Download</a></li>
+  <li><a href="#zero-shot-evaluation-vllm" id="toc-zero-shot-evaluation-vllm" class="nav-link" data-scroll-target="#zero-shot-evaluation-vllm"><span class="header-section-number">2</span> Zero-Shot Evaluation &amp; vLLM</a>
+  <ul>
+  <li><a href="#vllm" id="toc-vllm" class="nav-link" data-scroll-target="#vllm"><span class="header-section-number">2.1</span> vLLM</a></li>
+  </ul></li>
+  <li><a href="#supervised-fine-tuning" id="toc-supervised-fine-tuning" class="nav-link" data-scroll-target="#supervised-fine-tuning"><span class="header-section-number">3</span> Supervised Fine Tuning</a>
+  <ul>
+  <li><a href="#tokenize-prompt-and-output" id="toc-tokenize-prompt-and-output" class="nav-link" data-scroll-target="#tokenize-prompt-and-output"><span class="header-section-number">3.1</span> Tokenize Prompt and Output</a></li>
+  <li><a href="#per-token-entropy" id="toc-per-token-entropy" class="nav-link" data-scroll-target="#per-token-entropy"><span class="header-section-number">3.2</span> Per Token Entropy</a></li>
+  <li><a href="#getting-log-probs-from-model" id="toc-getting-log-probs-from-model" class="nav-link" data-scroll-target="#getting-log-probs-from-model"><span class="header-section-number">3.3</span> Getting Log Probs from Model</a></li>
+  <li><a href="#masked-normalize" id="toc-masked-normalize" class="nav-link" data-scroll-target="#masked-normalize"><span class="header-section-number">3.4</span> Masked Normalize</a></li>
+  <li><a href="#sft-micro-batch-training-step" id="toc-sft-micro-batch-training-step" class="nav-link" data-scroll-target="#sft-micro-batch-training-step"><span class="header-section-number">3.5</span> SFT Micro-batch Training Step</a></li>
+  <li><a href="#sft-trainer" id="toc-sft-trainer" class="nav-link" data-scroll-target="#sft-trainer"><span class="header-section-number">3.6</span> SFT Trainer</a></li>
+  <li><a href="#sft-experiment" id="toc-sft-experiment" class="nav-link" data-scroll-target="#sft-experiment"><span class="header-section-number">3.7</span> SFT Experiment</a></li>
+  </ul></li>
+  <li><a href="#expert-iteration" id="toc-expert-iteration" class="nav-link" data-scroll-target="#expert-iteration"><span class="header-section-number">4</span> Expert Iteration</a></li>
+  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">5</span> GRPO</a></li>
   </ul>
 </nav>
 </nav>
@@ -471,13 +488,19 @@ window.Quarto = {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
+<h1 class="title d-none d-lg-block">Assignment 05: LLM Alignment: SFT, Expert Iteration, GRPO &amp; DPO</h1>
 </div>
 
+<div>
+  <div class="description">
+    在Assignment 05 我们将会实现SFT， Expert Iteration以及GRPO算法，对Qwen2.5-Math-1.5B模型进行微调，以提升其在MATH数据集上的表现。通过这些算法的实现，我们将深入理解LLM的对齐方法，并掌握如何应用这些技术来改进大型语言模型的性能。
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -498,13 +521,18 @@ window.Quarto = {
 </header>
 
 
-<p>Dataset https://huggingface.co/datasets/nlile/hendrycks-MATH-benchmark</p>
-<section id="environment" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Environment</h1>
-<p>Install code</p>
+<section id="dataset-preparation-model-download" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Dataset Preparation &amp; Model Download</h1>
+<div class="tldr foldable is-open">
+<div class="tldr-header foldable-header">
+<p>TL;DR: 快速版</p>
+</div>
+<div class="tldr-container foldable-content">
+<p>只需将运行以下命令，We are ready to GO！！！</p>
+<p>下载代码</p>
 <div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">git</span> clone https://github.com/YYZhang2025/Stanford-CS336.git</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="bu">cd</span> Stanford-CS336/assignment5-alignment</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Install package</p>
+<p>安装依赖，下载数据集和模型</p>
 <div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">pip</span> install uv </span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="ex">uv</span> sync <span class="at">--no-install-package</span> flash-attn</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="ex">uv</span> sync</span>
@@ -516,23 +544,609 @@ window.Quarto = {
 <span id="cb2-9"><a href="#cb2-9"></a>  <span class="at">--repo-id</span> Qwen/Qwen2.5-Math-1.5B <span class="dt">\</span></span>
 <span id="cb2-10"><a href="#cb2-10"></a>  <span class="at">--save-dir</span> models/Qwen2.5-Math-1.5B <span class="dt">\</span></span>
 <span id="cb2-11"><a href="#cb2-11"></a>  <span class="at">--method</span> snapshot <span class="at">--no-symlinks</span> <span class="at">--verify</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>我们先来下载模型权重，只需一个命令：</p>
+<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python</span> download_model.py <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="at">--repo-id</span> Qwen/Qwen2.5-Math-1.5B <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="at">--save-dir</span> models/Qwen2.5-Math-1.5B <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="at">--method</span> snapshot <span class="at">--no-symlinks</span> <span class="at">--verify</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>通过上面的命令，我们就可以把Qwen2.5-Math-1.5B模型下载到<code>models/Qwen2.5-Math-1.5B</code>目录下。</p>
+<hr>
+<p>在这个Assignment中，我们将会用到Math Dataset，不过Assignment中，由于版权问题，并没有提供完整的数据，因此我们需要自行下载数据集，在这个Assignment中，我们主要会用到以下两个数据集：</p>
+<ul>
+<li><strong>GSM8K Dataset</strong>：一个包含8,500多个高中水平数学问题的数据集，专注于逐步推理和解决方案生成。（这个数据集在Assignment中已经提供 <code>data/gsm8k</code>）</li>
+<li><strong>MATH Dataset</strong>: 这个数据集包含12,500多个高中和大学水平的数学问题，涵盖多个主题和难度级别 <a href="https://huggingface.co/datasets/nlile/hendrycks-MATH-benchmark">Link</a>。</li>
+</ul>
+<p>我们现在下载MATH:</p>
+<div class="sourceCode" id="cb4" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="ex">hf</span> download nlile/hendrycks-MATH-benchmark <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="at">--repo-type</span> dataset <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="at">--local-dir</span> ./data/hendrycks-MATH-benchmark</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="fu">mv</span> ./data/hendrycks-MATH-benchmark  ./data/math</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>接下来，我们来预处理一下这些数据集，因为不同的数据集格式不一样，我们需要把他们处理成统一的格式， 以便我们后续的训练。先来看<code>GSM8K</code>数据集的格式：</p>
+<div class="sourceCode" id="cb5" data-code-line-numbers=""><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="dt">"question"</span><span class="fu">:</span> <span class="st">"Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?"</span><span class="fu">,</span> </span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="dt">"answer"</span><span class="fu">:</span> <span class="st">"Natalia sold 48/2 = &lt;&lt;48/2=24&gt;&gt;24 clips in May.</span><span class="ch">\n</span><span class="st">Natalia sold 48+24 = &lt;&lt;48+24=72&gt;&gt;72 clips altogether in April and May.</span><span class="ch">\n</span><span class="st">#### 72"</span><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>每个样本包含 <code>question</code> 和 <code>answer</code> 两个字段，我们需要把他们处理成 <code>prompt</code> 和 <code>cot</code> 的格式，并且提取出里面的答案：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/dataset_utils/gsm8k.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb6" data-filename="assignment5-alignment/cs336_alignment/dataset_utils/gsm8k.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> extract_gsm8k_answer(answer: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    ANS_RE <span class="op">=</span> re.<span class="bu">compile</span>(<span class="vs">r"####</span><span class="dv">\s</span><span class="op">*</span><span class="kw">(</span><span class="pp">[</span><span class="ch">\-</span><span class="pp">0-9</span><span class="ch">\.\,</span><span class="pp">]</span><span class="op">+</span><span class="kw">)</span><span class="vs">"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    match <span class="op">=</span> ANS_RE.search(answer)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="cf">if</span> match:</span>
+<span id="cb6-5"><a href="#cb6-5"></a>        <span class="cf">return</span> match.group(<span class="dv">1</span>).strip().replace(<span class="st">","</span>, <span class="st">""</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    <span class="cf">return</span> <span class="st">"[invalid]"</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="kw">def</span> process_row(row: Dict[<span class="bu">str</span>, Any]):</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    problem <span class="op">=</span> row[<span class="st">"question"</span>]</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    cot <span class="op">=</span> row[<span class="st">"answer"</span>]</span>
+<span id="cb6-12"><a href="#cb6-12"></a>    clean_cot <span class="op">=</span> re.sub(<span class="vs">r"</span><span class="dv">\s</span><span class="op">*</span><span class="ch">\n</span><span class="vs">####</span><span class="dv">\s</span><span class="op">*</span><span class="vs">-</span><span class="op">?</span><span class="dv">\d</span><span class="op">+</span>(?:<span class="ch">\.</span><span class="dv">\d</span><span class="op">+</span>)<span class="op">?</span><span class="dv">\s</span><span class="op">*</span><span class="dv">$</span><span class="vs">"</span>, <span class="st">""</span>, cot)</span>
+<span id="cb6-13"><a href="#cb6-13"></a>    answer <span class="op">=</span> extract_gsm8k_answer(row[<span class="st">"answer"</span>])</span>
+<span id="cb6-14"><a href="#cb6-14"></a></span>
+<span id="cb6-15"><a href="#cb6-15"></a>    clean_cot <span class="op">=</span> wrap_cot_with_answer(clean_cot, answer)</span>
+<span id="cb6-16"><a href="#cb6-16"></a></span>
+<span id="cb6-17"><a href="#cb6-17"></a>    <span class="cf">return</span> problem, <span class="bu">str</span>(clean_cot), <span class="bu">str</span>(answer).lower() <span class="cf">if</span> answer <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>在预处理之后，我们会把数据集处理成下面的格式：</p>
+<div class="sourceCode" id="cb7" data-code-line-numbers=""><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">{</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">"question"</span><span class="fu">:</span> <span class="st">"Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?"</span><span class="fu">,</span> </span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">"cot"</span><span class="fu">:</span> <span class="st">"Natalia sold 48/2 = &lt;&lt;48/2=24&gt;&gt;24 clips in May.</span><span class="ch">\n</span><span class="st">Natalia sold 48+24 = &lt;&lt;48+24=72&gt;&gt;72 clips altogether in April and May.</span><span class="ch">\n</span><span class="st">&lt;/think&gt; &lt;answer&gt;72&lt;/answer&gt;"</span><span class="fu">,</span> </span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="dt">"answer"</span><span class="fu">:</span> <span class="st">"72"</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>类似地，我们也需要对MATH数据集进行预处理，MATH数据集的格式如下：</p>
+<div class="sourceCode" id="cb8" data-code-line-numbers=""><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">"problem"</span><span class="fu">:</span> <span class="st">"How many vertical asymptotes does the graph of $y=</span><span class="ch">\\</span><span class="st">frac{2}{x^2+x-6}$ have?"</span><span class="fu">,</span> </span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">"solution"</span><span class="fu">:</span> <span class="st">"The denominator of the rational function factors into $x^2+x-6=(x-2)(x+3)$. Since the numerator is always nonzero, there is a vertical asymptote whenever the denominator is $0$, which occurs for $x = 2$ and $x = -3$.  Therefore, the graph has $</span><span class="ch">\\</span><span class="st">boxed{2}$ vertical asymptotes.</span><span class="ch">\n</span><span class="st">&lt;/think&gt; &lt;answer&gt;2&lt;/answer&gt;"</span><span class="fu">,</span> </span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">"answer"</span><span class="fu">:</span> <span class="st">"2"</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/dataset_utils/math.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb9" data-filename="assignment5-alignment/cs336_alignment/dataset_utils/math.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> process_row(row: Dict[<span class="bu">str</span>, Any]):</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    problem <span class="op">=</span> row[<span class="st">"problem"</span>]</span>
+<span id="cb9-3"><a href="#cb9-3"></a>    cot <span class="op">=</span> row[<span class="st">"solution"</span>]</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a>    <span class="cf">if</span> row[<span class="st">"answer"</span>] <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb9-6"><a href="#cb9-6"></a>        answer <span class="op">=</span> extract_final_answer_from_text(cot)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="cf">else</span>:</span>
+<span id="cb9-8"><a href="#cb9-8"></a>        answer <span class="op">=</span> row[<span class="st">"answer"</span>]</span>
+<span id="cb9-9"><a href="#cb9-9"></a>        cot <span class="op">=</span> wrap_cot_with_answer(cot, answer)</span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a>    <span class="cf">return</span> problem, <span class="bu">str</span>(cot), <span class="bu">str</span>(answer).lower() <span class="cf">if</span> answer <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>在处理之后，我们会把MATH数据集处理成下面的格式：</p>
+<div class="sourceCode" id="cb10" data-code-line-numbers=""><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">{</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="dt">"question"</span><span class="fu">:</span> <span class="st">"How many vertical asymptotes does the graph of $y=</span><span class="ch">\\</span><span class="st">frac{2}{x^2+x-6}$ have?"</span><span class="fu">,</span> </span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="dt">"cot"</span><span class="fu">:</span> <span class="st">"The denominator of the rational function factors into $x^2+x-6=(x-2)(x+3)$. Since the numerator is always nonzero, there is a vertical asymptote whenever the denominator is $0$, which occurs for $x = 2$ and $x = -3$.  Therefore, the graph has $</span><span class="ch">\\</span><span class="st">boxed{2}$ vertical asymptotes.</span><span class="ch">\n</span><span class="st">&lt;/think&gt; &lt;answer&gt;2&lt;/answer&gt;"</span><span class="fu">,</span> </span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="dt">"answer"</span><span class="fu">:</span> <span class="st">"2"</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>具体的细节，看<code>assignment5-alignment/cs336_alignment/dataset_utils</code> 文件夹下的代码。以及 <code>assignment5-alignment/preprocess.py</code> 这个脚本。在这里就不赘述了。处理完之后，我们会有：</p>
+<div class="sourceCode" id="cb11" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb11-1"><a href="#cb11-1"></a>data/</span>
+<span id="cb11-2"><a href="#cb11-2"></a>├── alpaca_eval/</span>
+<span id="cb11-3"><a href="#cb11-3"></a>├── gsm8k/</span>
+<span id="cb11-4"><a href="#cb11-4"></a>├── math/</span>
+<span id="cb11-5"><a href="#cb11-5"></a>├── mmlu/</span>
+<span id="cb11-6"><a href="#cb11-6"></a>├── pre-processed/</span>
+<span id="cb11-7"><a href="#cb11-7"></a>│   ├── gsm8k/</span>
+<span id="cb11-8"><a href="#cb11-8"></a>│   │   ├── test.jsonl</span>
+<span id="cb11-9"><a href="#cb11-9"></a>│   │   └── train.jsonl</span>
+<span id="cb11-10"><a href="#cb11-10"></a>│   └── math/</span>
+<span id="cb11-11"><a href="#cb11-11"></a>│       ├── test.jsonl</span>
+<span id="cb11-12"><a href="#cb11-12"></a>│       └── train.jsonl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>当然，大家也可以选择直接使用我已经处理好的数据集， 直接从<a href="https://huggingface.co/datasets/YuYangZhang/Reasoning-Dataset">这里</a>下载即可。或者使用下面的命令：</p>
+<div class="sourceCode" id="cb12" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a><span class="ex">hf</span> download YuYangZhang/Reasoning-Dataset  <span class="at">--repo-type</span> dataset <span class="at">--local-dir</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="supervised-fine-tuning" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Supervised Fine Tuning</h1>
-<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">python</span> train_sft.py</span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="ex">python</span> cs336_alignment/eval.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="zero-shot-evaluation-vllm" class="level1 page-columns page-full" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Zero-Shot Evaluation &amp; vLLM</h1>
+<section id="vllm" class="level2 page-columns page-full" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="vllm"><span class="header-section-number">2.1</span> vLLM</h2>
+<p>在这个Assignment中，我们会使用vLLM 来进行模型的推理， 以便我们可以更快的进行评估和训练。 以下几个方法：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/vllm_utils.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb13" data-filename="assignment5-alignment/cs336_alignment/vllm_utils.py" data-code-line-numbers=""><pre class="sourceCode numberSource Python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> init_vllm(model_id: <span class="bu">str</span>, device: <span class="bu">str</span>, seed: <span class="bu">int</span>, gpu_memory_utilization: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.85</span>):</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    vllm_set_random_seed(seed)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    world_size_patch <span class="op">=</span> patch(<span class="st">"torch.distributed.get_world_size"</span>, return_value<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    profiling_patch <span class="op">=</span> patch(</span>
+<span id="cb13-5"><a href="#cb13-5"></a>        <span class="st">"vllm.worker.worker.Worker._assert_memory_footprint_increased_during_profiling"</span>, return_value<span class="op">=</span><span class="va">None</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a>    )</span>
+<span id="cb13-7"><a href="#cb13-7"></a>    <span class="cf">with</span> world_size_patch, profiling_patch:</span>
+<span id="cb13-8"><a href="#cb13-8"></a>        <span class="cf">return</span> LLM(</span>
+<span id="cb13-9"><a href="#cb13-9"></a>            model<span class="op">=</span>model_id,</span>
+<span id="cb13-10"><a href="#cb13-10"></a>            device<span class="op">=</span>device,</span>
+<span id="cb13-11"><a href="#cb13-11"></a>            dtype<span class="op">=</span>torch.bfloat16,</span>
+<span id="cb13-12"><a href="#cb13-12"></a>            enable_prefix_caching<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb13-13"><a href="#cb13-13"></a>            gpu_memory_utilization<span class="op">=</span>gpu_memory_utilization,</span>
+<span id="cb13-14"><a href="#cb13-14"></a>        )</span>
+<span id="cb13-15"><a href="#cb13-15"></a></span>
+<span id="cb13-16"><a href="#cb13-16"></a><span class="kw">def</span> load_policy_into_vllm_instance(policy: PreTrainedModel, llm: LLM):</span>
+<span id="cb13-17"><a href="#cb13-17"></a>    state_dict <span class="op">=</span> policy.state_dict()</span>
+<span id="cb13-18"><a href="#cb13-18"></a>    llm_model <span class="op">=</span> llm.llm_engine.model_executor.driver_worker.model_runner.model</span>
+<span id="cb13-19"><a href="#cb13-19"></a>    llm_model.load_weights(state_dict.items())</span>
+<span id="cb13-20"><a href="#cb13-20"></a>  </span>
+<span id="cb13-21"><a href="#cb13-21"></a><span class="kw">def</span> generate_responses(vllm: LLM, prompts: <span class="bu">list</span>[<span class="bu">str</span>], sampling_params) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">str</span>]:</span>
+<span id="cb13-22"><a href="#cb13-22"></a>    outputs <span class="op">=</span> vllm.generate(</span>
+<span id="cb13-23"><a href="#cb13-23"></a>        prompts,</span>
+<span id="cb13-24"><a href="#cb13-24"></a>        sampling_params<span class="op">=</span>sampling_params,</span>
+<span id="cb13-25"><a href="#cb13-25"></a>    )</span>
+<span id="cb13-26"><a href="#cb13-26"></a>    responses <span class="op">=</span> [output.outputs[<span class="dv">0</span>].text <span class="cf">for</span> output <span class="kw">in</span> outputs]</span>
+<span id="cb13-27"><a href="#cb13-27"></a>    <span class="cf">return</span> responses</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>当我们需要使用vLLM进行推理时，我们只需要先初始化vLLM实例， 之后把模型权重load进去， 最后调用<code>generate_responses</code>函数即可完成推理：</p>
+<div class="sourceCode" id="cb14" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>vllm <span class="op">=</span> init_vllm(</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    model_id<span class="op">=</span>MODEL_NAME,</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    device<span class="op">=</span><span class="bu">str</span>(get_device(rank<span class="op">=</span><span class="dv">1</span>)),</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    seed<span class="op">=</span><span class="dv">42</span>,</span>
+<span id="cb14-5"><a href="#cb14-5"></a>    gpu_memory_utilization<span class="op">=</span><span class="fl">0.85</span>,</span>
+<span id="cb14-6"><a href="#cb14-6"></a>)</span>
+<span id="cb14-7"><a href="#cb14-7"></a>sampling_params <span class="op">=</span> SamplingParams(</span>
+<span id="cb14-8"><a href="#cb14-8"></a>    max_tokens<span class="op">=</span><span class="dv">1024</span>, temperature<span class="op">=</span><span class="dv">1</span>, top_p<span class="op">=</span><span class="dv">1</span>, stop<span class="op">=</span>[<span class="st">"&lt;/answer&gt;"</span>], include_stop_str_in_output<span class="op">=</span><span class="va">True</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a>)</span>
+<span id="cb14-10"><a href="#cb14-10"></a>load_policy_into_vllm_instance(policy, vllm)</span>
+<span id="cb14-11"><a href="#cb14-11"></a>responses <span class="op">=</span> generate_responses(</span>
+<span id="cb14-12"><a href="#cb14-12"></a>    vllm,</span>
+<span id="cb14-13"><a href="#cb14-13"></a>    prompts,</span>
+<span id="cb14-14"><a href="#cb14-14"></a>    sampling_params<span class="op">=</span>sampling_params,</span>
+<span id="cb14-15"><a href="#cb14-15"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>接下来，我们先来评估一下Qwen2.5-Math-1.5B在MATH和GSM8K数据集上的表现， 具体的评估代码在 <code>assignment5-alignment/eval.py</code> 以及 <code>assignment5-alignment/cs336_alignment/eval.py</code>， 运行下面的命令即可：</p>
+<div class="sourceCode" id="cb15" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a><span class="ex">python</span> eval.py  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>来看一下评估结果：</p>
+<div class="column-page">
+<div id="tbl-kl-mc-estimation" class="hover quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<div aria-describedby="tbl-kl-mc-estimation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="table-hover table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 5%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 8%">
+<col style="width: 26%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>dataset_path</th>
+<th>total</th>
+<th>answer_correct</th>
+<th>format_correct</th>
+<th>reward_1</th>
+<th>formatted_but_answer_wrong</th>
+<th>answer_accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>math/train.jsonl</td>
+<td>12000</td>
+<td>359</td>
+<td>2038</td>
+<td>359</td>
+<td>1679</td>
+<td>0.029</td>
+</tr>
+<tr class="even">
+<td>math/test.jsonl</td>
+<td>500</td>
+<td>13</td>
+<td>77</td>
+<td>13</td>
+<td>64</td>
+<td>0.026</td>
+</tr>
+<tr class="odd">
+<td>gsm8k/train.jsonl</td>
+<td>7473</td>
+<td>232</td>
+<td>1433</td>
+<td>232</td>
+<td>1201</td>
+<td>0.031</td>
+</tr>
+<tr class="even">
+<td>gsm8k/test.jsonl</td>
+<td>1319</td>
+<td>41</td>
+<td>258</td>
+<td>41</td>
+<td>217</td>
+<td>0.031</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-tbl" id="tbl-kl-mc-estimation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Qwen2.5-Math-1.5B Zero-Shot Evaluation Results on MATH and GSM8K Datasets
+</figcaption>
+</figure>
+</div>
+</div>
+<p>可以看到，在<a href="https://en.wikipedia.org/wiki/Zero-shot_learning">Zero-Shot</a>的情况下，Qwen2.5-Math-1.5B在MATH和GSM8K数据集上的表现都非常差，只有大约2.6%到3.1%的准确率。这也符合预期，因为Qwen2.5-Math-1.5B虽然是一个强大的语言模型，但在没有经过专门微调的情况下，其在复杂数学问题上的表现仍然有限。</p>
 </section>
-<section id="expert-iteration" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Expert Iteration</h1>
-<p>This is the fireture {#fig-some}</p>
 </section>
-<section id="grpo" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> GRPO</h1>
-<p><span id="eq-some"><span class="math display">\[
-\mathcal{N} = a
+<section id="supervised-fine-tuning" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Supervised Fine Tuning</h1>
+<p>首先第一个算法就是Supervised Fine Tuning（SFT）。在 Alignment 训练里，SFT 往往被看作“第一阶段”：用人工标注的高质量数据，把 base model 从“会说话”推到“更像助理、更会按指令做事”。在Post-Training中主要起到一个 <span class="hilite-teal">warm-start</span> 的作用。为之后的Reinforcement Learning 算法做一个铺垫，这样做的主要目的有两个：</p>
+<ol type="1">
+<li>Warm-start：让模型先变“像助理”</li>
+</ol>
+<p>base model 可能会乱格式、跑题、答非所问。SFT 直接用示范数据教它： • 看到 prompt 该怎么组织输出 • 该不该写推理、怎么写 • 最终答案要放到 <answer> 里 这会显著提高 format correctness / instruction following，也是你评估表里最先能被拉起来的指标。</answer></p>
+<ol start="2" type="1">
+<li>稳定、样本效率高（比 RL 好训）</li>
+</ol>
+<p>SFT 就是最大似然/交叉熵，训练目标明确、梯度稳定、收敛更可控： • 不需要 reward model • 不需要 rollout、优势估计、clip/KL 等一堆超参 • 同样计算量下，通常比 RL 更“省事、省算力”</p>
+<ol start="3" type="1">
+<li>学会“正确的输出分布”，减少 RL 的探索难度</li>
+</ol>
+<p>RL 只给“好/不好”的信号（甚至只有最终对错），如果模型一开始输出很乱，RL 会非常难学、方差很大。 SFT 先把策略带到一个合理区域，RL 才更容易在此基础上做提升（例如提升正确率、减少啰嗦、对齐偏好）。</p>
+<ol start="4" type="1">
+<li>用 response_mask 只优化回答，不逼模型“背 prompt”</li>
+</ol>
+<p>你写的 response_mask 很关键：SFT 把 prompt 当条件，只在 response token 上算 loss： • 避免模型花 capacity 去重建 prompt • 训练信号更聚焦在“该怎么回答” 这在长 prompt/长上下文时特别重要。</p>
+<ol start="5" type="1">
+<li>提供“行为先验”，防止 RL 训练崩坏</li>
+</ol>
+<p>在 PPO/GRPO 里经常会担心 reward hacking、模式坍塌、输出退化。 SFT 提供一个强先验：即使 RL 更新过猛，KL/参考模型通常也把它拉回 SFT 附近，让训练更稳。</p>
+<p>SFT的算法如下</p>
+<div id="algo-sft" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-pseudocode-number="1" data-line-number="true" data-line-number-punc=":" data-comment-delimiter="#" data-no-end="false" data-indent-size="1.2em">
+<div class="pseudocode">
+\begin{algorithm} \caption{Supervised Fine-Tuning (SFT)} \begin{algorithmic} \Require Initial policy model $\pi_{\theta_{\text{init}}}$ \Require SFT dataset $\mathcal{D}$ (prompt–response pairs) \Require Number of SFT steps $n_{\text{sft\_steps}}$ \Require Learning rate $\alpha$ \State $\pi_{\theta} \gets \pi_{\theta_{\text{init}}}$ \For{$\text{step} = 1$ \textbf{to} $n_{\text{sft\_steps}}$} \State Sample a minibatch $\mathcal{D}_b = \{(x_j, y_j)\}_{j=1}^{B}$ from $\mathcal{D}$ \Comment{$x$: prompt/question, $y$: target response} \State $\mathcal{L}_{\text{CE}}(\theta) \gets -\mathbb{E}_{(x,y)\sim \mathcal{D}_b}\left[\sum_{t=1}^{|y|}\log \pi_{\theta}(y_t \mid x, y_{&lt;t})\right]$ \Comment{Teacher-forcing cross-entropy / NLL} \State $\theta \gets \theta - \alpha \nabla_{\theta}\mathcal{L}_{\text{CE}}(\theta)$ \EndFor \State \Return $\pi_{\theta}$ \end{algorithmic} \end{algorithm}
+</div>
+</div>
+<p>其实，SFT 可以视作一个<strong>Imitation Learning</strong>，其过程就是</p>
+<ol type="1">
+<li>给定一个Prompt <span class="math inline">\(P\)</span>， 以及一个对应的Response <span class="math inline">\(R\)</span>，</li>
+<li>将Prompt传入模型，我们希望可以模型可以根据这个Prompt， 来生成出与对应Response 一样的回答。</li>
+</ol>
+<p>这个也就是用过 Maximize Likelihood 来学习，也就是最小化Loss Function，在这个情景中，也就是 Cross Entropy Loss。 <span id="eq-sft-loss"><span class="math display">\[
+\mathcal{L}_{\text{SFT}}(\theta) = - \sum_{t=1}^{|R|} \log p_\theta(R_t \mid P, R_{&lt;t})
 \tag{1}\]</span></span></p>
-<p>This is the conent (<a href="#eq-some" class="quarto-xref">Equation&nbsp;1</a>)</p>
+<p>接下来，让我们先定义一些helper 函数，来帮我们完成这一系列：</p>
+<section id="tokenize-prompt-and-output" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="tokenize-prompt-and-output"><span class="header-section-number">3.1</span> Tokenize Prompt and Output</h2>
+<p>首先我们要定义的第一个函数就是 <code>tokenize_prompt_and_output()</code>, 它的作用，顾名思义，就是接收一系列的prompts，和 Response，并且tokenize他们，并且返回他们的ids。不过，需要注意的一点，也是很重要的一点就是，<span class="hilite-pink">我们要同时返回Response Mask</span>。 我们先来看看这个Response Mask的作用是什么：</p>
+<hr>
+<p>假如我们有一个 <span class="math inline">\(q\)</span> 和 <span class="math inline">\(o\)</span>, 我们将它并在一起，得到了我们的函数 <span class="math inline">\([q, o ]\)</span>, 我们将整段传入Model，在没有Response Mask的情况下，模型就是对所有的token计算loss，这样模型就会被迫去预测：</p>
+<ol type="1">
+<li>prompt 里的下一个 token（本质是在“复述/重建 prompt”）</li>
+<li>output 里的 token（这才是我们真正关心的）</li>
+</ol>
+<p>但是在SFT训练的阶段， prompt 是输入条件，我们并不希望优化模型去“背 prompt 的分布”，只希望它在给定 prompt 后生成正确输出。所以用 response_mask 把 loss 限定在 output token 上： <span class="hilite-pink">训练信号只来自回答部分</span>。当然，除此之外，Response Mask还对应着pad tokens 举个直观的例子：</p>
+<p>假设输入是：</p>
+<ul>
+<li>q: “2+2=?”</li>
+<li>o: “4”</li>
+</ul>
+<p>拼接后 token 序列是：<code>[q_tokens][o_tokens][pad...]</code></p>
+<p>response_mask 会像这样：</p>
+<ul>
+<li>q_tokens → False False False …</li>
+<li>o_tokens → True True …</li>
+<li>pad → False False …</li>
+</ul>
+<div class="sourceCode" id="cb16" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb16-1"><a href="#cb16-1"></a>Tokens:        [ 2 , + , 2 , = , ? , 4 , &lt;pad&gt; , &lt;pad&gt; ]</span>
+<span id="cb16-2"><a href="#cb16-2"></a>Response_mask: [ F , F , F , F , F , T ,   F   ,   F   ] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>结果：loss 只在 “4” 的 token 上算，prompt 部分完全不参与。</p>
+<p>我们来看看代码是怎么实现的：</p>
+<p>首先第一步自然是Tokenize Prompts和Response：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/utils.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb17" data-filename="assignment5-alignment/cs336_alignment/algs/utils.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>prompt_tokens <span class="op">=</span> tokenizer(</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    prompt_strs,</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    add_special_tokens<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb17-4"><a href="#cb17-4"></a>    padding<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb17-5"><a href="#cb17-5"></a>    truncation<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb17-6"><a href="#cb17-6"></a>    return_attention_mask<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb17-7"><a href="#cb17-7"></a>)</span>
+<span id="cb17-8"><a href="#cb17-8"></a></span>
+<span id="cb17-9"><a href="#cb17-9"></a>output_tokens <span class="op">=</span> tokenizer(</span>
+<span id="cb17-10"><a href="#cb17-10"></a>    output_strs,</span>
+<span id="cb17-11"><a href="#cb17-11"></a>    add_special_tokens<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb17-12"><a href="#cb17-12"></a>    padding<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb17-13"><a href="#cb17-13"></a>    truncation<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb17-14"><a href="#cb17-14"></a>    return_attention_mask<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb17-15"><a href="#cb17-15"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>注意! 在这里，我们并不会返回<code>Tensor</code> 返回的是List， 并且List里面每个元素的长度是不一样的，</p>
+<p>接下来， 我们把这两个List中的内容 concat 在一起，得到 <code>[q, o]</code>， 并且计算出我们的Response Mask</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/utils.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb18" data-filename="assignment5-alignment/cs336_alignment/algs/utils.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>input_ids <span class="op">=</span> []</span>
+<span id="cb18-2"><a href="#cb18-2"></a>response_mask <span class="op">=</span> []</span>
+<span id="cb18-3"><a href="#cb18-3"></a></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="cf">for</span> p_ids, o_ids <span class="kw">in</span> <span class="bu">zip</span>(prompt_tokens[<span class="st">"input_ids"</span>], output_tokens[<span class="st">"input_ids"</span>]):</span>
+<span id="cb18-5"><a href="#cb18-5"></a>    combined_ids <span class="op">=</span> p_ids <span class="op">+</span> o_ids</span>
+<span id="cb18-6"><a href="#cb18-6"></a>    input_ids.append(combined_ids)</span>
+<span id="cb18-7"><a href="#cb18-7"></a></span>
+<span id="cb18-8"><a href="#cb18-8"></a>    mask <span class="op">=</span> ([<span class="va">False</span>] <span class="op">*</span> <span class="bu">len</span>(p_ids)) <span class="op">+</span> ([<span class="va">True</span>] <span class="op">*</span> <span class="bu">len</span>(o_ids))</span>
+<span id="cb18-9"><a href="#cb18-9"></a>    response_mask.append(mask)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>到目前为止，input_ids 和 response_mask 里面的<u>内容长度不一样长</u>，所以我们要将它Pad 到同样的长度，这样才可以传入模型：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/utils.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb19" data-filename="assignment5-alignment/cs336_alignment/algs/utils.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>MAX_LEN <span class="op">=</span> <span class="bu">max</span>(<span class="bu">len</span>(ids) <span class="cf">for</span> ids <span class="kw">in</span> input_ids)</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co"># 151643 for Qwen/Qwen2.5-Math-1.5B</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a>pad_id <span class="op">=</span> tokenizer.pad_token_id <span class="cf">if</span> tokenizer.pad_token_id <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> tokenizer.eos_token_id</span>
+<span id="cb19-4"><a href="#cb19-4"></a></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="kw">def</span> pad_to(x, value):</span>
+<span id="cb19-6"><a href="#cb19-6"></a>    <span class="cf">return</span> x <span class="op">+</span> [value] <span class="op">*</span> (MAX_LEN <span class="op">-</span> <span class="bu">len</span>(x))</span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a>full <span class="op">=</span> torch.tensor([pad_to(x, pad_id) <span class="cf">for</span> x <span class="kw">in</span> input_ids], dtype<span class="op">=</span>torch.<span class="bu">long</span>)</span>
+<span id="cb19-9"><a href="#cb19-9"></a>response_mask <span class="op">=</span> torch.tensor([pad_to(x, <span class="va">False</span>) <span class="cf">for</span> x <span class="kw">in</span> response_mask], dtype<span class="op">=</span>torch.<span class="bu">bool</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>接下来就构建我们的input和labels， Labels中记录的是inputs中的下一个：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/utils.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb20" data-filename="assignment5-alignment/cs336_alignment/algs/utils.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>input_ids <span class="op">=</span> full[:, :<span class="op">-</span><span class="dv">1</span>].contiguous()</span>
+<span id="cb20-2"><a href="#cb20-2"></a>labels <span class="op">=</span> full[:, <span class="dv">1</span>:].contiguous()</span>
+<span id="cb20-3"><a href="#cb20-3"></a>response_mask <span class="op">=</span> response_mask[:, <span class="dv">1</span>:].contiguous()</span>
+<span id="cb20-4"><a href="#cb20-4"></a></span>
+<span id="cb20-5"><a href="#cb20-5"></a></span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="cf">return</span> {</span>
+<span id="cb20-7"><a href="#cb20-7"></a>        <span class="st">"input_ids"</span>: input_ids,</span>
+<span id="cb20-8"><a href="#cb20-8"></a>        <span class="st">"labels"</span>: labels,</span>
+<span id="cb20-9"><a href="#cb20-9"></a>        <span class="st">"response_mask"</span>: response_mask,</span>
+<span id="cb20-10"><a href="#cb20-10"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>需要注意的是， Response Mask中是Labels中的mask，而不是inputs_ids中的mask。</p>
+<div class="tldr foldable is-open">
+<div class="tldr-header foldable-header">
+<p>TL;DR: Tokenization &amp; Prompts</p>
+</div>
+<div class="tldr-container foldable-content">
+<p>在这里函数中，我们主要做两件事情：</p>
+<ol type="1">
+<li>Tokenize Prompt 和 Output，这里的Prompt是我们添加了Template之后</li>
+<li>Concat Tokenized Prompt， Output一起，并且生成Response Mask</li>
+<li>Padding到相同的长度</li>
+<li>将Concat之后的内容移一位，得到inputs和labels</li>
+</ol>
+</div>
+</div>
+</section>
+<section id="per-token-entropy" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="per-token-entropy"><span class="header-section-number">3.2</span> Per Token Entropy</h2>
+<p>对于每一个位置<span class="math inline">\(t\)</span>, 模型会给出一下个token的分布，也就是 <span class="math inline">\(p_{t}(x) = \text{softmax}(\text{logits}_{t})\)</span>, Entropy定义为：</p>
+<p><span id="eq-entropy"><span class="math display">\[
+H(p) = - \sum_{x \in \mathcal{X}} p(x) \log p(x)
+\tag{2}\]</span></span></p>
+<ul>
+<li><strong>Entropy 高</strong>： 分布更“平”，模型不那么确定（探索更强）（对于Category Distribution，<span class="math inline">\(p(x) = \frac{1}{| x| }\)</span> 有最高的Entropy</li>
+<li><strong>Entropy 低</strong>：分布更“尖”，模型更确定（可能变得过度自信、模式坍缩（model collapse）</li>
+</ul>
+<p>在 RL 里如果你看到 entropy 很快掉到很低，常见含义是：</p>
+<ul>
+<li>策略变得太确定（exploration 变差）</li>
+<li>训练可能开始“钻 reward 漏洞”或输出单一模板</li>
+<li>学习可能不稳定（尤其和 KL/clip 配合不当时）</li>
+</ul>
+<p>计算entropy也很简单的，</p>
+<p><span id="eq-entropy-compute"><span class="math display">\[
+\begin{split}
+\ell &amp;= \text{logits} \\
+\log p &amp;= \log\text{softmax}(\ell) \\
+p &amp;= \exp(\log p) \\
+H(p) &amp;= - \sum_{x \in \mathcal{X}} p(x) \log p(x)
+\end{split}
+\tag{3}\]</span></span></p>
+<p>用上面的公式，我们可以定义一个函数 <code>compute_entropy</code> 来计算entropy：</p>
+<div class="sourceCode" id="cb21" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">def</span> compute_entropy(logits: torch.Tensor) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb21-2"><a href="#cb21-2"></a>    <span class="co">"""</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">    Compute the entropy of the probability distribution defined by the logits.</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co">    """</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>    log_probs <span class="op">=</span> F.log_softmax(logits, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb21-6"><a href="#cb21-6"></a>    probs <span class="op">=</span> torch.exp(log_probs)</span>
+<span id="cb21-7"><a href="#cb21-7"></a>    entropy <span class="op">=</span> <span class="op">-</span>torch.<span class="bu">sum</span>(probs <span class="op">*</span> log_probs, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb21-8"><a href="#cb21-8"></a></span>
+<span id="cb21-9"><a href="#cb21-9"></a>    <span class="cf">return</span> entropy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="getting-log-probs-from-model" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="getting-log-probs-from-model"><span class="header-section-number">3.3</span> Getting Log Probs from Model</h2>
+<p>接下来，我们来定义另一个Helper Function <code>get_response_log_probs</code> 它的作用是：<strong>把“模型对每个位置真实 token 的条件概率”算出来（以 log 形式），并按 token 粒度返回</strong> 可能现在理解这个有点困难，在之后SFT 和 RL 的算法中，我们会具体讲解一下的。在这里，我们先定义一下这个函数 我们知道，SFT 的Loss <a href="#eq-sft-loss" class="quarto-xref">Equation&nbsp;1</a> 中需要用到 <span class="math inline">\(\log p_\theta(R_t \mid P, R_{&lt;t})\)</span>， 也就是模型在位置<span class="math inline">\(t\)</span>上， 对真实token <span class="math inline">\(R_t\)</span>的log prob。 因此，我们需要定义一个函数来计算这个值：</p>
+<div class="sourceCode" id="cb22" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">def</span> get_response_log_probs(</span>
+<span id="cb22-2"><a href="#cb22-2"></a>    model, input_ids: torch.Tensor, labels: torch.Tensor, return_token_entropy: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, torch.Tensor]:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>对于模型输出 <span class="math inline">\(f_{\theta}(x)\)</span>, 其输出的是Logits，也就是没有normalized的distribution，我们第一步自然是利用softmax来将其变为分布， 之后我们再根据我们需要的label，作为索引，来提取出我们需要的log-probs</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/utils.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb23" data-filename="assignment5-alignment/cs336_alignment/algs/utils.py" data-code-line-numbers="10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">def</span> get_response_log_probs(</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    model, </span>
+<span id="cb23-3"><a href="#cb23-3"></a>    input_ids: torch.Tensor, <span class="co"># （B, T）</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>    labels: torch.Tensor, <span class="co"># （B, T）</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>    return_token_entropy: <span class="bu">bool</span> <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a>) <span class="op">-&gt;</span> <span class="bu">dict</span>[<span class="bu">str</span>, torch.Tensor]:</span>
+<span id="cb23-7"><a href="#cb23-7"></a>    logits <span class="op">=</span> model(input_ids<span class="op">=</span>input_ids).logits <span class="co"># (B, T, V)</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a></span>
+<span id="cb23-9"><a href="#cb23-9"></a>    logp <span class="op">=</span> F.log_softmax(logits, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb23-10"><a href="#cb23-10"></a>    log_probs <span class="op">=</span> logp.gather(<span class="op">-</span><span class="dv">1</span>, labels.unsqueeze(<span class="op">-</span><span class="dv">1</span>)).squeeze(<span class="op">-</span><span class="dv">1</span>) </span>
+<span id="cb23-11"><a href="#cb23-11"></a></span>
+<span id="cb23-12"><a href="#cb23-12"></a>    res <span class="op">=</span> {</span>
+<span id="cb23-13"><a href="#cb23-13"></a>        <span class="st">"log_probs"</span>: log_probs,</span>
+<span id="cb23-14"><a href="#cb23-14"></a>    }</span>
+<span id="cb23-15"><a href="#cb23-15"></a>    <span class="cf">if</span> return_token_entropy:</span>
+<span id="cb23-16"><a href="#cb23-16"></a>        entropy <span class="op">=</span> compute_entropy(logits)</span>
+<span id="cb23-17"><a href="#cb23-17"></a>        res[<span class="st">"token_entropy"</span>] <span class="op">=</span> entropy</span>
+<span id="cb23-18"><a href="#cb23-18"></a>    <span class="cf">return</span> res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>这个函数最关键的部分就是第10行， 通过 <code>gather</code> 函数，我们可以根据labels，来提取出我们需要的log_probs。<code>logp</code>的shape是(B, T, V)， 其中B是Batch Size， T是Sequence Length， V是Vocabulary Size，而labels的shape是(B, T)， 因此通过 <code>gather</code> 函数，我们可以得到每个位置上，真实token的log_probs， 最终得到的<code>log_probs</code> shape是 (B, T)， 也就是我们想要的结果。</p>
+<div class="warning foldable is-open">
+<div class="warning-header foldable-header">
+<p>WARNING: About Response Mask</p>
+</div>
+<div class="warning-container foldable-content">
+<p>我们在这一步，并没用用到Response Mask，也就是说，这个函数会返回所有位置的Log Probs， 包括Prompt部分和Pad部分。我们需要在之后的Loss计算中 <code>masked_normalize</code>，使用Response Mask来Mask掉Prompt和Pad部分。</p>
+</div>
+</div>
+<p>因此，在SFT 中，Log Probs 我们通过 <code>log_probs.sum(dim=-1)</code> 可以计算出Loss，当然，在做这个计算之前，我们还需要Mask掉Prompts，我们接下去来实现它：</p>
+</section>
+<section id="masked-normalize" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="masked-normalize"><span class="header-section-number">3.4</span> Masked Normalize</h2>
+<p>接下来，我们来实现 <code>masked_normalize</code> 函数， 这个函数的作用是：<strong>根据Mask，对Tensor进行Mask，并且进行Normalize</strong></p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/utils.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb24" data-filename="assignment5-alignment/cs336_alignment/algs/utils.py" data-code-line-numbers=""><pre class="sourceCode numberSource Python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">def</span> masked_normalize(</span>
+<span id="cb24-2"><a href="#cb24-2"></a>    tensor: torch.Tensor, <span class="co"># (B, T)</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>    mask: torch.Tensor,  <span class="co"># (B, T)</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>    normalize_constant: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span>, </span>
+<span id="cb24-5"><a href="#cb24-5"></a>    dim: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a>) <span class="op">-&gt;</span> torch.Tensor:</span>
+<span id="cb24-7"><a href="#cb24-7"></a>    <span class="cf">assert</span> tensor.shape <span class="op">==</span> mask.shape, <span class="st">"Tensor and mask must have the same shape"</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a></span>
+<span id="cb24-9"><a href="#cb24-9"></a>    masked_f <span class="op">=</span> mask.type_as(tensor)</span>
+<span id="cb24-10"><a href="#cb24-10"></a>    masked_tensor <span class="op">=</span> tensor <span class="op">*</span> masked_f</span>
+<span id="cb24-11"><a href="#cb24-11"></a>    masked_sum <span class="op">=</span> torch.<span class="bu">sum</span>(masked_tensor, dim<span class="op">=</span>dim) <span class="cf">if</span> dim <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="cf">else</span> torch.<span class="bu">sum</span>(masked_tensor)</span>
+<span id="cb24-12"><a href="#cb24-12"></a></span>
+<span id="cb24-13"><a href="#cb24-13"></a>    <span class="cf">return</span> masked_sum <span class="op">/</span> normalize_constant</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>这个函数很简单，首先我们会根据Mask来Mask掉Tensor中不需要的部分， 之后我们会对剩下的部分进行Sum， 最后我们会根据normalize_constant来进行Normalize。 传入masked_normalize的tensor，一般是Log Probs， 这样我们就可以计算出Masked Log Probs的和, 也就是我们想要的Loss。其中我认为一个很巧妙的设计是 <code>normalize_constant</code> 和 <code>dim</code> 参数， 通过这两个参数，我们可以灵活的控制我们想要的Normalize方式， 以及想要Sum的维度， 比如：</p>
+<ul>
+<li>如果我们想要计算Batch中所有Token的Loss，我们可以传入 <code>dim=None</code>， 并且 <code>normalize_constant = B</code>， 这样我们就可以得到Batch中所有Token的平均Loss。 (Token Level Loss)</li>
+<li>如果我们想要计算Batch中每个Sequence的Loss，我们可以传入 <code>dim=-1</code>， 并且 <code>normalize_constant = 1.0</code>， 这样我们就可以得到Batch中每个Sequence的Loss。 (Sequence Level Loss)</li>
+</ul>
+</section>
+<section id="sft-micro-batch-training-step" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="sft-micro-batch-training-step"><span class="header-section-number">3.5</span> SFT Micro-batch Training Step</h2>
+<p>有了这些Helper Functions，我们可以来实现SFT的训练, 由于Qwen2.5-Math-1.5B的模型比较大， 我们不能完全实现Batch Size较大的，因此，我们需要通过<a href="https://www.hopsworks.ai/dictionary/gradient-accumulation">Gradient Accumulation</a>的技术，来使得训练变得可能，我们先来定义一小步：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/sft.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb25" data-filename="assignment5-alignment/cs336_alignment/algs/sft.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">def</span> sft_microbatch_train_step(</span>
+<span id="cb25-2"><a href="#cb25-2"></a>    policy_log_probs: torch.Tensor,</span>
+<span id="cb25-3"><a href="#cb25-3"></a>    response_mask: torch.Tensor,</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    gradient_accumulation_steps: <span class="bu">int</span>,</span>
+<span id="cb25-5"><a href="#cb25-5"></a>    normalize_constant: <span class="bu">float</span> <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span id="cb25-6"><a href="#cb25-6"></a>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[torch.Tensor, <span class="bu">dict</span>[<span class="bu">str</span>, torch.Tensor]]:</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>其实很简单，这个函数就做两件事情：</p>
+<ol type="1">
+<li>计算Loss</li>
+<li>Backward 计算Gradient</li>
+</ol>
+<p><span id="eq-sft-batch-sum-loss"><span class="math display">\[
+\mathcal{L}_{\text{SFT}}^{\text{batch-sum}}
+=
+-\sum_{i=1}^{B}\sum_{t=1}^{T}
+m^{(i)}_t\;
+\log p_\theta\!\big(y^{(i)}_t \mid x^{(i)}_{&lt;t}\big)
+\tag{4}\]</span></span></p>
+<p>其中 <span class="math inline">\(m_{t}^{(i)}\)</span> 表示的是Mask值</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/sft.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb26" data-filename="assignment5-alignment/cs336_alignment/algs/sft.py" data-code-line-numbers="9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>loss_unscaled <span class="op">=</span> masked_normalize(</span>
+<span id="cb26-2"><a href="#cb26-2"></a>    policy_log_probs,</span>
+<span id="cb26-3"><a href="#cb26-3"></a>    response_mask,</span>
+<span id="cb26-4"><a href="#cb26-4"></a>    normalize_constant<span class="op">=</span>normalize_constant,</span>
+<span id="cb26-5"><a href="#cb26-5"></a>    dim<span class="op">=-</span><span class="dv">1</span>,</span>
+<span id="cb26-6"><a href="#cb26-6"></a>) <span class="co"># 我们可以看到， dim=-1， 而且 normalize_constant = 1.0， 也就是Sequence Level Loss</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a></span>
+<span id="cb26-8"><a href="#cb26-8"></a>loss_unscaled <span class="op">=</span> <span class="op">-</span>loss_unscaled.mean()</span>
+<span id="cb26-9"><a href="#cb26-9"></a>loss_scaled <span class="op">=</span> loss_unscaled <span class="op">/</span> gradient_accumulation_steps </span>
+<span id="cb26-10"><a href="#cb26-10"></a>loss_scaled.backward()</span>
+<span id="cb26-11"><a href="#cb26-11"></a></span>
+<span id="cb26-12"><a href="#cb26-12"></a>metadata <span class="op">=</span> {</span>
+<span id="cb26-13"><a href="#cb26-13"></a>    <span class="st">"loss_unscaled"</span>: loss_unscaled.detach(),</span>
+<span id="cb26-14"><a href="#cb26-14"></a>}</span>
+<span id="cb26-15"><a href="#cb26-15"></a><span class="cf">return</span> loss_scaled.detach(), metadata</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Gradient Accumulation的实现也很简单， 我们只需要在计算Loss之后， 除以 <code>gradient_accumulation_steps</code> 即可。 这样我们就可以在之后的SFT Trainer中， 实现Gradient Accumulation的功能了。</p>
+</section>
+<section id="sft-trainer" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="sft-trainer"><span class="header-section-number">3.6</span> SFT Trainer</h2>
+<p>有了这些Helper Functions，我们就可以定义我们的SFT Trainer了。相当的直观</p>
+<div class="sourceCode" id="cb27" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw">class</span> SFTTrainer:</span>
+<span id="cb27-2"><a href="#cb27-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(</span>
+<span id="cb27-3"><a href="#cb27-3"></a>        <span class="va">self</span>,</span>
+<span id="cb27-4"><a href="#cb27-4"></a>        model: PreTrainedModel,</span>
+<span id="cb27-5"><a href="#cb27-5"></a>        train_config: SFTTrainingConfig,</span>
+<span id="cb27-6"><a href="#cb27-6"></a>        device: torch.device,</span>
+<span id="cb27-7"><a href="#cb27-7"></a>        dataset_dir_base: <span class="bu">str</span> <span class="op">=</span> <span class="st">"./data/pre-processed"</span>,</span>
+<span id="cb27-8"><a href="#cb27-8"></a>    ): </span>
+<span id="cb27-9"><a href="#cb27-9"></a>        ...</span>
+<span id="cb27-10"><a href="#cb27-10"></a>    </span>
+<span id="cb27-11"><a href="#cb27-11"></a>    <span class="kw">def</span> train_step(</span>
+<span id="cb27-12"><a href="#cb27-12"></a>        <span class="va">self</span>,</span>
+<span id="cb27-13"><a href="#cb27-13"></a>    ) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">float</span>, <span class="bu">float</span>]: </span>
+<span id="cb27-14"><a href="#cb27-14"></a>        ... </span>
+<span id="cb27-15"><a href="#cb27-15"></a>        </span>
+<span id="cb27-16"><a href="#cb27-16"></a>    <span class="kw">def</span> train(<span class="va">self</span>, vllm<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb27-17"><a href="#cb27-17"></a>        ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>在这里就不过多的赘述了，有需要的同学请自行查看代码 <a href="https://github.com/YYZhang2025/Stanford-CS336/blob/main/assignment5-alignment/cs336_alignment/algs/sft.py"><code>assignment5-alignment/cs336_alignment/algs/sft.py</code></a> 以及它的训练代码 <a href="https://github.com/YYZhang2025/Stanford-CS336/blob/main/assignment5-alignment/train_sft.py"><code>assignment5-alignment/train_sft.py</code></a></p>
+</section>
+<section id="sft-experiment" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="sft-experiment"><span class="header-section-number">3.7</span> SFT Experiment</h2>
+<p>接下来我们来看看SFT 的训练结果：</p>
+<div id="fig-rlhf-vs-rlvr" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rlhf-vs-rlvr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-rlhf-vs-rlvr" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-sft-accuracy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-sft-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/sft-accuracy.png" class="img-fluid figure-img" data-ref-parent="fig-rlhf-vs-rlvr">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-sft-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Accuracy
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-rlhf-vs-rlvr" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-sft-format" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-sft-format-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/sft-format.png" class="img-fluid figure-img" data-ref-parent="fig-rlhf-vs-rlvr">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-sft-format-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Format Reward
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rlhf-vs-rlvr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Result of SFT on Qwen2.5-Math-1.5B
+</figcaption>
+</figure>
+</div>
+<p>可以看到，经过SFT训练之后，模型在MATH, GSM8K数据集上的表现都有了显著的提升，尤其是在Format Reward上，提升非常明显，这也符合我们之前提到的SFT的作用， 让模型变得更像助理，更会按指令做事。并且Accuracy也有了显著的提升， 这也说明SFT在提升模型能力方面是有效的。</p>
+</section>
+</section>
+<section id="expert-iteration" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Expert Iteration</h1>
+<div id="algo-ei" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-pseudocode-number="2" data-line-number="true" data-line-number-punc=":" data-comment-delimiter="#" data-no-end="false" data-indent-size="1.2em">
+<div class="pseudocode">
+\begin{algorithm} \caption{Expert Iteration (EI)} \begin{algorithmic} \Require Initial policy model $\pi_{\theta_{\text{init}}}$ \Require Reward function $R(q, o)$ \Require Task question set $\mathcal{D}$ \Require Number of EI steps $n_{\text{ei\_steps}}$ \Require Number of samples per prompt $G$ \State $\pi_{\theta} \gets \pi_{\theta_{\text{init}}}$ \For{$\text{step} = 1$ \textbf{to} $n_{\text{ei\_steps}}$} \State Sample a batch of questions $\mathcal{D}_b \subset \mathcal{D}$ \State $\pi_{\theta_{\text{old}}} \gets \pi_{\theta}$ \Comment{freeze current policy as expert} \For{\textbf{each} question $q \in \mathcal{D}_b$} \State Sample $G$ candidate outputs $\{o^{(i)}\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot \mid q)$ \State Compute rewards $\{r^{(i)}\}_{i=1}^G$, where $r^{(i)} = R(q, o^{(i)})$ \EndFor \State $\mathcal{D}_{\text{sft}} \gets \{(q, o^{(i)}) \mid r^{(i)} &gt; 0\}$ \Comment{keep only correct / high-reward samples} \State $\pi_{\theta} \gets \text{SFT}(\pi_{\theta}, \mathcal{D}_{\text{sft}})$ \Comment{Algorithm 1: supervised fine-tuning on filtered data} \EndFor \State \Return $\pi_{\theta}$ \end{algorithmic} \end{algorithm}
+</div>
+</div>
+<p>Expert Iteration, 在SFT的基础上，只多了几步采样的步骤，通过这几个步骤，我们可以得到更多的Prompt-Reponse Paris， 以便我们更好的训练SFT。同时，里面的Functions，我们也可以在GRPO中复用，可以看作是为GRPO做好准备。</p>
+</section>
+<section id="grpo" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> GRPO</h1>
+<p><img src="assets/ass05-grpo-alg.png" class="img-fluid"></p>
 
 
 </section>
