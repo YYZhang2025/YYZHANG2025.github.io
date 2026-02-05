@@ -79,9 +79,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../../site_libs/bootstrap/bootstrap-51ad148c0f8c6e164aa005824741c6ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../../site_libs/bootstrap/bootstrap-dark-506b7cb43fad2afaa54227a45fe75876.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../../site_libs/bootstrap/bootstrap-51ad148c0f8c6e164aa005824741c6ca.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-d55b1525cb7d56cc0beabf31aa7c8a7d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-dark-157318f1118be7d8dcd8863eb53a2815.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../../site_libs/bootstrap/bootstrap-d55b1525cb7d56cc0beabf31aa7c8a7d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -478,8 +478,25 @@ window.Quarto = {
   <li><a href="#sft-trainer" id="toc-sft-trainer" class="nav-link" data-scroll-target="#sft-trainer"><span class="header-section-number">3.6</span> SFT Trainer</a></li>
   <li><a href="#sft-experiment" id="toc-sft-experiment" class="nav-link" data-scroll-target="#sft-experiment"><span class="header-section-number">3.7</span> SFT Experiment</a></li>
   </ul></li>
-  <li><a href="#expert-iteration" id="toc-expert-iteration" class="nav-link" data-scroll-target="#expert-iteration"><span class="header-section-number">4</span> Expert Iteration</a></li>
-  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">5</span> GRPO</a></li>
+  <li><a href="#expert-iteration" id="toc-expert-iteration" class="nav-link" data-scroll-target="#expert-iteration"><span class="header-section-number">4</span> Expert Iteration</a>
+  <ul>
+  <li><a href="#ei-experiment" id="toc-ei-experiment" class="nav-link" data-scroll-target="#ei-experiment"><span class="header-section-number">4.1</span> EI Experiment</a></li>
+  </ul></li>
+  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">5</span> GRPO</a>
+  <ul>
+  <li><a href="#grpo-experiment" id="toc-grpo-experiment" class="nav-link" data-scroll-target="#grpo-experiment"><span class="header-section-number">5.1</span> GRPO Experiment</a></li>
+  <li><a href="#other-experiments" id="toc-other-experiments" class="nav-link" data-scroll-target="#other-experiments"><span class="header-section-number">5.2</span> Other Experiments</a>
+  <ul>
+  <li><a href="#learning-rate-tuning" id="toc-learning-rate-tuning" class="nav-link" data-scroll-target="#learning-rate-tuning"><span class="header-section-number">5.2.1</span> Learning Rate Tuning</a></li>
+  <li><a href="#effect-of-baseline" id="toc-effect-of-baseline" class="nav-link" data-scroll-target="#effect-of-baseline"><span class="header-section-number">5.2.2</span> Effect of Baseline</a></li>
+  <li><a href="#length-normalization" id="toc-length-normalization" class="nav-link" data-scroll-target="#length-normalization"><span class="header-section-number">5.2.3</span> Length Normalization</a></li>
+  <li><a href="#normalization-with-group-std" id="toc-normalization-with-group-std" class="nav-link" data-scroll-target="#normalization-with-group-std"><span class="header-section-number">5.2.4</span> Normalization with group std</a></li>
+  <li><a href="#off-policy-vs.-on-policy" id="toc-off-policy-vs.-on-policy" class="nav-link" data-scroll-target="#off-policy-vs.-on-policy"><span class="header-section-number">5.2.5</span> Off-Policy vs.&nbsp;On-Policy</a></li>
+  <li><a href="#off-policy-clipping" id="toc-off-policy-clipping" class="nav-link" data-scroll-target="#off-policy-clipping"><span class="header-section-number">5.2.6</span> Off Policy Clipping</a></li>
+  <li><a href="#different-prompts" id="toc-different-prompts" class="nav-link" data-scroll-target="#different-prompts"><span class="header-section-number">5.2.7</span> Different Prompts</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#dpo" id="toc-dpo" class="nav-link" data-scroll-target="#dpo"><span class="header-section-number">6</span> DPO</a></li>
   </ul>
 </nav>
 </nav>
@@ -600,7 +617,7 @@ window.Quarto = {
 <p>类似地，我们也需要对MATH数据集进行预处理，MATH数据集的格式如下：</p>
 <div class="sourceCode" id="cb8" data-code-line-numbers=""><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">{</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">"problem"</span><span class="fu">:</span> <span class="st">"How many vertical asymptotes does the graph of $y=</span><span class="ch">\\</span><span class="st">frac{2}{x^2+x-6}$ have?"</span><span class="fu">,</span> </span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">"solution"</span><span class="fu">:</span> <span class="st">"The denominator of the rational function factors into $x^2+x-6=(x-2)(x+3)$. Since the numerator is always nonzero, there is a vertical asymptote whenever the denominator is $0$, which occurs for $x = 2$ and $x = -3$.  Therefore, the graph has $</span><span class="ch">\\</span><span class="st">boxed{2}$ vertical asymptotes.</span><span class="ch">\n</span><span class="st">&lt;/think&gt; &lt;answer&gt;2&lt;/answer&gt;"</span><span class="fu">,</span> </span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">"solution"</span><span class="fu">:</span> <span class="st">"The denominator of the rational function factors into $x^2+x-6=(x-2)(x+3)$. Since the numerator is always nonzero, there is a vertical asymptote whenever the denominator is $0$, which occurs for $x = 2$ and $x = -3$.  Therefore, the graph has $</span><span class="ch">\\</span><span class="st">boxed{2}$ vertical asymptotes."</span><span class="fu">,</span> </span>
 <span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">"answer"</span><span class="fu">:</span> <span class="st">"2"</span></span>
 <span id="cb8-5"><a href="#cb8-5"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="code-with-filename">
@@ -795,7 +812,7 @@ Table&nbsp;1: Qwen2.5-Math-1.5B Zero-Shot Evaluation Results on MATH and GSM8K D
 </ol>
 <p>在 PPO/GRPO 里经常会担心 reward hacking、模式坍塌、输出退化。 SFT 提供一个强先验：即使 RL 更新过猛，KL/参考模型通常也把它拉回 SFT 附近，让训练更稳。</p>
 <p>SFT的算法如下</p>
-<div id="algo-sft" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-pseudocode-number="1" data-line-number="true" data-line-number-punc=":" data-comment-delimiter="#" data-no-end="false" data-indent-size="1.2em">
+<div id="algo-sft" class="pseudocode-container quarto-float" data-no-end="false" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-line-number-punc=":" data-pseudocode-number="1" data-comment-delimiter="#" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Supervised Fine-Tuning (SFT)} \begin{algorithmic} \Require Initial policy model $\pi_{\theta_{\text{init}}}$ \Require SFT dataset $\mathcal{D}$ (prompt–response pairs) \Require Number of SFT steps $n_{\text{sft\_steps}}$ \Require Learning rate $\alpha$ \State $\pi_{\theta} \gets \pi_{\theta_{\text{init}}}$ \For{$\text{step} = 1$ \textbf{to} $n_{\text{sft\_steps}}$} \State Sample a minibatch $\mathcal{D}_b = \{(x_j, y_j)\}_{j=1}^{B}$ from $\mathcal{D}$ \Comment{$x$: prompt/question, $y$: target response} \State $\mathcal{L}_{\text{CE}}(\theta) \gets -\mathbb{E}_{(x,y)\sim \mathcal{D}_b}\left[\sum_{t=1}^{|y|}\log \pi_{\theta}(y_t \mid x, y_{&lt;t})\right]$ \Comment{Teacher-forcing cross-entropy / NLL} \State $\theta \gets \theta - \alpha \nabla_{\theta}\mathcal{L}_{\text{CE}}(\theta)$ \EndFor \State \Return $\pi_{\theta}$ \end{algorithmic} \end{algorithm}
 </div>
@@ -1019,8 +1036,8 @@ H(p) &amp;= - \sum_{x \in \mathcal{X}} p(x) \log p(x)
 </div>
 <p>这个函数很简单，首先我们会根据Mask来Mask掉Tensor中不需要的部分， 之后我们会对剩下的部分进行Sum， 最后我们会根据normalize_constant来进行Normalize。 传入masked_normalize的tensor，一般是Log Probs， 这样我们就可以计算出Masked Log Probs的和, 也就是我们想要的Loss。其中我认为一个很巧妙的设计是 <code>normalize_constant</code> 和 <code>dim</code> 参数， 通过这两个参数，我们可以灵活的控制我们想要的Normalize方式， 以及想要Sum的维度， 比如：</p>
 <ul>
-<li>如果我们想要计算Batch中所有Token的Loss，我们可以传入 <code>dim=None</code>， 并且 <code>normalize_constant = B</code>， 这样我们就可以得到Batch中所有Token的平均Loss。 (Token Level Loss)</li>
-<li>如果我们想要计算Batch中每个Sequence的Loss，我们可以传入 <code>dim=-1</code>， 并且 <code>normalize_constant = 1.0</code>， 这样我们就可以得到Batch中每个Sequence的Loss。 (Sequence Level Loss)</li>
+<li>如果我们想要计算Batch中所有Token的Loss，我们可以传入 <code>dim=None</code>， 并且 <code>normalize_constant = mask.sum()</code>， 这样我们就可以得到Batch中所有Token的平均Loss。 (Token Level Loss)</li>
+<li>如果我们想要计算Batch中每个Sequence的Loss，我们可以传入 <code>dim=-1</code>， 并且 <code>normalize_constant = mask.sum(dim = -1)</code>， 这样我们就可以得到Batch中每个Sequence的Loss。 (Sequence Level Loss)</li>
 </ul>
 </section>
 <section id="sft-micro-batch-training-step" class="level2" data-number="3.5">
@@ -1137,16 +1154,350 @@ Figure&nbsp;1: Result of SFT on Qwen2.5-Math-1.5B
 </section>
 <section id="expert-iteration" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Expert Iteration</h1>
-<div id="algo-ei" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-pseudocode-number="2" data-line-number="true" data-line-number-punc=":" data-comment-delimiter="#" data-no-end="false" data-indent-size="1.2em">
+<div id="algo-ei" class="pseudocode-container quarto-float" data-no-end="false" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-line-number-punc=":" data-pseudocode-number="2" data-comment-delimiter="#" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Expert Iteration (EI)} \begin{algorithmic} \Require Initial policy model $\pi_{\theta_{\text{init}}}$ \Require Reward function $R(q, o)$ \Require Task question set $\mathcal{D}$ \Require Number of EI steps $n_{\text{ei\_steps}}$ \Require Number of samples per prompt $G$ \State $\pi_{\theta} \gets \pi_{\theta_{\text{init}}}$ \For{$\text{step} = 1$ \textbf{to} $n_{\text{ei\_steps}}$} \State Sample a batch of questions $\mathcal{D}_b \subset \mathcal{D}$ \State $\pi_{\theta_{\text{old}}} \gets \pi_{\theta}$ \Comment{freeze current policy as expert} \For{\textbf{each} question $q \in \mathcal{D}_b$} \State Sample $G$ candidate outputs $\{o^{(i)}\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot \mid q)$ \State Compute rewards $\{r^{(i)}\}_{i=1}^G$, where $r^{(i)} = R(q, o^{(i)})$ \EndFor \State $\mathcal{D}_{\text{sft}} \gets \{(q, o^{(i)}) \mid r^{(i)} &gt; 0\}$ \Comment{keep only correct / high-reward samples} \State $\pi_{\theta} \gets \text{SFT}(\pi_{\theta}, \mathcal{D}_{\text{sft}})$ \Comment{Algorithm 1: supervised fine-tuning on filtered data} \EndFor \State \Return $\pi_{\theta}$ \end{algorithmic} \end{algorithm}
 </div>
 </div>
 <p>Expert Iteration, 在SFT的基础上，只多了几步采样的步骤，通过这几个步骤，我们可以得到更多的Prompt-Reponse Paris， 以便我们更好的训练SFT。同时，里面的Functions，我们也可以在GRPO中复用，可以看作是为GRPO做好准备。</p>
+<p>在这里，采样的时候，我们会先重复 prompts 和 answers， 以便我们可以对每个prompt采样多个response：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/ei.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb28" data-filename="assignment5-alignment/cs336_alignment/algs/ei.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">def</span> get_ei_batch(</span>
+<span id="cb28-2"><a href="#cb28-2"></a>    prompts: <span class="bu">list</span>[<span class="bu">str</span>],</span>
+<span id="cb28-3"><a href="#cb28-3"></a>    answers: <span class="bu">list</span>[<span class="bu">str</span>],</span>
+<span id="cb28-4"><a href="#cb28-4"></a>    batch_size: <span class="bu">int</span> <span class="op">=</span> <span class="dv">512</span>,</span>
+<span id="cb28-5"><a href="#cb28-5"></a>    num_responses_per_prompt: <span class="bu">int</span> <span class="op">=</span> <span class="dv">4</span>,</span>
+<span id="cb28-6"><a href="#cb28-6"></a>):</span>
+<span id="cb28-7"><a href="#cb28-7"></a>    random_index <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="bu">len</span>(prompts)), k<span class="op">=</span>batch_size)</span>
+<span id="cb28-8"><a href="#cb28-8"></a>    random_prompts <span class="op">=</span> [prompts[i] <span class="cf">for</span> i <span class="kw">in</span> random_index]</span>
+<span id="cb28-9"><a href="#cb28-9"></a>    random_answers <span class="op">=</span> [answers[i] <span class="cf">for</span> i <span class="kw">in</span> random_index]</span>
+<span id="cb28-10"><a href="#cb28-10"></a></span>
+<span id="cb28-11"><a href="#cb28-11"></a>    all_prompts <span class="op">=</span> []</span>
+<span id="cb28-12"><a href="#cb28-12"></a>    <span class="cf">for</span> prompt <span class="kw">in</span> random_prompts:</span>
+<span id="cb28-13"><a href="#cb28-13"></a>        all_prompts.extend([prompt] <span class="op">*</span> num_responses_per_prompt)</span>
+<span id="cb28-14"><a href="#cb28-14"></a>    all_true_answers <span class="op">=</span> []</span>
+<span id="cb28-15"><a href="#cb28-15"></a>    <span class="cf">for</span> answer <span class="kw">in</span> random_answers:</span>
+<span id="cb28-16"><a href="#cb28-16"></a>        all_true_answers.extend([answer] <span class="op">*</span> num_responses_per_prompt)</span>
+<span id="cb28-17"><a href="#cb28-17"></a></span>
+<span id="cb28-18"><a href="#cb28-18"></a>    <span class="cf">return</span> {</span>
+<span id="cb28-19"><a href="#cb28-19"></a>        <span class="st">"prompts"</span>: <span class="bu">list</span>(all_prompts),</span>
+<span id="cb28-20"><a href="#cb28-20"></a>        <span class="st">"true_answers"</span>: <span class="bu">list</span>(all_true_answers),</span>
+<span id="cb28-21"><a href="#cb28-21"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>有了prompts 和 answers之后， 我们就可以进行采样了， 采样的代码和之前的vLLM推理代码是一样的：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/ei.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb29" data-filename="assignment5-alignment/cs336_alignment/algs/ei.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>sampled_responses <span class="op">=</span> generate_responses(vllm, sampled_prompts, <span class="va">self</span>.sampling_params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>之后我们就可以计算Reward， 以及过滤出高质量的Prompt-Response Pairs， 以便我们进行SFT训练：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/ei.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb30" data-filename="assignment5-alignment/cs336_alignment/algs/ei.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a>rewards_dict <span class="op">=</span> compute_rewards_from_responses(</span>
+<span id="cb30-2"><a href="#cb30-2"></a>    sampled_responses,</span>
+<span id="cb30-3"><a href="#cb30-3"></a>    true_answers,</span>
+<span id="cb30-4"><a href="#cb30-4"></a>    reward_fn<span class="op">=</span>REWARD_FN_MAP[<span class="va">self</span>.train_config.reward_fn],</span>
+<span id="cb30-5"><a href="#cb30-5"></a>)</span>
+<span id="cb30-6"><a href="#cb30-6"></a></span>
+<span id="cb30-7"><a href="#cb30-7"></a><span class="co"># 7. Filter responses by reward</span></span>
+<span id="cb30-8"><a href="#cb30-8"></a>filtered_prompts, filtered_responses, filtered_answers <span class="op">=</span> filter_by_reward(</span>
+<span id="cb30-9"><a href="#cb30-9"></a>    sampled_prompts,</span>
+<span id="cb30-10"><a href="#cb30-10"></a>    sampled_responses,</span>
+<span id="cb30-11"><a href="#cb30-11"></a>    true_answers,</span>
+<span id="cb30-12"><a href="#cb30-12"></a>    rewards_dict,</span>
+<span id="cb30-13"><a href="#cb30-13"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>具体的细节，大家可以查看代码 <a href="https://github.com/YYZhang2025/Stanford-CS336/blob/main/assignment5-alignment/cs336_alignment/algs/ei.py"><code>assignment5-alignment/cs336_alignment/algs/ei.py</code></a> 以及它的训练代码 <a href="https://github.com/YYZhang2025/Stanford-CS336/blob/main/assignment5-alignment/train_ei.py"><code>assignment5-alignment/train_ei.py</code></a></p>
+<section id="ei-experiment" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="ei-experiment"><span class="header-section-number">4.1</span> EI Experiment</h2>
+<p>接下来我们来看看EI 的训练结果：</p>
+<div id="fig-ei-exp" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ei-exp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ei-exp" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-ei-gsm8k-accuracy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ei-gsm8k-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/ei-gsm8k-accuracy.png" class="img-fluid figure-img" data-ref-parent="fig-ei-exp">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ei-gsm8k-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) GSM8K Accuracy
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-ei-exp" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-ei-math-accuracy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-ei-math-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/ei-math-accuracy.png" class="img-fluid figure-img" data-ref-parent="fig-ei-exp">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-ei-math-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Format Reward
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ei-exp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Result of EI on Qwen2.5-Math-1.5B on MATH and GSM8K Datasets
+</figcaption>
+</figure>
+</div>
+<p>可以看到，经过EI训练之后，模型在MATH, GSM8K数据集上的表现都有了显著的提升，尤其是在Accuracy上，提升非常明显，这也符合我们之前提到的EI的作用，通过采样更多的Prompt-Response Pairs，来提升模型的能力。并且Format Reward也有了显著的提升， 这也说明EI在提升模型能力方面是有效的。</p>
+</section>
 </section>
 <section id="grpo" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> GRPO</h1>
-<p><img src="assets/ass05-grpo-alg.png" class="img-fluid"></p>
+<p>经过前两轮的热身，终于到了我们本次Assignment的重头戏：GRPO。 GRPO的算法如下：</p>
+<div id="algo-grpo" class="pseudocode-container quarto-float" data-no-end="false" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-line-number-punc=":" data-pseudocode-number="3" data-comment-delimiter="#" data-line-number="true">
+<div class="pseudocode">
+\begin{algorithm} \caption{Group Relative Policy Optimization (GRPO)} \begin{algorithmic} \Require Initial policy $\pi_{\theta_{\text{init}}}$, reward function $R$, dataset of prompts/questions $\mathcal{D}$ \State Initialize policy $\pi_\theta \leftarrow \pi_{\theta_{\text{init}}}$ \For{$\text{step}=1,\dots,n_{\text{grpo\_steps}}$} \State Sample a minibatch of questions $\mathcal{D}_b \subset \mathcal{D}$ \State Snapshot old policy $\pi_{\theta_{\text{old}}} \leftarrow \pi_\theta$ \ForAll{$q \in \mathcal{D}_b$} \State Sample $G$ candidate outputs $\{o^{(i)}\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot \mid q)$ \State Compute rewards $r^{(i)} \leftarrow R\!\left(q, o^{(i)}\right)$ for $i=1,\dots,G$ \State Compute group-normalized advantages $A^{(i)}$ from $\{r^{(i)}\}_{i=1}^G$ (group normalization) \For{$\text{train\_step}=1,\dots,n_{\text{train\_steps\_per\_rollout\_batch}}$} \State Update $\pi_\theta$ by maximizing the GRPO-Clip objective using $\pi_{\theta_{\text{old}}}$ and $\{(o^{(i)},A^{(i)})\}_{i=1}^G$ \EndFor \EndFor \EndFor \State \Return $\pi_\theta$ \end{algorithmic} \end{algorithm}
+</div>
+</div>
+<p>在实现代码之前，我们先来看看GRPO的几个关键步骤：</p>
+<ol type="1">
+<li><strong>采样</strong>：和EI类似，我们需要对每个prompt采样多个response，以便我们可以计算reward。</li>
+<li><strong>计算Reward</strong>：我们需要计算每个response的reward，以便我们可以进行后续的优化。</li>
+<li><strong>计算Log Probs</strong>：我们需要计算每个response的log probs，包括Old Policy和New Policy的log probs。</li>
+<li><strong>计算Advantage</strong>：我们需要计算每个response的advantage。</li>
+<li><strong>计算Loss</strong>：我们需要计算GRPO的Loss，并且进行Backward。</li>
+<li><strong>更新Old Policy</strong>：我们需要在每个Step结束后，更新Old Policy为当前的New Policy。</li>
+</ol>
+<p>我们一步一步来看。首先是采样和计算Reward，这部分和EI是一样的，我们就不赘述了，我这里采用的方法，也是先重复prompts 和 answers， 以便我们可以对每个prompt采样多个response：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/grpo.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb31" data-filename="assignment5-alignment/cs336_alignment/algs/grpo.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">def</span> sample_batch_questions(</span>
+<span id="cb31-2"><a href="#cb31-2"></a>    prompts: <span class="bu">list</span>[<span class="bu">str</span>],</span>
+<span id="cb31-3"><a href="#cb31-3"></a>    answers: <span class="bu">list</span>[<span class="bu">str</span>],</span>
+<span id="cb31-4"><a href="#cb31-4"></a>    batch_size: <span class="bu">int</span>,</span>
+<span id="cb31-5"><a href="#cb31-5"></a>    group_size: <span class="bu">int</span> <span class="op">=</span> <span class="dv">8</span>,</span>
+<span id="cb31-6"><a href="#cb31-6"></a>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[<span class="bu">list</span>[<span class="bu">str</span>], <span class="bu">list</span>[<span class="bu">str</span>]]:</span>
+<span id="cb31-7"><a href="#cb31-7"></a>    index <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="bu">len</span>(prompts)), k<span class="op">=</span>batch_size)</span>
+<span id="cb31-8"><a href="#cb31-8"></a>    sampled_prompts <span class="op">=</span> [prompts[i] <span class="cf">for</span> i <span class="kw">in</span> index]</span>
+<span id="cb31-9"><a href="#cb31-9"></a>    sampled_answers <span class="op">=</span> [answers[i] <span class="cf">for</span> i <span class="kw">in</span> index]</span>
+<span id="cb31-10"><a href="#cb31-10"></a></span>
+<span id="cb31-11"><a href="#cb31-11"></a>    batch_prompts <span class="op">=</span> []</span>
+<span id="cb31-12"><a href="#cb31-12"></a>    batch_answers <span class="op">=</span> []</span>
+<span id="cb31-13"><a href="#cb31-13"></a>    <span class="cf">for</span> p, a <span class="kw">in</span> <span class="bu">zip</span>(sampled_prompts, sampled_answers):</span>
+<span id="cb31-14"><a href="#cb31-14"></a>        batch_prompts.extend([p] <span class="op">*</span> group_size)</span>
+<span id="cb31-15"><a href="#cb31-15"></a>        batch_answers.extend([a] <span class="op">*</span> group_size)</span>
+<span id="cb31-16"><a href="#cb31-16"></a></span>
+<span id="cb31-17"><a href="#cb31-17"></a>    <span class="cf">return</span> batch_prompts, batch_answers</span>
+<span id="cb31-18"><a href="#cb31-18"></a></span>
+<span id="cb31-19"><a href="#cb31-19"></a>rollout_responses <span class="op">=</span> generate_responses(vllm, sample_prompts, <span class="va">self</span>.sampling_params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>有了采样的responses之后， 我们就可以计算Reward了：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/grpo.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb32" data-filename="assignment5-alignment/cs336_alignment/algs/grpo.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw">def</span> compute_group_normalized_rewards(</span>
+<span id="cb32-2"><a href="#cb32-2"></a>    reward_fn: Callable,</span>
+<span id="cb32-3"><a href="#cb32-3"></a>    rollout_responses: <span class="bu">list</span>[<span class="bu">str</span>],</span>
+<span id="cb32-4"><a href="#cb32-4"></a>    repeated_ground_truths: <span class="bu">list</span>[<span class="bu">str</span>],</span>
+<span id="cb32-5"><a href="#cb32-5"></a>    group_size: <span class="bu">int</span>,</span>
+<span id="cb32-6"><a href="#cb32-6"></a>    advantage_eps: <span class="bu">float</span>,</span>
+<span id="cb32-7"><a href="#cb32-7"></a>    normalized_by_std: <span class="bu">bool</span> <span class="op">=</span> <span class="va">True</span>,</span>
+<span id="cb32-8"><a href="#cb32-8"></a>):</span>
+<span id="cb32-9"><a href="#cb32-9"></a>    formatted_rewards <span class="op">=</span> []</span>
+<span id="cb32-10"><a href="#cb32-10"></a>    answer_correct_rewards <span class="op">=</span> []</span>
+<span id="cb32-11"><a href="#cb32-11"></a>    rewards <span class="op">=</span> []</span>
+<span id="cb32-12"><a href="#cb32-12"></a>    <span class="cf">for</span> response, true_answer <span class="kw">in</span> <span class="bu">zip</span>(rollout_responses, repeated_ground_truths):</span>
+<span id="cb32-13"><a href="#cb32-13"></a>        reward_info <span class="op">=</span> reward_fn(response, true_answer)</span>
+<span id="cb32-14"><a href="#cb32-14"></a>        rewards.append(reward_info[<span class="st">"reward"</span>])</span>
+<span id="cb32-15"><a href="#cb32-15"></a>        formatted_rewards.append(reward_info[<span class="st">"format_reward"</span>])</span>
+<span id="cb32-16"><a href="#cb32-16"></a>        answer_correct_rewards.append(reward_info[<span class="st">"answer_reward"</span>])</span>
+<span id="cb32-17"><a href="#cb32-17"></a></span>
+<span id="cb32-18"><a href="#cb32-18"></a>    advs <span class="op">=</span> []</span>
+<span id="cb32-19"><a href="#cb32-19"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(rewards), group_size):</span>
+<span id="cb32-20"><a href="#cb32-20"></a>        group_rewards <span class="op">=</span> rewards[i : i <span class="op">+</span> group_size]</span>
+<span id="cb32-21"><a href="#cb32-21"></a>        group_rewards_tensor <span class="op">=</span> torch.tensor(group_rewards)</span>
+<span id="cb32-22"><a href="#cb32-22"></a>        group_mean <span class="op">=</span> torch.mean(group_rewards_tensor)</span>
+<span id="cb32-23"><a href="#cb32-23"></a>        <span class="cf">if</span> normalized_by_std:</span>
+<span id="cb32-24"><a href="#cb32-24"></a>            group_std <span class="op">=</span> torch.std(group_rewards_tensor) <span class="op">+</span> advantage_eps</span>
+<span id="cb32-25"><a href="#cb32-25"></a>            normalized_rewards <span class="op">=</span> (group_rewards_tensor <span class="op">-</span> group_mean) <span class="op">/</span> group_std</span>
+<span id="cb32-26"><a href="#cb32-26"></a>        <span class="cf">else</span>:</span>
+<span id="cb32-27"><a href="#cb32-27"></a>            normalized_rewards <span class="op">=</span> group_rewards_tensor <span class="op">-</span> group_mean</span>
+<span id="cb32-28"><a href="#cb32-28"></a>        advs.extend(normalized_rewards.tolist())</span>
+<span id="cb32-29"><a href="#cb32-29"></a></span>
+<span id="cb32-30"><a href="#cb32-30"></a>    meta_info <span class="op">=</span> {}</span>
+<span id="cb32-31"><a href="#cb32-31"></a></span>
+<span id="cb32-32"><a href="#cb32-32"></a>    <span class="cf">return</span> advs, rewards, meta_info</span>
+<span id="cb32-33"><a href="#cb32-33"></a>advantages, raw_rewards, metadata <span class="op">=</span> compute_group_normalized_rewards(</span>
+<span id="cb32-34"><a href="#cb32-34"></a>    reward_fn<span class="op">=</span><span class="va">self</span>.reward_fn,</span>
+<span id="cb32-35"><a href="#cb32-35"></a>    rollout_responses<span class="op">=</span>rollout_responses,</span>
+<span id="cb32-36"><a href="#cb32-36"></a>    repeated_ground_truths<span class="op">=</span>repeated_ground_truths,</span>
+<span id="cb32-37"><a href="#cb32-37"></a>    group_size<span class="op">=</span><span class="va">self</span>.train_config.group_size,</span>
+<span id="cb32-38"><a href="#cb32-38"></a>    advantage_eps<span class="op">=</span><span class="va">self</span>.train_config.advantage_eps,</span>
+<span id="cb32-39"><a href="#cb32-39"></a>    normalized_by_std<span class="op">=</span><span class="va">self</span>.train_config.norm_by_std,</span>
+<span id="cb32-40"><a href="#cb32-40"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>在这个函数中， 我们计算了每个response的reward， 之后我们根据group size， 来计算group normalized advantages。 具体来说， 我们会将每个group中的rewards， 计算mean和std， 之后我们会根据mean和std来计算normalized rewards， 也就是advantages。 这样做的好处是， 可以减少不同group之间的reward scale差异， 使得训练更加稳定。</p>
+<p>有了advantages之后， 我们就可以计算Log Probs了，</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/grpo.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb33" data-filename="assignment5-alignment/cs336_alignment/algs/grpo.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a>input_ids <span class="op">=</span> tokenized[<span class="st">"input_ids"</span>].to(<span class="va">self</span>.device, non_blocking<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb33-2"><a href="#cb33-2"></a>labels <span class="op">=</span> tokenized[<span class="st">"labels"</span>].to(<span class="va">self</span>.device, non_blocking<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>response_mask <span class="op">=</span> tokenized[<span class="st">"response_mask"</span>].to(<span class="va">self</span>.device, non_blocking<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb33-4"><a href="#cb33-4"></a>ave_length <span class="op">=</span> response_mask.<span class="bu">sum</span>(dim<span class="op">=</span><span class="dv">1</span>).<span class="bu">float</span>().mean().item()</span>
+<span id="cb33-5"><a href="#cb33-5"></a></span>
+<span id="cb33-6"><a href="#cb33-6"></a>old_log_probs <span class="op">=</span> []</span>
+<span id="cb33-7"><a href="#cb33-7"></a><span class="va">self</span>.model.<span class="bu">eval</span>()</span>
+<span id="cb33-8"><a href="#cb33-8"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb33-9"><a href="#cb33-9"></a>    <span class="cf">for</span> i <span class="kw">in</span> trange(<span class="dv">0</span>, input_ids.size(<span class="dv">0</span>), <span class="va">self</span>.train_config.micro_batch_size):</span>
+<span id="cb33-10"><a href="#cb33-10"></a>        batch_input_ids <span class="op">=</span> input_ids[i : i <span class="op">+</span> <span class="va">self</span>.train_config.micro_batch_size]</span>
+<span id="cb33-11"><a href="#cb33-11"></a>        batch_labels <span class="op">=</span> labels[i : i <span class="op">+</span> <span class="va">self</span>.train_config.micro_batch_size]</span>
+<span id="cb33-12"><a href="#cb33-12"></a></span>
+<span id="cb33-13"><a href="#cb33-13"></a>        <span class="cf">with</span> <span class="va">self</span>.ctx:</span>
+<span id="cb33-14"><a href="#cb33-14"></a>            policy_outputs <span class="op">=</span> get_response_log_probs(</span>
+<span id="cb33-15"><a href="#cb33-15"></a>                <span class="va">self</span>.model,</span>
+<span id="cb33-16"><a href="#cb33-16"></a>                input_ids<span class="op">=</span>batch_input_ids,</span>
+<span id="cb33-17"><a href="#cb33-17"></a>                labels<span class="op">=</span>batch_labels,</span>
+<span id="cb33-18"><a href="#cb33-18"></a>                return_token_entropy<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb33-19"><a href="#cb33-19"></a>            )</span>
+<span id="cb33-20"><a href="#cb33-20"></a>            batch_log_probs <span class="op">=</span> policy_outputs[<span class="st">"log_probs"</span>]</span>
+<span id="cb33-21"><a href="#cb33-21"></a></span>
+<span id="cb33-22"><a href="#cb33-22"></a>        old_log_probs.append(batch_log_probs.cpu())</span>
+<span id="cb33-23"><a href="#cb33-23"></a>old_log_probs <span class="op">=</span> torch.cat(old_log_probs, dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb33-24"><a href="#cb33-24"></a><span class="va">self</span>.model.train()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>在这里，我也用了类似于Gradient Accumulation的技术， 来计算Old Policy的Log Probs， 以便节省显存。 计算New Policy的Log Probs也是类似的， 这里就不赘述了。</p>
+<p>有了Old Policy和New Policy的Log Probs之后， 我们就可以计算GRPO的Loss了：</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>assignment5-alignment/cs336_alignment/algs/grpo.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb34" data-filename="assignment5-alignment/cs336_alignment/algs/grpo.py" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">def</span> grpo_microbatch_train_step(</span>
+<span id="cb34-2"><a href="#cb34-2"></a>    policy_log_probs: torch.Tensor,</span>
+<span id="cb34-3"><a href="#cb34-3"></a>    response_mask: torch.Tensor,</span>
+<span id="cb34-4"><a href="#cb34-4"></a>    gradient_accumulation_steps: <span class="bu">int</span>,</span>
+<span id="cb34-5"><a href="#cb34-5"></a>    loss_type: Literal[<span class="st">"no_baseline"</span>, <span class="st">"reinforce_with_baseline"</span>, <span class="st">"grpo_clip"</span>],</span>
+<span id="cb34-6"><a href="#cb34-6"></a>    raw_rewards: torch.Tensor <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb34-7"><a href="#cb34-7"></a>    advantages: torch.Tensor <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb34-8"><a href="#cb34-8"></a>    old_log_probs: torch.Tensor <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb34-9"><a href="#cb34-9"></a>    cliprange: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span id="cb34-10"><a href="#cb34-10"></a>) <span class="op">-&gt;</span> <span class="bu">tuple</span>[torch.Tensor, <span class="bu">dict</span>]:</span>
+<span id="cb34-11"><a href="#cb34-11"></a>    <span class="co">"""</span></span>
+<span id="cb34-12"><a href="#cb34-12"></a><span class="co">    Compute the GRPO loss over microbatches for training.</span></span>
+<span id="cb34-13"><a href="#cb34-13"></a><span class="co">    """</span></span>
+<span id="cb34-14"><a href="#cb34-14"></a>    loss, metadata <span class="op">=</span> compute_policy_gradient_loss(</span>
+<span id="cb34-15"><a href="#cb34-15"></a>        policy_log_probs<span class="op">=</span>policy_log_probs,</span>
+<span id="cb34-16"><a href="#cb34-16"></a>        loss_type<span class="op">=</span>loss_type,</span>
+<span id="cb34-17"><a href="#cb34-17"></a>        raw_rewards<span class="op">=</span>raw_rewards,</span>
+<span id="cb34-18"><a href="#cb34-18"></a>        advantages<span class="op">=</span>advantages,</span>
+<span id="cb34-19"><a href="#cb34-19"></a>        old_log_probs<span class="op">=</span>old_log_probs,</span>
+<span id="cb34-20"><a href="#cb34-20"></a>        cliprange<span class="op">=</span>cliprange,</span>
+<span id="cb34-21"><a href="#cb34-21"></a>    )</span>
+<span id="cb34-22"><a href="#cb34-22"></a></span>
+<span id="cb34-23"><a href="#cb34-23"></a>    masked_loss <span class="op">=</span> masked_mean(</span>
+<span id="cb34-24"><a href="#cb34-24"></a>        tensor<span class="op">=</span>loss,</span>
+<span id="cb34-25"><a href="#cb34-25"></a>        mask<span class="op">=</span>response_mask,</span>
+<span id="cb34-26"><a href="#cb34-26"></a>        dim<span class="op">=-</span><span class="dv">1</span>,</span>
+<span id="cb34-27"><a href="#cb34-27"></a>    )</span>
+<span id="cb34-28"><a href="#cb34-28"></a></span>
+<span id="cb34-29"><a href="#cb34-29"></a>    masked_loss <span class="op">=</span> masked_loss.mean()</span>
+<span id="cb34-30"><a href="#cb34-30"></a>    masked_loss <span class="op">=</span> masked_loss <span class="op">/</span> gradient_accumulation_steps</span>
+<span id="cb34-31"><a href="#cb34-31"></a>    masked_loss.backward()</span>
+<span id="cb34-32"><a href="#cb34-32"></a></span>
+<span id="cb34-33"><a href="#cb34-33"></a>    <span class="cf">return</span> masked_loss, metadata</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>在这个函数中， 我们计算了GRPO的Loss， 具体来说， 我们会根据传入的loss type， 来计算不同类型的Loss， 之后我们会根据Response Mask来Mask掉不需要的部分， 最后我们会进行Backward。</p>
+<p>最后， 在每个Step结束后， 我们需要更新Old Policy为当前的New Policy， 这部分代码也很简单， 直接赋值即可.</p>
+<div class="highlight">
+<p>其实熟悉了 GRPO 的算法之后，在回过头看这个算法实现， 你会发现， GRPO的实现其实并不复杂， 主要是把之前SFT和EI的代码进行了一些复用， 以及增加了一些新的功能， 比如计算Advantage， 以及计算不同类型的Loss。 只要理解了这些关键步骤， 实现起来其实并不难。</p>
+</div>
+<section id="grpo-experiment" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="grpo-experiment"><span class="header-section-number">5.1</span> GRPO Experiment</h2>
+<p>接下来我们来看看GRPO 的训练结果：</p>
+<div id="fig-grpo-exp" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-grpo-exp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-grpo-exp" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-grpo-gsm8k-accuracy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-grpo-gsm8k-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/grpo-accureacy.png" class="img-fluid figure-img" data-ref-parent="fig-grpo-exp">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-grpo-gsm8k-accuracy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) GRPO Accuracy
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-grpo-exp" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-grpo-gsm8k-entropy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-grpo-gsm8k-entropy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/grpo-gsm8k-token-entropy.png" class="img-fluid figure-img" data-ref-parent="fig-grpo-exp">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-grpo-gsm8k-entropy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) GSM8K Token Entropy
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-grpo-exp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Result of GRPO on Qwen2.5-Math-1.5B on GSM8K Dataset
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="other-experiments" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="other-experiments"><span class="header-section-number">5.2</span> Other Experiments</h2>
+<p>在Assignment中， 我还实现了一些其他的实验， 比如不同的Reward Function， 不同的Loss Type， 以及不同的Group Size。由于时间的关系，我并没有做这些实验，不过在代码中，可以很容易的实现这些实验。</p>
+<section id="learning-rate-tuning" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="learning-rate-tuning"><span class="header-section-number">5.2.1</span> Learning Rate Tuning</h3>
+<p>首先第一个实验就是学习率的调节， 由于GRPO的训练比较不稳定， 因此学习率的选择非常重要。 我尝试了不同的学习率， 发现0.0001是一个比较合适的选择， 过高的学习率会导致训练不稳定， 过低的学习率会导致训练收敛慢。</p>
+</section>
+<section id="effect-of-baseline" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="effect-of-baseline"><span class="header-section-number">5.2.2</span> Effect of Baseline</h3>
+<p>Baseline的作用是减少训练的方差， 因此我尝试了不同的Baseline， 发现使用Baseline可以显著提升训练的稳定性， 并且可以提升模型的性能。</p>
+</section>
+<section id="length-normalization" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="length-normalization"><span class="header-section-number">5.2.3</span> Length Normalization</h3>
+<p>在计算Log Probs的时候，根据不同的Length Normalization方式， 也会对训练产生影响。 我尝试了不同的Normalization方式， 发现使用Token Level Normalization可以提升模型的性能。</p>
+</section>
+<section id="normalization-with-group-std" class="level3" data-number="5.2.4">
+<h3 data-number="5.2.4" class="anchored" data-anchor-id="normalization-with-group-std"><span class="header-section-number">5.2.4</span> Normalization with group std</h3>
+<p>在计算Advantage的时候， 我尝试了是否使用Group Std来进行Normalization，</p>
+</section>
+<section id="off-policy-vs.-on-policy" class="level3" data-number="5.2.5">
+<h3 data-number="5.2.5" class="anchored" data-anchor-id="off-policy-vs.-on-policy"><span class="header-section-number">5.2.5</span> Off-Policy vs.&nbsp;On-Policy</h3>
+<p>要想把GRPO 训练好， 还有一个很重要的点就是Off-Policy 和 On-Policy的选择。 在GRPO中， 我们使用的是On-Policy的方式， 也就是使用Old Policy来采样数据， 然后使用New Policy来进行优化。 这种方式可以提升训练的稳定性， 并且可以提升模型的性能。要想把它改成Off-Policy也是可以的， 但是需要注意一些细节， 比如Importance Sampling等。</p>
+</section>
+<section id="off-policy-clipping" class="level3" data-number="5.2.6">
+<h3 data-number="5.2.6" class="anchored" data-anchor-id="off-policy-clipping"><span class="header-section-number">5.2.6</span> Off Policy Clipping</h3>
+</section>
+<section id="different-prompts" class="level3" data-number="5.2.7">
+<h3 data-number="5.2.7" class="anchored" data-anchor-id="different-prompts"><span class="header-section-number">5.2.7</span> Different Prompts</h3>
+<p>当然，我们还可以尝试不同的Prompts， 以便提升模型的性能。 不同的Prompt会对模型的性能产生影响， 因此选择合适的Prompt也是很重要的。当Prompts改变时，对应的Reward Function也需要相应的调整， 以便更好的适应新的Prompt。</p>
+</section>
+</section>
+</section>
+<section id="dpo" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> DPO</h1>
+<p>这个部分，是Assignment05 的补充内容，其主要目的是了解DPO算法的基本思想和实现方式。 由于时间的关系， 我并没有实现DPO的完整代码， 但是我会介绍DPO的基本思想和实现方式。DPO的算法如下：</p>
+<div id="algo-ei" class="pseudocode-container quarto-float" data-no-end="false" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-line-number-punc=":" data-pseudocode-number="4" data-comment-delimiter="#" data-line-number="true">
+<div class="pseudocode">
+\begin{algorithm} \caption{Direct Preference Optimization (DPO)} \begin{algorithmic} \Require Initial policy model $\pi_{\theta_{\text{init}}}$ \Require Reference policy $\pi_{\text{ref}}$ (e.g., SFT model; fixed) \Require Preference dataset $\mathcal{D}=\{(x, y^{+}, y^{-})\}$ \Require Inverse temperature $\beta &gt; 0$ \Require Number of DPO steps $n_{\text{dpo\_steps}}$ \State $\pi_{\theta} \gets \pi_{\theta_{\text{init}}}$ \For{$\text{step} = 1$ \textbf{to} $n_{\text{dpo\_steps}}$} \State Sample a minibatch $\mathcal{B} \subset \mathcal{D}$ of triples $(x, y^{+}, y^{-})$ \For{\textbf{each} $(x, y^{+}, y^{-}) \in \mathcal{B}$} \State Compute log-likelihood ratios vs reference: \State $s^{+} \gets \log \pi_{\theta}(y^{+}\mid x) - \log \pi_{\text{ref}}(y^{+}\mid x)$ \State $s^{-} \gets \log \pi_{\theta}(y^{-}\mid x) - \log \pi_{\text{ref}}(y^{-}\mid x)$ \State Compute preference margin: \State $\Delta \gets \beta \, (s^{+} - s^{-})$ \State Compute DPO loss: \State $\ell \gets -\log \sigma(\Delta)$ \Comment{$\sigma(\cdot)$ is the logistic sigmoid} \EndFor \State Update $\theta$ by minimizing mean loss: \State $\theta \gets \theta - \eta \nabla_{\theta}\left(\frac{1}{|\mathcal{B}|}\sum_{(x,y^+,y^-)\in\mathcal{B}} \ell\right)$ \EndFor \State \Return $\pi_{\theta}$ \end{algorithmic} \end{algorithm}
+</div>
+</div>
 
 
 </section>
