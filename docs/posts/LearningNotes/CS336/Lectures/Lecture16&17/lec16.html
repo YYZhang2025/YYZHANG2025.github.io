@@ -99,9 +99,9 @@ div.csl-indent {
 <link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../../site_libs/bootstrap/bootstrap-dark-f0ac33174fd5d836d1f6e5db13984c20.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../../site_libs/bootstrap/bootstrap-3daf7d0c9f7f10a56621094455a3a105.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-d55b1525cb7d56cc0beabf31aa7c8a7d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-dark-157318f1118be7d8dcd8863eb53a2815.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../../site_libs/bootstrap/bootstrap-d55b1525cb7d56cc0beabf31aa7c8a7d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -470,7 +470,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title"><strong>Lecture 16 &amp; 17: LLM Alignment SFT &amp; RLVR（GRPO）</strong></h1>
+          <h1 class="quarto-secondary-nav-title">Lecture 16 &amp; 17: LLM Alignment SFT &amp; RLVR（GRPO）</h1>
         </a>     
     </div>
   </nav>
@@ -539,7 +539,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><strong>Lecture 16 &amp; 17: LLM Alignment SFT &amp; RLVR（GRPO）</strong></h1>
+<h1 class="title d-none d-lg-block">Lecture 16 &amp; 17: LLM Alignment SFT &amp; RLVR（GRPO）</h1>
 </div>
 
 <div>
@@ -759,7 +759,7 @@ Figure&nbsp;2: 对比了 PPO 与 GRPO 的训练流程差异： <br>上半部分�
 <section id="grpo-algorithm" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="grpo-algorithm"><span class="header-section-number">3.3</span> GRPO Algorithm</h2>
 <p>了解了GRPO的Objective Function (<a href="#eq-grpo" class="quarto-xref">Equation&nbsp;1</a>) 和Advantage计算(<a href="#eq-grpo-advantage" class="quarto-xref">Equation&nbsp;3</a>) 后，我们来看一下GRPO的整体算法流程：</p>
-<div id="algo-grpo" class="pseudocode-container quarto-float" data-comment-delimiter="#" data-indent-size="1.2em" data-no-end="false" data-line-number-punc=":" data-line-number="true" data-caption-prefix="Algorithm" data-pseudocode-number="1">
+<div id="algo-grpo" class="pseudocode-container quarto-float" data-comment-delimiter="#" data-indent-size="1.2em" data-no-end="false" data-pseudocode-number="1" data-line-number-punc=":" data-caption-prefix="Algorithm" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Iterative Group Relative Policy Optimization (GRPO)}\begin{algorithmic} \Require initial policy model $\pi_{\theta_{\text{init}}}$; reward model(s) $r_\phi$; task prompts $\mathcal{D}$; hyperparameters $\epsilon, \beta, \mu$; group size $G$; iterations $I$; steps $M$ \Ensure trained policy $\pi_\theta$ \State $\pi_\theta \gets \pi_{\theta_{\text{init}}}$ \For{$\text{iteration} = 1, \ldots, I$} \State $\pi_{\text{ref}} \gets \pi_\theta$ \Comment{reference (anchor) policy} \For{$\text{step} = 1, \ldots, M$} \State Sample a batch $\mathcal{D}_b$ from $\mathcal{D}$ \State $\pi_{\theta_{\text{old}}} \gets \pi_\theta$ \Comment{snapshot old policy} \ForAll{$q \in \mathcal{D}_b$} \State Sample $G$ outputs $\{o_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot \mid q)$ \State Compute rewards $\{r_i\}_{i=1}^{G}$ by $r_i \gets r_\phi(q, o_i)$ \State Compute group-relative advantages $\{\hat{A}_{i,t}\}$ for each token $t$ in each $o_i$ \EndFor \For{$\text{GRPO-iter} = 1, \ldots, \mu$} \State Update $\pi_\theta$ by maximizing the GRPO objective \EndFor \State Update $r_\phi$ via continuous training using a replay mechanism \EndFor \EndFor \State \Return $\pi_\theta$ \end{algorithmic} \end{algorithm}
 </div>

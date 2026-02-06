@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Yuyang Zhang">
+<meta name="description" content="在Assignment 04中，我们将重点关注用于训练大型语言模型的数据收集和处理方法。首先，我们会探索不同类型的数据源，如网络文本、书籍和对话数据等，了解它们的特点和适用场景。接着，我们将学习如何进行数据清洗和预处理，以提升数据质量和模型性能。最后，我们还将介绍数据增强技术和数据质量评估方法，帮助我们更好地利用高质量的数据来训练出更优秀的语言模型。">
 
-<title>About YUYANG</title>
+<title>Assignment 04: Data Collection &amp; Processing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,30 +25,31 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="././style/icon.avif" rel="icon">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9b093afc427f9b9faea6dacc048c362b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-1220b7a03fb302cb1d40d6ccd5f94e6c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-9b093afc427f9b9faea6dacc048c362b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
-<script src="site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
-<link href="site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../.././style/icon.avif" rel="icon">
+<script src="../../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap-d55b1525cb7d56cc0beabf31aa7c8a7d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-dark-157318f1118be7d8dcd8863eb53a2815.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../../site_libs/bootstrap/bootstrap-d55b1525cb7d56cc0beabf31aa7c8a7d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -142,11 +145,10 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<link rel="stylesheet" href="style/callout.css">
-<link rel="stylesheet" href="style/toc.css">
-<meta property="og:title" content="About YUYANG">
-<meta property="og:description" content="">
-<meta property="og:image" content="./style/profile.png">
+<link rel="stylesheet" href="../../../../../style/callout.css">
+<link rel="stylesheet" href="../../../../../style/toc.css">
+<meta property="og:title" content="Assignment 04: Data Collection &amp; Processing">
+<meta property="og:description" content="在Assignment 04中，我们将重点关注用于训练大型语言模型的数据收集和处理方法。首先，我们会探索不同类型的数据源，如网络文本、书籍和对话数据等，了解它们的特点和适用场景。接着，我们将学习如何进行数据清洗和预处理，以提升数据质量和模型性能。最后，我们还将介绍数据增强技术和数据质量评估方法，帮助我们更好地利用高质量的数据来训练出更优秀的语言模型。">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -314,7 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
             <div id="quarto-search" class="" title="Search"></div>
@@ -324,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item compact">
@@ -340,15 +342,15 @@ document.addEventListener("DOMContentLoaded", function () {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./posts/Blogs/blogs_index.html"> 
+    <a class="nav-link" href="../../../../../posts/Blogs/blogs_index.html"> 
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="../../../../../posts/Projects/projects_index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./posts/PapersWithCode/100_Papers_index.html"> 
+    <a class="nav-link" href="../../../../../posts/PapersWithCode/100_Papers_index.html"> 
 <span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -357,15 +359,15 @@ document.addEventListener("DOMContentLoaded", function () {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learning-notes">    
         <li>
-    <a class="dropdown-item" href="./posts/LearningNotes/CS336/index.html">
+    <a class="dropdown-item" href="../../../../../posts/LearningNotes/CS336/index.html">
  <span class="dropdown-text">Stanford CS336: LLM from Scratch</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./posts/LearningNotes/DLFaC/index.html">
+    <a class="dropdown-item" href="../../../../../posts/LearningNotes/DLFaC/index.html">
  <span class="dropdown-text">DLFaC</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./posts/LearningNotes/LLM-Series/index.html">
+    <a class="dropdown-item" href="../../../../../posts/LearningNotes/LLM-Series/index.html">
  <span class="dropdown-text">LLM Model Series</span></a>
   </li>  
     </ul>
@@ -383,151 +385,59 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">About YUYANG</h1>
+          <h1 class="quarto-secondary-nav-title">Assignment 04: Data Collection &amp; Processing</h1>
         </a>     
     </div>
   </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title d-none d-lg-block">About YUYANG</h1>
-                      </div>
-  </div>
-  <div class="quarto-title-meta column-page">
-    </div>
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    
+</nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<div class="quarto-about-solana column-page">
-  <div class="about-entity">
-    <div class="entity-contents">
-       <div class="about-links">
-  <a href="https://www.linkedin.com/in/zhang-yuyang/" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="https://github.com/YYZhang2025" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="mailto:zhangyuyang1211@gmail.com" class="about-link" rel="" target="">
-    <i class="bi bi-envelope"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="https://x.com/YUYANGZHAN2025" class="about-link" rel="" target="">
-    <i class="bi bi-twitter"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="https://www.facebook.com/yuyang.zhang.202512" class="about-link" rel="" target="">
-    <i class="bi bi-facebook"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="https://github.com/YYZhang2025/YYZHANG2025/blob/main/cv.pdf" class="about-link" rel="" target="">
-    <i class="bi bi-file-person"></i>
-     <span class="about-link-text">Resume</span>
-  </a>
-</div>
-      <div class="about-contents"><main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
-<p>I am a recent graduate from Singapore Management University in MITB (AI Track). With a strong foundation in computer science and big data, I have hands-on experience in machine learning and deep learning, and I’m passionate about building impactful AI-driven solutions. I am currently seeking full-time opportunities in the AI field where I can contribute, grow, and make a meaningful impact. <strong>Open to Work</strong> – feel free to reach out at <a href="mailto:zhangyuyang1211@gmail.com">zhangyuyang1211@gmail.com</a>!</p>
-<section id="education" class="level2">
-<h2 data-anchor-id="education">Education</h2>
-<div class="timeline">
-  <div class="timeline-item">
-    <div class="dot"></div>
-    <div class="content">
-      <div class="year">2023 - 2025</div>
-      <div class="degree">Master of IT in Business</div>
-      <div class="school"><a href="https://www.smu.edu.sg/">Singapore Management University</a></div>
-    </div>
-  </div>
-  <div class="timeline-item">
-    <div class="dot"></div>
-    <div class="content">
-      <div class="year">2020 - 2023</div>
-      <div class="degree">Bachelor of Computer Science</div>
-      <div class="school"><a href="https://www.uow.edu.au/">University of Wollongong</a></div>
-    </div>
-  </div>
-  </div>
-</section>
-<section id="work-experience" class="level2">
-<h2 data-anchor-id="work-experience">Work Experience</h2>
-<div class="timeline">
-  <div class="timeline-item">
-    <div class="dot"></div>
-    <div class="content">
-      <div class="year">Feb 2025  -  Apr 2025</div>
-      <div class="degree">Research Assistant Intern</div>
-      <div class="school"><a href="https://smart.mit.edu/">SMART </a></div>
-    </div>
-  </div>
-  </div>
-<!-- ## Certifications
-```{=html}
-<div class="timeline">
-  <div class="timeline-item">
-    <div class="dot"></div>
-    <div class="content">
-      <div class="year">March 2025  - Present</div>
-      <div class="degree">Research Assistant Intern</div>
-      <div class="school"><a href="https://smart.mit.edu/">SMART </a></div>
-    </div>
-  </div>
-  </div>
-``` -->
-<!-- ## Projects
-```{=html}
-<div class="timeline">
-  <div class="timeline-item">
-    <div class="dot"></div>
-    <div class="content">
-      <div class="degree"> File-Tuning Large Visual Language Model
-          [<a href="https://github.com/Yyzhang2000/PaliGemma-FT">GitHub</a>]
-          [<a href="https://github.com/Yyzhang2000/PaliGemma-FT">Blog</a>]
-      </div>
-       <p class="subtext" > Wrting the  </p>
-    </div>
-  </div>
-  </div>
-``` -->
-</section>
-<section id="technical-skills" class="level2">
-<h2 data-anchor-id="technical-skills">Technical Skills</h2>
-<div class="tech-stack-container">
-  <div class="tech-tags">
-    <span class="tag">Python Development</span>
-    <span class="tag">Algorithm Design</span>
-    <span class="tag">Deep Learning</span>
-    <span class="tag">Machine Learning</span>
-    <span class="tag">Computer Vision</span>
-    <span class="tag">Natural Language Processing</span>
-    <span class="tag-highlight">Deep Reinforcement Learning</span>
-    <span class="tag">Graph Neural Networks</span>
-    <span class="tag-highlight">Large Language Model</span>
-    <span class="tag">Model Compression</span>
-    <span class="tag">Convex Optimization</span>
-    <span class="tag">Probabilistic Graph Model</span>
-    <span class="tag">Meta Learning</span>
-    <span class="tag-highlight">Deep Generative Model</span>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Assignment 04: Data Collection &amp; Processing</h1>
+</div>
+
+<div>
+  <div class="description">
+    在Assignment 04中，我们将重点关注用于训练大型语言模型的数据收集和处理方法。首先，我们会探索不同类型的数据源，如网络文本、书籍和对话数据等，了解它们的特点和适用场景。接着，我们将学习如何进行数据清洗和预处理，以提升数据质量和模型性能。最后，我们还将介绍数据增强技术和数据质量评估方法，帮助我们更好地利用高质量的数据来训练出更优秀的语言模型。
   </div>
 </div>
 
 
-</section>
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main></div>
-    </div>
-    <img src="./style/profile.png" class="about-image
-  rounded " style="width: 15em;">
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
   </div>
-</div>
- <!-- /main -->
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -543,6 +453,13 @@ document.addEventListener("DOMContentLoaded", function () {
       window.document.body.appendChild(a);
     }
     setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -988,5 +905,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-<script src="site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+<script src="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
 </body></html>
