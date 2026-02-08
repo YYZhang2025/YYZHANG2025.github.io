@@ -99,9 +99,9 @@ div.csl-indent {
 <link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../../site_libs/bootstrap/bootstrap-d55b1525cb7d56cc0beabf31aa7c8a7d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../../site_libs/bootstrap/bootstrap-dark-157318f1118be7d8dcd8863eb53a2815.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../../site_libs/bootstrap/bootstrap-d55b1525cb7d56cc0beabf31aa7c8a7d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-59211e55ab44552a1b7c872bcdbce6f0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../../site_libs/bootstrap/bootstrap-dark-a1ffae6563e02abf815d893f2848a2c5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../../site_libs/bootstrap/bootstrap-59211e55ab44552a1b7c872bcdbce6f0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -229,8 +229,6 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../../../../../style/callout.css">
-<link rel="stylesheet" href="../../../../../style/toc.css">
 <meta property="og:title" content="Lecture 15: LLM Alignment SFT &amp; RLHF(PPO, DPO)">
 <meta property="og:description" content="Lecture15主要梳理 LLM 的后训练（Post-Training）主线：从监督微调（SFT）的数据与目标函数出发，解释为何SFT可以让模型获得一定的Instruct Following的能力，并系统介绍 RLHF 的奖励模型训练与 PPO 更新流程，进一步对比 DPO/SimPO 等将 RL 简化为监督学习的替代方案。最后总结 RLHF 的关键风险（reward hacking、model collapse），并说明为何需要走向可验证奖励的 RLVR 来提升推理能力与训练稳定性。">
 <meta property="og:image" content="assets/lec15-overview-post-training.png">
@@ -411,7 +409,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../../index.html"> 
+    <a class="nav-link" href="../../../../../index.qmd"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item compact">
@@ -689,7 +687,7 @@ Figure&nbsp;5: OpenAssistant 数据集中的一个对话树示例，展示了从
 \underset{\theta}{\max} \log p_{\theta}(y | x)
 \tag{1}\]</span></span></p>
 <p>从代码来看，就是简单的几步：</p>
-<div id="0f645f77" class="cell">
+<div id="6558327f" class="cell">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb2" data-source-line-numbers="nil" data-code-line-numbers="8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(train_steps):</span>

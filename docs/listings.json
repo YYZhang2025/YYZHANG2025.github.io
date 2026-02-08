@@ -71,5 +71,25 @@
     "items": [
       "/posts/LearningNotes/LLM-Series/Qwen/Qwen.html"
     ]
+  },
+  {
+    "listing": "/posts/PapersWithCode/100_Papers_index_.html",
+    "items": [
+      "/posts/PapersWithCode/01-transformer/Transformer.html",
+      "/posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html",
+      "/posts/PapersWithCode/03-deit/DeiT.html",
+      "/posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html",
+      "/posts/PapersWithCode/05-vivit/ViViT.html",
+      "/posts/PapersWithCode/06-clip/CLIP.html",
+      "/posts/PapersWithCode/07-dino/DINO.html",
+      "/posts/PapersWithCode/08-vae/VAE.html",
+      "/posts/PapersWithCode/09-mae/MAE.html",
+      "/posts/PapersWithCode/100_Papers_index.html",
+      "/posts/PapersWithCode/10-pixel-gated-cnn/Pixel Gated CNN.html",
+      "/posts/PapersWithCode/11-vq-vae/VQ_VAE.html",
+      "/posts/PapersWithCode/15-stable-diffusion/Latent Diffusion Model.html",
+      "/posts/PapersWithCode/16-dit/DiT.html",
+      "/posts/PapersWithCode/17-flash-attention/Flash Attention.html"
+    ]
   }
 ]
