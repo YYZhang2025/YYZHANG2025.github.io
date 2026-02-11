@@ -1886,7 +1886,7 @@ W_{i,j} \sim \mathcal{U}\left(-\sqrt{\frac{6}{n_{in} + n_{out}}}, \sqrt{\frac{6}
 <section id="optimizer" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="optimizer"><span class="header-section-number">3.3</span> Optimizer</h2>
 <p>Transformer的论文中，用的是Adam Optimizer <span class="citation" data-cites="AdamMethodStochastic2017kingma">(<a href="#ref-AdamMethodStochastic2017kingma" role="doc-biblioref">Kingma and Ba 2017</a>)</span>, 它是一种自适应学习率优化算法，结合了动量法和RMSProp的优点。Adam通过计算梯度的一阶矩估计（动量）和二阶矩估计（梯度的平方的指数加权平均）来调整每个参数的学习率，从而提高训练的稳定性和收敛速度。Adam的更新规则如下:</p>
-<div id="algo-adam-wd" class="pseudocode-container quarto-float" data-no-end="false" data-pseudocode-number="1" data-caption-prefix="Algorithm" data-comment-delimiter="#" data-line-number-punc=":" data-line-number="true" data-indent-size="1.2em">
+<div id="algo-adam-wd" class="pseudocode-container quarto-float" data-line-number="true" data-caption-prefix="Algorithm" data-pseudocode-number="1" data-line-number-punc=":" data-no-end="false" data-indent-size="1.2em" data-comment-delimiter="#">
 <div class="pseudocode">
 \begin{algorithm} \caption{Adam with L2 Regularization(Weight Decay)} \begin{algorithmic} \Require Parameters $\theta_0$ \Require Learning rate $\alpha$, betas $(\beta_1,\beta_2)$ \Require Weight decay coefficient $\lambda$ \State Initialize $m_0 \gets 0$, $v_0 \gets 0$, $t \gets 0$ \While{not converged} \State $t \gets t + 1$ \State Compute gradient $g_t \gets \nabla_{\theta}\mathcal{L}(\theta_{t-1})$ \State Apply L2 regularization: $g_t^{\text{wd}} \gets g_t + \lambda \theta_{t-1}$ \State First moment: $m_t \gets \beta_1 m_{t-1} + (1-\beta_1) g_t^{\text{wd}}$ \State Second moment: $v_t \gets \beta_2 v_{t-1} + (1-\beta_2)\left(g_t^{\text{wd}}\right)^2$ \State Bias-corrected moments: $\hat m_t \gets \dfrac{m_t}{1-\beta_1^t}$, $\hat v_t \gets \dfrac{v_t}{1-\beta_2^t}$ \State Parameter update: $\theta_t \gets \theta_{t-1} - \alpha \dfrac{\hat m_t}{\sqrt{\hat v_t} + \epsilon}$ \EndWhile \end{algorithmic} \end{algorithm}
 </div>
@@ -2118,6 +2118,30 @@ Figure&nbsp;10: 从图中可以看出，随着 <span class="math inline">\(\epsi
 </section>
 <section id="results" class="level2" data-number="3.7">
 <h2 data-number="3.7" class="anchored" data-anchor-id="results"><span class="header-section-number">3.7</span> Results</h2>
+<div id="fig-loss-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-loss-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="./assets/Transformer-loss.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-loss-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11: The Loss Curve of Transformer training for 10,000 steps
+</figcaption>
+</figure>
+</div>
+<p>有一个有趣的现象就是，Loss的下降呈现 zig-zag pattern，这个现象在很多NLP模型的训练中都会出现，但是我还没有找到一个很好的解释，可能是Learning Rate 调节的原因，也可能是Dataloader的问题，有时间我就探索这个问题的。欢迎大家在评论区留言讨论！</p>
+<p>下面是训练完10,000步后一个翻译的例子:</p>
+<div class="sourceCode" id="cb34" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb34-1"><a href="#cb34-1"></a>English Input: Several years ago here at TED, Peter Skillman  introduced a design challenge  called the marshmallow</span>
+<span id="cb34-2"><a href="#cb34-2"></a>challenge.</span>
+<span id="cb34-3"><a href="#cb34-3"></a>Model Output: &lt;s&gt; 几年前,在TED, Peter Skillman介绍了一个设计挑战  叫做杨饼干的挑战-- &lt;/s&gt;</span>
+<span id="cb34-4"><a href="#cb34-4"></a>Reference: 几年前，在这里的 TED 上，Peter Skillman 提出了一个名为“棉花糖挑战”的设计挑战。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>一些简单的例子</p>
+<div class="sourceCode" id="cb35" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb35-1"><a href="#cb35-1"></a>English Input: Who are you?</span>
+<span id="cb35-2"><a href="#cb35-2"></a>Model Output: &lt;s&gt; 你是谁?&lt;/s&gt;</span>
+<span id="cb35-3"><a href="#cb35-3"></a>English Input: What is your name?</span>
+<span id="cb35-4"><a href="#cb35-4"></a>Model Output: &lt;s&gt; 你叫什么?&lt;/s&gt;</span>
+<span id="cb35-5"><a href="#cb35-5"></a>English Input: I love Artificial Intelligence.</span>
+<span id="cb35-6"><a href="#cb35-6"></a>Model Output: &lt;s&gt; 我喜欢魅力。&lt;/s&gt;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>可以看到，我们的模型已经能够进行简单的英文到中文的翻译了，当然距离实际应用还有很大的差距，比如翻译的流畅度和准确度还需要提升，模型的规模也需要更大，训练的数据也需要更多等等。</p>
 </section>
 </section>
 <section id="summary" class="level1" data-number="4">
@@ -2130,7 +2154,7 @@ Figure&nbsp;10: 从图中可以看出，随着 <span class="math inline">\(\epsi
 <li>Adam 的实现</li>
 <li>以及评估指标等内容。</li>
 </ul>
-<p>通过这些细节的介绍，读者可以更好地理解Transformer模型的工作原理以及如何在实际应用中进行训练和评估。</p>
+<p>通过这些细节的介绍，可以更好地理解Transformer模型的工作原理以及如何在实际应用中进行训练和评估。</p>
 <p>总之，关于Transformer以及后续的改进，有太多太多可以讲的了，比如：</p>
 <ul>
 <li>Position Encoding的变体</li>
@@ -2755,6 +2779,38 @@ Zhang, Biao, and Rico Sennrich. 2019. <span>“Root <span>Mean Square Layer Norm
     }
   });
   </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark_dimmed">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      if (authorPrefersDark) {
+          [baseTheme, altTheme] = [altTheme, baseTheme];
+      }
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "YYZhang2025/YYZhang2025.github.io";
+    script.dataset.repoId = "R_kgDOQlDTcQ";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOQlDTcc4C2MRz";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
