@@ -30,8 +30,9 @@
   {
     "listing": "/posts/Projects/projects_index.html",
     "items": [
+      "/posts/Projects/PaliGemma/pali-gemma.html",
       "/posts/Projects/Qwen3-VL/Qwen3-VL.html",
-      "/posts/Projects/PaliGemma/pali-gemma.html"
+      "/posts/Projects/VLM-from-scratch/vlm-from-scratch.html"
     ]
   },
   {

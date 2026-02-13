@@ -99,9 +99,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-e8c1a825a870d04582ea804911b5160f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-ed46defcaa01458e5e3102cd839e3ae3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-e8c1a825a870d04582ea804911b5160f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-39ba5454dfe05321ac5ba9e09fbdf508.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-42a82cb70fe1c4cb7139818b7aa6bb3c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-39ba5454dfe05321ac5ba9e09fbdf508.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -409,7 +409,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.qmd"> 
+    <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item compact">
@@ -1886,7 +1886,7 @@ W_{i,j} \sim \mathcal{U}\left(-\sqrt{\frac{6}{n_{in} + n_{out}}}, \sqrt{\frac{6}
 <section id="optimizer" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="optimizer"><span class="header-section-number">3.3</span> Optimizer</h2>
 <p>Transformer的论文中，用的是Adam Optimizer <span class="citation" data-cites="AdamMethodStochastic2017kingma">(<a href="#ref-AdamMethodStochastic2017kingma" role="doc-biblioref">Kingma and Ba 2017</a>)</span>, 它是一种自适应学习率优化算法，结合了动量法和RMSProp的优点。Adam通过计算梯度的一阶矩估计（动量）和二阶矩估计（梯度的平方的指数加权平均）来调整每个参数的学习率，从而提高训练的稳定性和收敛速度。Adam的更新规则如下:</p>
-<div id="algo-adam-wd" class="pseudocode-container quarto-float" data-line-number="true" data-caption-prefix="Algorithm" data-pseudocode-number="1" data-line-number-punc=":" data-no-end="false" data-indent-size="1.2em" data-comment-delimiter="#">
+<div id="algo-adam-wd" class="pseudocode-container quarto-float" data-pseudocode-number="1" data-line-number="true" data-caption-prefix="Algorithm" data-comment-delimiter="#" data-indent-size="1.2em" data-no-end="false" data-line-number-punc=":">
 <div class="pseudocode">
 \begin{algorithm} \caption{Adam with L2 Regularization(Weight Decay)} \begin{algorithmic} \Require Parameters $\theta_0$ \Require Learning rate $\alpha$, betas $(\beta_1,\beta_2)$ \Require Weight decay coefficient $\lambda$ \State Initialize $m_0 \gets 0$, $v_0 \gets 0$, $t \gets 0$ \While{not converged} \State $t \gets t + 1$ \State Compute gradient $g_t \gets \nabla_{\theta}\mathcal{L}(\theta_{t-1})$ \State Apply L2 regularization: $g_t^{\text{wd}} \gets g_t + \lambda \theta_{t-1}$ \State First moment: $m_t \gets \beta_1 m_{t-1} + (1-\beta_1) g_t^{\text{wd}}$ \State Second moment: $v_t \gets \beta_2 v_{t-1} + (1-\beta_2)\left(g_t^{\text{wd}}\right)^2$ \State Bias-corrected moments: $\hat m_t \gets \dfrac{m_t}{1-\beta_1^t}$, $\hat v_t \gets \dfrac{v_t}{1-\beta_2^t}$ \State Parameter update: $\theta_t \gets \theta_{t-1} - \alpha \dfrac{\hat m_t}{\sqrt{\hat v_t} + \epsilon}$ \EndWhile \end{algorithmic} \end{algorithm}
 </div>

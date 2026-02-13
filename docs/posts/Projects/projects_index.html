@@ -46,9 +46,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-eeac9ff24188a322fa5d95b1b7d7d227.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-4530ebd6f0bfd9d485b5c7e693f022c9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-eeac9ff24188a322fa5d95b1b7d7d227.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-e06ddc95b3f663f24ff19ac999d40218.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-a0be66d444f83d79f3e59c98cd8eb3b9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-e06ddc95b3f663f24ff19ac999d40218.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -89,9 +89,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-image','listing-title','listing-author','listing-description','listing-categories','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-project','listing-freeze','listing-title-block-banner','listing-website','listing-format','listing-execute','listing-filters','listing-pseudocode','listing-language','listing-comments','listing-bibliography','listing-biblio-style','listing-tbl-cap-location','listing-author','listing-title','listing-description','listing-image','listing-categories','listing-keywords','listing-time-need','listing-level','listing-date','listing-path','listing-outputHref','listing-date-modified','listing-filename','listing-file-modified','listing-reading-time','listing-word-count',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-date-modified-sort'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-reading-time-sort'] },{ data: ['listing-word-count-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
+      searchColumns: ["listing-project","listing-freeze","listing-title-block-banner","listing-website","listing-format","listing-execute","listing-filters","listing-pseudocode","listing-language","listing-comments","listing-bibliography","listing-biblio-style","listing-tbl-cap-location","listing-author","listing-title","listing-description","listing-image","listing-categories","listing-keywords","listing-time-need","listing-level","listing-date","listing-path","listing-outputHref","listing-date-modified","listing-filename","listing-file-modified","listing-reading-time","listing-word-count"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -207,7 +207,8 @@ window.Quarto = {
 
 <meta property="og:title" content="Projects">
 <meta property="og:description" content="This page contains all the projects I have done during my learning process. I hope you can find something useful here. HAPPY LEARNING😁😁!!!">
-<meta property="og:image" content="../../posts/Projects/Qwen3-VL/assets/cover.png">
+<meta property="og:image" content="../../posts/Projects/VLM-from-scratch/assets/cover.png">
+<meta property="og:image:alt" content="cover">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -489,70 +490,270 @@ window.Quarto = {
 
 
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVsJTJDTXVsdGktTW9kYWxpdHklMkNGaW5lLVR1bmluZw==" data-listing-file-modified-sort="1765327251632" data-listing-reading-time-sort="4" data-listing-word-count-sort="677">
-<a href="../../posts/Projects/Qwen3-VL/Qwen3-VL.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../../posts/Projects/Qwen3-VL/assets/cover.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-<strong>Qwen3-VL Inference</strong>
-</h5>
-<div class="listing-reading-time card-text text-muted">4 min</div>
-<div class="listing-categories">
+<div class="quarto-listing quarto-listing-container-custom" id="listing-listing">
+<div class="research-card-grid">
 
-<div class="listing-category" onclick="window.quartoListingCategory('TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVs'); return false;">Large Language Model</div>
+  
 
-<div class="listing-category" onclick="window.quartoListingCategory('TXVsdGktTW9kYWxpdHk='); return false;">Multi-Modality</div>
+  
 
-<div class="listing-category" onclick="window.quartoListingCategory('RmluZS1UdW5pbmc='); return false;">Fine-Tuning</div>
+    <div class="research-card" data-index="0" data-categories="TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVsJTJDTXVsdGktTW9kYWxpdHklMkNGaW5lLVR1bmluZw==" data-listing-date-sort="1767196800000" data-listing-file-modified-sort="1770963546887" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="682">
 
-</div>
-<div class="card-text listing-description delink">
-<p>Built a Qwen3-VL model from scratch in PyTorch, loaded the 14B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its…</p>
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</div>
-</div>
-</div></a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVsJTJDTXVsdGktTW9kYWxpdHklMkNGaW5lLVR1bmluZw==" data-listing-file-modified-sort="1765221818186" data-listing-reading-time-sort="1" data-listing-word-count-sort="37">
-<a href="../../posts/Projects/PaliGemma/pali-gemma.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img loading="lazy" src="../../posts/Projects/PaliGemma/assets/cover.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-<strong>PaliGemma Inference and Fine Tuning</strong>
-</h5>
-<div class="listing-reading-time card-text text-muted">1 min</div>
-<div class="listing-categories">
+      <!-- IMAGE -->
+      
+        <a class="card-image-wrapper" href="../../posts/Projects/VLM-from-scratch/vlm-from-scratch.html">
+          <img src="../../posts/Projects/VLM-from-scratch/assets/cover.png" alt="cover">
+        </a>
+      
 
-<div class="listing-category" onclick="window.quartoListingCategory('TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVs'); return false;">Large Language Model</div>
+      <div class="card-body">
 
-<div class="listing-category" onclick="window.quartoListingCategory('TXVsdGktTW9kYWxpdHk='); return false;">Multi-Modality</div>
+        <!-- TITLE -->
+        <a class="card-title" href="../../posts/Projects/VLM-from-scratch/vlm-from-scratch.html">
+          Building Vision Language Model from Scratch
+        </a>
 
-<div class="listing-category" onclick="window.quartoListingCategory('RmluZS1UdW5pbmc='); return false;">Fine-Tuning</div>
+        <!-- CATEGORIES -->
+        
+          <div class="card-tags">
+            
+              <a class="project-tag" href="#category=Large Language Model">Large Language Model</a>
+            
+              <a class="project-tag" href="#category=Multi-Modality">Multi-Modality</a>
+            
+              <a class="project-tag" href="#category=Fine-Tuning">Fine-Tuning</a>
+            
+          </div>
+        
 
-</div>
-<div class="card-text listing-description delink">
-<p>Built a PaliGemma model from scratch in PyTorch, loaded the 3B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its…</p>
-</div>
-<div class="card-attribution card-text-small start">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</div>
-</div>
-</div></a>
-</div>
+        <!-- DESCRIPTION -->
+        
+          <div class="card-description">
+            Training a Vision Language Model (VLM) from scratch using PyTorch, implementing key components such as vision encoder, vision-language fusion, and large language model backbone, and fine-tuning it for multi-modal tasks. After pre-training, adapt a RLVR approahce to further fine-tune the model for enhanced performance on specific tasks.
+          </div>
+        
+
+        <!-- KEYWORDS -->
+        
+          <div class="card-keywords">
+            
+              <span class="card-keyword">Qwen3-VL</span>
+            
+              <span class="card-keyword">PyTorch</span>
+            
+              <span class="card-keyword">LoRA</span>
+            
+              <span class="card-keyword">DeepStack</span>
+            
+              <span class="card-keyword">M-RoPE</span>
+            
+          </div>
+        
+
+        <!-- AUTHOR + LEVEL + DATE + TIME -->
+        
+          <div class="card-meta">
+
+            
+              <div class="card-author">
+                Yuyang Zhang
+              </div>
+            
+
+            
+              <div class="card-level" data-level="hard">
+                <span class="card-level-label">Level:</span>
+                <span class="card-level-value">Hard</span>
+              </div>
+            
+
+            
+              <div class="card-time">
+                ⏱ 30 hours
+              </div>
+            
+
+          </div>
+        
+
+      </div>
+
+    </div>
+
+  
+
+    <div class="research-card" data-index="1" data-categories="TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVsJTJDTXVsdGktTW9kYWxpdHklMkNGaW5lLVR1bmluZw==" data-listing-date-sort="1759248000000" data-listing-file-modified-sort="1770963538630" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="682">
+
+      <!-- IMAGE -->
+      
+        <a class="card-image-wrapper" href="../../posts/Projects/Qwen3-VL/Qwen3-VL.html">
+          <img src="../../posts/Projects/Qwen3-VL/assets/cover.png" alt="cover">
+        </a>
+      
+
+      <div class="card-body">
+
+        <!-- TITLE -->
+        <a class="card-title" href="../../posts/Projects/Qwen3-VL/Qwen3-VL.html">
+          Qwen3-VL Inference
+        </a>
+
+        <!-- CATEGORIES -->
+        
+          <div class="card-tags">
+            
+              <a class="project-tag" href="#category=Large Language Model">Large Language Model</a>
+            
+              <a class="project-tag" href="#category=Multi-Modality">Multi-Modality</a>
+            
+              <a class="project-tag" href="#category=Fine-Tuning">Fine-Tuning</a>
+            
+          </div>
+        
+
+        <!-- DESCRIPTION -->
+        
+          <div class="card-description">
+            Built a Qwen3-VL model from scratch in PyTorch, loaded the 14B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities.
+          </div>
+        
+
+        <!-- KEYWORDS -->
+        
+          <div class="card-keywords">
+            
+              <span class="card-keyword">Qwen3-VL</span>
+            
+              <span class="card-keyword">PyTorch</span>
+            
+              <span class="card-keyword">LoRA</span>
+            
+              <span class="card-keyword">DeepStack</span>
+            
+              <span class="card-keyword">M-RoPE</span>
+            
+          </div>
+        
+
+        <!-- AUTHOR + LEVEL + DATE + TIME -->
+        
+          <div class="card-meta">
+
+            
+              <div class="card-author">
+                Yuyang Zhang
+              </div>
+            
+
+            
+              <div class="card-level" data-level="intermediate">
+                <span class="card-level-label">Level:</span>
+                <span class="card-level-value">Intermediate</span>
+              </div>
+            
+
+            
+              <div class="card-time">
+                ⏱ 15 hours
+              </div>
+            
+
+          </div>
+        
+
+      </div>
+
+    </div>
+
+  
+
+    <div class="research-card" data-index="2" data-categories="TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVsJTJDTXVsdGktTW9kYWxpdHklMkNGaW5lLVR1bmluZw==" data-listing-date-sort="1727712000000" data-listing-file-modified-sort="1770964663775" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="35" data-listing-word-count-sort="6968">
+
+      <!-- IMAGE -->
+      
+        <a class="card-image-wrapper" href="../../posts/Projects/PaliGemma/pali-gemma.html">
+          <img src="../../posts/Projects/PaliGemma/assets/cover.png" alt="cover">
+        </a>
+      
+
+      <div class="card-body">
+
+        <!-- TITLE -->
+        <a class="card-title" href="../../posts/Projects/PaliGemma/pali-gemma.html">
+          PaliGemma Inference and LoRA Fine Tuning
+        </a>
+
+        <!-- CATEGORIES -->
+        
+          <div class="card-tags">
+            
+              <a class="project-tag" href="#category=Large Language Model">Large Language Model</a>
+            
+              <a class="project-tag" href="#category=Multi-Modality">Multi-Modality</a>
+            
+              <a class="project-tag" href="#category=Fine-Tuning">Fine-Tuning</a>
+            
+          </div>
+        
+
+        <!-- DESCRIPTION -->
+        
+          <div class="card-description">
+            This project involves modeling a multi-modal large language model called PaliGemma, which integrates vision and language tasks. First we perform inference using the pre-trained PaliGemma model. Then, we fine-tune the model using LoRA (Low-Rank Adaptation) for specific applications, for example Receipt OCR Extraction. By the end, will implement a Gradio web interface to demonstrate the fine-tuned model's capabilities.
+          </div>
+        
+
+        <!-- KEYWORDS -->
+        
+          <div class="card-keywords">
+            
+              <span class="card-keyword">LoRA</span>
+            
+              <span class="card-keyword">PyTorch</span>
+            
+              <span class="card-keyword">Gradio</span>
+            
+              <span class="card-keyword">Grouped Query Attention</span>
+            
+              <span class="card-keyword">RoPE</span>
+            
+              <span class="card-keyword">KV Cache</span>
+            
+          </div>
+        
+
+        <!-- AUTHOR + LEVEL + DATE + TIME -->
+        
+          <div class="card-meta">
+
+            
+              <div class="card-author">
+                Yuyang Zhang
+              </div>
+            
+
+            
+              <div class="card-level" data-level="entry">
+                <span class="card-level-label">Level:</span>
+                <span class="card-level-value">Entry</span>
+              </div>
+            
+
+            
+              <div class="card-time">
+                ⏱ 8 hours
+              </div>
+            
+
+          </div>
+        
+
+      </div>
+
+    </div>
+
+  
+
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
