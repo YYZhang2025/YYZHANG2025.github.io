@@ -1,33 +1,5 @@
 [
   {
-    "listing": "/posts/LearningNotes/CS336/index.html",
-    "items": [
-      "/posts/LearningNotes/CS336/Lectures/Lecture01/lec01.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture02/lec02.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture03/lec03.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture04/lec04.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture05&06/lec05.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture07&08/lec07.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture9&11/lec9.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture10/lec10.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture12/lec12.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture13&14/lec13.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture15/lec15.html",
-      "/posts/LearningNotes/CS336/Lectures/Lecture16&17/lec16.html",
-      "/posts/LearningNotes/CS336/Assignments/Ass01/ass01.html",
-      "/posts/LearningNotes/CS336/Assignments/Ass02/ass02.html",
-      "/posts/LearningNotes/CS336/Assignments/Ass04/ass04.html",
-      "/posts/LearningNotes/CS336/Assignments/Ass05/ass05.html"
-    ]
-  },
-  {
-    "listing": "/posts/LearningNotes/DLFaC/index.html",
-    "items": [
-      "/posts/LearningNotes/DLFaC/Chapter01/Chapter01.html",
-      "/posts/LearningNotes/DLFaC/Chapter02/Chapter02.html"
-    ]
-  },
-  {
     "listing": "/posts/Projects/projects_index.html",
     "items": [
       "/posts/Projects/PaliGemma/pali-gemma.html",
@@ -38,6 +10,7 @@
   {
     "listing": "/posts/Blogs/blogs_index.html",
     "items": [
+      "/posts/Blogs/Multi-Modality-Model/post.html",
       "/posts/Blogs/LLM-RL/post.html",
       "/posts/Blogs/KL-Divergence/post.html",
       "/posts/Blogs/Learnings-in-DeepLearning/post.html",
@@ -46,52 +19,6 @@
       "/posts/Blogs/LLM-Inference/post.html",
       "/posts/Blogs/LLM-Architecture/LLM-Architecture.html",
       "/posts/Blogs/Speed-up-training/post.html"
-    ]
-  },
-  {
-    "listing": "/posts/PapersWithCode/100_Papers_index.html",
-    "items": [
-      "/posts/PapersWithCode/01-transformer/Transformer.html",
-      "/posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html",
-      "/posts/PapersWithCode/03-deit/DeiT.html",
-      "/posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html",
-      "/posts/PapersWithCode/05-vivit/ViViT.html",
-      "/posts/PapersWithCode/06-clip/CLIP.html",
-      "/posts/PapersWithCode/07-dino/DINO.html",
-      "/posts/PapersWithCode/08-vae/VAE.html",
-      "/posts/PapersWithCode/09-mae/MAE.html",
-      "/posts/PapersWithCode/10-pixel-gated-cnn/Pixel Gated CNN.html",
-      "/posts/PapersWithCode/11-vq-vae/VQ_VAE.html",
-      "/posts/PapersWithCode/15-stable-diffusion/Latent Diffusion Model.html",
-      "/posts/PapersWithCode/16-dit/DiT.html",
-      "/posts/PapersWithCode/01-transformer/Untitled.html",
-      "/posts/PapersWithCode/17-flash-attention/Flash Attention.html"
-    ]
-  },
-  {
-    "listing": "/posts/LearningNotes/LLM-Series/index.html",
-    "items": [
-      "/posts/LearningNotes/LLM-Series/Qwen/Qwen.html"
-    ]
-  },
-  {
-    "listing": "/posts/PapersWithCode/100_Papers_index_.html",
-    "items": [
-      "/posts/PapersWithCode/01-transformer/Transformer.html",
-      "/posts/PapersWithCode/02-vision-transformer/Vision-Transformer.html",
-      "/posts/PapersWithCode/03-deit/DeiT.html",
-      "/posts/PapersWithCode/04-swin-transformer/Swin-Transformer.html",
-      "/posts/PapersWithCode/05-vivit/ViViT.html",
-      "/posts/PapersWithCode/06-clip/CLIP.html",
-      "/posts/PapersWithCode/07-dino/DINO.html",
-      "/posts/PapersWithCode/08-vae/VAE.html",
-      "/posts/PapersWithCode/09-mae/MAE.html",
-      "/posts/PapersWithCode/100_Papers_index.html",
-      "/posts/PapersWithCode/10-pixel-gated-cnn/Pixel Gated CNN.html",
-      "/posts/PapersWithCode/11-vq-vae/VQ_VAE.html",
-      "/posts/PapersWithCode/15-stable-diffusion/Latent Diffusion Model.html",
-      "/posts/PapersWithCode/16-dit/DiT.html",
-      "/posts/PapersWithCode/17-flash-attention/Flash Attention.html"
     ]
   }
 ]

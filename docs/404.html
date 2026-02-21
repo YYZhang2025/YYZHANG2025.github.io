@@ -43,9 +43,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="/site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="/site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="/site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="/site_libs/bootstrap/bootstrap-ce20583f16a6b272421e025cc782b7fe.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="/site_libs/bootstrap/bootstrap-dark-6c45348666e4fa9137ac2c527f99433b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="/site_libs/bootstrap/bootstrap-ce20583f16a6b272421e025cc782b7fe.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="/site_libs/bootstrap/bootstrap-faccbed3e4d92ccd689840a270882cf8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="/site_libs/bootstrap/bootstrap-dark-07f39a2babe3f5679efe60ffca6ad5e6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="/site_libs/bootstrap/bootstrap-faccbed3e4d92ccd689840a270882cf8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="/site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="/site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="/site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -144,8 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<link rel="stylesheet" href="/style/callout.css">
-<link rel="stylesheet" href="/style/toc.css">
 <meta property="og:title" content="Oops! That page can’t be found.">
 <meta property="og:image" content="/./style/404.png">
 </head>
@@ -325,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="/index.qmd"> 
+    <a class="nav-link" href="/index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item compact">
@@ -349,28 +347,9 @@ document.addEventListener("DOMContentLoaded", function () {
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="/posts/PapersWithCode/100_Papers_index.html"> 
-<span class="menu-text">100 PwC</span></a>
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
+<span class="menu-text">Learning Notes</span></a>
   </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-learning-notes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Learning Notes</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learning-notes">    
-        <li>
-    <a class="dropdown-item" href="/posts/LearningNotes/CS336/index.html">
- <span class="dropdown-text">Stanford CS336: LLM from Scratch</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="/posts/LearningNotes/DLFaC/index.html">
- <span class="dropdown-text">DLFaC</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="/posts/LearningNotes/LLM-Series/index.html">
- <span class="dropdown-text">LLM Model Series</span></a>
-  </li>  
-    </ul>
-  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -425,7 +404,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <p><img src="/./style/404.png" class="img-fluid"></p>
 <div style="text-align: center; font-size: 1.5em; margin-top: 2em;">
 <p>Sorry, the page you are looking for is not reachable. Please check back later!</p>
-<p>In the mean time you can check out the <a href="/./posts/blogs.html">my other blogs</a>.</p>
+<p>In the mean time you can check out the <a href="https://yyzhang2025.github.io/posts/Blogs/blogs_index.html">my other blogs</a>.</p>
 </div>
 
 
@@ -848,6 +827,38 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
   </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark_dimmed">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      if (authorPrefersDark) {
+          [baseTheme, altTheme] = [altTheme, baseTheme];
+      }
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "YYZhang2025/YYZhang2025.github.io";
+    script.dataset.repoId = "R_kgDOQlDTcQ";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOQlDTcc4C2MRz";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
