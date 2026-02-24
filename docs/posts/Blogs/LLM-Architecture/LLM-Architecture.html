@@ -8,9 +8,9 @@
 
 <meta name="author" content="Yuyang Zhang">
 <meta name="dcterms.date" content="2025-09-25">
-<meta name="description" content="In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.">
+<meta name="description" content="This is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, mixture of experts, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up: Position Encoding, Attention Mechanism, Feed Forward Network &amp; Mixture of Experts, Output Layer. Besides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. With the architecture in place, we will going through different training stages, such as pre-training stage, mid-training stage, and post-training training stage. By the end of this blog, you will have a comprehensive understanding of the transformer architecture and how to get your own LLM up and running.">
 
-<title>LLM Part1: Architecture</title>
+<title>LLM Part1: Transformer Architecture &amp; Training Stages</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-7056f3d9a7ef89a79f3c6d82697aa483.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-cfc2898c91e57cc5abf409e05373dd9f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-7056f3d9a7ef89a79f3c6d82697aa483.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-995215617c9794e2e6ba02d22a3e362e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-e1f7190687d6fd188fbaca9a07a3cf8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-995215617c9794e2e6ba02d22a3e362e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -232,8 +232,8 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="LLM Part1: Architecture">
-<meta property="og:description" content="In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.">
+<meta property="og:title" content="LLM Part1: Transformer Architecture &amp; Training Stages">
+<meta property="og:description" content="This is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, mixture of experts, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up: Position Encoding, Attention Mechanism, Feed Forward Network &amp; Mixture of Experts, Output Layer. Besides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. With the architecture in place, we will going through different training stages, such as pre-training stage, mid-training stage, and post-training training stage. By the end of this blog, you will have a comprehensive understanding of the transformer architecture and how to get your own LLM up and running.">
 <meta property="og:image" content="assets/original_transformer_architecture.png">
 </head>
 
@@ -452,7 +452,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">LLM Part1: Architecture</h1>
+          <h1 class="quarto-secondary-nav-title">LLM Part1: Transformer Architecture &amp; Training Stages</h1>
         </a>     
     </div>
   </nav>
@@ -548,7 +548,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">LLM Part1: Architecture</h1>
+<h1 class="title d-none d-lg-block">LLM Part1: Transformer Architecture &amp; Training Stages</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Transformer</div>
     <div class="quarto-category">Large Language Model</div>
@@ -557,7 +557,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance.
+    This is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, mixture of experts, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up: Position Encoding, Attention Mechanism, Feed Forward Network &amp; Mixture of Experts, Output Layer. Besides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. With the architecture in place, we will going through different training stages, such as pre-training stage, mid-training stage, and post-training training stage. By the end of this blog, you will have a comprehensive understanding of the transformer architecture and how to get your own LLM up and running.
   </div>
 </div>
 
@@ -581,7 +581,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">2025-11-25</p>
+      <p class="date-modified">2026-02-22</p>
     </div>
   </div>
     
@@ -667,8 +667,7 @@ window.Quarto = {
   <li><a href="#conclusion" id="toc-conclusion"><span class="header-section-number">10</span> Conclusion</a></li>
   </ul>
 </nav>
-<hr>
-<p>This is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up:</p>
+<p>This is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer based lm architectures that power LLMs. Such as position encoding, attention mechanisms, mixture of experts, and more. We will also explore different LM architectures such as Mamba, and the training process of these architectures. We are going from bottom to up:</p>
 <ul>
 <li>Position Encoding</li>
 <li>Attention Mechanism</li>
@@ -676,6 +675,16 @@ window.Quarto = {
 <li>Output Layer</li>
 </ul>
 <p>Besides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures.</p>
+<div class="highlight">
+<p>Planned LLM Series:</p>
+<ul>
+<li><span class="hilite-teal">Part 1: LLM Architecture (this blog)</span></li>
+<li>Part 2: LLM Deployment &amp; Inference Optimization (Quantization, Distillation, etc.)</li>
+<li>Part 3: LLM Post-Training Algorithms (LoRA, RLHF, RLVR, etc.)</li>
+<li>Part 4: Multi-Modal LLM (Vision-Language Models, etc.)</li>
+<li>Part 5: Agentic LLM (AutoGPT, BabyAGI, etc.)</li>
+</ul>
+</div>
 <section id="the-overview-of-transformer-model" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> The overview of transformer model</h1>
 <p>The Transformer model, originally proposed in the paper “Attention is All You Need” <span class="citation" data-cites="AttentionAllYou2023vaswani">(<a href="#ref-AttentionAllYou2023vaswani" role="doc-biblioref">Vaswani et al. 2023</a>)</span>, is a neural network architecture designed to process <strong>sequential data</strong>, such as natural language. With the high parallelization capabilities of transformers, they have become the foundation for many state-of-the-art natural language processing models. Nowadays, the most LLM are based on the variance of the transformer architecture. The transformer architecture consists of an encoder and a decoder, each composed of multiple layers of self-attention and feed-forward networks, as displayed in the <a href="#fig-original_transformer" class="quarto-xref">Figure&nbsp;1</a>.</p>
@@ -703,7 +712,7 @@ Figure&nbsp;1: The illustration of the original transformer architecture. (Image
 <section id="learned-position-encoding" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="learned-position-encoding"><span class="header-section-number">2.1</span> Learned Position Encoding</h2>
 <p>In the absolute position encoding, we put our position information into fixed sinusoidal functions. It is hand-crafted for specific tasks and does not adapt to the data. So, is it possible to learn position encodings from the data itself? It is possible, and this leads us to the concept of learned position encodings. The learned position encodings are typically implemented as additional trainable parameters in the model. Instead of using fixed sinusoidal functions, the model learns to generate position embeddings that are optimized for the specific task and dataset.</p>
-<div id="27043df0" class="cell" data-source-line-numbers="8">
+<div id="fade619f" class="cell" data-source-line-numbers="8">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb1" data-source-line-numbers="8" data-code-line-numbers="8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
@@ -782,7 +791,7 @@ Figure&nbsp;2: Illustration of Absolute Position Encoding
 <li><p><strong>Dimensionality</strong>: The choice of <span class="math inline">\(d_{\text{model}}\)</span> affects the granularity of the position encodings. As shown in <a href="#fig-absolute-position-encoding-d_model_variance" class="quarto-xref">Figure&nbsp;2 (b)</a>, increasing the dimensionality results in more fine-grained position encodings, which can help the model capture more subtle positional information.</p></li>
 <li><p>The low-dimension part of the dmodel is change more frequently than the high-dimension part, allowing the model to adapt more easily to different input lengths.</p></li>
 </ol>
-<div id="6816ef2f" class="cell" data-source-line-numbers="8-13">
+<div id="a3ce9317" class="cell" data-source-line-numbers="8-13">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb2" data-source-line-numbers="8-13" data-code-line-numbers="8-13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> torch </span>
@@ -1024,7 +1033,7 @@ x_{d-1}
 <li>Construct <code>cos</code> and <code>sin</code> matrices for the given input dimensions and maximum position.</li>
 <li>Apply the rotation to the input embeddings using the constructed matrices.</li>
 </ol>
-<div id="cdd4fc3c" class="cell">
+<div id="6af8617a" class="cell">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb4" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span> RotaryEmbedding(nn.Module):</span>
@@ -1134,7 +1143,7 @@ Note
 z' = z \cdot e^{i\theta} = (x + iy) \cdot (\cos \theta + i \sin \theta) = (x \cos \theta - y \sin \theta) + i (x \sin \theta + y \cos \theta)
 \]</span></p>
 <p>Code adapted from <a href="https://github.com/meta-llama/llama/blob/main/llama/model.py#L132">LLaMA model</a></p>
-<div id="dacb2dc1" class="cell">
+<div id="5c220cf1" class="cell">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb9" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> torch</span>
@@ -1211,7 +1220,7 @@ Figure&nbsp;4
        q_i k_{i-1}^\top - m(1),\;
        q_i k_i^\top \,\Big]
 \]</span></p>
-<div id="52268878" class="cell" data-source-line-numbers="33-34">
+<div id="3af21b4e" class="cell" data-source-line-numbers="33-34">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb10" data-source-line-numbers="33-34" data-code-line-numbers="33-34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">def</span> get_relative_positions(seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> torch.tensor:</span>

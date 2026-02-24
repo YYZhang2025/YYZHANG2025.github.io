@@ -1,16 +1,7 @@
 [
   {
-    "listing": "/posts/Projects/projects_index.html",
-    "items": [
-      "/posts/Projects/PaliGemma/pali-gemma.html",
-      "/posts/Projects/Qwen3-VL/Qwen3-VL.html",
-      "/posts/Projects/VLM-from-scratch/vlm-from-scratch.html"
-    ]
-  },
-  {
     "listing": "/posts/Blogs/blogs_index.html",
     "items": [
-      "/posts/Blogs/Multi-Modality-Model/post.html",
       "/posts/Blogs/LLM-RL/post.html",
       "/posts/Blogs/KL-Divergence/post.html",
       "/posts/Blogs/Learnings-in-DeepLearning/post.html",
@@ -19,6 +10,13 @@
       "/posts/Blogs/LLM-Inference/post.html",
       "/posts/Blogs/LLM-Architecture/LLM-Architecture.html",
       "/posts/Blogs/Speed-up-training/post.html"
+    ]
+  },
+  {
+    "listing": "/posts/Projects/projects_index.html",
+    "items": [
+      "/posts/Projects/PaliGemma/pali-gemma.html",
+      "/posts/Projects/Qwen3-VL/Qwen3-VL.html"
     ]
   }
 ]
