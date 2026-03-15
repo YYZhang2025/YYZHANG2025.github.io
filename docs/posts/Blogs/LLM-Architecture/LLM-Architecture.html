@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-995215617c9794e2e6ba02d22a3e362e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-e1f7190687d6fd188fbaca9a07a3cf8e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-995215617c9794e2e6ba02d22a3e362e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-748454780d2c9ac419bca5fe98ae0d47.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-ca56694a4d9f887b1300b76c7f9966b6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-748454780d2c9ac419bca5fe98ae0d47.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -454,6 +454,9 @@ window.Quarto = {
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
           <h1 class="quarto-secondary-nav-title">LLM Part1: Transformer Architecture &amp; Training Stages</h1>
         </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
   </nav>
 </header>
@@ -461,7 +464,12 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="2">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -712,7 +720,7 @@ Figure&nbsp;1: The illustration of the original transformer architecture. (Image
 <section id="learned-position-encoding" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="learned-position-encoding"><span class="header-section-number">2.1</span> Learned Position Encoding</h2>
 <p>In the absolute position encoding, we put our position information into fixed sinusoidal functions. It is hand-crafted for specific tasks and does not adapt to the data. So, is it possible to learn position encodings from the data itself? It is possible, and this leads us to the concept of learned position encodings. The learned position encodings are typically implemented as additional trainable parameters in the model. Instead of using fixed sinusoidal functions, the model learns to generate position embeddings that are optimized for the specific task and dataset.</p>
-<div id="fade619f" class="cell" data-source-line-numbers="8">
+<div id="f7a8bab9" class="cell" data-source-line-numbers="8">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb1" data-source-line-numbers="8" data-code-line-numbers="8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
@@ -791,7 +799,7 @@ Figure&nbsp;2: Illustration of Absolute Position Encoding
 <li><p><strong>Dimensionality</strong>: The choice of <span class="math inline">\(d_{\text{model}}\)</span> affects the granularity of the position encodings. As shown in <a href="#fig-absolute-position-encoding-d_model_variance" class="quarto-xref">Figure&nbsp;2 (b)</a>, increasing the dimensionality results in more fine-grained position encodings, which can help the model capture more subtle positional information.</p></li>
 <li><p>The low-dimension part of the dmodel is change more frequently than the high-dimension part, allowing the model to adapt more easily to different input lengths.</p></li>
 </ol>
-<div id="a3ce9317" class="cell" data-source-line-numbers="8-13">
+<div id="fcbabc88" class="cell" data-source-line-numbers="8-13">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb2" data-source-line-numbers="8-13" data-code-line-numbers="8-13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> torch </span>
@@ -1033,7 +1041,7 @@ x_{d-1}
 <li>Construct <code>cos</code> and <code>sin</code> matrices for the given input dimensions and maximum position.</li>
 <li>Apply the rotation to the input embeddings using the constructed matrices.</li>
 </ol>
-<div id="6af8617a" class="cell">
+<div id="d4f856ce" class="cell">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb4" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span> RotaryEmbedding(nn.Module):</span>
@@ -1143,7 +1151,7 @@ Note
 z' = z \cdot e^{i\theta} = (x + iy) \cdot (\cos \theta + i \sin \theta) = (x \cos \theta - y \sin \theta) + i (x \sin \theta + y \cos \theta)
 \]</span></p>
 <p>Code adapted from <a href="https://github.com/meta-llama/llama/blob/main/llama/model.py#L132">LLaMA model</a></p>
-<div id="5c220cf1" class="cell">
+<div id="380ff460" class="cell">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb9" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">import</span> torch</span>
@@ -1220,7 +1228,7 @@ Figure&nbsp;4
        q_i k_{i-1}^\top - m(1),\;
        q_i k_i^\top \,\Big]
 \]</span></p>
-<div id="3af21b4e" class="cell" data-source-line-numbers="33-34">
+<div id="43441d06" class="cell" data-source-line-numbers="33-34">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb10" data-source-line-numbers="33-34" data-code-line-numbers="33-34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">def</span> get_relative_positions(seq_len: <span class="bu">int</span>) <span class="op">-&gt;</span> torch.tensor:</span>
