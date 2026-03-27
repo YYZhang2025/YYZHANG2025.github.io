@@ -46,9 +46,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-efeb9126809ba64a6783329f762c7bb0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-dcaccc87c385d5c02d8ad2bc7c3fae88.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-efeb9126809ba64a6783329f762c7bb0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-18afb15a1e434f4a4e587276fdd6193b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-e90c9023c6ae4ae826899e837ecfa310.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-18afb15a1e434f4a4e587276fdd6193b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -89,9 +89,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-reading-time','listing-description','listing-word-count','listing-categories','listing-date','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-description','listing-date','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -409,6 +409,10 @@ window.Quarto = {
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../../posts/CS336/index.html"> 
+<span class="menu-text">Stanford CS336</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
 <span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
@@ -423,7 +427,7 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
+    <div class="quarto-title column-page">
       <h1 class="title">👋🏻Welcome to Yuyang’s Blog</h1>
                   <div>
         <div class="description">
@@ -434,7 +438,7 @@ window.Quarto = {
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta column-page">
 
       
     
@@ -447,10 +451,10 @@ window.Quarto = {
   
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-cloud"><div class="category" data-category="RGVlcCUyMExlYXJuaW5n"><span class="quarto-category-count category-cloud-2">Deep Learning</span></div><div class="category" data-category="RGlmZnVzaW9uLU1vZGVs"><span class="quarto-category-count category-cloud-2">Diffusion-Model</span></div><div class="category" data-category="R2VuZXJhdGl2ZS1Nb2RlbA=="><span class="quarto-category-count category-cloud-2">Generative-Model</span></div><div class="category" data-category="SW5mZXJlbmNl"><span class="quarto-category-count category-cloud-2">Inference</span></div><div class="category" data-category="TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVs"><span class="quarto-category-count category-cloud-5">Large Language Model</span></div><div class="category" data-category="TWF0aGVtYXRpY3M="><span class="quarto-category-count category-cloud-2">Mathematics</span></div><div class="category" data-category="UmVpbmZvcmNlbWVudCUyMExlYXJuaW5n"><span class="quarto-category-count category-cloud-2">Reinforcement Learning</span></div><div class="category" data-category="U3VtbWFyeQ=="><span class="quarto-category-count category-cloud-2">Summary</span></div><div class="category" data-category="VHJhaW5pbmclMjBUcmlja3M="><span class="quarto-category-count category-cloud-2">Training Tricks</span></div><div class="category" data-category="VHJhbnNmb3JtZXI="><span class="quarto-category-count category-cloud-4">Transformer</span></div></div></div>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
 
 
 
@@ -463,7 +467,51 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="VHJhbnNmb3JtZXIlMkNMYXJnZSUyMExhbmd1YWdlJTIwTW9kZWwlMkNSZWluZm9yY2VtZW50JTIwTGVhcm5pbmc=" data-listing-date-sort="1769270400000" data-listing-file-modified-sort="1772301358178" data-listing-date-modified-sort="1772301358000" data-listing-reading-time-sort="31" data-listing-word-count-sort="6040">
+<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1773936000000" data-listing-file-modified-sort="1774339429879" data-listing-date-modified-sort="1774339429000" data-listing-reading-time-sort="1" data-listing-word-count-sort="69">
+<div class="thumbnail"><a href="../../posts/Blogs/Context-Engineering/post.html" class="no-external">
+
+<p class="card-img-top"><img src="Context-Engineering/assets/context-length-information.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../../posts/Blogs/Context-Engineering/post.html" class="no-external">What is Context Engineering?</a>
+</h3>
+<div class="delink listing-description"><a href="../../posts/Blogs/Context-Engineering/post.html" class="no-external">
+System Prompt 里面应该包含什么
+</a></div>
+</div>
+<div class="metadata">
+<a href="../../posts/Blogs/Context-Engineering/post.html" class="no-external">
+<div class="listing-date">
+2026-03-20
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1773936000000" data-listing-file-modified-sort="1774289196447" data-listing-date-modified-sort="1774289196000" data-listing-reading-time-sort="2" data-listing-word-count-sort="229">
+<div class="thumbnail"><a href="../../posts/Blogs/LLM-Architecture/post.html" class="no-external">
+
+<p class="card-img-top"><img src="LLM-Architecture/assets/LLM-Architecture-Gallery.png"  class="thumbnail-image card-img"/></p>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="../../posts/Blogs/LLM-Architecture/post.html" class="no-external">LLM Architecture and Training Stages</a>
+</h3>
+<div class="delink listing-description"><a href="../../posts/Blogs/LLM-Architecture/post.html" class="no-external">
+<p>在这篇文章中，我们将深入探讨不同的LLM的模型架构。随着LLM的不断发展，模型的架构也在不断的演变，我们将从最初的Transformer架构展开，逐步的介绍不同Component的演变和改进。在最后，我们还会介绍除了Transformer架构之外的其他架构，比如Mamba架构。除了模型架构之外，我们还会介绍不同的Optimizer，Loss Functions和Regularization techniques在LLM训练中的应用。</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="../../posts/Blogs/LLM-Architecture/post.html" class="no-external">
+<div class="listing-date">
+2026-03-20
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="VHJhbnNmb3JtZXIlMkNMYXJnZSUyMExhbmd1YWdlJTIwTW9kZWwlMkNSZWluZm9yY2VtZW50JTIwTGVhcm5pbmc=" data-listing-date-sort="1769270400000" data-listing-file-modified-sort="1774628120434" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="31" data-listing-word-count-sort="6040">
 <div class="thumbnail"><a href="../../posts/Blogs/LLM-RL/post.html" class="no-external">
 
 <p class="card-img-top"><img src="LLM-RL/assets/rl-overview.png"  class="thumbnail-image card-img"/></p>
@@ -473,15 +521,6 @@ window.Quarto = {
 <h3 class="no-anchor listing-title">
 <a href="../../posts/Blogs/LLM-RL/post.html" class="no-external">Reinforcement Learning in LLM</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VHJhbnNmb3JtZXI='); return false;">Transformer</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVs'); return false;">Large Language Model</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('UmVpbmZvcmNlbWVudCUyMExlYXJuaW5n'); return false;">Reinforcement Learning</div>
-
-</div>
 <div class="delink listing-description"><a href="../../posts/Blogs/LLM-RL/post.html" class="no-external">
 <p>In this blog, we explore how reinforcement learning (RL) is used to post-train large language models (LLMs) to improve performance, robustness, and alignment. We begin by formulating LLM generation as an RL problem (states, actions, policies, rewards), then introduce widely used RL-from-preference methods (RLHF), focusing on algorithms such as <strong>PPO</strong> and <strong>DPO</strong>. Next, we cover <strong>RLVR</strong> (Reinforcement Learning with Verifiable Rewards) and discuss representative approaches including <strong>GRPO</strong>, <strong>GSPO</strong>, <strong>DAPO</strong>, <strong>SAPO</strong>, and the current state-of-the-art <strong>GDPO</strong>. We then survey practical training frameworks for LLM-RL, such as <strong>Verl</strong>, and conclude with key challenges, open problems, and future research directions in RL for language models.</p>
 </a></div>
@@ -491,17 +530,10 @@ window.Quarto = {
 <div class="listing-date">
 2026-01-25
 </div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-<div class="listing-reading-time">31 min</div>
-<div class="metadata-value listing-word-count">
-6,040 words
-</div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="TWF0aGVtYXRpY3M=" data-listing-date-sort="1764604800000" data-listing-file-modified-sort="1772292497162" data-listing-date-modified-sort="1772292497000" data-listing-reading-time-sort="32" data-listing-word-count-sort="6336">
+<div class="quarto-post image-right" data-index="3" data-categories="TWF0aGVtYXRpY3M=" data-listing-date-sort="1764604800000" data-listing-file-modified-sort="1774628120298" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="32" data-listing-word-count-sort="6336">
 <div class="thumbnail"><a href="../../posts/Blogs/KL-Divergence/post.html" class="no-external">
 
 <p class="card-img-top"><img src="KL-Divergence/assets/KL-asymmetric.png"  class="thumbnail-image card-img"/></p>
@@ -511,11 +543,6 @@ Yuyang Zhang
 <h3 class="no-anchor listing-title">
 <a href="../../posts/Blogs/KL-Divergence/post.html" class="no-external">From Entropy to KL Divergence: A Comprehensive Guide</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TWF0aGVtYXRpY3M='); return false;">Mathematics</div>
-
-</div>
 <div class="delink listing-description"><a href="../../posts/Blogs/KL-Divergence/post.html" class="no-external">
 <p>KL Divergence, also known as <em>Kullback-Leibler Divergence</em>, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of <strong>entropy</strong>, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its mathematical formulation, how to approximate use three different Monte Carlo Estimator, and finally its applications in various fields such as classification, generative modeling, knowledge disllation, reinforcement learning, and large language model. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.</p>
 </a></div>
@@ -525,17 +552,10 @@ Yuyang Zhang
 <div class="listing-date">
 2025-12-02
 </div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-<div class="listing-reading-time">32 min</div>
-<div class="metadata-value listing-word-count">
-6,336 words
-</div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="RGVlcCUyMExlYXJuaW5nJTJDU3VtbWFyeQ==" data-listing-date-sort="1764604800000" data-listing-file-modified-sort="1764629958622" data-listing-date-modified-sort="1764629958000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2766">
+<div class="quarto-post image-right" data-index="4" data-categories="RGVlcCUyMExlYXJuaW5nJTJDU3VtbWFyeQ==" data-listing-date-sort="1764604800000" data-listing-file-modified-sort="1774628120342" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2766">
 <div class="thumbnail"><a href="../../posts/Blogs/Learnings-in-DeepLearning/post.html" class="no-external">
 
 <p class="card-img-top"><img src="Learnings-in-DeepLearning/assets/Contrastive-Learning-Paragdim.png"  class="thumbnail-image card-img"/></p>
@@ -545,13 +565,6 @@ Yuyang Zhang
 <h3 class="no-anchor listing-title">
 <a href="../../posts/Blogs/Learnings-in-DeepLearning/post.html" class="no-external">All kinds of “Learnings” in Deep Learning</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGVlcCUyMExlYXJuaW5n'); return false;">Deep Learning</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('U3VtbWFyeQ=='); return false;">Summary</div>
-
-</div>
 <div class="delink listing-description"><a href="../../posts/Blogs/Learnings-in-DeepLearning/post.html" class="no-external">
 <p>In the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.</p>
 </a></div>
@@ -561,17 +574,10 @@ Yuyang Zhang
 <div class="listing-date">
 2025-12-02
 </div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-<div class="listing-reading-time">14 min</div>
-<div class="metadata-value listing-word-count">
-2,766 words
-</div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="VHJhbnNmb3JtZXIlMkNMYXJnZSUyMExhbmd1YWdlJTIwTW9kZWw=" data-listing-date-sort="1764000000000" data-listing-file-modified-sort="1764168669870" data-listing-date-modified-sort="1764168669000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3174">
+<div class="quarto-post image-right" data-index="5" data-categories="VHJhbnNmb3JtZXIlMkNMYXJnZSUyMExhbmd1YWdlJTIwTW9kZWw=" data-listing-date-sort="1764000000000" data-listing-file-modified-sort="1774628120439" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3174">
 <div class="thumbnail"><a href="../../posts/Blogs/Position-Embedding/post.html" class="no-external">
 
 <p class="card-img-top"><img src="Position-Embedding/assets/Position-Embedding-sin-cos-omega.png"  class="thumbnail-image card-img"/></p>
@@ -581,13 +587,6 @@ Yuyang Zhang
 <h3 class="no-anchor listing-title">
 <a href="../../posts/Blogs/Position-Embedding/post.html" class="no-external">The Evolution of Position Encoding in the Transformer</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VHJhbnNmb3JtZXI='); return false;">Transformer</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVs'); return false;">Large Language Model</div>
-
-</div>
 <div class="delink listing-description"><a href="../../posts/Blogs/Position-Embedding/post.html" class="no-external">
 <p>In the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as in the Image and Video to unify the position encoding.</p>
 </a></div>
@@ -597,17 +596,10 @@ Yuyang Zhang
 <div class="listing-date">
 2025-11-25
 </div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-<div class="listing-reading-time">16 min</div>
-<div class="metadata-value listing-word-count">
-3,174 words
-</div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="R2VuZXJhdGl2ZS1Nb2RlbCUyQ0RpZmZ1c2lvbi1Nb2RlbA==" data-listing-date-sort="1760457600000" data-listing-file-modified-sort="1764050703319" data-listing-date-modified-sort="1764050703000" data-listing-reading-time-sort="26" data-listing-word-count-sort="5001">
+<div class="quarto-post image-right" data-index="6" data-categories="R2VuZXJhdGl2ZS1Nb2RlbCUyQ0RpZmZ1c2lvbi1Nb2RlbA==" data-listing-date-sort="1760457600000" data-listing-file-modified-sort="1774628120117" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="26" data-listing-word-count-sort="5001">
 <div class="thumbnail"><a href="../../posts/Blogs/Diffusion-Models/Diffusion-Model.html" class="no-external">
 
 <p class="card-img-top"><img src="Diffusion-Models/assets/Linear-Gaussian-big.png"  class="thumbnail-image card-img"/></p>
@@ -617,13 +609,6 @@ Yuyang Zhang
 <h3 class="no-anchor listing-title">
 <a href="../../posts/Blogs/Diffusion-Models/Diffusion-Model.html" class="no-external">All About Diffusion &amp; Flow Models</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('R2VuZXJhdGl2ZS1Nb2RlbA=='); return false;">Generative-Model</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('RGlmZnVzaW9uLU1vZGVs'); return false;">Diffusion-Model</div>
-
-</div>
 <div class="delink listing-description"><a href="../../posts/Blogs/Diffusion-Models/Diffusion-Model.html" class="no-external">
 <p>This article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—<strong>DDPM</strong>, <strong>DDIM</strong>, and <strong>Score Matching</strong>—and explore their relationships. From there, we introduce the <strong>ODE/SDE framework</strong>, showing how DDPM can be derived from stochastic differential equations and how this connects to <strong>Flow Matching</strong>. We then highlight key model variants such as <strong>Stable Diffusion</strong> and <strong>Movie Gen</strong>, discussing their architectures and applications. Finally, we broaden the scope to examine how diffusion models are being adapted beyond image generation, including <strong>diffusion policies in reinforcement learning</strong> and their emerging role in <strong>large language models (LLMs)</strong>.</p>
 </a></div>
@@ -633,17 +618,10 @@ Yuyang Zhang
 <div class="listing-date">
 2025-10-15
 </div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-<div class="listing-reading-time">26 min</div>
-<div class="metadata-value listing-word-count">
-5,001 words
-</div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVsJTJDSW5mZXJlbmNl" data-listing-date-sort="1759248000000" data-listing-file-modified-sort="1764154079581" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="88">
+<div class="quarto-post image-right" data-index="7" data-categories="TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVsJTJDSW5mZXJlbmNl" data-listing-date-sort="1759248000000" data-listing-file-modified-sort="1774628120417" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="88">
 <div class="thumbnail"><a href="../../posts/Blogs/LLM-Inference/post.html" class="no-external">
 
 <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
@@ -653,13 +631,6 @@ Yuyang Zhang
 <h3 class="no-anchor listing-title">
 <a href="../../posts/Blogs/LLM-Inference/post.html" class="no-external">LLM Part2: Inference</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVs'); return false;">Large Language Model</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('SW5mZXJlbmNl'); return false;">Inference</div>
-
-</div>
 <div class="delink listing-description"><a href="../../posts/Blogs/LLM-Inference/post.html" class="no-external">
 <p>In this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.</p>
 </a></div>
@@ -669,53 +640,32 @@ Yuyang Zhang
 <div class="listing-date">
 2025-10-01
 </div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-<div class="listing-reading-time">1 min</div>
-<div class="metadata-value listing-word-count">
-88 words
-</div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="VHJhbnNmb3JtZXIlMkNMYXJnZSUyMExhbmd1YWdlJTIwTW9kZWw=" data-listing-date-sort="1758729600000" data-listing-file-modified-sort="1771750659933" data-listing-date-modified-sort="1771750659000" data-listing-reading-time-sort="28" data-listing-word-count-sort="5470">
-<div class="thumbnail"><a href="../../posts/Blogs/LLM-Architecture/LLM-Architecture.html" class="no-external">
+<div class="quarto-post image-right" data-index="8" data-categories="VHJhbnNmb3JtZXIlMkNMYXJnZSUyMExhbmd1YWdlJTIwTW9kZWw=" data-listing-date-sort="1758729600000" data-listing-file-modified-sort="1774628120349" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="28" data-listing-word-count-sort="5470">
+<div class="thumbnail"><a href="../../posts/Blogs/LLM-Architecture copy/LLM-Architecture.html" class="no-external">
 
-<p class="card-img-top"><img src="LLM-Architecture/assets/original_transformer_architecture.png"  class="thumbnail-image card-img"/></p>
+<p class="card-img-top"><img src="LLM-Architecture copy/assets/original_transformer_architecture.png"  class="thumbnail-image card-img"/></p>
 
 </a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
-<a href="../../posts/Blogs/LLM-Architecture/LLM-Architecture.html" class="no-external">LLM Part1: Transformer Architecture &amp; Training Stages</a>
+<a href="../../posts/Blogs/LLM-Architecture copy/LLM-Architecture.html" class="no-external">LLM Part1: Transformer Architecture &amp; Training Stages</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VHJhbnNmb3JtZXI='); return false;">Transformer</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('TGFyZ2UlMjBMYW5ndWFnZSUyME1vZGVs'); return false;">Large Language Model</div>
-
-</div>
-<div class="delink listing-description"><a href="../../posts/Blogs/LLM-Architecture/LLM-Architecture.html" class="no-external">
+<div class="delink listing-description"><a href="../../posts/Blogs/LLM-Architecture copy/LLM-Architecture.html" class="no-external">
 <p>This is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, mixture of experts, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up: Position Encoding, Attention Mechanism, Feed Forward Network &amp; Mixture of Experts, Output Layer. Besides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. With the architecture in place, we will going through different training stages, such as pre-training stage, mid-training stage, and post-training training stage. By the end of this blog, you will have a comprehensive understanding of the transformer architecture and how to get your own LLM up and running.</p>
 </a></div>
 </div>
 <div class="metadata">
-<a href="../../posts/Blogs/LLM-Architecture/LLM-Architecture.html" class="no-external">
+<a href="../../posts/Blogs/LLM-Architecture copy/LLM-Architecture.html" class="no-external">
 <div class="listing-date">
 2025-09-25
-</div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-<div class="listing-reading-time">28 min</div>
-<div class="metadata-value listing-word-count">
-5,470 words
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="VHJhaW5pbmclMjBUcmlja3M=" data-listing-date-sort="1757433600000" data-listing-file-modified-sort="1771749234454" data-listing-date-modified-sort="1771749234000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2648">
+<div class="quarto-post image-right" data-index="9" data-categories="VHJhaW5pbmclMjBUcmlja3M=" data-listing-date-sort="1757433600000" data-listing-file-modified-sort="1774628120450" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2648">
 <div class="thumbnail"><a href="../../posts/Blogs/Speed-up-training/post.html" class="no-external">
 
 <img loading="lazy" src="../../posts/Blogs/Speed-up-training" class="thumbnail-image">
@@ -725,11 +675,6 @@ Yuyang Zhang
 <h3 class="no-anchor listing-title">
 <a href="../../posts/Blogs/Speed-up-training/post.html" class="no-external">Speed Up Training for Neural Networks</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('VHJhaW5pbmclMjBUcmlja3M='); return false;">Training Tricks</div>
-
-</div>
 <div class="delink listing-description"><a href="../../posts/Blogs/Speed-up-training/post.html" class="no-external">
 <p><em>Training large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.</em></p>
 </a></div>
@@ -738,13 +683,6 @@ Yuyang Zhang
 <a href="../../posts/Blogs/Speed-up-training/post.html" class="no-external">
 <div class="listing-date">
 2025-09-10
-</div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-<div class="listing-reading-time">14 min</div>
-<div class="metadata-value listing-word-count">
-2,648 words
 </div>
 </a>
 </div>

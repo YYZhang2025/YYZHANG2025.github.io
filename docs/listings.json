@@ -2,13 +2,15 @@
   {
     "listing": "/posts/Blogs/blogs_index.html",
     "items": [
+      "/posts/Blogs/Context-Engineering/post.html",
+      "/posts/Blogs/LLM-Architecture/post.html",
       "/posts/Blogs/LLM-RL/post.html",
       "/posts/Blogs/KL-Divergence/post.html",
       "/posts/Blogs/Learnings-in-DeepLearning/post.html",
       "/posts/Blogs/Position-Embedding/post.html",
       "/posts/Blogs/Diffusion-Models/Diffusion-Model.html",
       "/posts/Blogs/LLM-Inference/post.html",
-      "/posts/Blogs/LLM-Architecture/LLM-Architecture.html",
+      "/posts/Blogs/LLM-Architecture copy/LLM-Architecture.html",
       "/posts/Blogs/Speed-up-training/post.html"
     ]
   },
@@ -17,7 +19,28 @@
     "items": [
       "/posts/Projects/PaliGemma/pali-gemma.html",
       "/posts/Projects/Qwen3-VL/Qwen3-VL.html",
-      "/posts/Projects/VLM-from-scratch/index.html"
+      "/posts/Projects/VLM-from-scratch/index.html",
+      "/posts/Projects/Chat-LLM/index.html"
+    ]
+  },
+  {
+    "listing": "/posts/CS336/index.html",
+    "items": [
+      "/posts/CS336/Lecture01/lec01.html",
+      "/posts/CS336/Lecture02/lec02.html",
+      "/posts/CS336/Lecture04/lec04.html",
+      "/posts/CS336/Lecture05&06/lec05.html",
+      "/posts/CS336/Lecture07&08/lec07.html",
+      "/posts/CS336/Lecture9&11/lec9.html",
+      "/posts/CS336/Lecture10/lec10.html",
+      "/posts/CS336/Lecture12/lec12.html",
+      "/posts/CS336/Lecture13&14/lec13.html",
+      "/posts/CS336/Lecture15/lec15.html",
+      "/posts/CS336/Lecture16&17/lec16.html",
+      "/posts/CS336/Ass01/ass01.html",
+      "/posts/CS336/Ass02/ass02.html",
+      "/posts/CS336/Ass04/ass04.html",
+      "/posts/CS336/Ass05/ass05.html"
     ]
   }
 ]
