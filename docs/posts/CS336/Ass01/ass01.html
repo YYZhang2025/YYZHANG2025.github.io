@@ -105,6 +105,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -429,16 +432,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -783,7 +786,7 @@ window.Quarto = {
 <li><strong>Repeat</strong>: 重复步骤2,3，直到达到预定的合并次数</li>
 </ol>
 <p>BPE 的伪代码如下所示：</p>
-<div id="algo-bpe" class="pseudocode-container quarto-float" data-no-end="false" data-pseudocode-number="1" data-caption-prefix="Algorithm" data-line-number="true" data-line-number-punc=":" data-comment-delimiter="#" data-indent-size="1.2em">
+<div id="algo-bpe" class="pseudocode-container quarto-float" data-no-end="false" data-line-number-punc=":" data-comment-delimiter="#" data-line-number="true" data-indent-size="1.2em" data-pseudocode-number="1" data-caption-prefix="Algorithm">
 <div class="pseudocode">
 \begin{algorithm} \caption{BPE Training} \begin{algorithmic} \Require Corpus text $\mathcal{D}$ \Require Number of merges $M$ \Require Special tokens $\mathcal{S}$ (e.g., \texttt{&lt;|endoftext|&gt;}) \Ensure Vocabulary $V$, merge rules list $\Pi$ \State Convert each document $x \in \mathcal{D}$ into bytes $b(x)$ \State Initialize tokenized corpus as sequences of single-byte tokens \State $V \gets \{0,1,\dots,255\} \cup \mathcal{S}$ \State $\Pi \gets [\,]$ \For{$t = 1$ \textbf{to} $M$} \State $C \gets$ empty map from pair $\to$ count \For{\textbf{each} token sequence $s$ in the corpus} \Comment{Count adjacent byte-token pairs} \For{\textbf{each} index $i$ from $1$ to $|s|-1$} \State $C[(s_i, s_{i+1})] \gets C[(s_i, s_{i+1})] + 1$ \EndFor \EndFor \State Choose $(a,b)$ with the largest count in $C$ \Comment{Select the most frequent pair} \State Define a new token $new$ as the merge of $(a,b)$ \State $V \gets V \cup \{new\}$ \Comment{Create a new merged token and record the merge rule} \State Append $(a,b)\rightarrow new$ to $\Pi$ \For{\textbf{each} token sequence $s$ in the corpus} \Comment{Replace all occurrences of $(a,b)$ in the corpus} \State Replace adjacent $(a,b)$ with $new$ left-to-right (non-overlapping) \EndFor \EndFor \State \Return $V, \Pi$ \end{algorithmic} \end{algorithm}
 </div>
@@ -1411,7 +1414,7 @@ window.Quarto = {
 <p>在TinyStory上训练BPE，</p>
 <div class="sourceCode" id="cb25" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1"></a><span class="ex">uv</span> run python ./train_bpe.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>只需要不到2mins。</p>
-<p><img src="assets/ass01-bpe-tinystories.png" class="img-fluid"></p>
+<p><a href="assets/ass01-bpe-tinystories.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="assets/ass01-bpe-tinystories.png" class="img-fluid"></a></p>
 </section>
 <section id="bpe-tokenizer" class="level2" data-number="2.8">
 <h2 data-number="2.8" class="anchored" data-anchor-id="bpe-tokenizer"><span class="header-section-number">2.8</span> BPE Tokenizer</h2>
@@ -1602,7 +1605,7 @@ window.Quarto = {
 <span id="cb31-6"><a href="#cb31-6"></a>    k <span class="op">=</span> nxt[k]               <span class="co"># 跳到下一个“仍在链表中的”位置</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>至此，我们以及完成了BPE阶段的所有的内容，接下来就是要训练，并存储我们预先Token好的内容</p>
 <div class="sourceCode" id="cb32" data-code-line-numbers=""><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a><span class="ex">uv</span> run pytest tests/test_tokenizer.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img src="assets/ass01-test-tokenizer.png" class="img-fluid"></p>
+<p><a href="assets/ass01-test-tokenizer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="assets/ass01-test-tokenizer.png" class="img-fluid"></a></p>
 </section>
 </section>
 <section id="tokenize-and-save-file" class="level2" data-number="2.9">
@@ -1690,7 +1693,7 @@ Figure&nbsp;1: 在视频中，Andrej Karpathy 详细讲解了GPT-2的实现细�
 <div id="fig-transformer-lm-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-transformer-lm-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/ass01-transformer-lm-overview.png" class="img-fluid figure-img">
+<a href="assets/ass01-transformer-lm-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;2: Transformer Language Model 整体架构概览"><img src="assets/ass01-transformer-lm-overview.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-transformer-lm-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Transformer Language Model 整体架构概览
@@ -1885,7 +1888,7 @@ y = Wx
 <div id="fig-different-activation-functions" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-different-activation-functions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/ass01-act-fns.png" class="img-fluid figure-img">
+<a href="assets/ass01-act-fns.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;3: 不同激活函数样子"><img src="assets/ass01-act-fns.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-different-activation-functions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: 不同激活函数样子
@@ -1934,7 +1937,7 @@ q'^{(i)} = R_i q^{(i)} = R_i W_q x^{(i)}
 <div id="fig-illustration-of-rope" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-illustration-of-rope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/rope.png" class="img-fluid figure-img">
+<a href="./assets/rope.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;4: RoPE 旋转示意图：对每一对维度 (q_{2k-1}, q_{2k})，按位置 i 旋转角度 \theta_{i,k}。"><img src="./assets/rope.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-illustration-of-rope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: RoPE 旋转示意图：对每一对维度 <span class="math inline">\((q_{2k-1}, q_{2k})\)</span>，按位置 <span class="math inline">\(i\)</span> 旋转角度 <span class="math inline">\(\theta_{i,k}\)</span>。
@@ -2199,7 +2202,7 @@ c=-\max_i v_i,
 <div id="fig-attention-scaling-factor" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-attention-scaling-factor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/attention-scaling-factor.png" class="img-fluid figure-img">
+<a href="./assets/attention-scaling-factor.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;5: Attention 中的缩放因子对 softmax 分布的影响， 当d_k 较大时，缩放能防止 softmax 过于尖锐。"><img src="./assets/attention-scaling-factor.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-attention-scaling-factor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: Attention 中的缩放因子对 softmax 分布的影响， 当<span class="math inline">\(d_k\)</span> 较大时，缩放能防止 softmax 过于尖锐。
@@ -2245,7 +2248,7 @@ True &amp; True  &amp; \cdots &amp; True
 <div id="fig-causal-mask-example" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-causal-mask-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/causal_mask.png" class="img-fluid figure-img">
+<a href="./assets/causal_mask.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;6: Causal Mask 示例图"><img src="./assets/causal_mask.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-causal-mask-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: Causal Mask 示例图
@@ -2495,7 +2498,7 @@ Difference nomralization structures
 <div id="fig-hybird-norm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-hybird-norm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/hybird-norm.png" class="img-fluid figure-img">
+<a href="./assets/hybird-norm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;7: 比较不同的Normalization的结构，a) Post-Norm 结构；b) Pre-Norm 结构； c) 带 QK-Norm 的 Pre-Norm 结构；d) HybridNorm 结构"><img src="./assets/hybird-norm.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hybird-norm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: 比较不同的Normalization的结构，a) Post-Norm 结构；b) Pre-Norm 结构； c) 带 QK-Norm 的 Pre-Norm 结构；d) HybridNorm 结构
@@ -2774,7 +2777,7 @@ v_t &amp;= \beta_2 v_{t-1} + (1 - \beta_2) (g_t + \lambda \theta_{t-1})^2 \\
 <div id="fig-adamw-alg" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-adamw-alg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/ass01-AdamW-alg.png" class="img-fluid figure-img">
+<a href="assets/ass01-AdamW-alg.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;8: AdamW 算法"><img src="assets/ass01-AdamW-alg.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-adamw-alg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8: AdamW 算法
@@ -3002,7 +3005,7 @@ Table&nbsp;1: 符号说明
 <div id="fig-cos-annealing" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cos-annealing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/ass01-cos-annealing.png" class="img-fluid figure-img">
+<a href="assets/ass01-cos-annealing.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;9: Figure: Cosine Annealing Learning Rate Scheduler Example   total_steps = 10000 , alpha_max = 0.001 , alpha_min = 1e-4 , Tw = 500 , Tc = total_steps // 2"><img src="assets/ass01-cos-annealing.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cos-annealing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9: Figure: Cosine Annealing Learning Rate Scheduler Example <br> total_steps = 10000 , alpha_max = 0.001 , alpha_min = 1e-4 , Tw = 500 , Tc = total_steps // 2
@@ -3539,7 +3542,7 @@ Note
 <div id="fig-temperature-sampling" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-temperature-sampling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/temperature-sampling.png" class="img-fluid figure-img">
+<a href="./assets/temperature-sampling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;10: Temperature 对采样分布的影响示意图"><img src="./assets/temperature-sampling.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-temperature-sampling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;10: Temperature 对采样分布的影响示意图
@@ -3679,7 +3682,7 @@ Table&nbsp;2: 总结不同采样方法的优缺点
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/train_loss.png" class="img-fluid figure-img"></p>
+<p><a href="assets/train_loss.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Training Loss"><img src="assets/train_loss.png" class="img-fluid figure-img"></a></p>
 <figcaption>Training Loss</figcaption>
 </figure>
 </div>
@@ -3687,7 +3690,7 @@ Table&nbsp;2: 总结不同采样方法的优缺点
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/Train_Perplexity.png" class="img-fluid figure-img"></p>
+<p><a href="assets/Train_Perplexity.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Training Perplexity"><img src="assets/Train_Perplexity.png" class="img-fluid figure-img"></a></p>
 <figcaption>Training Perplexity</figcaption>
 </figure>
 </div>
@@ -3697,7 +3700,7 @@ Table&nbsp;2: 总结不同采样方法的优缺点
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/eval_loss.png" class="img-fluid figure-img"></p>
+<p><a href="assets/eval_loss.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Evaluation Loss"><img src="assets/eval_loss.png" class="img-fluid figure-img"></a></p>
 <figcaption>Evaluation Loss</figcaption>
 </figure>
 </div>
@@ -3705,7 +3708,7 @@ Table&nbsp;2: 总结不同采样方法的优缺点
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/eval_perp.png" class="img-fluid figure-img"></p>
+<p><a href="assets/eval_perp.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Evaluation Perplexity"><img src="assets/eval_perp.png" class="img-fluid figure-img"></a></p>
 <figcaption>Evaluation Perplexity</figcaption>
 </figure>
 </div>
@@ -3727,7 +3730,7 @@ Figure&nbsp;11: Loss 和 Perplexity 曲线显示
 <div id="fig-generated-text" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-generated-text-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/generated-text.png" class="img-fluid figure-img">
+<a href="./assets/generated-text.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;12: 生成文本示例, prompt=“Once upon a time”, max_new_tokens=256, top_k=50, temperature=0.8"><img src="./assets/generated-text.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-generated-text-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;12: 生成文本示例, prompt=“Once upon a time”, <code>max_new_tokens</code>=256, <code>top_k</code>=50, <code>temperature</code>=0.8
@@ -3755,7 +3758,7 @@ Figure&nbsp;12: 生成文本示例, prompt=“Once upon a time”, <code>max_new
 <section id="in-the-end" class="level1" data-number="8">
 <h1 data-number="8"><span class="header-section-number">8</span> In the End</h1>
 <p>最后，感谢你一路坚持到这里！创作不易，如果你觉得内容对你有帮助，欢迎请我<strong>喝杯咖啡/支付宝红包</strong>，支持我继续创作！你们的支持是我最大的动力！ :) <br></p>
-<p><img src="../../../style/AliPay.jpg" class="img-fluid" width="300"></p>
+<p><a href="../../../style/AliPay.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="../../../style/AliPay.jpg" class="img-fluid" width="300"></a></p>
 
 
 
@@ -4279,6 +4282,38 @@ Zhuo, Zhijian, Yutao Zeng, Ya Wang, Sijun Zhang, Jian Yang, Xiaoqing Li, Xun Zho
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

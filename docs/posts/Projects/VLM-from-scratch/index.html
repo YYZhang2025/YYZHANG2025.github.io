@@ -72,6 +72,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -396,16 +399,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -546,7 +549,7 @@ window.Quarto = {
 <div id="fig-qwen3-vl-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-qwen3-vl-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/cover.png" class="img-fluid figure-img" style="width:100.0%">
+<a href="assets/cover.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: The overview of Qwen3-VL model architecture"><img src="assets/cover.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-qwen3-vl-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: The overview of Qwen3-VL model architecture
@@ -584,7 +587,7 @@ PE_{interp}(x, y) = \text{BilinearInterpolate}(PE, x, y)
 <div id="fig-CoMP" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-CoMP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/CoMP.png" class="img-fluid figure-img">
+<a href="assets/CoMP.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: The illustration of CoMP"><img src="assets/CoMP.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-CoMP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: The illustration of CoMP
@@ -608,7 +611,7 @@ Figure&nbsp;2: The illustration of CoMP
 <div id="fig-patch-merger" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-patch-merger-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/patch-merger.png" class="img-fluid figure-img">
+<a href="assets/patch-merger.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: The function of Patch Merger. patch merging process, a down-sampling technique used in transformer architectures like the Swin Transformer. This operation reduces the spatial dimensions of the feature map while increasing the channel dimension."><img src="assets/patch-merger.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-patch-merger-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: The function of Patch Merger. patch merging process, a down-sampling technique used in transformer architectures like the Swin Transformer. This operation reduces the spatial dimensions of the feature map while increasing the channel dimension.
@@ -625,7 +628,7 @@ Figure&nbsp;3: The function of Patch Merger. patch merging process, a down-sampl
 <div id="fig-deeostack" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-deeostack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/deepstack.png" class="img-fluid figure-img" style="width:100.0%">
+<a href="assets/deepstack.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: The architecture of DeepStack"><img src="assets/deepstack.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deeostack-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: The architecture of DeepStack
@@ -1157,6 +1160,38 @@ Tschannen, Michael, Alexey Gritsenko, Xiao Wang, Muhammad Ferjad Naeem, Ibrahim 
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

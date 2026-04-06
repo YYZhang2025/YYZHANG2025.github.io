@@ -70,6 +70,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -394,16 +397,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -601,7 +604,7 @@ what is expert?
 <div id="fig-dense-fnn-vs-moe" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dense-fnn-vs-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/dense-fnn-vs-moe.png" class="img-fluid figure-img">
+<a href="./assets/dense-fnn-vs-moe.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Dense FFN Layer 与 MoE Layer比较。左侧是传统的Dense FFN Layer，右侧是MoE Layer。MoE Layer由多个专家网络（Experts）组成，每个专家网络都是一个独立的FFN Layer。"><img src="./assets/dense-fnn-vs-moe.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dense-fnn-vs-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Dense FFN Layer 与 MoE Layer比较。左侧是传统的Dense FFN Layer，右侧是MoE Layer。MoE Layer由多个专家网络（Experts）组成，每个专家网络都是一个独立的FFN Layer。
@@ -613,7 +616,7 @@ Figure&nbsp;1: Dense FFN Layer 与 MoE Layer比较。左侧是传统的Dense FFN
 <div id="fig-same-flop-more-params" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-same-flop-more-params-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/same_flop_more_params.png" class="img-fluid figure-img">
+<a href="./assets/same_flop_more_params.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: 从图中可以看出，随着参数量的增加，模型的性能（如perplexity）也在提升。"><img src="./assets/same_flop_more_params.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-same-flop-more-params-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: 从图中可以看出，随着参数量的增加，模型的性能（如perplexity）也在提升。
@@ -624,7 +627,7 @@ Figure&nbsp;2: 从图中可以看出，随着参数量的增加，模型的性�
 <div id="fig-faster-training" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-faster-training-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/faster-training.png" class="img-fluid figure-img">
+<a href="./assets/faster-training.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: 相比于T5(Dense)模型，MoE模型在达到相同perplexity水平下，所需的训练时间更短。"><img src="./assets/faster-training.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-faster-training-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: 相比于T5(Dense)模型，MoE模型在达到相同perplexity水平下，所需的训练时间更短。
@@ -635,7 +638,7 @@ Figure&nbsp;3: 相比于T5(Dense)模型，MoE模型在达到相同perplexity水�
 <div id="fig-dist-moe" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dist-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/dist-moe.png" class="img-fluid figure-img">
+<a href="./assets/dist-moe.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: 我可以将不同的Experts分配到不同的计算节点上，并行计算，从而提高训练效率。"><img src="./assets/dist-moe.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dist-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: 我可以将不同的Experts分配到不同的计算节点上，并行计算，从而提高训练效率。
@@ -679,7 +682,7 @@ Figure&nbsp;4: 我可以将不同的Experts分配到不同的计算节点上，�
 <div id="fig-router-choice" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-router-choice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/router-choice.png.png" class="img-fluid figure-img">
+<a href="./assets/router-choice.png.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: 不同的Router设计思路比较。"><img src="./assets/router-choice.png.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-router-choice-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: 不同的Router设计思路比较。
@@ -705,7 +708,7 @@ Figure&nbsp;5: 不同的Router设计思路比较。
 <div id="fig-routing-topk" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-routing-topk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/routing-topk.png" style="width:40.0%;height:40.0%" data-ref-parent="fig-token-choice-router" class="figure-img">
+<a href="./assets/routing-topk.png" class="lightbox" data-gallery="fig-token-choice-router" title="Figure&nbsp;6&nbsp;(a): Top-K routing choice"><img src="./assets/routing-topk.png" style="width:40.0%;height:40.0%" data-ref-parent="fig-token-choice-router" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-routing-topk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Top-K routing choice
@@ -717,7 +720,7 @@ Figure&nbsp;5: 不同的Router设计思路比较。
 <div id="fig-routing-hashing" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-routing-hashing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/routing-hashing.png" style="width:40.0%;height:40.0%" data-ref-parent="fig-token-choice-router" class="figure-img">
+<a href="./assets/routing-hashing.png" class="lightbox" data-gallery="fig-token-choice-router" title="Figure&nbsp;6&nbsp;(b): Hashing-based routing（通常作为Baseline）"><img src="./assets/routing-hashing.png" style="width:40.0%;height:40.0%" data-ref-parent="fig-token-choice-router" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-routing-hashing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Hashing-based routing（通常作为Baseline）
@@ -731,7 +734,7 @@ Figure&nbsp;5: 不同的Router设计思路比较。
 <div id="fig-routing-rl" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-routing-rl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/routing-rl.png" style="width:40.0%;height:40.0%" data-ref-parent="fig-token-choice-router" class="figure-img">
+<a href="./assets/routing-rl.png" class="lightbox" data-gallery="fig-token-choice-router" title="Figure&nbsp;6&nbsp;(c): RL-Based Routing"><img src="./assets/routing-rl.png" style="width:40.0%;height:40.0%" data-ref-parent="fig-token-choice-router" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-routing-rl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (c) RL-Based Routing
@@ -743,7 +746,7 @@ Figure&nbsp;5: 不同的Router设计思路比较。
 <div id="fig-routing-matching" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-routing-matching-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/routing-mathcing.png" style="width:40.0%;height:40.0%" data-ref-parent="fig-token-choice-router" class="figure-img">
+<a href="./assets/routing-mathcing.png" class="lightbox" data-gallery="fig-token-choice-router" title="Figure&nbsp;6&nbsp;(d): Solve a Optimization Problem"><img src="./assets/routing-mathcing.png" style="width:40.0%;height:40.0%" data-ref-parent="fig-token-choice-router" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-routing-matching-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (d) Solve a Optimization Problem
@@ -790,7 +793,7 @@ h_i' = \sum_{j} g_{i,j} \text{Expert}_j(h_i) + h_i
 <div id="fig-deepseek-moe" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-deepseek-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/deepseek-moe.png" class="img-fluid figure-img">
+<a href="./assets/deepseek-moe.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;7: DeepSeek提出的Top-K变形，每个token除了选择Top-K专家外，还会固定传入一个Shared Expert。"><img src="./assets/deepseek-moe.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deepseek-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: DeepSeek提出的Top-K变形，每个token除了选择Top-K专家外，还会固定传入一个Shared Expert。
@@ -801,7 +804,7 @@ Figure&nbsp;7: DeepSeek提出的Top-K变形，每个token除了选择Top-K专家
 <div id="fig-ablation-moe" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ablation-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/ablation-moe.png" class="img-fluid figure-img">
+<a href="./assets/ablation-moe.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;8: 从这种消融实验中可以看出，在experts变多的情况下，加入Shared Expert能够提升模型的性能。"><img src="./assets/ablation-moe.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ablation-moe-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8: 从这种消融实验中可以看出，在experts变多的情况下，加入Shared Expert能够提升模型的性能。
@@ -978,7 +981,7 @@ s_{i,j} + b_j, \quad s_{i,j} \in \text{Top-K}(s_i) \\
 <div id="fig-lb-loss" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-lb-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/lb_loss.png" class="img-fluid figure-img">
+<a href="./assets/lb_loss.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;9: 我们看到，不加负载均衡损失时，某些专家几乎没有被选择（Dead Experts）。而加入负载均衡损失后，专家的使用更加均衡。"><img src="./assets/lb_loss.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lb-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9: 我们看到，不加负载均衡损失时，某些专家几乎没有被选择（Dead Experts）。而加入负载均衡损失后，专家的使用更加均衡。
@@ -1032,7 +1035,7 @@ L_{total} = L_{CE} + \lambda_{load} L_{load} + \lambda_{z} L_{z}
 <section id="in-the-end" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> In the End</h1>
 <p>最后，感谢你一路坚持到这里！创作不易，如果你觉得内容对你有帮助，欢迎请我<strong>喝杯咖啡/支付宝红包</strong>，支持我继续创作！你们的支持是我最大的动力！ :) <br></p>
-<p><img src="../../../style/AliPay.jpg" class="img-fluid" width="300"></p>
+<p><a href="../../../style/AliPay.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="../../../style/AliPay.jpg" class="img-fluid" width="300"></a></p>
 
 
 
@@ -1544,6 +1547,38 @@ Yang, An, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Y
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

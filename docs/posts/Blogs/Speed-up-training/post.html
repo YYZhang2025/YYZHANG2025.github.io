@@ -86,6 +86,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -410,16 +413,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -598,7 +601,7 @@ window.Quarto = {
 <div id="fig-float32" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-float32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/float32.png" class="img-fluid figure-img" data-ref-parent="fig-different-data-types">
+<a href="assets/float32.png" class="lightbox" data-gallery="fig-different-data-types" title="Figure&nbsp;1&nbsp;(a): The representation of Float32"><img src="assets/float32.png" class="img-fluid figure-img" data-ref-parent="fig-different-data-types"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-float32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) The representation of Float32
@@ -612,7 +615,7 @@ window.Quarto = {
 <div id="fig-float16" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-float16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/float16.png" class="img-fluid figure-img" data-ref-parent="fig-different-data-types">
+<a href="assets/float16.png" class="lightbox" data-gallery="fig-different-data-types" title="Figure&nbsp;1&nbsp;(b): The representation of Float16"><img src="assets/float16.png" class="img-fluid figure-img" data-ref-parent="fig-different-data-types"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-float16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) The representation of Float16
@@ -626,7 +629,7 @@ window.Quarto = {
 <div id="fig-bfloat16" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-bfloat16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/bfloat16.png" class="img-fluid figure-img" data-ref-parent="fig-different-data-types">
+<a href="assets/bfloat16.png" class="lightbox" data-gallery="fig-different-data-types" title="Figure&nbsp;1&nbsp;(c): The representation of BFloat16"><img src="assets/bfloat16.png" class="img-fluid figure-img" data-ref-parent="fig-different-data-types"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-bfloat16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (c) The representation of BFloat16
@@ -717,7 +720,7 @@ Why need activation for backward pass?
 \]</span> where <span class="math inline">\(\mathbf{x}\)</span> is the input to the layer, which is the activation of the previous layer. Thus, we need to store the activation for the backward pass.</p>
 </div>
 </div>
-<div id="dae37809" class="cell">
+<div id="a9794d93" class="cell">
 <details class="code-fold">
 <summary>Calculate Memory Usage of Model</summary>
 <div class="sourceCode cell-code" id="cb2" data-source-line-numbers="nil" data-code-line-numbers="nil"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> torch</span>
@@ -804,7 +807,7 @@ Why need activation for backward pass?
 <div id="fig-broadcast" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-broadcast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/broadcast.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops">
+<a href="assets/broadcast.png" class="lightbox" data-gallery="fig-collective-ops" title="Figure&nbsp;2&nbsp;(a): Broadcast"><img src="assets/broadcast.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-broadcast-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Broadcast
@@ -816,7 +819,7 @@ Why need activation for backward pass?
 <div id="fig-scatter" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/scatter.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops">
+<a href="assets/scatter.png" class="lightbox" data-gallery="fig-collective-ops" title="Figure&nbsp;2&nbsp;(b): Scatter"><img src="assets/scatter.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Scatter
@@ -828,7 +831,7 @@ Why need activation for backward pass?
 <div id="fig-gather" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-gather-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/gather.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops">
+<a href="assets/gather.png" class="lightbox" data-gallery="fig-collective-ops" title="Figure&nbsp;2&nbsp;(c): Gather"><img src="assets/gather.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-gather-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (c) Gather
@@ -840,7 +843,7 @@ Why need activation for backward pass?
 <div id="fig-reduce" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-reduce-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/reduce.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops">
+<a href="assets/reduce.png" class="lightbox" data-gallery="fig-collective-ops" title="Figure&nbsp;2&nbsp;(d): Reduce"><img src="assets/reduce.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-reduce-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (d) Reduce
@@ -854,7 +857,7 @@ Why need activation for backward pass?
 <div id="fig-all-gather" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-all-gather-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/all-gather.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops">
+<a href="assets/all-gather.png" class="lightbox" data-gallery="fig-collective-ops" title="Figure&nbsp;2&nbsp;(e): All-gather"><img src="assets/all-gather.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-all-gather-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (e) All-gather
@@ -866,7 +869,7 @@ Why need activation for backward pass?
 <div id="fig-reduce-scatter" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-reduce-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/reduce-scatter.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops">
+<a href="assets/reduce-scatter.png" class="lightbox" data-gallery="fig-collective-ops" title="Figure&nbsp;2&nbsp;(f): Reduce-scatter"><img src="assets/reduce-scatter.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-reduce-scatter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (f) Reduce-scatter
@@ -878,7 +881,7 @@ Why need activation for backward pass?
 <div id="fig-all-reduce" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-all-reduce-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/all-reduce.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops">
+<a href="assets/all-reduce.png" class="lightbox" data-gallery="fig-collective-ops" title="Figure&nbsp;2&nbsp;(g): All-reduce"><img src="assets/all-reduce.png" class="img-fluid figure-img" data-ref-parent="fig-collective-ops"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-all-reduce-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (g) All-reduce
@@ -1572,6 +1575,38 @@ Tip
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

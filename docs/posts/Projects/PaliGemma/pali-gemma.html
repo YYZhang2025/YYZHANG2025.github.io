@@ -107,6 +107,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -431,16 +434,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -620,7 +623,7 @@ window.Quarto = {
 <div id="fig-llava-architecture" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-llava-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/llava_architecture.png.png" class="img-fluid figure-img">
+<a href="./assets/llava_architecture.png.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: The architecture of LLaVA, which PaliGemma is based on."><img src="./assets/llava_architecture.png.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-llava-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: The architecture of LLaVA, which PaliGemma is based on.
@@ -637,7 +640,7 @@ Figure&nbsp;1: The architecture of LLaVA, which PaliGemma is based on.
 <div id="fig-paligemma-architecture" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-paligemma-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/paligemma-architecture.png" class="img-fluid figure-img">
+<a href="./assets/paligemma-architecture.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: The overview of PaliGemma model architecture. It consists of a vision encoder, projector layer, and language model."><img src="./assets/paligemma-architecture.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-paligemma-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: The overview of PaliGemma model architecture. It consists of a vision encoder, projector layer, and language model.
@@ -651,7 +654,7 @@ Figure&nbsp;2: The overview of PaliGemma model architecture. It consists of a vi
 <div id="fig-vit-architecture" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-vit-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/vit.gif" class="img-fluid figure-img">
+<a href="./assets/vit.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: The architecture of Vision Transformer (ViT). Image is split into patches, which are then linearly embedded, positionally encoded, and fed into a transformer encoder."><img src="./assets/vit.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-vit-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: The architecture of Vision Transformer (ViT). Image is split into patches, which are then linearly embedded, positionally encoded, and fed into a transformer encoder.
@@ -856,7 +859,7 @@ Figure&nbsp;3: The architecture of Vision Transformer (ViT). Image is split into
 <div id="fig-clip-traning" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-clip-traning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/clip-traning.png" class="img-fluid figure-img">
+<a href="./assets/clip-traning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="./assets/clip-traning.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-clip-traning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4
@@ -1322,7 +1325,7 @@ x_{(d/2)}
 <div id="fig-paligemma-mask" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-paligemma-mask-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/paligemma-mask.png" class="img-fluid figure-img">
+<a href="./assets/paligemma-mask.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="./assets/paligemma-mask.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-paligemma-mask-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5
@@ -1365,7 +1368,7 @@ Figure&nbsp;5
 <div id="fig-lora-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-lora-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/lora-overview.png" class="img-fluid figure-img">
+<a href="./assets/lora-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: "><img src="./assets/lora-overview.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-lora-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6
@@ -1984,6 +1987,38 @@ Zhang, Biao, and Rico Sennrich. 2019. <span>“Root <span>Mean Square Layer Norm
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

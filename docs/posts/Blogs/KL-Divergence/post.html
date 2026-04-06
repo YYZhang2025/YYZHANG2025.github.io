@@ -106,6 +106,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -430,16 +433,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -789,7 +792,7 @@ D_{KL}(P || Q) = D_{KL}(f(P) || f(Q))
 <div id="fig-kl-asymmetric" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-kl-asymmetric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/KL-asymmetric.png" class="img-fluid figure-img">
+<a href="./assets/KL-asymmetric.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: As shown in the figure above, we have two probability distributions P and Q. When we compute the KL Divergence D_{KL}(P || Q), we are measuring how much information is lost when we use distribution Q to approximate distribution P. In this case, since Q is quite different from P, the KL Divergence is relatively large."><img src="./assets/KL-asymmetric.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kl-asymmetric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: As shown in the figure above, we have two probability distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>. When we compute the KL Divergence <span class="math inline">\(D_{KL}(P || Q)\)</span>, we are measuring how much information is lost when we use distribution <span class="math inline">\(Q\)</span> to approximate distribution <span class="math inline">\(P\)</span>. In this case, since <span class="math inline">\(Q\)</span> is quite different from <span class="math inline">\(P\)</span>, the KL Divergence is relatively large.
@@ -805,7 +808,7 @@ Figure&nbsp;1: As shown in the figure above, we have two probability distributio
 <div id="fig-multi-modal-gaussian-distribution" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-multi-modal-gaussian-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/multi-modal-gaussian-dist.png" class="img-fluid figure-img">
+<a href="./assets/multi-modal-gaussian-dist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Illustration of the true distribution P=\frac{1}{2} \mathcal{N}(-2, 3.0) + \frac{1}{2} \mathcal{N}(3, 0.5)."><img src="./assets/multi-modal-gaussian-dist.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-multi-modal-gaussian-distribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Illustration of the true distribution <span class="math inline">\(P=\frac{1}{2} \mathcal{N}(-2, 3.0) + \frac{1}{2} \mathcal{N}(3, 0.5)\)</span>.
@@ -848,7 +851,7 @@ D_{KL}(P || Q_{\theta}) &amp; = \mathbb{E}_{x \sim P} \left[ \log \frac{P(x)}{Q_
 <div id="fig-forward-kl-plot" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-forward-kl-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/forward-kl-plot.png" class="img-fluid figure-img">
+<a href="./assets/forward-kl-plot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Illustration of the optimization of model parameters \theta using forward KL Divergence. The blue curve represents the true distribution P, while the orange curve represents the model distribution Q_{\theta}."><img src="./assets/forward-kl-plot.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-forward-kl-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Illustration of the optimization of model parameters <span class="math inline">\(\theta\)</span> using forward KL Divergence. The blue curve represents the true distribution <span class="math inline">\(P\)</span>, while the orange curve represents the model distribution <span class="math inline">\(Q_{\theta}\)</span>.
@@ -881,7 +884,7 @@ D_{KL}(Q_{\theta} || P) &amp; = \mathbb{E}_{x \sim Q_{\theta}} \left[ \log \frac
 <div id="fig-reverse-kl-plot" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-reverse-kl-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/reverse-kl-plot.png" class="img-fluid figure-img">
+<a href="./assets/reverse-kl-plot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Illustration of the optimization of model parameters \theta using reverse KL Divergence. The blue curve represents the true distribution P, while the orange curve represents the model distribution Q_{\theta}."><img src="./assets/reverse-kl-plot.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reverse-kl-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Illustration of the optimization of model parameters <span class="math inline">\(\theta\)</span> using reverse KL Divergence. The blue curve represents the true distribution <span class="math inline">\(P\)</span>, while the orange curve represents the model distribution <span class="math inline">\(Q_{\theta}\)</span>.
@@ -894,7 +897,7 @@ Figure&nbsp;4: Illustration of the optimization of model parameters <span class=
 </div>
 <div class="note-container foldable-content">
 <p>One thing to note that, since we use gradient descent to get the optimal <span class="math inline">\(\theta\)</span>, the initalization matters. In the <a href="#fig-reverse-kl-plot" class="quarto-xref">Figure&nbsp;4</a>, we initalize the $= -2 $, but if we initalize the <span class="math inline">\(\mu = 3\)</span>, the result will be different:</p>
-<p><img src="./assets/reverse-kl-init-mu3.png" class="img-fluid"></p>
+<p><a href="./assets/reverse-kl-init-mu3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="./assets/reverse-kl-init-mu3.png" class="img-fluid"></a></p>
 </div>
 </div>
 <p>Let’s summarize the difference between forward and reverse KL Divergence:</p>
@@ -988,7 +991,7 @@ D_{KL}(P || Q) = D_{KL}(f(P) || f(Q))
 <div id="fig-two-gaussian-distributions" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-two-gaussian-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/two-gaussian-distributions.png" class="img-fluid figure-img">
+<a href="./assets/two-gaussian-distributions.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;5: Two Gaussian distributions P = \mathcal{N}(0.1, 1.5) and Q = \mathcal{N}(0, 2.2) used for KL Divergence estimation examples."><img src="./assets/two-gaussian-distributions.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-two-gaussian-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: Two Gaussian distributions <span class="math inline">\(P = \mathcal{N}(0.1, 1.5)\)</span> and <span class="math inline">\(Q = \mathcal{N}(0, 2.2)\)</span> used for KL Divergence estimation examples.
@@ -1005,7 +1008,7 @@ D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \log \frac{P(x_i)}{Q(x_i)}
 <div id="fig-naive-mc-kl" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-naive-mc-kl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/2026-02-04-14-44-29.png" class="img-fluid figure-img">
+<a href="./assets/2026-02-04-14-44-29.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;6: The example plot of naive Monte Carlo estimation of KL Divergence between two Gaussian distributions P and Q using different number of samples."><img src="./assets/2026-02-04-14-44-29.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-naive-mc-kl-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: The example plot of naive Monte Carlo estimation of KL Divergence between two Gaussian distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> using different number of samples.
@@ -1053,7 +1056,7 @@ D_{KL}(P || Q) \approx \frac{1}{2} \mathbb{E}_{x \sim P} \left[ \left(\log \frac
 <div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/2026-02-04-15-45-16.png" class="img-fluid figure-img">
+<a href="./assets/2026-02-04-15-45-16.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;7: "><img src="./assets/2026-02-04-15-45-16.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7
@@ -1081,7 +1084,7 @@ D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \left( \log \frac{P(x_i)}{Q(x_
 <p><span id="eq-kl-mc-control-variates"><span class="math display">\[
 D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \left(- \log g(x_i) -  \lambda\left(g(x_i) - 1 \right) \right)
 \tag{23}\]</span></span></p>
-<p><img src="./assets/logx_x_1.png" class="img-fluid"></p>
+<p><a href="./assets/logx_x_1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="./assets/logx_x_1.png" class="img-fluid"></a></p>
 <p>We see the <span class="math inline">\(x-1\)</span> is always greater than or equal to 0 when <span class="math inline">\(x \geq 1\)</span>, and less than or equal to 0 when <span class="math inline">\(x \leq 1\)</span>. Therefore, by choosing an appropriate <span class="math inline">\(\lambda\)</span>, we can reduce the variance of the estimator.</p>
 <p>We can take <span class="math inline">\(\lambda = 1\)</span> for simplicity, and the estimator becomes: <span class="math display">\[
 D_{KL}(P || Q) \approx \frac{1}{N} \sum_{i=1}^{N} \left( g(x_i) - 1 - g(x_i) \right)
@@ -1246,7 +1249,7 @@ D_{KL}(P || Q_\theta) \approx - \frac{1}{N} \sum_{i=1}^{N} \log Q_\theta(x_i) + 
 <div id="fig-dino" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dino-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/DINO illustration.gif" class="img-fluid figure-img">
+<a href="./assets/DINO illustration.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;8: Illustration of DINO framework. The student network learns to match the output distribution of the teacher network using KL Divergence."><img src="./assets/DINO illustration.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dino-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8: Illustration of DINO framework. The student network learns to match the output distribution of the teacher network using KL Divergence.
@@ -1832,6 +1835,38 @@ Schulman, John, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. 
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

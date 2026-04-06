@@ -105,6 +105,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -429,16 +432,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -606,7 +609,7 @@ window.Quarto = {
 <div id="fig-post-training-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-post-training-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/lec15-overview-post-training.png" class="img-fluid figure-img">
+<a href="assets/lec15-overview-post-training.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: 该图展示了 RLHF 的整体训练流程：首先由我们为给定Prompt示范高质量答案，对模型进行监督微调（SFT）；接着针对同一提示生成多条模型输出，由人对这些回答进行从好到坏的排序，用于训练一个奖励模型（Reward Model）；最后在实际训练中，模型针对新提示生成回答，奖励模型对其打分，并通过 PPO 等强化学习算法不断更新模型参数，使模型逐步倾向于产出更符合人类偏好的结果。"><img src="assets/lec15-overview-post-training.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-post-training-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: 该图展示了 RLHF 的整体训练流程：首先由我们为给定Prompt示范高质量答案，对模型进行监督微调（SFT）；接着针对同一提示生成多条模型输出，由人对这些回答进行从好到坏的排序，用于训练一个奖励模型（Reward Model）；最后在实际训练中，模型针对新提示生成回答，奖励模型对其打分，并通过 PPO 等强化学习算法不断更新模型参数，使模型逐步倾向于产出更符合人类偏好的结果。
@@ -632,7 +635,7 @@ Figure&nbsp;1: 该图展示了 RLHF 的整体训练流程：首先由我们为�
 <div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/flan-example-data.png" class="img-fluid figure-img">
+<a href="./assets/flan-example-data.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: FLAN 数据示例：把分类任务写成“指令 + 输入 + 输出”的形式"><img src="./assets/flan-example-data.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: FLAN 数据示例：把分类任务写成“指令 + 输入 + 输出”的形式
@@ -648,7 +651,7 @@ Figure&nbsp;2: FLAN 数据示例：把分类任务写成“指令 + 输入 + 输
 <div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/lec15-alpaca-example.png" class="img-fluid figure-img">
+<a href="assets/lec15-alpaca-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Alpaca 数据示例：给定指令，生成对应回答"><img src="assets/lec15-alpaca-example.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Alpaca 数据示例：给定指令，生成对应回答
@@ -681,7 +684,7 @@ Figure&nbsp;3: Alpaca 数据示例：给定指令，生成对应回答
 <div id="fig-alpaca-self-instruct" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-alpaca-self-instruct-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/lec15-self-instruct.png" class="img-fluid figure-img">
+<a href="assets/lec15-self-instruct.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Alpaca 数据生成流程示意：用强模型（text-davinci-003）基于少量人工示范，自动生成大规模的指令-回答对，用于微调基础模型（LLaMA-7B）。这种方法显著降低了高质量 SFT 数据的获取成本。Image source Self-Instruct: Aligning LM with Self Generated Instructions"><img src="assets/lec15-self-instruct.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-alpaca-self-instruct-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Alpaca 数据生成流程示意：用强模型（text-davinci-003）基于少量人工示范，自动生成大规模的指令-回答对，用于微调基础模型（LLaMA-7B）。这种方法显著降低了高质量 SFT 数据的获取成本。Image source <a href="https://github.com/yizhongw/self-instruct">Self-Instruct: Aligning LM with Self Generated Instructions</a>
@@ -699,7 +702,7 @@ Figure&nbsp;4: Alpaca 数据生成流程示意：用强模型（text-davinci-003
 <div id="fig-openassistant-conversation-tree" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-openassistant-conversation-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/OpenAssistatn-example.png" class="img-fluid figure-img">
+<a href="./assets/OpenAssistatn-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: OpenAssistant 数据集中的一个对话树示例，展示了从初始提示（prompt）到多轮交互的完整对话结构。每个节点代表一条消息，并标注了角色（prompter 或 assistant）及其对应的回复选项和偏好排序信息。"><img src="./assets/OpenAssistatn-example.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-openassistant-conversation-tree-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: OpenAssistant 数据集中的一个对话树示例，展示了从初始提示（prompt）到多轮交互的完整对话结构。每个节点代表一条消息，并标注了角色（prompter 或 assistant）及其对应的回复选项和偏好排序信息。
@@ -724,7 +727,7 @@ Figure&nbsp;5: OpenAssistant 数据集中的一个对话树示例，展示了从
 \underset{\theta}{\max} \log p_{\theta}(y | x)
 \tag{1}\]</span></span></p>
 <p>从代码来看，就是简单的几步：</p>
-<div id="7b645b25" class="cell">
+<div id="d3559eb1" class="cell">
 <details open="" class="code-fold">
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb2" data-source-line-numbers="nil" data-code-line-numbers="8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(train_steps):</span>
@@ -791,7 +794,7 @@ Figure&nbsp;5: OpenAssistant 数据集中的一个对话树示例，展示了从
 <div id="fig-mid-training-data-dist" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-mid-training-data-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/mid-training-data-dist.png" class="img-fluid figure-img">
+<a href="assets/mid-training-data-dist.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: 这张图说明很多模型会把“指令微调数据”提前混进预训练的后期（decay/mid-training），让数据配方从“纯网页预训练”（左图）逐步变成“预训练语料 + 各类SFT/高质量指令数据的混合”（右图），从而更规模化地获得指令跟随能力并减少灾难性遗忘。"><img src="assets/mid-training-data-dist.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mid-training-data-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: 这张图说明很多模型会把“指令微调数据”提前混进预训练的后期（decay/mid-training），让数据配方从“纯网页预训练”（左图）逐步变成“预训练语料 + 各类SFT/高质量指令数据的混合”（右图），从而更规模化地获得指令跟随能力并减少灾难性遗忘。
@@ -829,7 +832,7 @@ Figure&nbsp;6: 这张图说明很多模型会把“指令微调数据”提前�
 <div id="fig-gv-gap" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gv-gap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/lec15-gv-gap.png" class="img-fluid figure-img">
+<a href="assets/lec15-gv-gap.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: 图里每个 annotator 的偏好条形图显示：有人明显更偏向 Instruct Davinci summaries，而总体偏好接近 50/50，且一致性 \alpha 很低，说明偏好差异/自我不一致很明显。"><img src="assets/lec15-gv-gap.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gv-gap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: 图里每个 annotator 的偏好条形图显示：有人明显更偏向 <strong>Instruct Davinci summaries</strong>，而总体偏好接近 50/50，且一致性 <span class="math inline">\(\alpha\)</span> 很低，说明偏好差异/自我不一致很明显。
@@ -1169,7 +1172,7 @@ r_t^{\text{KL}} = -\beta\left(\log \pi_\theta(a_t|s_t)-\log \pi_{\text{ref}}(a_t
 <div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/dpo-vs-ppo.png" class="img-fluid figure-img">
+<a href="./assets/dpo-vs-ppo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8: 图中展示了 DPO 和 PPO 的对比，DPO 直接用偏好数据（chosen vs rejected）来训练策略 \pi_\theta, 对“人类更喜欢的回答”给更高概率，对“不喜欢的回答”给更低概率."><img src="./assets/dpo-vs-ppo.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8: 图中展示了 DPO 和 PPO 的对比，DPO 直接用偏好数据（chosen vs rejected）来训练策略 <span class="math inline">\(\pi_\theta\)</span>, 对“人类更喜欢的回答”给更高概率，对“不喜欢的回答”给更低概率.
@@ -1947,6 +1950,38 @@ Rafailov, Rafael, Archit Sharma, Eric Mitchell, Stefano Ermon, Christopher D. Ma
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

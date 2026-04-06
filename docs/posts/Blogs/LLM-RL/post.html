@@ -106,6 +106,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -430,16 +433,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -850,7 +853,7 @@ Table&nbsp;1: Notations in RL and LLMs
 <div id="fig-rl-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rl-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/rl-overview.png" class="img-fluid figure-img">
+<a href="./assets/rl-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: The overall framework of Reinforcement Learning. The agent interacts with the environment by taking action a_t = \pi(s_t) based on its current state s_t, receiving rewards r_t, and transitioning to new states with probability p(s_{t+1} | s_t, a_t)."><img src="./assets/rl-overview.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rl-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: The overall framework of Reinforcement Learning. The agent interacts with the environment by taking action <span class="math inline">\(a_t = \pi(s_t)\)</span> based on its current state <span class="math inline">\(s_t\)</span>, receiving rewards <span class="math inline">\(r_t\)</span>, and transitioning to new states with probability <span class="math inline">\(p(s_{t+1} | s_t, a_t)\)</span>.
@@ -996,7 +999,7 @@ Q^{\pi}(s_t, a_t) = \mathbb{E}_{s_{t+1} \sim p} \left[ r_t + \gamma V^{\pi}(s_{t
 \end{split}
 \tag{28}\]</span></span></p>
 <p>There are several challenges with off-policy policy gradient methods:</p>
-<div id="algo-reinforce" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-comment-delimiter="//" data-line-number-punc=":" data-no-end="false" data-line-number="true" data-indent-size="1.2em" data-pseudocode-number="1">
+<div id="algo-reinforce" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-line-number="true" data-line-number-punc=":" data-indent-size="1.2em" data-pseudocode-number="1" data-comment-delimiter="//" data-no-end="false">
 <div class="pseudocode">
 \begin{algorithm} \caption{REINFORCE (Monte Carlo Policy Gradient)} \begin{algorithmic} \Require Policy $\pi_\theta(a \mid s)$ with parameters $\theta$ \Require Learning rate $\alpha$ \While{not converged} \State Sample a trajectory $\tau = (s_0, a_0, r_0, \dots, s_T, a_T, r_T)$ by running $\pi_\theta$ \For{$t = 0$ \textbf{to} $T$} \State $R_t \gets \sum_{t' = t}^{T} r_{t'}$ \Comment{Reward-to-go} \State $\theta \gets \theta + \alpha \, \nabla_\theta \log \pi_\theta(a_t \mid s_t) \, R_t$ \EndFor \EndWhile \end{algorithmic} \end{algorithm}
 </div>
@@ -1050,7 +1053,7 @@ Q^{\pi}(s_t, a_t) = \mathbb{E}_{s_{t+1} \sim p} \left[ r_t + \gamma V^{\pi}(s_{t
 <div id="fig-instruct-gpt-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-instruct-gpt-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/instruct-gpt-overview.png" class="img-fluid figure-img">
+<a href="./assets/instruct-gpt-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Overview of the RLHF process used in InstructGPT. The process involves three main steps: (1) collecting human feedback on model-generated outputs, (2) training a reward model to predict human preferences, and (3) fine-tuning the LLM using reinforcement learning to optimize for the learned reward model. (We only focus on the RL part in this blog)"><img src="./assets/instruct-gpt-overview.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-instruct-gpt-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Overview of the RLHF process used in InstructGPT. The process involves three main steps: (1) collecting human feedback on model-generated outputs, (2) training a reward model to predict human preferences, and (3) fine-tuning the LLM using reinforcement learning to optimize for the learned reward model. (We only focus on the RL part in this blog)
@@ -1075,7 +1078,7 @@ Figure&nbsp;2: Overview of the RLHF process used in InstructGPT. The process inv
 <li><strong>Fine-Tuning with PPO</strong>: The LLM is then fine-tuned using the PPO algorithm, which optimizes the policy (the LLM) to maximize the expected reward as predicted by the reward model. PPO uses a clipped objective function to ensure that policy updates are not too large, maintaining stability during training.</li>
 </ol>
 <p>Here we just focus on the step 3, the PPO fine-tuning process. The PPO algorithm can be summarized as follows:</p>
-<div id="algo-ppo" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-comment-delimiter="#" data-line-number-punc=":" data-no-end="false" data-line-number="true" data-indent-size="1.2em" data-pseudocode-number="2">
+<div id="algo-ppo" class="pseudocode-container quarto-float" data-caption-prefix="Algorithm" data-line-number="true" data-line-number-punc=":" data-indent-size="1.2em" data-pseudocode-number="2" data-comment-delimiter="#" data-no-end="false">
 <div class="pseudocode">
 \begin{algorithm} \caption{Proximal Policy Optimization (PPO) for RLHF (LLMs)} \begin{algorithmic} \Require Initial policy $\pi_{\theta_{old}}$ with parameters $\theta_{old}$ \Require Reward model $R_{\phi}$ trained on human feedback \Require Reference policy $\pi_{\text{ref}}$ (e.g., SFT model) \Require Value function (critic) $V_{\psi}$ with parameters $\psi$ \Require Clipping parameter $\epsilon$, KL coefficient $\beta$ \Require Discount $\gamma$, GAE parameter $\lambda$ \Require Number of PPO epochs $K$, minibatch size $m$ \Require Learning rates $\alpha_{\theta}, \alpha_{\psi}$ \While{not converged} \State Sample a batch of prompts $\{x_i\}_{i=1}^{B}$ \State Roll out $\pi_{\theta_{old}}$ to get responses $\{y_i\}$ with token actions $\{a_{i,t}\}_{t=1}^{T_i}$ \State Compute old log-probs $\ell^{old}_{i,t} \gets \log \pi_{\theta_{old}}(a_{i,t}\mid x_i, a_{i,&lt;t})$ \State Compute ref log-probs $\ell^{ref}_{i,t} \gets \log \pi_{\text{ref}}(a_{i,t}\mid x_i, a_{i,&lt;t})$ \State Compute sequence reward $r^{RM}_i \gets R_{\phi}(x_i, y_i)$ \Comment{Define per-timestep rewards with KL penalty (token-level) + terminal reward} \For{$i = 1$ \textbf{to} $B$} \For{$t = 1$ \textbf{to} $T_i$} \State $\text{kl}_{i,t} \gets \ell^{old}_{i,t} - \ell^{ref}_{i,t}$ \State $r_{i,t} \gets -\beta \cdot \text{kl}_{i,t}$ \EndFor \State $r_{i,T_i} \gets r_{i,T_i} + r^{RM}_i$ \Comment{terminal reward added at last token} \EndFor \For{$i = 1$ \textbf{to} $B$} \Comment{Compute advantages via GAE using critic $V_{\psi}$} \State $A_{i,T_i+1} \gets 0$ \For{$t = T_i$ \textbf{down to} $1$} \State $\delta_{i,t} \gets r_{i,t} + \gamma V_{\psi}(s_{i,t+1}) - V_{\psi}(s_{i,t})$ \State $A_{i,t} \gets \delta_{i,t} + \gamma \lambda A_{i,t+1}$ \State $\hat{R}_{i,t} \gets A_{i,t} + V_{\psi}(s_{i,t})$ \Comment{return/target} \EndFor \EndFor \For{$epoch = 1$ \textbf{to} $K$} \Comment{Optimize policy and value for $K$ epochs over minibatches} \State Shuffle all token positions $(i,t)$ and split into minibatches of size $m$ \For{\textbf{each} minibatch $\mathcal{M}$} \State $\ell_{i,t} \gets \log \pi_{\theta}(a_{i,t}\mid s_{i,t}) \quad \forall (i,t)\in\mathcal{M}$ \State $\rho_{i,t} \gets \exp(\ell_{i,t} - \ell^{old}_{i,t})$ \State $\tilde{\rho}_{i,t} \gets \text{clip}(\rho_{i,t}, 1-\epsilon, 1+\epsilon)$ \State $L^{\text{clip}}(\theta) \gets -\mathbb{E}_{(i,t)\in\mathcal{M}}\left[\min(\rho_{i,t}A_{i,t}, \tilde{\rho}_{i,t}A_{i,t})\right]$ \State $L^{V}(\psi) \gets \mathbb{E}_{(i,t)\in\mathcal{M}}\left[(V_{\psi}(s_{i,t}) - \hat{R}_{i,t})^2\right]$ \State $\theta \gets \theta - \alpha_{\theta}\nabla_{\theta} L^{\text{clip}}(\theta)$ \State $\psi \gets \psi - \alpha_{\psi}\nabla_{\psi} L^{V}(\psi)$ \EndFor \EndFor \State $\theta_{old} \gets \theta$ \Comment{sync old policy for next rollout} \EndWhile \end{algorithmic} \end{algorithm}
 </div>
@@ -1089,7 +1092,7 @@ Figure&nbsp;2: Overview of the RLHF process used in InstructGPT. The process inv
 <div id="fig-dpo-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dpo-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/DPO-overview.png" class="img-fluid figure-img">
+<a href="./assets/DPO-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Overview of the Direct Preference Optimization (DPO) process. DPO directly optimizes the policy using human preference data by adjusting the model’s logits based on the preference between pairs of responses, eliminating the need for a separate reward model."><img src="./assets/DPO-overview.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dpo-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Overview of the Direct Preference Optimization (DPO) process. DPO directly optimizes the policy using human preference data by adjusting the model’s logits based on the preference between pairs of responses, eliminating the need for a separate reward model.
@@ -1766,6 +1769,38 @@ Zheng, Chujie, Shixuan Liu, Mingze Li, Xiong-Hui Chen, Bowen Yu, Chang Gao, Kai 
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

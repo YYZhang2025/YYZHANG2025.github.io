@@ -107,6 +107,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/videojs/video.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -431,16 +434,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -654,7 +657,7 @@ Note
 <div id="fig-illustration-float-represent" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-illustration-float-represent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/float-represent.png" class="img-fluid figure-img">
+<a href="./assets/float-represent.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: 浮点数的表示"><img src="./assets/float-represent.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-illustration-float-represent-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: 浮点数的表示
@@ -679,7 +682,7 @@ number = (-1)^0 \times 2^{-3} \times 1.25 = 0.15625
 <div id="fig-IEEE-754-Calculator" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-IEEE-754-Calculator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/IEEE-754-Calculator.png" class="img-fluid figure-img">
+<a href="./assets/IEEE-754-Calculator.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: 通过这个在线计算器，验证浮点数的表示方法。"><img src="./assets/IEEE-754-Calculator.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-IEEE-754-Calculator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: 通过这个<a href="https://www.h-schmidt.net/FloatConverter/IEEE754.html">在线计算器</a>，验证浮点数的表示方法。
@@ -692,7 +695,7 @@ Figure&nbsp;2: 通过这个<a href="https://www.h-schmidt.net/FloatConverter/IEE
 <div id="fig-illustration-float32" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-illustration-float32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/float32.png" class="img-fluid figure-img">
+<a href="./assets/float32.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Float32 使用32位 (4字节) 来表示一个浮点数。它由1位符号位、8位指数位和23位尾数位组成，可以表示大约7位十进制有效数字。"><img src="./assets/float32.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-illustration-float32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Float32 使用32位 (4字节) 来表示一个浮点数。它由1位符号位、8位指数位和23位尾数位组成，可以表示大约7位十进制有效数字。
@@ -706,7 +709,7 @@ Figure&nbsp;3: Float32 使用32位 (4字节) 来表示一个浮点数。它由1�
 <div id="fig-illustration-float16" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-illustration-float16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/float16.png" class="img-fluid figure-img">
+<a href="./assets/float16.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Float16 使用16位 (2字节) 来表示一个浮点数。它由1位符号位、5位指数位和10位尾数位组成，可以表示大约3位十进制有效数字。"><img src="./assets/float16.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-illustration-float16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Float16 使用16位 (2字节) 来表示一个浮点数。它由1位符号位、5位指数位和10位尾数位组成，可以表示大约3位十进制有效数字。
@@ -743,7 +746,7 @@ Tip
 <div id="fig-illustration-bfloat16" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-illustration-bfloat16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/bfloat16.png" class="img-fluid figure-img">
+<a href="./assets/bfloat16.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: BFloat16 使用16位 (2字节) 来表示一个浮点数。它由1位符号位、8位指数位和7位尾数位组成，可以表示大约3位十进制有效数字。"><img src="./assets/bfloat16.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-illustration-bfloat16-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: BFloat16 使用16位 (2字节) 来表示一个浮点数。它由1位符号位、8位指数位和7位尾数位组成，可以表示大约3位十进制有效数字。
@@ -773,7 +776,7 @@ Figure&nbsp;5: BFloat16 使用16位 (2字节) 来表示一个浮点数。它由1
 <div id="fig-illustration-fp8" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-illustration-fp8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/fp8.png" class="img-fluid figure-img">
+<a href="./assets/fp8.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: FP8 使用8位 (1字节) 来表示一个浮点数。E4M3 由1位符号位、4位指数位和3位尾数位组成；E5M2 由1位符号位、5位指数位和2位尾数位组成。"><img src="./assets/fp8.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-illustration-fp8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: FP8 使用8位 (1字节) 来表示一个浮点数。E4M3 由1位符号位、4位指数位和3位尾数位组成；E5M2 由1位符号位、5位指数位和2位尾数位组成。
@@ -851,7 +854,7 @@ Figure&nbsp;6: FP8 使用8位 (1字节) 来表示一个浮点数。E4M3 由1位�
 <div id="fig-cpu-to-gpu" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cpu-to-gpu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/cpu-to-gpu.png" class="img-fluid figure-img">
+<a href="./assets/cpu-to-gpu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: 我们将Tensor从CPU的RAM上，移动到DRAM上。"><img src="./assets/cpu-to-gpu.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cpu-to-gpu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: 我们将Tensor从CPU的RAM上，移动到DRAM上。
@@ -875,7 +878,7 @@ Figure&nbsp;7: 我们将Tensor从CPU的RAM上，移动到DRAM上。
 <div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/tensor-storage.png" class="img-fluid figure-img">
+<a href="./assets/tensor-storage.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8: "><img src="./assets/tensor-storage.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8
@@ -1055,7 +1058,7 @@ Note
 <div id="fig-pinned-memory" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-pinned-memory-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/pinned-memory.png" class="img-fluid figure-img">
+<a href="./assets/pinned-memory.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;9: 如图所示，Pinned memory 可以作为设备(Device)到主机(Host)拷贝的中转区，直接在 pinned memory 中分配主机数组，就能避免 pageable 内存与 pinned 内存之间的额外拷贝开销，从而提升数据传输效率。"><img src="./assets/pinned-memory.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pinned-memory-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9: 如图所示，Pinned memory 可以作为设备(Device)到主机(Host)拷贝的中转区，直接在 pinned memory 中分配主机数组，就能避免 pageable 内存与 pinned 内存之间的额外拷贝开销，从而提升数据传输效率。
@@ -1618,6 +1621,38 @@ Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan 
     </script>
   
 <script>videojs(video_shortcode_videojs_video1);</script>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

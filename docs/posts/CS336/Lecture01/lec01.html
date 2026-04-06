@@ -105,6 +105,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -400,16 +403,16 @@ document.addEventListener("DOMContentLoaded", function () {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -517,7 +520,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <div id="fig-course-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-course-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/course-overview.png" class="img-fluid figure-img">
+<a href="./assets/course-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: 课程的5大块内容"><img src="./assets/course-overview.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-course-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: 课程的5大块内容
@@ -546,7 +549,7 @@ Warning
 <div id="fig-tokenization-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-tokenization-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/tokenization-overview.png" class="img-fluid figure-img">
+<a href="./assets/tokenization-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Tokenization的过程示意图，主要由两个步骤组成: encode和decode。"><img src="./assets/tokenization-overview.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tokenization-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Tokenization的过程示意图，主要由两个步骤组成: <code>encode</code>和<code>decode</code>。
@@ -567,7 +570,7 @@ Figure&nbsp;2: Tokenization的过程示意图，主要由两个步骤组成: <co
 <div id="fig-tokenization-example" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-tokenization-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<p><a href="https://tiktokenizer.vercel.app/?encoder=gpt2"><img src="./assets/tokenization-example.png" class="img-fluid figure-img"></a></p>
+<p><a href="https://tiktokenizer.vercel.app/?encoder=gpt2"><span class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="./assets/tokenization-example.png" class="img-fluid figure-img"></span></a></p>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tokenization-example-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Tokenization 示例. 访问这个<a href="https://tiktokenizer.vercel.app/?encoder=gpt2">链接</a>可以在线体验不同的tokenizer的效果。
@@ -659,7 +662,7 @@ Figure&nbsp;3: Tokenization 示例. 访问这个<a href="https://tiktokenizer.ve
 <div id="fig-BPE-algorithm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-BPE-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/BPE-algorithm.png" class="img-fluid figure-img">
+<a href="./assets/BPE-algorithm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: BPE算法的示意图，展示了字符对的合并过程。"><img src="./assets/BPE-algorithm.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-BPE-algorithm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: BPE算法的示意图，展示了字符对的合并过程。
@@ -1271,6 +1274,38 @@ Sennrich, Rico, Barry Haddow, and Alexandra Birch. 2016. <span>“Neural <span>M
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

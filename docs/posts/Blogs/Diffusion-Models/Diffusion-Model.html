@@ -106,6 +106,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -430,16 +433,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -709,7 +712,7 @@ q(\mathbf{y}\mid \mathbf{x})
 <div id="fig-linear-gaussian-large-variance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-linear-gaussian-large-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/Linear-Gaussian-big.png" id="fig-linear-gaussian-large-variance" class="img-fluid figure-img">
+<a href="assets/Linear-Gaussian-big.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="assets/Linear-Gaussian-big.png" id="fig-linear-gaussian-large-variance" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-linear-gaussian-large-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1
@@ -719,7 +722,7 @@ Figure&nbsp;1
 <div id="fig-linear-gaussian-small-variance" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-linear-gaussian-small-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/Linear-Gaussian-Small.png" id="fig-linear-gaussian-small-variance" class="img-fluid figure-img">
+<a href="assets/Linear-Gaussian-Small.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="assets/Linear-Gaussian-Small.png" id="fig-linear-gaussian-small-variance" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-linear-gaussian-small-variance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2
@@ -854,7 +857,7 @@ x_{t+1} = x_t + \frac{\eta_t}{2}\left(-\frac{x_t-\mu}{\sigma^2}\right) + \sqrt{\
 <div id="fig-ld-for-gaussian-vary" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ld-for-gaussian-vary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/langevin_step_vary.gif" class="img-fluid figure-img">
+<a href="assets/langevin_step_vary.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: langevin_step_vary"><img src="assets/langevin_step_vary.gif" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ld-for-gaussian-vary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: langevin_step_vary
@@ -888,7 +891,7 @@ x_{t+1} = x_t - \eta \,\nabla f(x_t)
 <li>Noise Predictor <span class="math inline">\(\hat{\epsilon}_{\theta}\)</span></li>
 </ul>
 <p>It is ok if you don’t understand right now.</p>
-<p><img src="assets/ddpm-architecture.png" class="img-fluid"></p>
+<p><a href="assets/ddpm-architecture.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="assets/ddpm-architecture.png" class="img-fluid"></a></p>
 <section id="forward-and-backward-diffusion-process" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="forward-and-backward-diffusion-process"><span class="header-section-number">2.1</span> Forward and Backward Diffusion Process</h2>
 <p>For the diffusion process, we gradually add standard normal distribution, until it become the pure gaussian, mathematically, it can be express as:</p>
@@ -1035,15 +1038,15 @@ ELBO &amp;=   \mathbb{E}_{\mathrm{x}_{1:T} \sim Q(\mathrm{x}_{1:T} | \mathrm{x}_
 <li><span class="math inline">\(x_{0}\)</span> Predictor</li>
 <li>Noise Predictor <img src="assets/3-different-posterior-dist.png" class="img-fluid"></li>
 </ul>
-<p><img src="assets/3-different-predictor.png" class="img-fluid"></p>
+<p><a href="assets/3-different-predictor.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="assets/3-different-predictor.png" class="img-fluid"></a></p>
 <p>In practice, we can simply drop the weight term in training: and use noise predictor</p>
 <p>In this blog, we will first introduce what is the diffusion models, than we will introduce how to implement the DDPM from scratch using PyTorch. After that, we will explore the flow matching and score matching model through the ODE/SDE. By the end of the blog, I believe you will gain a comprehensive understanding of the diffusion model, and SOTA generative models.</p>
 </section>
 <section id="sampling-from-ddpm" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="sampling-from-ddpm"><span class="header-section-number">2.3</span> Sampling from DDPM</h2>
 <p>Diffusion Model</p>
-<p><img src="assets/DDPM-Training-Sampling-algs.png" class="img-fluid"></p>
-<p><img src="assets/ddpm-forward-reverse.png" class="img-fluid"></p>
+<p><a href="assets/DDPM-Training-Sampling-algs.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="assets/DDPM-Training-Sampling-algs.png" class="img-fluid"></a></p>
+<p><a href="assets/ddpm-forward-reverse.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="assets/ddpm-forward-reverse.png" class="img-fluid"></a></p>
 <p>Forward Diffusion Process: <span class="math display">\[
 q(\mathrm{x}_{t} | \mathrm{x}_{t - 1}) =\mathcal{N}(
 \mathrm{x}_{t};
@@ -1189,9 +1192,9 @@ x_{t-\Delta t} = x_t + \Delta t , s_\theta(x_t, t) + \sqrt{2\Delta t},\varepsilo
 = - \frac{x_t - \sqrt{\bar{\alpha}_t}\,\mathbb{E}[x_0 \mid x_t]}{1-\bar{\alpha}_t}
 \]</span></p>
 <p><img src="assets/Post-1.png" class="img-fluid"> <img src="assets/Post-2.png" class="img-fluid"></p>
-<p><img src="assets/Post-3.png" class="img-fluid"></p>
+<p><a href="assets/Post-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="assets/Post-3.png" class="img-fluid"></a></p>
 <p>So, this is the Noise-Conditional Score-Based Models <img src="assets/Post-5.png" class="img-fluid"></p>
-<p><img src="assets/Post-6.png" class="img-fluid"></p>
+<p><a href="assets/Post-6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="assets/Post-6.png" class="img-fluid"></a></p>
 <p>So, the solution is the Annealed Langevin Dynamics <img src="assets/Post-7.png" class="img-fluid"> At the beginning (when <span class="math inline">\(\sigma_{t}\)</span> is large), As time progresses (and <span class="math inline">\(\sigma_{t}\)</span> decreases), <img src="assets/Post-8.png" class="img-fluid"></p>
 </section>
 </section>
@@ -1204,19 +1207,19 @@ x_{t-\Delta t} = x_t + \Delta t , s_\theta(x_t, t) + \sqrt{2\Delta t},\varepsilo
 <section id="vector-field" class="level3" data-number="6.1.1">
 <h3 data-number="6.1.1" class="anchored" data-anchor-id="vector-field"><span class="header-section-number">6.1.1</span> Vector Field</h3>
 <p>Vector Field is a function that <u>assign a vector to every point in space</u>. For example: imagine a weather map, at each location, an arrow shows the wind’s direction and strength. That arrow map is a vector field.</p>
-<p><img src="assets/vector-field-weather-map.gif" class="img-fluid"></p>
+<p><a href="assets/vector-field-weather-map.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="assets/vector-field-weather-map.gif" class="img-fluid"></a></p>
 <p><span class="math display">\[
 F: \mathbb{R}^{n} \to \mathbb{R}^{n}
 \]</span></p>
 <p>And every ODE <span class="math inline">\(u\)</span> is defined by a vector field, and take in two variable <span class="math inline">\(\mathrm{x}\)</span> and <span class="math inline">\(t\)</span> <span class="math display">\[
 u: \mathbb{R}^{d} \times [0, 1] \to \mathbb{R}^{d}, \quad (x, t) \to u_{t}(x)
 \]</span> that for every time <span class="math inline">\(t\)</span> and location <span class="math inline">\(\mathrm{x}\)</span>, we get a vector <span class="math inline">\(u_{t}(\mathrm{x})  \in \mathbb{R}^{d}\)</span> that point to some <strong>direction</strong>. Image a point in the weather map, <span class="math inline">\(x\)</span> is a point in the map, and <span class="math inline">\(u(x)\)</span> tell <span class="math inline">\(x\)</span>, which direction should go next.</p>
-<p><img src="assets/Diffusion-Model-Conditional-ODE.png" class="img-fluid"></p>
-<p><img src="assets/Diffusion-Model-Conditinal-SDE.png" class="img-fluid"></p>
-<p><img src="assets/Diffusion-Model-Marginal-ODE.png" class="img-fluid"></p>
-<p><img src="assets/Diffusion-Model-Marginal-SDE.png" class="img-fluid"></p>
-<p><img src="assets/Diffusion-Model-Score.png" class="img-fluid"></p>
-<p><img src="assets/Diffusion-Model-choice-pdata.png" class="img-fluid"></p>
+<p><a href="assets/Diffusion-Model-Conditional-ODE.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="assets/Diffusion-Model-Conditional-ODE.png" class="img-fluid"></a></p>
+<p><a href="assets/Diffusion-Model-Conditinal-SDE.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="assets/Diffusion-Model-Conditinal-SDE.png" class="img-fluid"></a></p>
+<p><a href="assets/Diffusion-Model-Marginal-ODE.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="assets/Diffusion-Model-Marginal-ODE.png" class="img-fluid"></a></p>
+<p><a href="assets/Diffusion-Model-Marginal-SDE.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="assets/Diffusion-Model-Marginal-SDE.png" class="img-fluid"></a></p>
+<p><a href="assets/Diffusion-Model-Score.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="assets/Diffusion-Model-Score.png" class="img-fluid"></a></p>
+<p><a href="assets/Diffusion-Model-choice-pdata.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="assets/Diffusion-Model-choice-pdata.png" class="img-fluid"></a></p>
 <div class="callout callout-style-default callout-note callout-titled" title="Why we need $t$ in the ODE?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1232,23 +1235,23 @@ Why we need <span class="math inline">\(t\)</span> in the ODE?
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/learned_marginals_moon.gif" class="img-fluid figure-img"></p>
+<p><a href="assets/learned_marginals_moon.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="learned_marginals_norm"><img src="assets/learned_marginals_moon.gif" class="img-fluid figure-img" alt="learned_marginals_norm"></a></p>
 <figcaption>learned_marginals_norm</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/learned_marginals_norm.gif" class="img-fluid figure-img"></p>
+<p><a href="assets/learned_marginals_norm.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="learned_marginals_norm"><img src="assets/learned_marginals_norm.gif" class="img-fluid figure-img" alt="learned_marginals_norm"></a></p>
 <figcaption>learned_marginals_norm</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/learned_marginals_circle.gif" class="img-fluid figure-img"></p>
+<p><a href="assets/learned_marginals_circle.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-19" title="learned_marginals_circle"><img src="assets/learned_marginals_circle.gif" class="img-fluid figure-img" alt="learned_marginals_circle"></a></p>
 <figcaption>learned_marginals_circle</figcaption>
 </figure>
 </div>
-<p><img src="assets/Diffusion-Model-conditional-and-marginal.png" class="img-fluid"></p>
+<p><a href="assets/Diffusion-Model-conditional-and-marginal.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img src="assets/Diffusion-Model-conditional-and-marginal.png" class="img-fluid"></a></p>
 <p><img src="assets/Diffusion-Model-Marginal-VF.png" class="img-fluid"> <span class="math display">\[
 \begin{align}
 \frac{d}{dt}\mathrm{x}_{t } &amp;= u_{t}(\mathrm{x}_{t}) \\
@@ -1279,13 +1282,13 @@ W_{t + h} = W_{t} + \sqrt{ h }\epsilon_{t}, \quad \text{where} \ \epsilon_{t} \s
 <p>Euler-Maruyama Method is a numerical method.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/forward_panel_with_side_strips_full.png" class="img-fluid figure-img"></p>
+<p><a href="assets/forward_panel_with_side_strips_full.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21" title="forward_panel_with_side_strips_full"><img src="assets/forward_panel_with_side_strips_full.png" class="img-fluid figure-img" alt="forward_panel_with_side_strips_full"></a></p>
 <figcaption>forward_panel_with_side_strips_full</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/reverse_panel_with_side_strips_full.png" class="img-fluid figure-img"></p>
+<p><a href="assets/reverse_panel_with_side_strips_full.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22" title="reverse_panel_with_side_strips_full"><img src="assets/reverse_panel_with_side_strips_full.png" class="img-fluid figure-img" alt="reverse_panel_with_side_strips_full"></a></p>
 <figcaption>reverse_panel_with_side_strips_full</figcaption>
 </figure>
 </div>
@@ -1356,22 +1359,22 @@ p_t(x|z)\, p_{\text{data}}(z)\, dz\, dx\, dt \\
 \mathcal{L}_{CFM} = \mathbb{E}_{t \sim \text{Unif},\, z \sim p_{\text{data}},\, x \sim p_t(\cdot|z)}\left[\|u^\theta_t(x_t)-u_{t}^{\text{target}}(\mathrm{x}_{t} | \mathrm{z})\|^2   \right]
 \]</span></p>
 <p>From there, we get the Flow Matching. This is just a simple regression problem with respect to the vector field. Now, let’s see how to derive the score matching from the SDE ## Conditional Score Function &amp; Marginal Score Function</p>
-<p><img src="assets/Diffusion-Model-Langevin-Samples.png" class="img-fluid"></p>
+<p><a href="assets/Diffusion-Model-Langevin-Samples.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23"><img src="assets/Diffusion-Model-Langevin-Samples.png" class="img-fluid"></a></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/samples_evolution.gif" class="img-fluid figure-img"></p>
+<p><a href="assets/samples_evolution.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-24" title="samples_evolution"><img src="assets/samples_evolution.gif" class="img-fluid figure-img" alt="samples_evolution"></a></p>
 <figcaption>samples_evolution</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/density_evolution.gif" class="img-fluid figure-img"></p>
+<p><a href="assets/density_evolution.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-25" title="density_evolution"><img src="assets/density_evolution.gif" class="img-fluid figure-img" alt="density_evolution"></a></p>
 <figcaption>density_evolution</figcaption>
 </figure>
 </div>
-<p><img src="assets/Diffusion-Model-Browian.png" class="img-fluid"></p>
-<p><img src="assets/Diffusion-Model-Browain-vary-sigma.png" class="img-fluid"></p>
-<p><img src="assets/Diffusion-Model-Browain.png" class="img-fluid"></p>
+<p><a href="assets/Diffusion-Model-Browian.png" class="lightbox" data-gallery="quarto-lightbox-gallery-26"><img src="assets/Diffusion-Model-Browian.png" class="img-fluid"></a></p>
+<p><a href="assets/Diffusion-Model-Browain-vary-sigma.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27"><img src="assets/Diffusion-Model-Browain-vary-sigma.png" class="img-fluid"></a></p>
+<p><a href="assets/Diffusion-Model-Browain.png" class="lightbox" data-gallery="quarto-lightbox-gallery-28"><img src="assets/Diffusion-Model-Browain.png" class="img-fluid"></a></p>
 </section>
 <section id="mean-flow" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="mean-flow"><span class="header-section-number">6.3</span> Mean Flow</h2>
@@ -1384,7 +1387,7 @@ p_t(x|z)\, p_{\text{data}}(z)\, dz\, dx\, dt \\
 <section id="u-net" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="u-net"><span class="header-section-number">7.1</span> U-Net</h2>
 <p>U-Net: Convolutional Networks for Biomedical Image Segmentation</p>
-<p><img src="assets/U-net.png" class="img-fluid"></p>
+<p><a href="assets/U-net.png" class="lightbox" data-gallery="quarto-lightbox-gallery-29"><img src="assets/U-net.png" class="img-fluid"></a></p>
 <div class="callout-tldr" title="**Takeaway 1**">
 <ul>
 <li>Summarize the most important point of this section in 1–2 sentences.<br>
@@ -1403,11 +1406,11 @@ p_t(x|z)\, p_{\text{data}}(z)\, dz\, dx\, dt \\
 <section id="control-net" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="control-net"><span class="header-section-number">7.2</span> Control Net</h2>
 <p>Adding Conditional Control to Text-to-Image Diffusion Models</p>
-<p><img src="assets/control-net.png" class="img-fluid"></p>
+<p><a href="assets/control-net.png" class="lightbox" data-gallery="quarto-lightbox-gallery-30"><img src="assets/control-net.png" class="img-fluid"></a></p>
 </section>
 <section id="diffusion-transformer-dit" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="diffusion-transformer-dit"><span class="header-section-number">7.3</span> Diffusion Transformer (DiT)</h2>
-<p><img src="assets/DiT.png" class="img-fluid"></p>
+<p><a href="assets/DiT.png" class="lightbox" data-gallery="quarto-lightbox-gallery-31"><img src="assets/DiT.png" class="img-fluid"></a></p>
 </section>
 </section>
 <section id="applications" class="level1" data-number="8">
@@ -1423,7 +1426,7 @@ p_t(x|z)\, p_{\text{data}}(z)\, dz\, dx\, dt \\
 </section>
 <section id="stable-diffusion" class="level3" data-number="8.1.3">
 <h3 data-number="8.1.3" class="anchored" data-anchor-id="stable-diffusion"><span class="header-section-number">8.1.3</span> Stable Diffusion</h3>
-<p><img src="assets/stable-diffusion.png" class="img-fluid"></p>
+<p><a href="assets/stable-diffusion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-32"><img src="assets/stable-diffusion.png" class="img-fluid"></a></p>
 </section>
 </section>
 <section id="text-video-generation" class="level2" data-number="8.2">
@@ -1974,6 +1977,38 @@ Song, Yang, Jascha Sohl-Dickstein, Diederik P. Kingma, Abhishek Kumar, Stefano E
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

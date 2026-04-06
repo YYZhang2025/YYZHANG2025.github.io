@@ -70,6 +70,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -394,16 +397,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -612,7 +615,7 @@ window.Quarto = {
 <div id="fig-scaling-law-kaplan" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-scaling-law-kaplan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/scaling-law-kaplan.png" class="img-fluid figure-img">
+<a href="./assets/scaling-law-kaplan.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: 随着Compute， Dataset，Parameter的增加，模型的性能（Loss）在不断下降，并且这种下降是有规律可循的。"><img src="./assets/scaling-law-kaplan.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scaling-law-kaplan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: 随着Compute， Dataset，Parameter的增加，模型的性能（Loss）在不断下降，并且这种下降是有规律可循的。
@@ -626,7 +629,7 @@ Figure&nbsp;1: 随着Compute， Dataset，Parameter的增加，模型的性能�
 <div id="fig-data-scaling-law.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-data-scaling-law.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/data-scaling-law.png" class="img-fluid figure-img">
+<a href="./assets/data-scaling-law.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Data Scaling Law 是一条 Monotonic， Logistic-Like curve，随着Data Size的增加，模型的性能（Loss）在不断下降，并且这种下降是有规律可循的。"><img src="./assets/data-scaling-law.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-data-scaling-law.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Data Scaling Law 是一条 Monotonic， Logistic-Like curve，随着Data Size的增加，模型的性能（Loss）在不断下降，并且这种下降是有规律可循的。
@@ -684,7 +687,7 @@ y = Cx^\alpha
 <div id="fig-scaling-law-intriguing.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-scaling-law-intriguing.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/scaling-law-intriguing.png" class="img-fluid figure-img">
+<a href="./assets/scaling-law-intriguing.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: 不同的数据类型（比如文本，图像，音频等）会有不同的Scaling Law的参数。"><img src="./assets/scaling-law-intriguing.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scaling-law-intriguing.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: 不同的数据类型（比如文本，图像，音频等）会有不同的Scaling Law的参数。
@@ -703,7 +706,7 @@ Error \approx \frac{1}{\sqrt{N}} + n^{-\frac{1}{4}}
 <div id="fig-curse-of-dimensionality.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-curse-of-dimensionality.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/curse-of-dimensionality.png" class="img-fluid figure-img">
+<a href="./assets/curse-of-dimensionality.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="./assets/curse-of-dimensionality.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-curse-of-dimensionality.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4
@@ -719,7 +722,7 @@ Figure&nbsp;4
 <div id="fig-dis-shift-scaling-law.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dis-shift-scaling-law.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/dis-shift-scaling-law.png" class="img-fluid figure-img">
+<a href="./assets/dis-shift-scaling-law.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="./assets/dis-shift-scaling-law.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-dis-shift-scaling-law.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5
@@ -731,7 +734,7 @@ Figure&nbsp;5
 <div id="fig-scaling-law-datarepetition.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-scaling-law-datarepetition.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/scaling-law-datarepetition.png" class="img-fluid figure-img">
+<a href="./assets/scaling-law-datarepetition.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: "><img src="./assets/scaling-law-datarepetition.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-scaling-law-datarepetition.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6
@@ -746,7 +749,7 @@ D' = U_D + U_DR^{*}_D(1 - e^{\frac{-R_D}{R^{*}_D}})
 <div id="fig-data-selection-data-repetition.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-data-selection-data-repetition.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/data-selection-data-repetition.png" class="img-fluid figure-img">
+<a href="./assets/data-selection-data-repetition.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: "><img src="./assets/data-selection-data-repetition.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-data-selection-data-repetition.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7
@@ -770,7 +773,7 @@ Figure&nbsp;7
 <div id="fig-transformer-lstm.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-transformer-lstm.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/transformer-lstm.png" class="img-fluid figure-img">
+<a href="./assets/transformer-lstm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8: "><img src="./assets/transformer-lstm.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-transformer-lstm.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;8
@@ -785,7 +788,7 @@ Figure&nbsp;8
 <div id="fig-optimizer-choice.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-optimizer-choice.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/optimizer-choice.png" class="img-fluid figure-img">
+<a href="./assets/optimizer-choice.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;9: "><img src="./assets/optimizer-choice.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-optimizer-choice.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;9
@@ -800,7 +803,7 @@ Figure&nbsp;9
 <div id="fig-depth-width.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-depth-width.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/depth-width.png" class="img-fluid figure-img">
+<a href="./assets/depth-width.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;10: "><img src="./assets/depth-width.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-depth-width.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;10
@@ -816,7 +819,7 @@ Figure&nbsp;10
 <div id="fig-depth-width-embedding.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-depth-width-embedding.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/depth-width-embedding.png" class="img-fluid figure-img">
+<a href="./assets/depth-width-embedding.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;11: "><img src="./assets/depth-width-embedding.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-depth-width-embedding.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11
@@ -828,7 +831,7 @@ Figure&nbsp;11
 <div id="fig-aspect-ratio.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-aspect-ratio.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/aspect-ratio.png" class="img-fluid figure-img">
+<a href="./assets/aspect-ratio.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;12: "><img src="./assets/aspect-ratio.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-aspect-ratio.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;12
@@ -843,7 +846,7 @@ Figure&nbsp;12
 <div id="fig-batch-size-pre-trained-model.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-batch-size-pre-trained-model.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/batch-size-pre-trained-model.png" class="img-fluid figure-img">
+<a href="./assets/batch-size-pre-trained-model.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;13: "><img src="./assets/batch-size-pre-trained-model.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-batch-size-pre-trained-model.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;13
@@ -873,7 +876,7 @@ Error = [m^{-\alpha} + n^{-1}]^{\beta}
 <div id="fig-joit-data-model.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-joit-data-model.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/joit-data-model.png" class="img-fluid figure-img">
+<a href="./assets/joit-data-model.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Figure&nbsp;14: "><img src="./assets/joit-data-model.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-joit-data-model.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;14
@@ -897,7 +900,7 @@ Figure&nbsp;14
 <div id="fig-chinchilla-training-curve-envelope.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chinchilla-training-curve-envelope.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/chinchilla-training-curve-envelope.png" class="img-fluid figure-img">
+<a href="./assets/chinchilla-training-curve-envelope.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" title="Figure&nbsp;15: (Image Source [@TrainingComputeOptimalLarge2022hoffmann])"><img src="./assets/chinchilla-training-curve-envelope.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-chinchilla-training-curve-envelope.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;15: (Image Source <span class="citation" data-cites="TrainingComputeOptimalLarge2022hoffmann">(<a href="#ref-TrainingComputeOptimalLarge2022hoffmann" role="doc-biblioref">Hoffmann et al. 2022</a>)</span>)
@@ -919,7 +922,7 @@ C \propto N \cdot D
 <div id="fig-chinchilla-isoFlop-curve.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chinchilla-isoFlop-curve.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/chinchilla-isoFlop-curve.png" class="img-fluid figure-img">
+<a href="./assets/chinchilla-isoFlop-curve.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;16: "><img src="./assets/chinchilla-isoFlop-curve.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chinchilla-isoFlop-curve.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;16
@@ -936,7 +939,7 @@ Figure&nbsp;16
 <div id="fig-chinchilla-joint-fit.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chinchilla-joint-fit.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/chinchilla-joint-fit.png" class="img-fluid figure-img">
+<a href="./assets/chinchilla-joint-fit.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Figure&nbsp;17: "><img src="./assets/chinchilla-joint-fit.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chinchilla-joint-fit.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;17
@@ -947,7 +950,7 @@ Figure&nbsp;17
 <div id="fig-chinchilla-correction.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chinchilla-correction.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/chinchilla-correction.png" class="img-fluid figure-img">
+<a href="./assets/chinchilla-correction.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="Figure&nbsp;18: "><img src="./assets/chinchilla-correction.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chinchilla-correction.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;18
@@ -986,7 +989,7 @@ Figure&nbsp;18
 <div id="fig-diffusion-flop.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-diffusion-flop.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/diffusion-flop.png" class="img-fluid figure-img">
+<a href="./assets/diffusion-flop.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19" title="Figure&nbsp;19: "><img src="./assets/diffusion-flop.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-diffusion-flop.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;19
@@ -1018,7 +1021,7 @@ Figure&nbsp;19
 <div id="fig-cerebras-gpt-pre-training-flops.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cerebras-gpt-pre-training-flops.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/cerebras-gpt-pre-training-flops.png" class="img-fluid figure-img">
+<a href="./assets/cerebras-gpt-pre-training-flops.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20" title="Figure&nbsp;20: "><img src="./assets/cerebras-gpt-pre-training-flops.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-cerebras-gpt-pre-training-flops.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;20
@@ -1029,7 +1032,7 @@ Figure&nbsp;20
 <div id="fig-cerebras-gpt-training-flops.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cerebras-gpt-training-flops.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/cerebras-gpt-training-flops.png" class="img-fluid figure-img">
+<a href="./assets/cerebras-gpt-training-flops.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21" title="Figure&nbsp;21: "><img src="./assets/cerebras-gpt-training-flops.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-cerebras-gpt-training-flops.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;21
@@ -1584,6 +1587,38 @@ Kaplan, Jared, Sam McCandlish, Tom Henighan, Tom B. Brown, Benjamin Chess, Rewon
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

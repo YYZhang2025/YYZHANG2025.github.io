@@ -71,6 +71,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -395,16 +398,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -680,7 +683,7 @@ p(x) = \frac{e^{-E(x)}}{Z}
 <div id="fig-contrastive-learning" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-contrastive-learning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/Contrastive-Learning-Paragdim.png" class="img-fluid figure-img">
+<a href="./assets/Contrastive-Learning-Paragdim.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Illustration of Contrastive Learning"><img src="./assets/Contrastive-Learning-Paragdim.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-contrastive-learning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Illustration of Contrastive Learning
@@ -697,7 +700,7 @@ Figure&nbsp;1: Illustration of Contrastive Learning
 <div id="fig-clip" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-clip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/clip.png" class="img-fluid figure-img" style="width:100.0%">
+<a href="./assets/clip.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: The illustration of CLIP model"><img src="./assets/clip.png" class="img-fluid figure-img" style="width:100.0%"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-clip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: The illustration of CLIP model
@@ -761,7 +764,7 @@ Figure&nbsp;2: The illustration of CLIP model
 <div id="fig-curriculum-learning" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-curriculum-learning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/curriculum-learning.png" class="img-fluid figure-img">
+<a href="./assets/curriculum-learning.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: the illustration of Curriculum Learning"><img src="./assets/curriculum-learning.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-curriculum-learning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: the illustration of Curriculum Learning
@@ -800,7 +803,7 @@ Figure&nbsp;3: the illustration of Curriculum Learning
 <section id="nested-learning" class="level1" data-number="17">
 <h1 data-number="17"><span class="header-section-number">17</span> Nested Learning</h1>
 <p>Recently, Google Research proposed a new learning paradigm called <strong>Nested Learning</strong> <span class="citation" data-cites="NestedLearningIllusionbehrouz">(<a href="#ref-NestedLearningIllusionbehrouz" role="doc-biblioref">Behrouz et al., n.d.</a>)</span>, which aims to improve the efficiency and effectiveness of training deep learning models by organizing the learning process into nested levels. Each level focuses on different aspects of the data and model, allowing for a more structured and hierarchical approach to learning. This method has shown promising results in various applications, including natural language processing and computer vision.</p>
-<p><img src="./assets/nested-learning-pardigm.png" class="img-fluid"></p>
+<p><a href="./assets/nested-learning-pardigm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="./assets/nested-learning-pardigm.png" class="img-fluid"></a></p>
 </section>
 <section id="summary" class="level1" data-number="18">
 <h1 data-number="18"><span class="header-section-number">18</span> Summary</h1>
@@ -1322,6 +1325,38 @@ Radford, Alec, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, and Ilya Sutsk
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

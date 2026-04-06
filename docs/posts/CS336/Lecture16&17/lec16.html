@@ -105,6 +105,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -429,16 +432,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -660,7 +663,7 @@ window.Quarto = {
 <div id="fig-rlvf" class="quarto-float quarto-figure quarto-figure-center anchored" style="object-fit:contain;">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-rlvf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/rlvf-overview.png" style="object-fit:contain;;width:100.0%" data-ref-parent="fig-rlhf-vs-rlvr" height="200" class="figure-img">
+<a href="./assets/rlvf-overview.png" class="lightbox" data-gallery="fig-rlhf-vs-rlvr" title="Figure&nbsp;1&nbsp;(a): Overview of RLVR"><img src="./assets/rlvf-overview.png" style="object-fit:contain;;width:100.0%" data-ref-parent="fig-rlhf-vs-rlvr" height="200" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-rlvf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Overview of RLVR
@@ -672,7 +675,7 @@ window.Quarto = {
 <div id="fig-rlhf" class="quarto-float quarto-figure quarto-figure-center anchored" style="object-fit:contain;">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-rlhf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/rlhf-overview.png" style="object-fit:contain;;width:100.0%" data-ref-parent="fig-rlhf-vs-rlvr" height="200" class="figure-img">
+<a href="./assets/rlhf-overview.png" class="lightbox" data-gallery="fig-rlhf-vs-rlvr" title="Figure&nbsp;1&nbsp;(b): Overview of RLHF"><img src="./assets/rlhf-overview.png" style="object-fit:contain;;width:100.0%" data-ref-parent="fig-rlhf-vs-rlvr" height="200" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-rlhf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (b) Overview of RLHF
@@ -700,7 +703,7 @@ Figure&nbsp;1: RLVR vs RLHF， RLHF 依赖人工偏好数据，而 RLVR 则利�
 <div id="fig-grpo-ppo" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-grpo-ppo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/lec16-grpo-ppo.png" class="img-fluid figure-img">
+<a href="assets/lec16-grpo-ppo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;2: 对比了 PPO 与 GRPO 的训练流程差异：  上半部分（PPO）中，策略模型在生成单个输出 o 后，分别通过Reward Model与Reference Model得到Reward r 与 KL 约束，并依赖Value Model预测的状态价值 v，再用 GAE 计算优势 A 来更新策略；  下半部分（GRPO）中，策略模型对同一提示 q 一次性采样一组输出 \{o_1,\dots,o_G\}，仅依赖冻结的Reward Model与Reference Model得到组内奖励 \{r_1, r_2, \dots, r_G\}，通过组内相对计算（Group Computation）直接构造优势 \{A_1, A_2, \dots, A_G\}，从而不再需要价值模型与 GAE，以更简化的结构完成带 KL 约束的策略更新。"><img src="assets/lec16-grpo-ppo.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-grpo-ppo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: 对比了 PPO 与 GRPO 的训练流程差异： <br>上半部分（PPO）中，策略模型在生成单个输出 <span class="math inline">\(o\)</span> 后，分别通过<em>Reward Model</em>与<em>Reference Model</em>得到Reward <span class="math inline">\(r\)</span> 与 KL 约束，并依赖<em>Value Model</em>预测的状态价值 <span class="math inline">\(v\)</span>，再用 GAE 计算优势 A 来更新策略； <br>下半部分（GRPO）中，策略模型对同一提示 <span class="math inline">\(q\)</span> 一次性采样一组输出 <span class="math inline">\(\{o_1,\dots,o_G\}\)</span>，仅依赖冻结的Reward Model与Reference Model得到组内奖励 <span class="math inline">\(\{r_1, r_2, \dots, r_G\}\)</span>，通过组内相对计算（Group Computation）直接构造优势 <span class="math inline">\(\{A_1, A_2, \dots, A_G\}\)</span>，从而不再需要价值模型与 GAE，以更简化的结构完成带 KL 约束的策略更新。
@@ -798,7 +801,7 @@ Figure&nbsp;2: 对比了 PPO 与 GRPO 的训练流程差异： <br>上半部分�
 <section id="grpo-algorithm" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="grpo-algorithm"><span class="header-section-number">3.3</span> GRPO Algorithm</h2>
 <p>了解了GRPO的Objective Function (<a href="#eq-grpo" class="quarto-xref">Equation&nbsp;1</a>) 和Advantage计算(<a href="#eq-grpo-advantage" class="quarto-xref">Equation&nbsp;3</a>) 后，我们来看一下GRPO的整体算法流程：</p>
-<div id="algo-grpo" class="pseudocode-container quarto-float" data-line-number-punc=":" data-pseudocode-number="1" data-no-end="false" data-line-number="true" data-comment-delimiter="#" data-indent-size="1.2em" data-caption-prefix="Algorithm">
+<div id="algo-grpo" class="pseudocode-container quarto-float" data-line-number="true" data-indent-size="1.2em" data-no-end="false" data-line-number-punc=":" data-pseudocode-number="1" data-caption-prefix="Algorithm" data-comment-delimiter="#">
 <div class="pseudocode">
 \begin{algorithm} \caption{Iterative Group Relative Policy Optimization (GRPO)}\begin{algorithmic} \Require initial policy model $\pi_{\theta_{\text{init}}}$; reward model(s) $r_\phi$; task prompts $\mathcal{D}$; hyperparameters $\epsilon, \beta, \mu$; group size $G$; iterations $I$; steps $M$ \Ensure trained policy $\pi_\theta$ \State $\pi_\theta \gets \pi_{\theta_{\text{init}}}$ \For{$\text{iteration} = 1, \ldots, I$} \State $\pi_{\text{ref}} \gets \pi_\theta$ \Comment{reference (anchor) policy} \For{$\text{step} = 1, \ldots, M$} \State Sample a batch $\mathcal{D}_b$ from $\mathcal{D}$ \State $\pi_{\theta_{\text{old}}} \gets \pi_\theta$ \Comment{snapshot old policy} \ForAll{$q \in \mathcal{D}_b$} \State Sample $G$ outputs $\{o_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot \mid q)$ \State Compute rewards $\{r_i\}_{i=1}^{G}$ by $r_i \gets r_\phi(q, o_i)$ \State Compute group-relative advantages $\{\hat{A}_{i,t}\}$ for each token $t$ in each $o_i$ \EndFor \For{$\text{GRPO-iter} = 1, \ldots, \mu$} \State Update $\pi_\theta$ by maximizing the GRPO objective \EndFor \State Update $r_\phi$ via continuous training using a replay mechanism \EndFor \EndFor \State \Return $\pi_\theta$ \end{algorithmic} \end{algorithm}
 </div>
@@ -827,7 +830,7 @@ Figure&nbsp;2: 对比了 PPO 与 GRPO 的训练流程差异： <br>上半部分�
 <div id="fig-bias-grpo-overview" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bias-grpo-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/bias-grpo-overview.png" class="img-fluid figure-img">
+<a href="./assets/bias-grpo-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;3: 该图展示了 GRPO 的两类优化偏置：对同一问题 q 采样多条回答 o_i 后，GRPO 的“有效 advantage”满足 a_{i,t}=\frac{1}{\mathrm{std}(R)}\cdot \frac{\tilde A_{i,t}}{|o_i|}，其中 \tilde A_{i,t}=R(q,o_i)-\mathrm{mean}(R) 是组内中心化（相对）奖励；由于额外除以组内奖励标准差 \mathrm{std}(R) 与回答长度 |o_i|，训练会对不同问题与不同长度回答施加不同权重：蓝色圆点大小表示 1/\mathrm{std}(R) 对“问题级”更新强度的缩放，橙色箭头长度表示 \tilde A_{i,t}/|o_i| 对“回答级”更新幅度的缩放（箭头向上为正 advantage、向下为负），从而使优化偏向某些题目与某些长度的输出。"><img src="./assets/bias-grpo-overview.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bias-grpo-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: 该图展示了 GRPO 的两类优化偏置：对同一问题 <span class="math inline">\(q\)</span> 采样多条回答 <span class="math inline">\(o_i\)</span> 后，GRPO 的“有效 advantage”满足 <span class="math inline">\(a_{i,t}=\frac{1}{\mathrm{std}(R)}\cdot \frac{\tilde A_{i,t}}{|o_i|}\)</span>，其中 <span class="math inline">\(\tilde A_{i,t}=R(q,o_i)-\mathrm{mean}(R)\)</span> 是组内中心化（相对）奖励；由于额外除以组内奖励标准差 <span class="math inline">\(\mathrm{std}(R)\)</span> 与回答长度 <span class="math inline">\(|o_i|\)</span>，训练会对<strong>不同问题与不同长度回答施加不同权重</strong>：<tag style="color:blue">蓝色圆点大小表示 <span class="math inline">\(1/\mathrm{std}(R)\)</span> 对“问题级”更新强度的缩放</tag>，<tag style="color:orange">橙色箭头长度表示 <span class="math inline">\(\tilde A_{i,t}/|o_i|\)</span> 对“回答级”更新幅度的缩放（箭头向上为正 advantage、向下为负），从而使优化偏向某些题目与某些长度的输出</tag>。
@@ -914,7 +917,7 @@ Figure&nbsp;3: 该图展示了 GRPO 的两类优化偏置：对同一问题 <spa
 <div id="fig-deepseek-r1-length-bias" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-deepseek-r1-length-bias-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/deepseek-r1-length-bias.png" class="img-fluid figure-img">
+<a href="./assets/deepseek-r1-length-bias.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;4: 该张图展示了 DeepSeek-R1-Zero 在训练过程中，模型平均每条回答长度随训练步数的变化。横轴是训练步数（Steps），纵轴是平均每条 response 的长度（token 数）。可以看到，随着训练推进，模型输出长度呈持续上升趋势：从训练初期的几百到上千 token，逐步增长到后期的一万甚至接近两万 token，同时波动幅度也明显扩大。这一现象直观反映了 R1-Zero 在仅使用可验证奖励进行强化学习时，模型倾向于生成越来越长的推理链（CoT），体现出典型的“长度膨胀”行为，而不一定对应更高的实际解题效率。"><img src="./assets/deepseek-r1-length-bias.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deepseek-r1-length-bias-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: 该张图展示了 DeepSeek-R1-Zero 在训练过程中，模型平均每条回答长度随训练步数的变化。横轴是训练步数（Steps），纵轴是平均每条 response 的长度（token 数）。可以看到，随着训练推进，模型输出长度呈持续上升趋势：从训练初期的几百到上千 token，逐步增长到后期的一万甚至接近两万 token，同时波动幅度也明显扩大。这一现象直观反映了 R1-Zero 在仅使用可验证奖励进行强化学习时，模型倾向于生成越来越长的推理链（CoT），体现出典型的“长度膨胀”行为，而不一定对应更高的实际解题效率。
@@ -984,7 +987,7 @@ Figure&nbsp;4: 该张图展示了 DeepSeek-R1-Zero 在训练过程中，模型�
 <div id="fig-drgrpo-length-norm" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-drgrpo-length-norm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/drgrpo-length-norm.png" class="img-fluid figure-img">
+<a href="./assets/drgrpo-length-norm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;5: 主要看图中红色部分，Dr.GRPO在错误回答时，不再按长度归一化，这样长回答不会被“惩罚更轻”，从而避免了模型学会写长错误回答的现象。"><img src="./assets/drgrpo-length-norm.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-drgrpo-length-norm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: 主要看图中红色部分，Dr.GRPO在错误回答时，不再按长度归一化，这样<strong>长回答不会被“惩罚更轻”</strong>，从而避免了模型学会写长错误回答的现象。
@@ -1011,7 +1014,7 @@ Figure&nbsp;5: 主要看图中红色部分，Dr.GRPO在错误回答时，不再�
 <div id="fig-deepseek-r1-pipeline" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-deepseek-r1-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/deepseek-R1-training-pipeline.png" class="img-fluid figure-img">
+<a href="./assets/deepseek-R1-training-pipeline.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;6: "><img src="./assets/deepseek-R1-training-pipeline.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-deepseek-r1-pipeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6
@@ -1037,7 +1040,7 @@ Figure&nbsp;6
 <div id="fig-" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/Aha-moment-dr-grpo.png" class="img-fluid figure-img">
+<a href="./assets/Aha-moment-dr-grpo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;7: shows two examples to demonstrate that the DeepSeek-V3-Base model already exhibits the so-called “aha moment” even before the RL-tuning (Image Source [@UnderstandingR1ZeroLikeTraining2025liu])"><img src="./assets/Aha-moment-dr-grpo.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig--caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: shows two examples to demonstrate that the DeepSeek-V3-Base model already exhibits the so-called “aha moment” even before the RL-tuning (Image Source <span class="citation" data-cites="UnderstandingR1ZeroLikeTraining2025liu">(<a href="#ref-UnderstandingR1ZeroLikeTraining2025liu" role="doc-biblioref">Liu et al. 2025</a>)</span>)
@@ -1310,7 +1313,7 @@ prompt: [3, 6, 0, 2] | pred: [1, 1, 3, 7] | gt: [0, 2, 3, 6] | sort reward: 1 | 
 <section id="in-the-end" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> In the End</h1>
 <p>最后，感谢你一路坚持到这里！创作不易，如果你觉得内容对你有帮助，欢迎请我<strong>喝杯咖啡/支付宝红包</strong>，支持我继续创作！你们的支持是我最大的动力！ :) <br></p>
-<p><img src="../../../style/AliPay.jpg" class="img-fluid" width="300"></p>
+<p><a href="../../../style/AliPay.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="../../../style/AliPay.jpg" class="img-fluid" width="300"></a></p>
 
 
 
@@ -1822,6 +1825,38 @@ Shao, Zhihong, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Z
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

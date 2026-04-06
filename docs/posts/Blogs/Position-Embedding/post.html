@@ -106,6 +106,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -430,16 +433,16 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -593,7 +596,7 @@ A \cos (\omega t + \phi)
 <div id="fig-sin-cos-value-of-diff-omega" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sin-cos-value-of-diff-omega-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="assets/Position-Embedding-sin-cos-omega.png" id="fig-sin-cos-value-of-diff-omega" class="img-fluid figure-img">
+<a href="assets/Position-Embedding-sin-cos-omega.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="assets/Position-Embedding-sin-cos-omega.png" id="fig-sin-cos-value-of-diff-omega" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-sin-cos-value-of-diff-omega-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1
@@ -646,7 +649,7 @@ x\sin\theta + y\cos\theta
 \]</span> One of the good property of rotation matrix is that it is the <strong><a href="https://en.wikipedia.org/wiki/Orthogonal_matrix">orthonormal matrix</a></strong>(<span class="math inline">\(R^{\top}R = I\)</span>), which means the length of original vector will not change after rotate: <span class="math display">\[
 \|Rv\|^2 = (Rv)^\top (Rv) = v^\top (R^\top R) v = v^\top I v = v^\top v = \|v\|^2
 \]</span></p>
-<p><img src="assets/Position-Embedding-rotate-matrix.png" class="img-fluid"></p>
+<p><a href="assets/Position-Embedding-rotate-matrix.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="assets/Position-Embedding-rotate-matrix.png" class="img-fluid"></a></p>
 <p>On the other hand, a rotation in 2D can also be represented by multiplication be a complex number on the unit circle. The Euler’s Formula is define as: <span class="math display">\[
 e^{i\theta} = \cos \theta + i \sin \theta
 \]</span> This complex number has: - magnitude 1 - angle <span class="math inline">\(\theta\)</span> By multiplying a complex number by <span class="math inline">\(e^{i \theta}\)</span> produces a rotation. For a point <span class="math inline">\((x, y)\)</span>, it can be represented as a complex number <span class="math inline">\(z = x + iy\)</span>. Rotate it by <span class="math inline">\(\theta\)</span> radians by multiplying <span class="math inline">\(z = e^{i\theta} z\)</span>. Expand using Euler’s formula, we get: <span class="math display">\[
@@ -1512,6 +1515,38 @@ Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan 
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

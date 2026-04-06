@@ -725,7 +725,7 @@
     "href": "posts/Blogs/blogs_index.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "What is Context Engineering?\n\n\n\n\n\n\n\n\n2026-03-20\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Architecture and Training Stages\n\n\n在这篇文章中，我们将深入探讨不同的LLM的模型架构。随着LLM的不断发展，模型的架构也在不断的演变，我们将从最初的Transformer架构展开，逐步的介绍不同Component的演变和改进。在最后，我们还会介绍除了Transformer架构之外的其他架构，比如Mamba架构。除了模型架构之外，我们还会介绍不同的Optimizer，Loss Functions和Regularization techniques在LLM训练中的应用。\n\n\n\n\n\n2026-03-20\n\n\n\n\n\n\n\n\n\n\n\n\nReinforcement Learning in LLM\n\n\nIn this blog, we explore how reinforcement learning (RL) is used to post-train large language models (LLMs) to improve performance, robustness, and alignment. We begin by formulating LLM generation as an RL problem (states, actions, policies, rewards), then introduce widely used RL-from-preference methods (RLHF), focusing on algorithms such as PPO and DPO. Next, we cover RLVR (Reinforcement Learning with Verifiable Rewards) and discuss representative approaches including GRPO, GSPO, DAPO, SAPO, and the current state-of-the-art GDPO. We then survey practical training frameworks for LLM-RL, such as Verl, and conclude with key challenges, open problems, and future research directions in RL for language models.\n\n\n\n\n\n2026-01-25\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of entropy, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its mathematical formulation, how to approximate use three different Monte Carlo Estimator, and finally its applications in various fields such as classification, generative modeling, knowledge disllation, reinforcement learning, and large language model. By the end of this post, you will have a solid understanding of KL Divergence and how to apply it in your own projects.\n\n\n\n\n\n2025-12-02\n\n\n\n\n\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\n\n\n\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as in the Image and Video to unify the position encoding.\n\n\n\n\n\n2025-11-25\n\n\n\n\n\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic differential equations and how this connects to Flow Matching. We then highlight key model variants such as Stable Diffusion and Movie Gen, discussing their architectures and applications. Finally, we broaden the scope to examine how diffusion models are being adapted beyond image generation, including diffusion policies in reinforcement learning and their emerging role in large language models (LLMs).\n\n\n\n\n\n2025-10-15\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.\n\n\n\n\n\n2025-10-01\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Part1: Transformer Architecture & Training Stages\n\n\nThis is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer architectures that power LLMs. Such as position encoding, attention mechanisms, mixture of experts, and more. In the end, we will explore some SOTA LLM architectures, and study how to they combine those techniques to achieve better performance. We are going from bottom to up: Position Encoding, Attention Mechanism, Feed Forward Network & Mixture of Experts, Output Layer. Besides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. With the architecture in place, we will going through different training stages, such as pre-training stage, mid-training stage, and post-training training stage. By the end of this blog, you will have a comprehensive understanding of the transformer architecture and how to get your own LLM up and running.\n\n\n\n\n\n2025-09-25\n\n\n\n\n\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "What is Context Engineering & Harness Engineering?\n\n\n随着OpenClaw在2026年初的爆火，Context Engineering和Harness Engineering的概念重新被人们所关注。Context Engineering主要是指在使用LLM的过程中，如何有效地管理和利用上下文信息，以提高模型的性能和效率。而Harness Engineering则是指在使用LLM的过程中，如何设计和构建一个高效的系统架构，以支持模型的训练和部署。在这篇文章中，我们将深入探讨Context Engineering和Harness Engineering的概念，以及它们在LLM应用中的重要性和实践方法。\n\n\n\n\n\n2026-03-21\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Series Part1: Architecture and Training Stages\n\n\n在这篇文章中，我们将深入探讨不同的LLM的模型架构。随着LLM的不断发展，模型的架构也在不断的演变，我们将从最初的Transformer架构展开，逐步的介绍不同Component的演变和改进。在最后，我们还会介绍除了Transformer架构之外的其他架构，比如Mamba, RetNet等。最后我们还会介绍不同的Optimizer，Loss Functions: Cross-Entropy Loss，Diffusion Loss等，以及Regularization techniques在LLM训练中的应用。\n\n\n\n\n\n2026-03-20\n\n\nYuyang Zhang\n\n\nWords: 3280\n\n\nRead Time: 13 mins\n\n\n\n\n\n\n\n\n\n\n\n\nReinforcement Learning in LLM\n\n\nIn this blog, we explore how reinforcement learning (RL) is used to post-train large language models (LLMs) to improve performance, robustness, and alignment. We begin by formulating LLM generation as an RL problem (states, actions, policies, rewards), then introduce widely used RL-from-preference…\n\n\n\n\n\n2026-01-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of entropy, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its…\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as…\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic…\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own…\n\n\n\n\n\n2025-10-01\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html",
@@ -905,42 +905,42 @@
   {
     "objectID": "posts/Blogs/Context-Engineering/post.html",
     "href": "posts/Blogs/Context-Engineering/post.html",
-    "title": "What is Context Engineering?",
+    "title": "What is Context Engineering & Harness Engineering?",
     "section": "",
     "text": "1 What in the Context?\n  2 Context Engineering\n  \n  2.1 Select\n  2.2 Compress\n  \n  2.2.1 Tool Use Compression\n  \n  2.3 Context Collapse\n  2.4 When to Compress?\n  2.5 Multi-Agent\n  \n  3 Agentic Context Engineering"
   },
   {
     "objectID": "posts/Blogs/Context-Engineering/post.html#select",
     "href": "posts/Blogs/Context-Engineering/post.html#select",
-    "title": "What is Context Engineering?",
+    "title": "What is Context Engineering & Harness Engineering?",
     "section": "2.1 Select",
     "text": "2.1 Select\n别把所有的东西都放进去，挑选出最相关的东西放进去。比如在RAG的场景中，检索到的资料可能有很多，但是并不是所有的资料都是相关的，我们需要通过一些方法来挑选出最相关的资料放入Context中。\n除了RAG，我们还可以通过用LLM的方法，挑选我们需要的关键字，将其传入搜索引擎，并且用一个小的LLM来挑选出最相关的资料放入Context中，这个过程叫做Reranking\nTool RAG 当我们工具越来越多的时候 ，模型需要调用的工具也会越来越多，这时候我们就需要通过一些方法来挑选出最相关的工具放入Context中，或者说在模型生成输出的过程中，模型需要调用哪些工具，这些工具的信息也应该包含在Context中。\nMemory RAG 当我们有一个长时间的对话或者交互的时候，模型需要记住之前的对话内容或者交互内容，这些内容可以帮助模型理解当前的对话上下文，这些内容也应该包含在Context中。\n按需加在 用AI动态输出自己需要什么工具"
   },
   {
     "objectID": "posts/Blogs/Context-Engineering/post.html#compress",
     "href": "posts/Blogs/Context-Engineering/post.html#compress",
-    "title": "What is Context Engineering?",
+    "title": "What is Context Engineering & Harness Engineering?",
     "section": "2.2 Compress",
     "text": "2.2 Compress\n也叫Compact 将久远的对话内容或者交互内容进行压缩，提取出其中的关键信息，放入Context中，这样可以减少Context的长度，同时又能保留重要的信息。 什么时候压缩？ - 当每多少回合对话或者交互之后，就进行一次压缩，提取出其中的关键信息，放入Context中。 - 固定一段时间就压缩\n\n2.2.1 Tool Use Compression\nComputer Use的过程中时非常琐碎的内容，可能会有很多的细节信息，这些信息对于模型来说可能并不是非常重要，我们可以通过一些方法来压缩这些信息，提取出其中的关键信息，放入Context中，这样可以减少Context的长度，同时又能保留重要的信息.\n也可以把其放入RAG或者Log.txt\n\n\n\n\n\n\nFigure 2\n\n\n\n两个可以结合起来使用\n\n\n\n\n\n\nFigure 3\n\n\n\n可以把Tool的输出存在Log.txt 中"
   },
   {
     "objectID": "posts/Blogs/Context-Engineering/post.html#context-collapse",
     "href": "posts/Blogs/Context-Engineering/post.html#context-collapse",
-    "title": "What is Context Engineering?",
+    "title": "What is Context Engineering & Harness Engineering?",
     "section": "2.3 Context Collapse",
     "text": "2.3 Context Collapse\n在压缩的时候，可能会损失一些重要的信息。\n当然，可以专门训练一个LLM来进行模型的压缩"
   },
   {
     "objectID": "posts/Blogs/Context-Engineering/post.html#when-to-compress",
     "href": "posts/Blogs/Context-Engineering/post.html#when-to-compress",
-    "title": "What is Context Engineering?",
+    "title": "What is Context Engineering & Harness Engineering?",
     "section": "2.4 When to Compress?",
     "text": "2.4 When to Compress?\n模型很难自己压缩，所以我们需要通过一些方法来判断什么时候需要压缩，什么时候不需要压缩，这样可以减少Context的长度，同时又能保留重要的信息。"
   },
   {
     "objectID": "posts/Blogs/Context-Engineering/post.html#multi-agent",
     "href": "posts/Blogs/Context-Engineering/post.html#multi-agent",
-    "title": "What is Context Engineering?",
+    "title": "What is Context Engineering & Harness Engineering?",
     "section": "2.5 Multi-Agent",
     "text": "2.5 Multi-Agent\n当我们有多个Agent的时候，每个Agent可能需要不同的Context信息，这时候我们就需要通过一些方法来挑选出每个Agent需要的Context信息，放入Context中，这样可以减少Context的长度，同时又能保留重要的信息。\n比如Sub-agent，我们可以丢弃sub-agent的对话内容，只保存sub-agent的关键信息，返回Main Agent当中，这样可以减少Context的长度，同时又能保留重要的信息。\n\n\n\n\n\n\nFigure 4"
   },
@@ -1048,216 +1048,6 @@
     "title": "From Entropy to KL Divergence: A Comprehensive Guide",
     "section": "5.5 LLM Post-Training with KL Divergence",
     "text": "5.5 LLM Post-Training with KL Divergence\nIn the context of Large Language Models (LLMs), KL Divergence plays a crucial role in post-training techniques such as Reinforcement Learning from Human Feedback (RLHF) and Reinforcement Learning from Veriable Rewawrd(RLVR). The goal of RLHF is to fine-tune a pre-trained language model to better align with human preferences while the goal of RLVR is to align the model with a reward model that predicts human-like rewards. In both cases, KL Divergence is used to ensure that the fine-tuned model does not deviate too much from the original pre-trained model. Let’s view those process in the framework of KL Divergence minimization. Before the RL step, there is a Supervised Fine-Tuning (SFT) step, where the model is fine-tuned on a dataset of human-labeled examples. This step can be viewed as minimizing the KL Divergence between the model’s output distribution and the human-labeled distribution:\n\\[\n\\mathcal{L}_{\\text{SFT}} = D_{KL}(P_{\\text{human}} || P_{\\text{model}})\n\\]\nWe can view SFT as the forward KL minimization, where we use the human-labeled distribution as the “true” distribution and the model’s output distribution as the “approximate” distribution. This encourages the model to produce outputs that are similar to the human-labeled examples.\nIn the RL step, the loss can be viewed as reverse KL minimization:\n\\[\n\\mathcal{L}_{\\text{RLHF}} = D_{KL}(P_{\\text{model}} || P_{\\text{ref}})\n\\]\nTwo differet are mode-covering vs mode-seeking.\nBesides the RL part in the LLM post-training, KL Divergence also use to distill knowledge from a large model (teacher) to a smaller model (student) to speed up inference and reduce computational cost."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "",
-    "text": "1 The overview of transformer model\n  2 Position Encoding\n  \n  2.1 Learned Position Encoding\n  2.2 Absolute Position Encoding\n  2.3 Relative Position Encoding\n  2.4 RoPE (Rotary Position Embedding)\n  2.5 ALIBI\n  2.6 Extend to longer context\n  \n  2.6.1 Linear Position Interpolation\n  2.6.2 NTK-Aware Position Interpolation\n  2.6.3 YaRN\n  \n  \n  3 Normalization\n  \n  3.1 Layer Normalization vs. RMS Normalization\n  3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n  3.3 QK Norm\n  \n  4 Attention Mechanism\n  \n  4.1 Multi Headed Attention\n  \n  4.1.1 Time Complexity of Scaled Dot-Product Attention\n  \n  4.2 Grouped Query Attention / Multi Query Attention\n  4.3 Sparse Attention\n  \n  4.3.1 Sliding window attention\n  4.3.2 Dilated Attention\n  \n  4.4 Multi Latent Attention\n  4.5 Flash Attention\n  \n  4.5.1 Flash Attention V1 vs. V2 vs. V3\n  \n  4.6 Native Sparse Attention\n  4.7 Attention Sink\n  \n  5 Activations\n  \n  5.1 Swish\n  5.2 Gated Linear Unit (GLU)\n  \n  6 Feed Forward Network & Mixture of Experts\n  \n  6.1 Multi Layer Perceptron (MLP)\n  6.2 Gated Linear Unit (GLU)\n  6.3 Mixture of Experts (MoE)\n  \n  7 Model Initialization\n  \n  7.1 Weight Initialization\n  7.2 Layer Initialization\n  \n  8 Case Study\n  \n  8.1 LLaMA\n  8.2 Qwen\n  8.3 DeepSeek\n  8.4 GPT-Oss\n  \n  9 Other Architectures\n  \n  9.1 Diffusion Language Models\n  9.2 State Space Model (SSM)\n  \n  10 Conclusion\nThis is the part 1 of the LLM series, architecture. In this blog, we will going through different transformer based lm architectures that power LLMs. Such as position encoding, attention mechanisms, mixture of experts, and more. We will also explore different LM architectures such as Mamba, and the training process of these architectures. We are going from bottom to up:\nBesides that, we will also explore different normalization techniques, such as Layer Normalization and RMS Normalization, and the different position of the normalization layers within the architecture. Then, we will going through the training process and how to effectively train these architectures."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#learned-position-encoding",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#learned-position-encoding",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "2.1 Learned Position Encoding",
-    "text": "2.1 Learned Position Encoding\nIn the absolute position encoding, we put our position information into fixed sinusoidal functions. It is hand-crafted for specific tasks and does not adapt to the data. So, is it possible to learn position encodings from the data itself? It is possible, and this leads us to the concept of learned position encodings. The learned position encodings are typically implemented as additional trainable parameters in the model. Instead of using fixed sinusoidal functions, the model learns to generate position embeddings that are optimized for the specific task and dataset.\n\n\nShow the code\nimport torch\nimport torch.nn as nn\n\nclass LearnedPositionalEncoding(nn.Module):\n    def __init__(self, max_len, d_model):\n        super().__init__()\n\n        self.position_embeddings = nn.Embedding(max_len, d_model)\n\n    def forward(self, x):\n        seq_length = x.size(1)\n        # (1, seq_length)\n        positions = torch.arange(0, seq_length, device=x.device).unsqueeze(0)\n        return x + self.position_embeddings(positions)\n\n\nThis method is used in such as Vision Transformers (Dosovitskiy et al. 2021)."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#absolute-position-encoding",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#absolute-position-encoding",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "2.2 Absolute Position Encoding",
-    "text": "2.2 Absolute Position Encoding\nAs used in the (Vaswani et al. 2023), absolute position encoding assigns a unique position embedding to each position in the input sequence, regardless of the content of the tokens. One common approach is to use a fixed sinusoidal function to generate the position embeddings. For example: for each position \\(pos\\), the position embedding \\(PE(pos)\\) can be defined as:\n\\[\n\\begin{aligned}\n\\text{PE}(pos, 2i) &= \\sin\\!\\left(pos \\times \\frac{1}{10,000^{2i/d_{\\text{model}}}}\\right) \\\\\n\\text{PE}(pos, 2i+1) &= \\cos\\!\\left(pos \\times \\frac{1}{10,000^{2i/d_{\\text{model}}}}\\right)\n\\end{aligned}\n\\tag{1}\\]\nwhere\n\n\\(d_{\\text{model}}\\) is the dimensionality of the embeddings.\n\\(i\\) is the index of the embedding dimension. The sin function is applied to the even indices \\(2i\\), while the cos function is applied to the odd indices \\(2i+1\\).\n\nWe can illustrate the encoding as following:\n\n\n\n\n\n\n\n\n\n\n\n\n(a) Display of the position with different sequence lengths\n\n\n\n\n\n\n\n\n\n\n\n(b) Display of the position with different d_model\n\n\n\n\n\n\n\nFigure 2: Illustration of Absolute Position Encoding\n\n\n\n\nThere are several properties can be read from the Figure 2 and Equation 1:\n\nPeriodicity: The sine and cosine functions used in the position encoding have a periodic nature, which allows the model to easily learn to attend to relative positions. This is evident in Figure 2 (a), where the position encodings exhibit similar patterns for different sequence lengths.\nDimensionality: The choice of \\(d_{\\text{model}}\\) affects the granularity of the position encodings. As shown in Figure 2 (b), increasing the dimensionality results in more fine-grained position encodings, which can help the model capture more subtle positional information.\nThe low-dimension part of the dmodel is change more frequently than the high-dimension part, allowing the model to adapt more easily to different input lengths.\n\n\n\nShow the code\nimport torch \nimport torch.nn as nn \n\nclass AbsolutePositionalEncoding(nn.Module):\n    def __init__(self, d_model, max_len=5000):\n        super().__init__()\n\n        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)  \n        div_term = torch.exp(\n            torch.arange(0, d_model, 2).float() \n            * \n            (-torch.log(torch.tensor(10000.0)) / d_model)\n        )\n\n        pe = torch.zeros(max_len, d_model)\n        pe[:, 0::2] = torch.sin(position * div_term)\n        pe[:, 1::2] = torch.cos(position * div_term)\n        # (1, max_len, d_model): Expand the batch dimension\n        pe = pe.unsqueeze(0)\n        self.register_buffer('pe', pe)\n\n    def forward(self, x):\n        position_encoding = self.pe[:, :x.size(1), :]\n        x = x + position_encoding\n        return x\n\n\n\nWe chose this function because we hypothesized it would allow the model to easily learn to attend by relative positions, since for any fixed offset \\(k\\), \\(PE_{pos+k}\\) can be represented as a linear function of \\(PE_{pos}\\).  Attention Is All You Need \n\nHow to understand this sentence. Let’s first redefine the position encoding. \\[\n\\begin{aligned}\n\\mathrm{PE}(pos,2i) &= \\sin\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big), \\\\\n\\mathrm{PE}(pos,2i+1) &= \\cos\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big).\n\\end{aligned}\n\\] where \\(\\alpha_i = 10,000^{2i/d_{\\text{model}}}\\). And we consider \\((2i, 2i+1)\\) as one pair. Now, consider the same pair at position \\(pos + k\\). We can write the position encoding as:\n\\[\n\\begin{align}\n\\mathrm{PE}(pos+k,2i)\n&= \\sin\\!\\Big(\\tfrac{pos+k}{\\alpha_i}\\Big)\n    = \\sin\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big)\\cos\\!\\Big(\\tfrac{k}{\\alpha_i}\\Big)\n    + \\cos\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big)\\sin\\!\\Big(\\tfrac{k}{\\alpha_i}\\Big) \\\\\n\\mathrm{PE}(pos+k,2i+1)\n&= \\cos\\!\\Big(\\tfrac{pos+k}{\\alpha_i}\\Big)\n    =\\cos\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big)\\cos\\!\\Big(\\tfrac{k}{\\alpha_i}\\Big)\n    - \\sin\\!\\Big(\\tfrac{pos}{\\alpha_i}\\Big)\\sin\\!\\Big(\\tfrac{k}{\\alpha_i}\\Big)\n\\end{align}\n\\tag{2}\\]\n\n\nAngle addition formulas: \\[\n\\begin{align*}\n&\\sin(a+b) = \\sin(a)\\cos(b) + \\cos(a)\\sin(b) \\\\\n&\\cos(a+b) = \\cos(a)\\cos(b) - \\sin(a)\\sin(b)\n\\end{align*}\n\\]\nWrite this as vector form:\n\\[\n\\mathbf{p}_{pos}^{(i)} =\n\\begin{bmatrix}\n\\sin(pos/\\alpha_i) \\\\\n\\cos(pos/\\alpha_i)\n\\end{bmatrix}\n\\]\nThen \\(\\mathbf{p}_{pos+k}^{(i)}\\) equal to: \\[\n\\mathbf{p}_{pos+k}^{(i)} =\n\\underbrace{\n\\begin{bmatrix}\n\\cos(\\tfrac{k}{\\alpha_i}) & \\ \\ \\sin(\\tfrac{k}{\\alpha_i}) \\\\\n-\\sin(\\tfrac{k}{\\alpha_i}) & \\ \\ \\cos(\\tfrac{k}{\\alpha_i})\n\\end{bmatrix}\n}_{\\displaystyle R_i(k)}\n\\ \\mathbf{p}_{pos}^{(i)}\n\\]\nNotice that \\(R_i(k)\\) is known as rotation matrix which only depends on the relative position \\(k\\) and not on the absolute position \\(pos\\). This is the key insight that allows the model to generalize to different positions.\nStacking all pairs, \\[\n\\mathrm{PE}(pos+k) =\n\\underbrace{\n    \\begin{pmatrix}\n\\cos\\!\\big(\\tfrac{k}{\\alpha_1}\\big) & \\sin\\!\\big(\\tfrac{k}{\\alpha_1}\\big) & 0 & 0 & \\cdots & 0 & 0 \\\\\n-\\sin\\!\\big(\\tfrac{k}{\\alpha_1}\\big) & \\ \\cos\\!\\big(\\tfrac{k}{\\alpha_1}\\big) & 0 & 0 & \\cdots & 0 & 0 \\\\\n0 & 0 & \\cos\\!\\big(\\tfrac{k}{\\alpha_2}\\big) &\\sin\\!\\big(\\tfrac{k}{\\alpha_2}\\big) & \\cdots & 0 & 0 \\\\\n0 & 0 &  -\\sin\\!\\big(\\tfrac{k}{\\alpha_2}\\big) & \\ \\cos\\!\\big(\\tfrac{k}{\\alpha_2}\\big) & \\cdots & 0 & 0 \\\\\n\\vdots & \\vdots & \\vdots & \\vdots & \\ddots & \\vdots & \\vdots \\\\\n0 & 0 & 0 & 0 & \\cdots & \\cos\\!\\big(\\tfrac{k}{\\alpha_{d/2}}\\big) & \\sin\\!\\big(\\tfrac{k}{\\alpha_{d/2}}\\big) \\\\\n0 & 0 & 0 & 0 & \\cdots & -\\sin\\!\\big(\\tfrac{k}{\\alpha_{d/2}}\\big) & \\ \\cos\\!\\big(\\tfrac{k}{\\alpha_{d/2}}\\big)\n\\end{pmatrix}\n}_{R(k)}\n\\cdot\n\\underbrace{\n    \\begin{pmatrix}\n\\sin(\\tfrac{k}{\\alpha_1}) \\\\\n\\cos(\\tfrac{k}{\\alpha_1}) \\\\\n\\sin(\\tfrac{k}{\\alpha_2}) \\\\\n\\cos(\\tfrac{k}{\\alpha_2}) \\\\\n\\vdots \\\\\n\\sin(\\tfrac{k}{\\alpha_{d/2}}) \\\\\n\\cos(\\tfrac{k}{\\alpha_{d/2}})\n\\end{pmatrix}\n}_{\\mathrm{PE}(pos)}\n\\]\nwhere \\(R(k)\\) is block-diagonal with those \\(2\\times2\\) rotations, \\(R(k)\\) depends on \\(k\\) but not on \\(pos\\) → a linear map of \\(\\mathrm{PE}(pos)\\)."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#relative-position-encoding",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#relative-position-encoding",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "2.3 Relative Position Encoding",
-    "text": "2.3 Relative Position Encoding\nRelative Position Encoding, first proposed in Transformer-XL (Dai et al. 2019), then adaptive in different language model.\n\\[\nA_{i,j} =\n\\underbrace{Q_i^\\top K_j}_{\\text{content-based addressing}}\n+\n\\underbrace{Q_i^\\top R_{i-j}}_{\\text{content-dependent positional bias}}\n+\n\\underbrace{u^\\top K_j}_{\\text{global content bias}}\n+\n\\underbrace{v^\\top R_{i-j}}_{\\text{global positional bias}}\n\\]\nwhere:\n\n\\(Q_i \\in \\mathbb{R}^d\\): query vector at position \\(i\\)\n\n\\(K_j \\in \\mathbb{R}^d\\): key vector at position \\(j\\)\n\n\\(R_{i-j} \\in \\mathbb{R}^d\\): embedding of the relative distance \\((i-j)\\)\n\n\\(u, v \\in \\mathbb{R}^d\\): learnable global bias vectors\n\n\\(A_{i,j}\\): unnormalized attention score between position \\(i\\) and \\(j\\)\n\nimport torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass RelPositionalEncoding(nn.Module):\n    def __init__(self, d_model, max_len=5000):\n        super().__init__()\n        self.d_model = d_model\n\n        # relative positions: range [-max_len, max_len]\n        range_len = max_len * 2 + 1\n        self.rel_emb = nn.Embedding(range_len, d_model)\n\n        # trainable biases u, v (Transformer-XL)\n        self.u = nn.Parameter(torch.Tensor(d_model))\n        self.v = nn.Parameter(torch.Tensor(d_model))\n\n    def forward(self, q, k, seq_len):\n        B, H, L, Dh = q.size()\n\n        # (L, L): relative position indices\n        pos_idx = torch.arange(L, dtype=torch.long, device=q.device)\n        rel_idx = pos_idx[None, :] - pos_idx[:, None]  # i-j\n        rel_idx = rel_idx + seq_len  # shift to [0, 2*max_len]\n        rel_pos_emb = self.rel_emb(rel_idx)  # (L, L, d_model)\n\n        # compute QK^T (content-based)\n        content_score = torch.matmul(q, k.transpose(-2, -1))  # (B, H, L, L)\n\n        # project queries with R\n        rel_q = q + self.v.view(1, 1, 1, -1)  # add bias v\n        rel_score = torch.einsum('bhld,lrd-&gt;bhlr', rel_q, rel_pos_emb)\n\n        # add global content bias (u)\n        content_bias = torch.einsum('d,bhjd-&gt;bhj', self.u, k).unsqueeze(2)\n\n        # total score\n        logits = content_score + rel_score + content_bias\n        return logits / (Dh ** 0.5)  # scale as in attention"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#rope-rotary-position-embedding",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#rope-rotary-position-embedding",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "2.4 RoPE (Rotary Position Embedding)",
-    "text": "2.4 RoPE (Rotary Position Embedding)\nSo far we have see the absolute position encoding and relative position encoding. However, there is an problem with absolute position encoding. For example, for two sentence:\n\nEvery Day I will go to gym\nI will go to gym every day\n\nThe absolute position encoding is totally different from two sentences, even though they have the same words and means. On the other hand, the problem of the relative position encoding is that it does not capture the absolute position information, which is crucial for understanding the meaning of the sentences for some task such as text summarization.\nRoPE (Su et al. 2023) is a method combine those two. The vector rotated certain degree according to the absolute position in the sentence. On the other hand, it relative position information is preserved. According to Equation 2, the relative position is not related to the position.\n\n\n\n\n\n\nFigure 3: Illustration of RoPE\n\n\n\n\\[\nR_{\\Theta,m}^{d} \\mathbf{x}\n=\n\\begin{pmatrix}\nx_1\\\\\nx_2\\\\\nx_3\\\\\nx_4\\\\\n\\vdots\\\\\nx_{d-1}\\\\\nx_d\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\cos(m\\theta_{1})\\\\\n\\cos(m\\theta_{1})\\\\\n\\cos(m\\theta_{2})\\\\\n\\cos(m\\theta_{2})\\\\\n\\vdots\\\\\n\\cos\\!\\big(m\\theta_{d/2}\\big)\\\\\n\\cos\\!\\big(m\\theta_{d/2}\\big)\n\\end{pmatrix}\n+\n\\begin{pmatrix}\n- x_2\\\\\nx_1\\\\\n- x_4\\\\\nx_3\\\\\n\\vdots\\\\\n- x_d\\\\\nx_{d-1}\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\sin(m\\theta_{1})\\\\\n\\sin(m\\theta_{1})\\\\\n\\sin(m\\theta_{2})\\\\\n\\sin(m\\theta_{2})\\\\\n\\vdots\\\\\n\\sin\\!\\big(m\\theta_{d/2}\\big)\\\\\n\\sin\\!\\big(m\\theta_{d/2}\\big)\n\\end{pmatrix}\n\\tag{3}\\]\nwhere\n\\[\n\\theta_{i,d} = \\frac{1}{10,000^{2(i - 1) / d}} ,\\quad i \\in [1, 2, \\dots, d / 2 ]\n\\]\nAs we can see, to implement the RoPE in code, we can:\n\nConstruct cos and sin matrices for the given input dimensions and maximum position.\nApply the rotation to the input embeddings using the constructed matrices.\n\n\n\nShow the code\nclass RotaryEmbedding(nn.Module):\n    def __init__(self, head_dim, max_position_embedding, base):\n        super().__init__()\n\n        self.head_dim = head_dim\n        self.max_position_embedding = max_position_embedding\n        self.base = base \n\n        # (head_dim // 2)\n        inv_freq = 1.0 / (base ** (torch.arange(0, head_dim, 2).float() / head_dim))\n        self.register_buffer(\"inv_freq\", inv_freq)\n\n    def forward(self, x, position_ids, seq_len = None ):\n\n        # (head_dim // 2) =&gt; (1, head_dim // 2, 1) =&gt; (B, head_dim // 2, 1)\n        inv_freq_expanded = self.inv_freq[None, : , None].expand(x.size(0), -1, 1)\n\n        # (B, L)  =&gt; (B, 1, L)\n        position_ids_expanded = position_ids[:, None, :]\n\n        # Outer product \n        freqs = (inv_freq_expanded @ position_ids_expanded).transpose(1, 2)\n        emb = torch.cat((freqs, freqs), dim=-1)  # (B, L, d_model)\n\n        cos = emb.cos()\n        sin = emb.sin()\n    \n        return cos, sin \n\ndef rotate_half(x):\n    \"\"\"\n    Rotate the last dimension of x by half.\n    \"\"\"\n    x1 = x[..., : x.shape[-1] // 2] \n    x2 = x[..., x.shape[-1] // 2 :] \n    return torch.cat((-x2, x1), dim=-1)\n\n\ndef apply_rotary_pos_emb(q, k, cos, sin, unsqueeze_dim=1):\n    # (B, L, head_dim) =&gt; (B, 1, L, head_dim)\n    cos = cos.unsqueeze(unsqueeze_dim) # Add the head dimension\n    sin = sin.unsqueeze(unsqueeze_dim) # Add the head dimension\n\n    q_embed = (q * cos) + (rotate_half(q) * sin)\n    k_embed = (k * cos) + (rotate_half(k) * sin)\n    return q_embed, k_embed\n\n\n\n\n\n\n\n\nNote\n\n\n\nOne thing always bother me about this implementation is that the rotate_half function actually swap pair of the last dimension as mentioned in the paper. For example:\n&gt;&gt;&gt; x = torch.arange(0, 24).reshape(3, 8) # (B, D)\n&gt;&gt;&gt; x\ntensor([[ 0,  1,  2,  3,  4,  5,  6,  7],\n        [ 8,  9, 10, 11, 12, 13, 14, 15],\n        [16, 17, 18, 19, 20, 21, 22, 23]])\n&gt;&gt;&gt; x1 = rotate_half(x)\n&gt;&gt;&gt; x1\ntensor([[ -4,  -5,  -6,  -7,   0,   1,   2,   3],\n        [-12, -13, -14, -15,   8,   9,  10,  11],\n        [-20, -21, -22, -23,  16,  17,  18,  19]])\nThe above function just change the x to [-x_{d//2}, ..., -x_{d}, x_0, ..., x_{d//2-1}]\nCheck this linkif you are interested.\nIf this really bother you, you can just implement like this:\ndef rotate_half_v2(x):\n    # Assume x is (B, D)\n    x = x.reshape(x.shape[0], -1, 2)\n    x1, x2 = x.unbind(dim = -1)\n    x = torch.stack((-x2, x1), dim = -1)\n    return x.reshape(x.shape[0], -1)\nwhich is same as they mentioned in the paper.\n&gt;&gt;&gt; x\ntensor([[ 0,  1,  2,  3,  4,  5,  6,  7],\n        [ 8,  9, 10, 11, 12, 13, 14, 15],\n        [16, 17, 18, 19, 20, 21, 22, 23]])\n&gt;&gt;&gt; x2 = rotate_half_v2(x)\n&gt;&gt;&gt; x2\ntensor([[ -1,   0,  -3,   2,  -5,   4,  -7,   6],\n        [ -9,   8, -11,  10, -13,  12, -15,  14],\n        [-17,  16, -19,  18, -21,  20, -23,  22]])\nOr\ndef rotate_half_v3(x: torch.Tensor) -&gt; torch.Tensor:\n    y = torch.empty_like(x)\n    y[..., ::2] = -x[..., 1::2]  # even positions get -odd\n    y[..., 1::2] =  x[..., ::2]  # odd positions get even\n    return y\n\n&gt;&gt;&gt; x3 = rotate_half_v3(x)\n&gt;&gt;&gt; x3\ntensor([[ -1,   0,  -3,   2,  -5,   4,  -7,   6],\n        [ -9,   8, -11,  10, -13,  12, -15,  14],\n        [-17,  16, -19,  18, -21,  20, -23,  22]])\n\n\nThe other implementation of the RoPE is reply on the complex number. We can treat 2D vector \\((x, y)\\) as a complex number \\(z = x + iy\\), and the rotation can be done by multiplying with a complex exponential:\n\\[\nz' = z \\cdot e^{i\\theta} = (x + iy) \\cdot (\\cos \\theta + i \\sin \\theta) = (x \\cos \\theta - y \\sin \\theta) + i (x \\sin \\theta + y \\cos \\theta)\n\\]\nCode adapted from LLaMA model\n\n\nShow the code\nimport torch\nfrom typing import Tuple\n\ndef precompute_freqs_cis(dim: int, end: int, theta: float = 10000.0) -&gt; torch.Tensor:\n    \"\"\"\n    Returns freqs_cis with shape (end, dim//2), dtype complex64.\n    \"\"\"\n    assert dim % 2 == 0, \"head_dim (dim) must be even\"\n    freqs = 1.0 / (theta ** (torch.arange(0, dim, 2, dtype=torch.float32) / dim))\n    t = torch.arange(end, device=freqs.device, dtype=torch.float32)          # (end,)\n    angles = torch.outer(t, freqs)                                           # (end, dim//2)\n    freqs_cis = torch.polar(torch.ones_like(angles), angles)                 # complex64\n    return freqs_cis\n\ndef apply_rotary_emb(\n    xq: torch.Tensor,   # (B, T, H, D)\n    xk: torch.Tensor,   # (B, T, H, D)\n    freqs_cis: torch.Tensor,  # (T, D//2) complex\n) -&gt; Tuple[torch.Tensor, torch.Tensor]:\n    \"\"\"\n    Complex RoPE multiply with inline broadcasting reshape (no helper).\n    \"\"\"\n    B, T, H, D = xq.shape\n    assert xk.shape == (B, T, H, D)\n    assert D % 2 == 0\n    assert freqs_cis.shape == (T, D // 2), f\"expected {(T, D//2)}, got {freqs_cis.shape}\"\n\n    # view as complex: (..., D/2)\n    xq_c = torch.view_as_complex(xq.float().reshape(B, T, H, D // 2, 2))\n    xk_c = torch.view_as_complex(xk.float().reshape(B, T, H, D // 2, 2))\n\n    # INLINE reshape for broadcasting: (1, T, 1, D/2)\n    freqs_cis_b = freqs_cis.view(1, T, 1, D // 2)\n\n    # rotate and return to real, original shape & dtype\n    xq_out = torch.view_as_real(xq_c * freqs_cis_b).reshape_as(xq).type_as(xq)\n    xk_out = torch.view_as_real(xk_c * freqs_cis_b).reshape_as(xk).type_as(xk)\n    return xq_out, xk_out"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#alibi",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#alibi",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "2.5 ALIBI",
-    "text": "2.5 ALIBI\n(Press, Smith, and Lewis 2022)\n\n\n\n\n\n\nFigure 4\n\n\n\nAliBi: simple, monotonic bias → strong extrapolation, lower overhead.\nSo far, for the position embedding, we modify the Q, K to add the position information for attention to calculate. However, is it possible to directly modify the attention score? To notify them the position information? This is exactly what ALIBI does. The ALIBI (Attention with Linear Biases) method introduces a linear bias to the attention scores based on the distance between tokens. The bias is added directly to the attention score before applying the softmax function. Mathematically:\n\\[\n\\operatorname{softmax}\\!\\Big( q_i k_j^\\top \\;+\\; m \\cdot (-(i-j)) \\Big)\n\\]\nwhere:\n\n\\(q_i \\in \\mathbb{R}^d\\): query vector at position \\(i\\)\n\\(k_j \\in \\mathbb{R}^d\\): key vector at position \\(j\\)\n\\(m \\in \\mathbb{R}\\): slop (head-dependent constant)\n\\((i - j) \\geq 0\\): relative distance\n\nFor example, for query \\(i\\), the logits against all keys \\([0, 1, \\dots, i ]\\) become: \\[\n\\ell_i \\;=\\;\n\\Big[\\, q_i k_0^\\top - m(i-0),\\;\n       q_i k_1^\\top - m(i-1),\\;\n       \\ldots,\\;\n       q_i k_{i-1}^\\top - m(1),\\;\n       q_i k_i^\\top \\,\\Big]\n\\]\n\n\nShow the code\ndef get_relative_positions(seq_len: int) -&gt; torch.tensor:\n    x = torch.arange(seq_len)[None, :]\n    y = torch.arange(seq_len)[:, None]\n    return x - y\n\n\ndef get_alibi_slope(num_heads):\n    x = (2 ** 8) ** (1 / num_heads)\n    return (\n        torch.tensor([1 / x ** (i + 1) for i in range(num_heads)])\n        .unsqueeze(-1)\n        .unsqueeze(-1)\n    )\n\nclass AliBiMultiHeadAttention(nn.Module):\n    def __init__(self, num_heads, d_model):\n        super().__init__()\n        self.num_heads = num_heads\n        self.d_model = d_model\n        self.head_dim = d_model // num_heads\n        self.alibi_slope = get_alibi_slope(num_heads)\n\n        self.kqv = nn.Linear(self.d_model, 3 * self.d_model)\n    \n    def forward(self, x):\n        batch_size, seq_len, _ = x.shape\n\n        key, query, value = self.kqv(x).chunk(3, dim=-1)\n        query = query.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n        key   = key.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n        value = value.view(batch_size, seq_len, self.num_heads, -1).transpose(1, 2)\n\n        bias = (self.alibi_slope * get_relative_positions(seq_len)).unsqueeze(0)\n        score = query @ key.transpose(-2, -1) / (self.head_dim ** 0.5) + bias\n\n        mask = torch.tril(torch.ones(seq_len, seq_len)).to(x.device)\n        mask = mask[None, None, :, :]  # (1, 1, seq_len, seq_len)\n        score = score.masked_fill(\n            mask[:, :, :seq_len, :seq_len] == 0, float(\"-inf\")\n        )\n\n        attn = F.softmax(score, dim=-1)\n        out = torch.matmul(attn, value)\n        out = out.transpose(1, 2).reshape(batch_size, seq_len, -1)\n        out = self.dropout(out)\n        return out"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#extend-to-longer-context",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#extend-to-longer-context",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "2.6 Extend to longer context",
-    "text": "2.6 Extend to longer context\nSo far, for all the position encoding we discussed, it has one main drawback: it fixed maximum context length during training.\n\n\n\n\n\n\nFigure 5: (Image Source Video: Long-Context LLM Extension)\n\n\n\nWhen we are training on the fixed context length, the model learns to attend to the positions within that context. However, during inference, we may want to extend the context length beyond what the model was trained on. This is where the challenge lies. One way is to train a longer context length model from the beginning. However this requires more computational resources and may not be feasible for all applications. So, we need to find a way to adapt the model to longer contexts without retraining it from scratch.\nThere are several approaches to address this issue. Let’s discuss a few of them.\n\n2.6.1 Linear Position Interpolation\n\n\n\n\n\n\nFigure 6\n\n\n\ndecreases the frequencies of the basis functions so that more tokens fit within each period. The position interpolation (Chen et al. 2023) mentioned that we can just linearly interpolate the position embeddings for the extended context. This allows the model to generate position embeddings for longer sequences without requiring additional training. It just rescale the \\(m\\) base in the RoPE by: \\[\nf'(\\mathbf{x}, m) = f(\\mathbf{x}, m\\frac{L}{L'})\n\\] where \\(L\\) is the original context length and \\(L'\\) is the new context length.\n\n\n2.6.2 NTK-Aware Position Interpolation\nThe Linear Position Interpolation, if it was possible to pick the correct scale parameter dynamically based on the sequence length rather than having to settle for the fixed tradeoff of maximum sequence length vs. performance on shorter sequences. The NTK-Aware Position Interpolation method leverages the Neural Tangent Kernel (NTK) framework to adaptively adjust the position embeddings during inference. By analyzing the model’s behavior in the NTK regime, we can identify the optimal scaling factors for different sequence lengths, allowing for more effective extrapolation of position information.\n\\[\n\\alpha^{\\text{NTK-RoPE}}_{j} = \\kappa^{-\\frac{2j}{d_k}}\n\\]\n\n\n\n\n\n\nNeural Tangent Kernel (NTK)\n\n\n\n\n\n\n\n\n2.6.3 YaRN\nanother RoPE extension method, uses “NTK-by-parts” interpolation strategies across different dimensions of the embedding space and introduces a temperature factor to adjust the attention distribution for long inputs. But RoPE cannot extrapolate well to sequences longer than training (e.g., a model trained on 2K tokens struggles at 8K).\n\\[\n\\alpha^{\\mathrm{YaRN}}_{j}\n= \\frac{(1-\\gamma_j)\\,\\tfrac{1}{t} + \\gamma_j}{\\sqrt{T}} \\,.\n\\]\nYaRN modifies RoPE to support longer context windows while preserving model stability. (Peng et al. 2023)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#layer-normalization-vs.-rms-normalization",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#layer-normalization-vs.-rms-normalization",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "3.1 Layer Normalization vs. RMS Normalization",
-    "text": "3.1 Layer Normalization vs. RMS Normalization\nThe Layer Normalization (Ba, Kiros, and Hinton 2016) is a technique to normalize the inputs across the features for each training example. It is defined as:\n\\[\n\\text{LayerNorm}(x) = \\frac{x - \\mu}{\\sigma + \\epsilon} \\cdot \\gamma + \\beta\n\\tag{4}\\] where:\n\n\\(\\mu(x)\\): the mean of the input features.\n\\(\\sigma(x)\\): the standard deviation of the input features.\n\\(\\gamma\\): a learnable scale parameter.\n\\(\\beta\\): a learnable shift parameter.\n\nThere are two learnable parameters in Layer Normalization: \\(\\gamma\\) and \\(\\beta\\), which have the same shape as the input features \\(d_{\\text{model}}\\).\nHowever, in the Root Mean Square(RMS) Normalization, proposed in (Zhang and Sennrich 2019), that we remove the mean from the normalization process. The RMS Normalization is defined as:\n\\[\n\\text{RMSNorm}(x) = \\frac{x}{\\sqrt{\\frac{1}{d} \\sum_{i=1}^{d} x_i^2 + \\epsilon}} \\cdot \\gamma\n\\tag{5}\\] where:\n\n\\(\\epsilon\\): a small constant to prevent division by zero.\n\\(\\gamma\\): a learnable scale parameter, which has the same shape as the input features \\(d_{\\text{model}}\\).\n\nAs we can see, the main difference between Layer Normalization and RMS Normalization is the removal of the mean from the normalization process, and remove the learnable shift parameter \\(\\beta\\). There are several advantage of that:\n\nSimplicity: RMS Normalization is simpler and requires fewer parameters, making it easier to implement and faster to compute. For model with \\(d_{\\text{model}} = 512\\), 8 layers, each layer has 2 normalization. Than the reduction number of parameter is up to \\(512 \\times 8 \\times 2 = 8192\\) parameters.\nFewer operations: no mean subtraction, no bias addition.\nSaves memory bandwidth, which is often the bottleneck in GPUs (not FLOPs).\nWhile reduce the number of parameters, it also maintains similar performance."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#pre-layer-normalization-vs.-post-layer-normalization",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#pre-layer-normalization-vs.-post-layer-normalization",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization",
-    "text": "3.2 Pre-Layer Normalization vs. Post-Layer Normalization\n\n\n\n\n\n\nFigure 7: The figure illustrates the three different position of the normalization layer in the transformer architecture.\n\n\n\nOne main good reason why Pre-Layer Normalization is perform bettern than the Post-Layer Normalization is that, according to (Xiong et al. 2020), the help the gradient flow back through the network without disrupting the residual connections. When using the Pre-Layer Normalization, it tends to converge faster and more stably. And the initlization methods is become less sensitive to the scale of the inputs.\nThere are third type of the normalization position by (Ding et al. 2021) called sandwiched normalization, which is a combination of pre-layer and post-layer normalization. Is is proposed to improve the training for the text-image pair.\n\n\n\n\n\n\nGradient Flow\n\n\n\nOne generalizable lesson is that we should keep residual connections “clean” identity paths."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#qk-norm",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#qk-norm",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "3.3 QK Norm",
-    "text": "3.3 QK Norm\nThere is another normalization method called Query-Key Normalization (QK Norm), which is designed to improve the attention mechanism by normalizing the query and key vectors before computing the attention scores."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#multi-headed-attention",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#multi-headed-attention",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "4.1 Multi Headed Attention",
-    "text": "4.1 Multi Headed Attention\nThe standard multi headed attention is defined as:\n\\[\n\\text{MultiHead}(Q, K, V) = \\text{Concat}(\\text{head}_1, \\ldots, \\text{head}_h)W^O\n\\tag{6}\\]\nwhere each head is computed as:\n\\[\n\\text{head}_i = \\text{Attention}(QW_i^Q, KW_i^K, VW_i^V)\n\\tag{7}\\] with \\(W_i^Q\\), \\(W_i^K\\), and \\(W_i^V\\) being learned projection matrices.\nAnd the attention function, usually is scaled dot-product attention, is defined as: \\[\n\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V\n\\tag{8}\\]\nwhere \\(d_k\\) is the dimension of the keys. The reason for the scaling factor \\(\\sqrt{d_k}\\) is to counteract the effect of large dot-product values by the large dimension of \\(K\\), which can push the softmax function into regions with very small gradients.\n\n4.1.1 Time Complexity of Scaled Dot-Product Attention\nThe time complexity of the scaled dot-product attention mechanism can be analyzed as follows:\n\nQuery-Key Dot Product: The computation of the dot product between the query and key matrices has a time complexity of \\(O(n^2 d_k)\\), where \\(n\\) is the sequence length and \\(d_k\\) is the dimension of the keys.\nSoftmax Computation: The softmax function is applied to the dot product results, which has a time complexity of \\(O(n^2)\\).\nValue Weighting: The final step involves multiplying the softmax output with the value matrix, which has a time complexity of \\(O(n^2 d_v)\\), where \\(d_v\\) is the dimension of the values.\n\nOverall, the time complexity of the scaled dot-product attention is dominated by the query-key dot product and can be expressed as:\n\\[\nO(n^2 (d_k + d_v))\n\\tag{9}\\]\nAs we can see, the time complexity is quadratic in the sequence length, which can be a bottleneck for long sequences / contexts. Let’s see how we can improve it."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#grouped-query-attention-multi-query-attention",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#grouped-query-attention-multi-query-attention",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "4.2 Grouped Query Attention / Multi Query Attention",
-    "text": "4.2 Grouped Query Attention / Multi Query Attention\n\n\n\n\n\n\nFigure 8: Overview of Grouped Query Attention & Multi Query Attention (Image Source: (Ainslie et al. 2023))\n\n\n\nProposed by the (Ainslie et al. 2023), Grouped Query Attention (GQA) and Multi Query Attention (MQA) are designed to reduce the computational burden of the attention mechanism by grouping queries and sharing keys and values across multiple queries."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#sparse-attention",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#sparse-attention",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "4.3 Sparse Attention",
-    "text": "4.3 Sparse Attention\n\nFixed Pattern Attention: for example, sliding window attention\nStrided Attention: for example, dilated attention, every m-th token\nBlock Sparse Attention: for example, BigBird (BigBirdSparseAttention2020zaheer?), Longformer (Beltagy, Peters, and Cohan 2020)\nGlobal Attention:\nLearned / Dynamic Spare Attention\n\n\n4.3.1 Sliding window attention\n\n\n\n\n\n\nFigure 9\n\n\n\n(Beltagy, Peters, and Cohan 2020)\n\n\n4.3.2 Dilated Attention\n\n\n\n\n\n\nFigure 10: The illustration of Sparse Attention. (Image Source: Generating Long Sequences with Sparse Transformers)\n\n\n\n(Child et al. 2019)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#multi-latent-attention",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#multi-latent-attention",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "4.4 Multi Latent Attention",
-    "text": "4.4 Multi Latent Attention\n\n\n\n\n\n\nFigure 11: Compare between MHA, Grouped Query Attention, Multi Query Attention and Multi Latent Attention.\n\n\n\nMulti Latent Attention (MLA), proposed in (DeepSeek-AI et al. 2024) is a proposed extension to the attention mechanism that aims to capture more complex relationships within the input data by introducing multiple latent spaces. Each latent space can learn different aspects of the data, allowing for a more nuanced understanding of the input.\n\n\n\n\n\n\nFigure 12: The detail of Multi Latent Attention (MLA)."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#flash-attention",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#flash-attention",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "4.5 Flash Attention",
-    "text": "4.5 Flash Attention\nSo far, we see different attention mechanisms that aim to improve the efficiency and effectiveness of the standard attention mechanism. However, all aforementioned methods improve the attention mechanism by approximating the attention calculation. On the other hand, Flash Attention, proposed in (Dao 2023), takes a different approach by optimizing the attention computation itself.\n\n\n\n\n\n\nFigure 13: The illustration of Flash Attention\n\n\n\n\n4.5.1 Flash Attention V1 vs. V2 vs. V3"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#native-sparse-attention",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#native-sparse-attention",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "4.6 Native Sparse Attention",
-    "text": "4.6 Native Sparse Attention\n\n\n\n\n\n\nFigure 14: Illustration of Native Sparse Attention (Image Source: Native Sparse Attention: Hardware-Aligned and Natively Trainable Sparse Attention)\n\n\n\nProposed in (Yuan et al. 2025), this is a novel approach to sparse attention that aligns with hardware capabilities and allows for efficient training of sparse attention mechanisms."
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#attention-sink",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#attention-sink",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "4.7 Attention Sink",
-    "text": "4.7 Attention Sink"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#swish",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#swish",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "5.1 Swish",
-    "text": "5.1 Swish"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#gated-linear-unit-glu",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#gated-linear-unit-glu",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "5.2 Gated Linear Unit (GLU)",
-    "text": "5.2 Gated Linear Unit (GLU)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#multi-layer-perceptron-mlp",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#multi-layer-perceptron-mlp",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "6.1 Multi Layer Perceptron (MLP)",
-    "text": "6.1 Multi Layer Perceptron (MLP)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#gated-linear-unit-glu-1",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#gated-linear-unit-glu-1",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "6.2 Gated Linear Unit (GLU)",
-    "text": "6.2 Gated Linear Unit (GLU)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#mixture-of-experts-moe",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#mixture-of-experts-moe",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "6.3 Mixture of Experts (MoE)",
-    "text": "6.3 Mixture of Experts (MoE)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#weight-initialization",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#weight-initialization",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "7.1 Weight Initialization",
-    "text": "7.1 Weight Initialization"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#layer-initialization",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#layer-initialization",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "7.2 Layer Initialization",
-    "text": "7.2 Layer Initialization"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#llama",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#llama",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "8.1 LLaMA",
-    "text": "8.1 LLaMA"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#qwen",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#qwen",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "8.2 Qwen",
-    "text": "8.2 Qwen"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#deepseek",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#deepseek",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "8.3 DeepSeek",
-    "text": "8.3 DeepSeek"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#gpt-oss",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#gpt-oss",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "8.4 GPT-Oss",
-    "text": "8.4 GPT-Oss"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#diffusion-language-models",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#diffusion-language-models",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "9.1 Diffusion Language Models",
-    "text": "9.1 Diffusion Language Models\n\n\n\n\n\n\nFigure 15: Illustration of Diffusion Language Model. (Video Source: Inception Lab)\n\n\n\nLLaDA (Nie et al. 2025) is a diffusion-based language model that leverages the principles of diffusion models to generate text. By modeling the text generation process as a diffusion process, LLaDA aims to improve the quality and diversity of generated text.\n\n\n\n\n\n\nFigure 16: Example of LLaDA generation process. Prompt: “Explain what artificial intelligence is.” (Image Source: LLaDA demo)\n\n\n\n\n\n\n\n\n\nFigure 17: The training process and sampling process of LLaDA. (Image Source: LLaDA)"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#state-space-model-ssm",
-    "href": "posts/Blogs/LLM-Architecture copy/LLM-Architecture.html#state-space-model-ssm",
-    "title": "LLM Part1: Transformer Architecture & Training Stages",
-    "section": "9.2 State Space Model (SSM)",
-    "text": "9.2 State Space Model (SSM)"
   },
   {
     "objectID": "posts/Blogs/Diffusion-Models/Diffusion-Model.html",
@@ -1458,107 +1248,93 @@
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html",
     "href": "posts/Blogs/LLM-Architecture/post.html",
-    "title": "LLM Architecture and Training Stages",
+    "title": "LLM Series Part1: Architecture and Training Stages",
     "section": "",
-    "text": "1 Introduction\n  2 Word Embedding Layer\n  3 Position Encoding\n  \n  3.1 Absolute Position Encoding\n  3.2 Learnable Position Encoding\n  3.3 Relative Position Encoding\n  3.4 Extend Position Encoding\n  \n  4 Attention Mechanism\n  5 Feed-Forward Network (FFN)\n  6 Normalization Layer\n  7 Residual Connection\n  \n  7.1 mu HC\n  7.2 Attention Residual\n  \n  8 Output Layer\n  9 Other Architectures\n  \n  9.1 Mamba Architecture\n  9.2 RetNet Architecture\n  \n  10 Optimizers\n  11 Loss Functions\n  \n  11.1 Auto-regressive Loss\n  11.2 Diffusion Loss\n  \n  12 Regularization Techniques\n  \n  12.1 Dropout\n  12.2 Weight Decay\n  12.3 Gradient Clipping\n  12.4 Gradient Normalization\n  \n  13 Conclusion"
+    "text": "1 Introduction\n  2 Review of Transformer Architecture\n  3 Word Embedding Layer\n  4 Position Encoding\n  \n  4.1 Absolute Position Encoding\n  4.2 Learnable Position Encoding\n  4.3 Relative Position Encoding\n  4.4 RoPE\n  4.5 Position Interpolation\n  \n  4.5.1 Frequence-Based PI\n  4.5.2 Dynamic-Scaling\n  \n  4.6 NoPE\n  \n  5 Attention Mechanism\n  \n  5.0.1 Multi-Head Attention(MHA)\n  5.0.2 Groped Query Attention(GQA)\n  5.0.3 Multi-Head Latent Attention(MLA)\n  5.0.4 Sliding Window Attention\n  5.0.5 Flash Attention\n  5.0.6 Gated Attention\n  \n  6 Feed-Forward Network (FFN)\n  7 Mixture of Expert\n  8 Normalization Layer\n  9 Residual Connection\n  \n  9.1 mHC\n  9.2 Attention Residual\n  \n  10 Output Layer\n  11 Other Architectures\n  \n  11.1 Mamba Architecture\n  11.2 RetNet Architecture\n  \n  12 Training Objective\n  \n  12.1 Cross-Entropy Loss\n  12.2 Diffusion Loss\n  \n  13 Conclusion\n  14 In the end"
   },
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html#absolute-position-encoding",
     "href": "posts/Blogs/LLM-Architecture/post.html#absolute-position-encoding",
-    "title": "LLM Architecture and Training Stages",
-    "section": "3.1 Absolute Position Encoding",
-    "text": "3.1 Absolute Position Encoding\nAbsolute Position Encoding是Transformer中最初使用的Position Encoding方式，它通过给句子中的每个Token分配一个唯一的位置信息来引入位置信息。具体来说，Absolute Position Encoding使用一个固定的函数来计算每个Token的位置信息，通常使用正弦和余弦函数来计算位置信息。数学的表达如下：\n\\[\n\\begin{split}\nPE_{(pos, 2i)} & = \\sin\\left(\\frac{pos}{10000^{2i /d_{model}}}\\right) \\\\\nPE_{(pos, 2i+1)} &= \\cos\\left(\\frac{pos}{10000^{2i /d_{model}}}\\right)\n\\end{split}\n\\tag{2}\\]\n其中：\n\n\\(pos\\) 是Token在输入序列中的位置索引。\n\\(i\\) 是隐藏维度的索引。\n\\(d_{model}\\) 是模型的隐藏维度大小。\n\n我们可以看到，Absolute Position Encoding将Word Embedding的维度分成两个为一组，每组使用一个正弦函数和一个余弦函数来计算位置信息。这样做的好处是，模型可以通过观察输入序列中各个元素的位置信息来捕捉上下文信息，从而提高模型的性能和表达能力。"
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "4.1 Absolute Position Encoding",
+    "text": "4.1 Absolute Position Encoding\nAbsolute Position Encoding是Transformer中最初使用的Position Encoding方式，它通过给句子中的每个Token分配一个唯一的位置信息来引入位置信息。具体来说，Absolute Position Encoding使用一个固定的函数来计算每个Token的位置信息，通常使用正弦和余弦函数来计算位置信息。数学的表达如下：\n\\[\n\\begin{split}\nPE_{(pos, 2i)} & = \\sin\\left(\\frac{pos}{10000^{2i /d_{model}}}\\right) \\\\\nPE_{(pos, 2i+1)} &= \\cos\\left(\\frac{pos}{10000^{2i /d_{model}}}\\right)\n\\end{split}\n\\tag{2}\\]\n其中：\n\n\\(pos\\) 是Token在输入序列中的位置索引。\n\\(i\\) 是隐藏维度的索引。\n\\(d_{model}\\) 是模型的隐藏维度大小。\n\n我们可以看到，Absolute Position Encoding将Word Embedding的维度分成两个为一组，每组使用一个正弦函数和一个余弦函数来计算位置信息。这样做的好处是，模型可以通过观察输入序列中各个元素的位置信息来捕捉上下文信息，从而提高模型的性能和表达能力。"
   },
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html#learnable-position-encoding",
     "href": "posts/Blogs/LLM-Architecture/post.html#learnable-position-encoding",
-    "title": "LLM Architecture and Training Stages",
-    "section": "3.2 Learnable Position Encoding",
-    "text": "3.2 Learnable Position Encoding\nLearnable Position Encoding是Absolute Position Encoding的一种特殊情况，它将位置信息作为一个可学习的参数来训练模型。具体来说，Learnable Position Encoding使用一个可学习的矩阵来存储位置信息，每一行对应一个位置索引，每一列对应一个隐藏维度。数学的表达如下：\n\\[\nPE_{(pos)} = P[pos]\n\\tag{3}\\]\n其中：\n\n\\(pos\\) 是Token在输入序列中的位置索引。\n\\(P\\) 是一个可学习的矩阵，表示位置信息的权重矩阵。\n\\(PE_{(pos)}\\) 是第\\(pos\\)个位置的位置信息向量。\n\n其实在LLM的训练中，Learnable Position Encoding时很少见的Encoding方式，其原因就是它的参数量比较大，尤其是当输入序列的长度比较长的时候，Learnable Position Encoding的参数量会急剧增加，从而增加模型的计算复杂度和内存占用。因此，在实际应用中，Learnable Position Encoding通常不如Absolute Position Encoding常见。最常见的Learnable Position Encoding的应用场景是在Vision Transformer (Dosovitskiy et al. 2021)中，在Vision Transformer中，输入序列的长度通常比较短，因此Learnable Position Encoding的参数量相对较小。"
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "4.2 Learnable Position Encoding",
+    "text": "4.2 Learnable Position Encoding\nLearnable Position Encoding是Absolute Position Encoding的一种特殊情况，它将位置信息作为一个可学习的参数来训练模型。具体来说，Learnable Position Encoding使用一个可学习的矩阵来存储位置信息，每一行对应一个位置索引，每一列对应一个隐藏维度。数学的表达如下：\n\\[\nPE_{(pos)} = P[pos]\n\\tag{3}\\]\n其中：\n\n\\(pos\\) 是Token在输入序列中的位置索引。\n\\(P\\) 是一个可学习的矩阵，表示位置信息的权重矩阵。\n\\(PE_{(pos)}\\) 是第\\(pos\\)个位置的位置信息向量。\n\n其实在LLM的训练中，Learnable Position Encoding时很少见的Encoding方式，其原因就是它的参数量比较大，尤其是当输入序列的长度比较长的时候，Learnable Position Encoding的参数量会急剧增加，从而增加模型的计算复杂度和内存占用。因此，在实际应用中，Learnable Position Encoding通常不如Absolute Position Encoding常见。最常见的Learnable Position Encoding的应用场景是在Vision Transformer (Dosovitskiy et al. 2021)中，在Vision Transformer中，输入序列的长度通常比较短，因此Learnable Position Encoding的参数量相对较小。\n\n\n\n\n\n\nFigure 3\n\n\n\n\n\n\n\n\n\nFigure 4"
   },
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html#relative-position-encoding",
     "href": "posts/Blogs/LLM-Architecture/post.html#relative-position-encoding",
-    "title": "LLM Architecture and Training Stages",
-    "section": "3.3 Relative Position Encoding",
-    "text": "3.3 Relative Position Encoding"
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "4.3 Relative Position Encoding",
+    "text": "4.3 Relative Position Encoding\n比如Alibili(Press, Smith, and Lewis 2022) 和 T5"
   },
   {
-    "objectID": "posts/Blogs/LLM-Architecture/post.html#extend-position-encoding",
-    "href": "posts/Blogs/LLM-Architecture/post.html#extend-position-encoding",
-    "title": "LLM Architecture and Training Stages",
-    "section": "3.4 Extend Position Encoding",
-    "text": "3.4 Extend Position Encoding"
+    "objectID": "posts/Blogs/LLM-Architecture/post.html#rope",
+    "href": "posts/Blogs/LLM-Architecture/post.html#rope",
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "4.4 RoPE",
+    "text": "4.4 RoPE"
   },
   {
-    "objectID": "posts/Blogs/LLM-Architecture/post.html#mu-hc",
-    "href": "posts/Blogs/LLM-Architecture/post.html#mu-hc",
-    "title": "LLM Architecture and Training Stages",
-    "section": "7.1 mu HC",
-    "text": "7.1 mu HC"
+    "objectID": "posts/Blogs/LLM-Architecture/post.html#position-interpolation",
+    "href": "posts/Blogs/LLM-Architecture/post.html#position-interpolation",
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "4.5 Position Interpolation",
+    "text": "4.5 Position Interpolation\n在训练的时候，我们设定最长的长度，但是在Inference的时候，我们可能会遇到比Max Position更长的Sequence，\n\n4.5.1 Frequence-Based PI\n\n\n4.5.2 Dynamic-Scaling"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-Architecture/post.html#nope",
+    "href": "posts/Blogs/LLM-Architecture/post.html#nope",
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "4.6 NoPE",
+    "text": "4.6 NoPE"
+  },
+  {
+    "objectID": "posts/Blogs/LLM-Architecture/post.html#mhc",
+    "href": "posts/Blogs/LLM-Architecture/post.html#mhc",
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "9.1 mHC",
+    "text": "9.1 mHC\n\n\n\n\n\n\nFigure 11"
   },
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html#attention-residual",
     "href": "posts/Blogs/LLM-Architecture/post.html#attention-residual",
-    "title": "LLM Architecture and Training Stages",
-    "section": "7.2 Attention Residual",
-    "text": "7.2 Attention Residual"
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "9.2 Attention Residual",
+    "text": "9.2 Attention Residual\n\n\n\n\n\n\nFigure 12"
   },
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html#mamba-architecture",
     "href": "posts/Blogs/LLM-Architecture/post.html#mamba-architecture",
-    "title": "LLM Architecture and Training Stages",
-    "section": "9.1 Mamba Architecture",
-    "text": "9.1 Mamba Architecture"
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "11.1 Mamba Architecture",
+    "text": "11.1 Mamba Architecture"
   },
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html#retnet-architecture",
     "href": "posts/Blogs/LLM-Architecture/post.html#retnet-architecture",
-    "title": "LLM Architecture and Training Stages",
-    "section": "9.2 RetNet Architecture",
-    "text": "9.2 RetNet Architecture"
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "11.2 RetNet Architecture",
+    "text": "11.2 RetNet Architecture"
   },
   {
-    "objectID": "posts/Blogs/LLM-Architecture/post.html#auto-regressive-loss",
-    "href": "posts/Blogs/LLM-Architecture/post.html#auto-regressive-loss",
-    "title": "LLM Architecture and Training Stages",
-    "section": "11.1 Auto-regressive Loss",
-    "text": "11.1 Auto-regressive Loss"
+    "objectID": "posts/Blogs/LLM-Architecture/post.html#cross-entropy-loss",
+    "href": "posts/Blogs/LLM-Architecture/post.html#cross-entropy-loss",
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "12.1 Cross-Entropy Loss",
+    "text": "12.1 Cross-Entropy Loss\n之前提到的所有模型的训练目标都是基于Cross-Entropy Loss的，也就是最大化输入文本的条件概率。具体来说，给定一个输入文本序列\\(X = (x_1, x_2, ..., x_n)\\)，模型的目标是最大化条件概率\\(P(X) = P(x_1)P(x_2|x_1)P(x_3|x_1, x_2)...P(x_n|x_1, x_2, ..., x_{n-1})\\)。在训练过程中，我们通常会使用Cross-Entropy Loss来衡量模型生成的文本序列与真实文本序列之间的差异，从而指导模型的优化和训练。数学的表达如下：\n\\[\n\\mathcal{L} = -\\sum_{i=1}^{n} \\log P(x_i|x_1, x_2, ..., x_{i-1})\n\\]"
   },
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html#diffusion-loss",
     "href": "posts/Blogs/LLM-Architecture/post.html#diffusion-loss",
-    "title": "LLM Architecture and Training Stages",
-    "section": "11.2 Diffusion Loss",
-    "text": "11.2 Diffusion Loss"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture/post.html#dropout",
-    "href": "posts/Blogs/LLM-Architecture/post.html#dropout",
-    "title": "LLM Architecture and Training Stages",
-    "section": "12.1 Dropout",
-    "text": "12.1 Dropout"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture/post.html#weight-decay",
-    "href": "posts/Blogs/LLM-Architecture/post.html#weight-decay",
-    "title": "LLM Architecture and Training Stages",
-    "section": "12.2 Weight Decay",
-    "text": "12.2 Weight Decay"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture/post.html#gradient-clipping",
-    "href": "posts/Blogs/LLM-Architecture/post.html#gradient-clipping",
-    "title": "LLM Architecture and Training Stages",
-    "section": "12.3 Gradient Clipping",
-    "text": "12.3 Gradient Clipping"
-  },
-  {
-    "objectID": "posts/Blogs/LLM-Architecture/post.html#gradient-normalization",
-    "href": "posts/Blogs/LLM-Architecture/post.html#gradient-normalization",
-    "title": "LLM Architecture and Training Stages",
-    "section": "12.4 Gradient Normalization",
-    "text": "12.4 Gradient Normalization"
+    "title": "LLM Series Part1: Architecture and Training Stages",
+    "section": "12.2 Diffusion Loss",
+    "text": "12.2 Diffusion Loss\n现在的SOTA的模型，最大问题就是Auto-Regressive，要等到生成完一个Token之后才能生成下一个Token，这样的生成方式效率非常低，尤其是当输入文本序列比较长的时候，生成的时间会急剧增加。为了提高模型的生成效率，最近有一些研究提出了一些新的训练目标，比如Diffusion Loss，它通过引入一个噪声分布来模拟输入文本序列中的噪声，从而使模型能够在生成过程中更快地收敛和优化。具体来说，Diffusion Loss通过引入一个噪声分布来模拟输入文本序列中的噪声，从而使模型能够在生成过程中更快地收敛和优化。数学的表达如下：\n\n\n\n\n\n\nFigure 13"
   },
   {
     "objectID": "posts/Blogs/Learnings-in-DeepLearning/post.html",

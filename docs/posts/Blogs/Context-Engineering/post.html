@@ -7,9 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
-<meta name="dcterms.date" content="2026-03-20">
+<meta name="dcterms.date" content="2026-03-21">
+<meta name="description" content="随着OpenClaw在2026年初的爆火，Context Engineering和Harness Engineering的概念重新被人们所关注。Context Engineering主要是指在使用LLM的过程中，如何有效地管理和利用上下文信息，以提高模型的性能和效率。而Harness Engineering则是指在使用LLM的过程中，如何设计和构建一个高效的系统架构，以支持模型的训练和部署。在这篇文章中，我们将深入探讨Context Engineering和Harness Engineering的概念，以及它们在LLM应用中的重要性和实践方法。">
 
-<title>What is Context Engineering?</title>
+<title>What is Context Engineering &amp; Harness Engineering?</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -50,6 +51,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -145,8 +149,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="What is Context Engineering?">
-<meta property="og:description" content="">
+<meta property="og:title" content="What is Context Engineering &amp; Harness Engineering?">
+<meta property="og:description" content="随着OpenClaw在2026年初的爆火，Context Engineering和Harness Engineering的概念重新被人们所关注。Context Engineering主要是指在使用LLM的过程中，如何有效地管理和利用上下文信息，以提高模型的性能和效率。而Harness Engineering则是指在使用LLM的过程中，如何设计和构建一个高效的系统架构，以支持模型的训练和部署。在这篇文章中，我们将深入探讨Context Engineering和Harness Engineering的概念，以及它们在LLM应用中的重要性和实践方法。">
 <meta property="og:image" content="./assets/context-length-information.png">
 </head>
 
@@ -345,16 +349,16 @@ document.addEventListener("DOMContentLoaded", function () {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+<span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../../../posts/CS336/index.html"> 
 <span class="menu-text">Stanford CS336</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LLM-CookBook/"> 
-<span class="menu-text">(M)LLM Cookbook</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -369,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">What is Context Engineering?</h1>
+          <h1 class="quarto-secondary-nav-title">What is Context Engineering &amp; Harness Engineering?</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -416,9 +420,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">What is Context Engineering?</h1>
+<h1 class="title d-none d-lg-block">What is Context Engineering &amp; Harness Engineering?</h1>
 </div>
 
+<div>
+  <div class="description">
+    随着OpenClaw在2026年初的爆火，Context Engineering和Harness Engineering的概念重新被人们所关注。Context Engineering主要是指在使用LLM的过程中，如何有效地管理和利用上下文信息，以提高模型的性能和效率。而Harness Engineering则是指在使用LLM的过程中，如何设计和构建一个高效的系统架构，以支持模型的训练和部署。在这篇文章中，我们将深入探讨Context Engineering和Harness Engineering的概念，以及它们在LLM应用中的重要性和实践方法。
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -433,14 +442,14 @@ document.addEventListener("DOMContentLoaded", function () {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-03-20</p>
+      <p class="date">2026-03-21</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">2026-03-24</p>
+      <p class="date-modified">2026-04-06</p>
     </div>
   </div>
     
@@ -478,7 +487,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <p>System Prompt 里面应该包含什么</p>
 <ul>
 <li>Dialogue History（Short Term Memory）: 之前的对话内容，可以帮助模型理解当前的对话上下文。</li>
-<li>Long Term Memory：</li>
+<li>Long Term Memory： 长期记忆，可以帮助模型在更长时间范围内保持对话的一致性和上下文理解。</li>
 <li>Other Information：从RAG，或者其他外部知识库中检索到的信息，可以帮助模型生成更准确和相关的输出。</li>
 <li>Tool Use：模型在生成输出的过程中，可能需要调用一些工具或者API来获取更多的信息或者执行一些操作，这些工具的使用信息也应该包含在System Prompt中。 （Prompt）：
 <ul>
@@ -496,7 +505,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <div id="fig-context-length-information.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-context-length-information.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/context-length-information.png" class="img-fluid figure-img">
+<a href="./assets/context-length-information.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/context-length-information.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-context-length-information.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1
@@ -526,7 +535,7 @@ Figure&nbsp;1
 <div id="fig-replace-tool-output.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-replace-tool-output.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/replace-tool-output.png" class="img-fluid figure-img">
+<a href="./assets/replace-tool-output.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="./assets/replace-tool-output.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-replace-tool-output.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2
@@ -537,7 +546,7 @@ Figure&nbsp;2
 <div id="fig-combine.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-combine.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/combine.png" class="img-fluid figure-img">
+<a href="./assets/combine.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="./assets/combine.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-combine.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3
@@ -563,7 +572,7 @@ Figure&nbsp;3
 <div id="fig-sub-agent.png" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sub-agent.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="./assets/sub-agent.png" class="img-fluid figure-img">
+<a href="./assets/sub-agent.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="./assets/sub-agent.png" class="img-fluid figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-sub-agent.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4
@@ -1074,6 +1083,38 @@ Figure&nbsp;4
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
