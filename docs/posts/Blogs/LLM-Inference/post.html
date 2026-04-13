@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
-<meta name="dcterms.date" content="2025-10-01">
-<meta name="description" content="In this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.">
+<meta name="dcterms.date" content="2026-04-08">
+<meta name="description" content="在这篇文章中，我们将深入探讨LLM的高性能推理（Inference）技术。随着LLM的规模不断扩大，并且LLM相关的应用推理的计算资源需求也在不断增加，因此如何提高LLM的推理效率成为了一个重要的问题。在这篇文章中，我们将介绍一些常用的高性能推理技术，比如量化（Quantization），剪枝（Pruning），知识蒸馏（Knowledge Distillation）等，这些技术可以有效地减少模型的计算复杂度，提高模型的推理效率。另外，我们还会介绍一些针对LLM推理优化的硬件加速器，比如GPU，TPU等，以及一些针对LLM推理优化的软件库，比如ONNX Runtime，TensorRT等。最后，我们还会介绍一些实际应用中的LLM推理优化案例，比如ChatGPT，LLaMA等。">
 
-<title>LLM Part2: Inference</title>
+<title>LLM Series Part2: Speed up &amp; Scale up LLM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -146,8 +146,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="LLM Part2: Inference">
-<meta property="og:description" content="In this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.">
+<meta property="og:title" content="LLM Series Part2: Speed up &amp; Scale up LLM">
+<meta property="og:description" content="在这篇文章中，我们将深入探讨LLM的高性能推理（Inference）技术。随着LLM的规模不断扩大，并且LLM相关的应用推理的计算资源需求也在不断增加，因此如何提高LLM的推理效率成为了一个重要的问题。在这篇文章中，我们将介绍一些常用的高性能推理技术，比如量化（Quantization），剪枝（Pruning），知识蒸馏（Knowledge Distillation）等，这些技术可以有效地减少模型的计算复杂度，提高模型的推理效率。另外，我们还会介绍一些针对LLM推理优化的硬件加速器，比如GPU，TPU等，以及一些针对LLM推理优化的软件库，比如ONNX Runtime，TensorRT等。最后，我们还会介绍一些实际应用中的LLM推理优化案例，比如ChatGPT，LLaMA等。">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -345,11 +345,11 @@ document.addEventListener("DOMContentLoaded", function () {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
+    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
 <span class="menu-text">100 PwC</span></a>
   </li>  
   <li class="nav-item">
@@ -369,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">LLM Part2: Inference</h1>
+          <h1 class="quarto-secondary-nav-title">LLM Series Part2: Speed up &amp; Scale up LLM</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -398,16 +398,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">LLM Part2: Inference</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">Large Language Model</div>
-    <div class="quarto-category">Inference</div>
-  </div>
-  </div>
+<h1 class="title d-none d-lg-block">LLM Series Part2: Speed up &amp; Scale up LLM</h1>
+</div>
 
 <div>
   <div class="description">
-    In this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own applications.
+    在这篇文章中，我们将深入探讨LLM的高性能推理（Inference）技术。随着LLM的规模不断扩大，并且LLM相关的应用推理的计算资源需求也在不断增加，因此如何提高LLM的推理效率成为了一个重要的问题。在这篇文章中，我们将介绍一些常用的高性能推理技术，比如量化（Quantization），剪枝（Pruning），知识蒸馏（Knowledge Distillation）等，这些技术可以有效地减少模型的计算复杂度，提高模型的推理效率。另外，我们还会介绍一些针对LLM推理优化的硬件加速器，比如GPU，TPU等，以及一些针对LLM推理优化的软件库，比如ONNX Runtime，TensorRT等。最后，我们还会介绍一些实际应用中的LLM推理优化案例，比如ChatGPT，LLaMA等。
   </div>
 </div>
 
@@ -424,10 +420,16 @@ document.addEventListener("DOMContentLoaded", function () {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2025-10-01</p>
+      <p class="date">2026-04-08</p>
     </div>
   </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">2026-04-08</p>
+    </div>
+  </div>
     
   </div>
   
@@ -436,12 +438,6 @@ document.addEventListener("DOMContentLoaded", function () {
 </header>
 
 
-<p>In the part 1 of the LLM series, we covered the architecture of LLMs, including key components such as position encoding, attention mechanisms, and more. We also explored various normalization techniques and the training process for these models. In the part 2, we will explore different inference techniques, which is necessary for effectively utilizing LLMs in real-world applications. And we will also explore several practical examples and use cases to illustrate these techniques in action, such as:</p>
-<ul>
-<li>vLLM</li>
-</ul>
-<p>https://lilianweng.github.io/posts/2023-01-10-inference-optimization/ # Resource Different Architecture: - Mixture of Recursion: https://arxiv.org/abs/2507.10524 - Diffusion Text:</p>
-<hr>
 
 
 

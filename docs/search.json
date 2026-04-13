@@ -725,7 +725,7 @@
     "href": "posts/Blogs/blogs_index.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "What is Context Engineering & Harness Engineering?\n\n\n随着OpenClaw在2026年初的爆火，Context Engineering和Harness Engineering的概念重新被人们所关注。Context Engineering主要是指在使用LLM的过程中，如何有效地管理和利用上下文信息，以提高模型的性能和效率。而Harness Engineering则是指在使用LLM的过程中，如何设计和构建一个高效的系统架构，以支持模型的训练和部署。在这篇文章中，我们将深入探讨Context Engineering和Harness Engineering的概念，以及它们在LLM应用中的重要性和实践方法。\n\n\n\n\n\n2026-03-21\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Series Part1: Architecture and Training Stages\n\n\n在这篇文章中，我们将深入探讨不同的LLM的模型架构。随着LLM的不断发展，模型的架构也在不断的演变，我们将从最初的Transformer架构展开，逐步的介绍不同Component的演变和改进。在最后，我们还会介绍除了Transformer架构之外的其他架构，比如Mamba, RetNet等。最后我们还会介绍不同的Optimizer，Loss Functions: Cross-Entropy Loss，Diffusion Loss等，以及Regularization techniques在LLM训练中的应用。\n\n\n\n\n\n2026-03-20\n\n\nYuyang Zhang\n\n\nWords: 3280\n\n\nRead Time: 13 mins\n\n\n\n\n\n\n\n\n\n\n\n\nReinforcement Learning in LLM\n\n\nIn this blog, we explore how reinforcement learning (RL) is used to post-train large language models (LLMs) to improve performance, robustness, and alignment. We begin by formulating LLM generation as an RL problem (states, actions, policies, rewards), then introduce widely used RL-from-preference…\n\n\n\n\n\n2026-01-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of entropy, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its…\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as…\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic…\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Part2: Inference\n\n\nIn this blog, we will going through the inference process of LLMs, including how to effectively use them for various tasks. We will explore techniques such as prompt engineering, few-shot learning, and more. By the end, you will have a solid understanding of how to leverage LLMs for your own…\n\n\n\n\n\n2025-10-01\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "LLM Series Part2: Speed up & Scale up LLM\n\n\n在这篇文章中，我们将深入探讨LLM的高性能推理（Inference）技术。随着LLM的规模不断扩大，并且LLM相关的应用推理的计算资源需求也在不断增加，因此如何提高LLM的推理效率成为了一个重要的问题。在这篇文章中，我们将介绍一些常用的高性能推理技术，比如量化（Quantization），剪枝（Pruning），知识蒸馏（Knowledge Distillation）等，这些技术可以有效地减少模型的计算复杂度，提高模型的推理效率。另外，我们还会介绍一些针对LLM推理优化的硬件加速器，比如GPU，TPU等，以及一些针对LLM推理优化的软件库，比如ONNX…\n\n\n\n\n\n2026-04-08\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is Context Engineering & Harness Engineering?\n\n\n随着OpenClaw在2026年初的爆火，Context Engineering和Harness Engineering的概念被提出并且重新被人关注。Context Engineering主要是指在使用LLM的过程中，如何有效地管理和利用上下文信息，以提高模型的性能和效率。而Harness Engineering则是指在使用LLM的过程中，如何设计和构建一个高效的系统架构，以支持模型的训练和部署。在这篇文章中，我们将深入探讨Context Engineering和Harness Engineering的概念，以及它们在LLM应用中的重要性和实践方法。\n\n\n\n\n\n2026-03-21\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Series Part1: Architecture and Training Stages\n\n\n在这篇文章中，我们将深入探讨不同的LLM的模型架构。随着LLM的不断发展，模型的架构也在不断的演变，我们将从最初的Transformer架构展开，逐步的介绍不同Component的演变和改进。在最后，我们还会介绍除了Transformer架构之外的其他架构，比如Mamba, RetNet等。最后我们还会介绍不同的Optimizer，Loss Functions: Cross-Entropy Loss，Diffusion Loss等，以及Regularization techniques在LLM训练中的应用。\n\n\n\n\n\n2026-03-20\n\n\nYuyang Zhang\n\n\n3280 words\n\n\n13 mins\n\n\n\n\n\n\n\n\n\n\n\n\nReinforcement Learning in LLM\n\n\n\nTransformer\n\nLarge Language Model\n\nReinforcement Learning\n\n\n\nIn this blog, we explore how reinforcement learning (RL) is used to post-train large language models (LLMs) to improve performance, robustness, and alignment. We begin by formulating LLM generation as an RL problem (states, actions, policies, rewards), then introduce widely used RL-from-preference…\n\n\n\n\n\n2026-01-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\n\nMathematics\n\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of entropy, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its…\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\n\nDeep Learning\n\nSummary\n\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as…\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\n\nGenerative-Model\n\nDiffusion-Model\n\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic…\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html",
@@ -1241,9 +1241,9 @@
   {
     "objectID": "posts/Blogs/LLM-Inference/post.html",
     "href": "posts/Blogs/LLM-Inference/post.html",
-    "title": "LLM Part2: Inference",
+    "title": "LLM Series Part2: Speed up & Scale up LLM",
     "section": "",
-    "text": "In the part 1 of the LLM series, we covered the architecture of LLMs, including key components such as position encoding, attention mechanisms, and more. We also explored various normalization techniques and the training process for these models. In the part 2, we will explore different inference techniques, which is necessary for effectively utilizing LLMs in real-world applications. And we will also explore several practical examples and use cases to illustrate these techniques in action, such as:\n\nvLLM\n\nhttps://lilianweng.github.io/posts/2023-01-10-inference-optimization/ # Resource Different Architecture: - Mixture of Recursion: https://arxiv.org/abs/2507.10524 - Diffusion Text:\n\n\n\n\n Back to top"
+    "text": "Back to top"
   },
   {
     "objectID": "posts/Blogs/LLM-Architecture/post.html",
@@ -1460,7 +1460,7 @@
     "href": "posts/Projects/projects_index.html",
     "title": "Projects",
     "section": "",
-    "text": "Due to the tiny bug in the interface, please click IMAGE or TITLE to view the project details. I will fix this bug as soon as possible. Sorry for the inconvenience.\n\n\n\n\n\n\n\n  \n\n  \n\n    \n\n      \n      \n        \n          \n        \n      \n\n      \n\n        \n        \n          MicroLLM: From-Scratch ChatGPT-Style LLM Stack\n        \n\n        \n        \n\n        \n        \n          \n            Built an end-to-end ChatGPT-style LLM system from scratch, using scaling law experiments to choose compute-optimal model size and token budget, followed by pre-training and post-training with SFT and GRPO. Developed an interactive Gradio chat interface to showcase instruction following, reasoning, and conversational generation in a ChatGPT-like experience.\n          \n        \n\n        \n        \n          \n            \n              LLM\n            \n              Pre-Training\n            \n              Scaling Laws\n            \n              SFT\n            \n              GRPO\n            \n              Mixed Precision Training\n            \n              ZeRO-2\n            \n          \n        \n\n        \n        \n          \n\n            \n              \n                Yuyang Zhang\n              \n            \n\n            \n              \n                Level:\n                Advance\n              \n            \n\n            \n              \n                ⏱ 50 hours\n              \n            \n\n          \n        \n\n      \n\n    \n\n  \n\n    \n\n      \n      \n        \n          \n        \n      \n\n      \n\n        \n        \n          Qwen3-VL Inference\n        \n\n        \n        \n          \n            \n              Large Language Model\n            \n              Multi-Modality\n            \n              Fine-Tuning\n            \n          \n        \n\n        \n        \n          \n            Built a Qwen3-VL model from scratch in PyTorch, loaded the 14B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities.\n          \n        \n\n        \n        \n          \n            \n              Qwen3-VL\n            \n              PyTorch\n            \n              LoRA\n            \n              DeepStack\n            \n              M-RoPE\n            \n          \n        \n\n        \n        \n          \n\n            \n              \n                Yuyang Zhang\n              \n            \n\n            \n              \n                Level:\n                Intermediate\n              \n            \n\n            \n              \n                ⏱ 15 hours\n              \n            \n\n          \n        \n\n      \n\n    \n\n  \n\n    \n\n      \n      \n        \n          \n        \n      \n\n      \n\n        \n        \n          Qwen3-VL Inference\n        \n\n        \n        \n          \n            \n              Large Language Model\n            \n              Multi-Modality\n            \n              Fine-Tuning\n            \n          \n        \n\n        \n        \n          \n            Built a Qwen3-VL model from scratch in PyTorch, loaded the 14B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities.\n          \n        \n\n        \n        \n          \n            \n              Qwen3-VL\n            \n              PyTorch\n            \n              LoRA\n            \n              DeepStack\n            \n              M-RoPE\n            \n          \n        \n\n        \n        \n          \n\n            \n              \n                Yuyang Zhang\n              \n            \n\n            \n              \n                Level:\n                Intermediate\n              \n            \n\n            \n              \n                ⏱ 15 hours\n              \n            \n\n          \n        \n\n      \n\n    \n\n  \n\n    \n\n      \n      \n        \n          \n        \n      \n\n      \n\n        \n        \n          PaliGemma Inference and LoRA Fine Tuning\n        \n\n        \n        \n          \n            \n              Large Language Model\n            \n              Multi-Modality\n            \n              Fine-Tuning\n            \n          \n        \n\n        \n        \n          \n            This project involves modeling a multi-modal large language model called PaliGemma, which integrates vision and language tasks. First we perform inference using the pre-trained PaliGemma model. Then, we fine-tune the model using LoRA (Low-Rank Adaptation) for specific applications, for example Receipt OCR Extraction. By the end, will implement a Gradio web interface to demonstrate the fine-tuned model's capabilities.\n          \n        \n\n        \n        \n          \n            \n              LoRA\n            \n              PyTorch\n            \n              Gradio\n            \n              Grouped Query Attention\n            \n              RoPE\n            \n              KV Cache\n            \n          \n        \n\n        \n        \n          \n\n            \n              \n                Yuyang Zhang\n              \n            \n\n            \n              \n                Level:\n                Entry\n              \n            \n\n            \n              \n                ⏱ 8 hours\n              \n            \n\n          \n        \n\n      \n\n    \n\n  \n\n\nNo matching items\n Back to top"
+    "text": "Due to the tiny bug in the interface, please click IMAGE or TITLE to view the project details. I will fix this bug as soon as possible. Sorry for the inconvenience.\n\n\n\n\n\n\n\n  \n\n  \n\n    \n\n      \n      \n        \n          \n        \n      \n\n      \n\n        \n        \n          ChatLLM: From-Scratch LLM Training and Post-Training Stack\n        \n\n        \n        \n\n        \n        \n          \n            Built an end-to-end LLM stack from scratch, covering scaling law experiments, compute-optimal model sizing, pre-training, supervised fine-tuning, and GRPO-based post-training. Trained a ChatGPT-style conversational model and deployed an interactive demo to showcase instruction following, reasoning, and multi-turn generation.\n          \n        \n\n        \n        \n          \n            \n              LLM\n            \n              Pre-Training\n            \n              Scaling Laws\n            \n              SFT\n            \n              GRPO\n            \n              Mixed Precision Training\n            \n              ZeRO-2\n            \n          \n        \n\n        \n        \n          \n\n            \n              \n                Yuyang Zhang\n              \n            \n\n            \n              \n                Level:\n                Advance\n              \n            \n\n            \n              \n                ⏱ 50 hours\n              \n            \n\n          \n        \n\n      \n\n    \n\n  \n\n    \n\n      \n      \n        \n          \n        \n      \n\n      \n\n        \n        \n          Qwen3-VL Inference\n        \n\n        \n        \n          \n            \n              Large Language Model\n            \n              Multi-Modality\n            \n              Fine-Tuning\n            \n          \n        \n\n        \n        \n          \n            Built a Qwen3-VL model from scratch in PyTorch, loaded the 14B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities.\n          \n        \n\n        \n        \n          \n            \n              Qwen3-VL\n            \n              PyTorch\n            \n              LoRA\n            \n              DeepStack\n            \n              M-RoPE\n            \n          \n        \n\n        \n        \n          \n\n            \n              \n                Yuyang Zhang\n              \n            \n\n            \n              \n                Level:\n                Intermediate\n              \n            \n\n            \n              \n                ⏱ 15 hours\n              \n            \n\n          \n        \n\n      \n\n    \n\n  \n\n    \n\n      \n      \n        \n          \n        \n      \n\n      \n\n        \n        \n          Qwen3-VL Inference\n        \n\n        \n        \n          \n            \n              Large Language Model\n            \n              Multi-Modality\n            \n              Fine-Tuning\n            \n          \n        \n\n        \n        \n          \n            Built a Qwen3-VL model from scratch in PyTorch, loaded the 14B (224x224) model, fine-tuned it with LoRA for specific tasks, and developed a Gradio app to showcase its capabilities.\n          \n        \n\n        \n        \n          \n            \n              Qwen3-VL\n            \n              PyTorch\n            \n              LoRA\n            \n              DeepStack\n            \n              M-RoPE\n            \n          \n        \n\n        \n        \n          \n\n            \n              \n                Yuyang Zhang\n              \n            \n\n            \n              \n                Level:\n                Intermediate\n              \n            \n\n            \n              \n                ⏱ 15 hours\n              \n            \n\n          \n        \n\n      \n\n    \n\n  \n\n    \n\n      \n      \n        \n          \n        \n      \n\n      \n\n        \n        \n          PaliGemma Inference and LoRA Fine Tuning\n        \n\n        \n        \n          \n            \n              Large Language Model\n            \n              Multi-Modality\n            \n              Fine-Tuning\n            \n          \n        \n\n        \n        \n          \n            This project involves modeling a multi-modal large language model called PaliGemma, which integrates vision and language tasks. First we perform inference using the pre-trained PaliGemma model. Then, we fine-tune the model using LoRA (Low-Rank Adaptation) for specific applications, for example Receipt OCR Extraction. By the end, will implement a Gradio web interface to demonstrate the fine-tuned model's capabilities.\n          \n        \n\n        \n        \n          \n            \n              LoRA\n            \n              PyTorch\n            \n              Gradio\n            \n              Grouped Query Attention\n            \n              RoPE\n            \n              KV Cache\n            \n          \n        \n\n        \n        \n          \n\n            \n              \n                Yuyang Zhang\n              \n            \n\n            \n              \n                Level:\n                Entry\n              \n            \n\n            \n              \n                ⏱ 8 hours\n              \n            \n\n          \n        \n\n      \n\n    \n\n  \n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/Projects/VLM-from-scratch/index.html",
@@ -1713,5 +1713,124 @@
     "title": "Lecture 07 & 08: Parallelism Training",
     "section": "",
     "text": "Back to top"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html",
+    "href": "posts/Projects/Micro-LLM/index.html",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "",
+    "text": "1 About this Project\n  2 Create a Virtual Environment\n  3 Model\n  \n  3.1 RoPE Position Embedding\n  3.2 Normalization\n  3.3 Attention Mechanism\n  \n  3.3.1 Globel Attention\n  3.3.2 Sliding Window Attention\n  \n  3.4 Feed-Forward Network (FFN)\n  3.5 Attention Residual\n  3.6 Dummy Test\n  \n  4 Optimizer\n  \n  4.1 AdamW\n  4.2 Muon\n  4.3 ZeRO-2\n  \n  5 Tokenizer\n  6 Dataset & DataLoader\n  7 Scaling Laws\n  8 Pre-Training Evaluateion Metrics\n  9 Pre-Training\n  \n  9.1 Mixed Precision Training\n  9.2 Gradient Accumulation\n  \n  10 Instruction-Tuning (SFT)\n  \n  10.1 Dataset Preparation\n  \n  10.1.1 Basic Task\n  10.1.2 SmolTalk\n  10.1.3 Arc\n  10.1.4 MMLU\n  10.1.5 GSM8K\n  10.1.6 Customized Instruction Dataset\n  \n  \n  11 Post-Training (GRPO)\n  12 Gradio Chat Interface\n  13 Conclusion\n  14 What’s Next\n  \n  14.1 AutoResearch\n  14.2 Multi-Modality LLM\n  14.3 Inference System\n  \n  15 In the End"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#dataset-preparation",
+    "href": "posts/Projects/Micro-LLM/index.html#dataset-preparation",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "10.1 Dataset Preparation",
+    "text": "10.1 Dataset Preparation\n\n10.1.1 Basic Task\n\n\n10.1.2 SmolTalk\n\n\n10.1.3 Arc\n\n\n10.1.4 MMLU\n\n\n10.1.5 GSM8K\n\n\n10.1.6 Customized Instruction Dataset\n除了上述的公开集，我们还可以自己构建一些"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#autoresearch",
+    "href": "posts/Projects/Micro-LLM/index.html#autoresearch",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "14.1 AutoResearch",
+    "text": "14.1 AutoResearch\n在这个nanoChat项目之后，Karpathy大神有开源了一个叫做AutoResearch的神器（GitHub上的Stars比这个项目还高），它通过定义简单的三个文件：\n\nprepare.py：数据准备脚本\ntrain.py：训练脚本\nprogram.md: 告诉Agent该怎么做\n\n通过这个方法，Agent自动迭代模型结构、优化器、超参数、训练循环、batch size、model size 等等，来找到最优的训练方案。不过我觉得最有创新的方法就是它可以通过git来回滚，保留好的结果，回滚坏的结果。通过这种方式，AutoResearch可以在没有人类干预的情况下自动进行实验和优化，并提高了模型的性能，如下图所示：\n\n\n\n\n\n\nFigure 2"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#multi-modality-llm",
+    "href": "posts/Projects/Micro-LLM/index.html#multi-modality-llm",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "14.2 Multi-Modality LLM",
+    "text": "14.2 Multi-Modality LLM\n基于文本的LLM已经非常强大了，但未来我们可以尝试训练一个多模态的LLM，能够处理图像、视频、音频等多种输入形式。比如我们可以训练一个模型，输入一张图片，它能够生成对这张图片的描述，或者输入一段视频，它能够总结视频的内容，甚至输入一段音频，它能够转录成文本并进行分析。常见的MLLM的框架有：\n\nLLaVA"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#inference-system",
+    "href": "posts/Projects/Micro-LLM/index.html#inference-system",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "14.3 Inference System",
+    "text": "14.3 Inference System"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#rope-position-embedding",
+    "href": "posts/Projects/Micro-LLM/index.html#rope-position-embedding",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "3.1 RoPE Position Embedding",
+    "text": "3.1 RoPE Position Embedding"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#attention-mechanism",
+    "href": "posts/Projects/Micro-LLM/index.html#attention-mechanism",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "3.3 Attention Mechanism",
+    "text": "3.3 Attention Mechanism\n\n3.3.1 Globel Attention\n\n\n3.3.2 Sliding Window Attention"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#adamw",
+    "href": "posts/Projects/Micro-LLM/index.html#adamw",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "4.1 AdamW",
+    "text": "4.1 AdamW"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#muon",
+    "href": "posts/Projects/Micro-LLM/index.html#muon",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "4.2 Muon",
+    "text": "4.2 Muon"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#zero-2",
+    "href": "posts/Projects/Micro-LLM/index.html#zero-2",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "4.3 ZeRO-2",
+    "text": "4.3 ZeRO-2"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#mixed-precision-training",
+    "href": "posts/Projects/Micro-LLM/index.html#mixed-precision-training",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "9.1 Mixed Precision Training",
+    "text": "9.1 Mixed Precision Training"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#gradient-accumulation",
+    "href": "posts/Projects/Micro-LLM/index.html#gradient-accumulation",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "9.2 Gradient Accumulation",
+    "text": "9.2 Gradient Accumulation"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#section",
+    "href": "posts/Projects/Micro-LLM/index.html#section",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "7.3 ",
+    "text": "7.3"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#normalization",
+    "href": "posts/Projects/Micro-LLM/index.html#normalization",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "3.2 Normalization",
+    "text": "3.2 Normalization"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#feed-forward-network-ffn",
+    "href": "posts/Projects/Micro-LLM/index.html#feed-forward-network-ffn",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "3.4 Feed-Forward Network (FFN)",
+    "text": "3.4 Feed-Forward Network (FFN)"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#attention-residual",
+    "href": "posts/Projects/Micro-LLM/index.html#attention-residual",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "3.5 Attention Residual",
+    "text": "3.5 Attention Residual"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#dummy-test",
+    "href": "posts/Projects/Micro-LLM/index.html#dummy-test",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "3.6 Dummy Test",
+    "text": "3.6 Dummy Test"
   }
 ]
