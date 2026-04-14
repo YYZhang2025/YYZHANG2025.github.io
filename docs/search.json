@@ -1719,7 +1719,7 @@
     "href": "posts/Projects/Micro-LLM/index.html",
     "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
     "section": "",
-    "text": "1 About this Project\n  2 Create a Virtual Environment\n  3 Model\n  \n  3.1 RoPE Position Embedding\n  3.2 Normalization\n  3.3 Attention Mechanism\n  \n  3.3.1 Globel Attention\n  3.3.2 Sliding Window Attention\n  \n  3.4 Feed-Forward Network (FFN)\n  3.5 Attention Residual\n  3.6 Dummy Test\n  \n  4 Optimizer\n  \n  4.1 AdamW\n  4.2 Muon\n  4.3 ZeRO-2\n  \n  5 Tokenizer\n  6 Dataset & DataLoader\n  7 Scaling Laws\n  8 Pre-Training Evaluateion Metrics\n  9 Pre-Training\n  \n  9.1 Mixed Precision Training\n  9.2 Gradient Accumulation\n  \n  10 Instruction-Tuning (SFT)\n  \n  10.1 Dataset Preparation\n  \n  10.1.1 Basic Task\n  10.1.2 SmolTalk\n  10.1.3 Arc\n  10.1.4 MMLU\n  10.1.5 GSM8K\n  10.1.6 Customized Instruction Dataset\n  \n  \n  11 Post-Training (GRPO)\n  12 Gradio Chat Interface\n  13 Conclusion\n  14 What’s Next\n  \n  14.1 AutoResearch\n  14.2 Multi-Modality LLM\n  14.3 Inference System\n  \n  15 In the End"
+    "text": "1 About this Project\n  2 Create a Virtual Environment\n  3 Model\n  \n  3.1 Linear Layer\n  3.2 Word Embedding Layer\n  3.3 RoPE Position Embedding\n  3.4 Normalization\n  \n  3.4.1 Pre-Normalization\n  \n  3.5 Attention Mechanism\n  \n  3.5.1 Globel Attention\n  3.5.2 Sliding Window Attention\n  3.5.3 Hybrid Attention\n  \n  3.6 Feed-Forward Network (FFN)\n  3.7 Attention Residual\n  3.8 Dummy Test\n  \n  4 Optimizer\n  \n  4.1 AdamW\n  4.2 Muon\n  4.3 ZeRO-2\n  \n  5 Tokenizer\n  6 Dataset & DataLoader\n  7 Scaling Laws\n  8 Pre-Training Evaluateion Metrics\n  9 Pre-Training\n  \n  9.1 Mixed Precision Training\n  9.2 Gradient Accumulation\n  \n  10 Instruction-Tuning (SFT)\n  \n  10.1 Dataset Preparation\n  \n  10.1.1 Basic Task\n  10.1.2 SmolTalk\n  10.1.3 Arc\n  10.1.4 MMLU\n  10.1.5 GSM8K\n  10.1.6 Customized Instruction Dataset\n  \n  \n  11 Post-Training (GRPO)\n  12 Gradio Chat Interface\n  13 Conclusion\n  14 What’s Next\n  \n  14.1 AutoResearch\n  14.2 Multi-Modality LLM\n  14.3 Inference System\n  \n  15 In the end"
   },
   {
     "objectID": "posts/Projects/Micro-LLM/index.html#dataset-preparation",
@@ -1733,7 +1733,7 @@
     "href": "posts/Projects/Micro-LLM/index.html#autoresearch",
     "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
     "section": "14.1 AutoResearch",
-    "text": "14.1 AutoResearch\n在这个nanoChat项目之后，Karpathy大神有开源了一个叫做AutoResearch的神器（GitHub上的Stars比这个项目还高），它通过定义简单的三个文件：\n\nprepare.py：数据准备脚本\ntrain.py：训练脚本\nprogram.md: 告诉Agent该怎么做\n\n通过这个方法，Agent自动迭代模型结构、优化器、超参数、训练循环、batch size、model size 等等，来找到最优的训练方案。不过我觉得最有创新的方法就是它可以通过git来回滚，保留好的结果，回滚坏的结果。通过这种方式，AutoResearch可以在没有人类干预的情况下自动进行实验和优化，并提高了模型的性能，如下图所示：\n\n\n\n\n\n\nFigure 2"
+    "text": "14.1 AutoResearch\n在这个nanoChat项目之后，Karpathy大神有开源了一个叫做AutoResearch的神器（GitHub上的Stars比这个项目还高），它通过定义简单的三个文件：\n\nprepare.py：数据准备脚本\ntrain.py：训练脚本\nprogram.md: 告诉Agent该怎么做\n\n通过这个方法，Agent自动迭代模型结构、优化器、超参数、训练循环、batch size、model size 等等，来找到最优的训练方案。不过我觉得最有创新的方法就是它可以通过git来回滚，保留好的结果，回滚坏的结果。通过这种方式，AutoResearch可以在没有人类干预的情况下自动进行实验和优化，并提高了模型的性能，如下图所示：\n\n\n\n\n\n\nFigure 5"
   },
   {
     "objectID": "posts/Projects/Micro-LLM/index.html#multi-modality-llm",
@@ -1753,15 +1753,15 @@
     "objectID": "posts/Projects/Micro-LLM/index.html#rope-position-embedding",
     "href": "posts/Projects/Micro-LLM/index.html#rope-position-embedding",
     "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
-    "section": "3.1 RoPE Position Embedding",
-    "text": "3.1 RoPE Position Embedding"
+    "section": "3.3 RoPE Position Embedding",
+    "text": "3.3 RoPE Position Embedding\n有了Word Embedding Layer之后，我们就需要引入位置信息了。由于Transformer模型没有循环结构，因此需要通过位置编码来引入位置信息，使模型能够理解输入序列中各个元素的相对位置。传统的Transforme(Vaswani et al. 2023)使用的是Sinusoidal Position Encoding，但是在现代的LLM中，我们通常会使用RoPE（Rotary Position Embedding）(Su et al. 2023)来替代传统的Sinusoidal Position Encoding，RoPE是一种基于旋转的位置信息编码方法，它通过对输入的Token向量进行旋转来引入位置信息。具体来说，RoPE将hidden state分成两个一组，然后对每一组进行旋转，旋转的角度由位置信息和hidden state 的维度决定。这样，模型就可以通过旋转后的向量来捕捉输入序列中各个元素的相对位置关系\n\n\n\n\n\n\nFigure 2\n\n\n\n用数学公式表示就是：\n\\[\nRoPE(x, m) =\n\\begin{pmatrix}\nx_1 \\\\\nx_2 \\\\\nx_3 \\\\\nx_4 \\\\\n\\vdots \\\\\nx_{d-1} \\\\\nx_d\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\cos m\\theta_1 \\\\\n\\cos m\\theta_1 \\\\\n\\cos m\\theta_2 \\\\\n\\cos m\\theta_2 \\\\\n\\vdots \\\\\n\\cos m\\theta_{d/2} \\\\\n\\cos m\\theta_{d/2}\n\\end{pmatrix}\n+\n\\begin{pmatrix}\n-x_2 \\\\\nx_1 \\\\\n-x_4 \\\\\nx_3 \\\\\n\\vdots \\\\\n-x_d \\\\\nx_{d-1}\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\sin m\\theta_1 \\\\\n\\sin m\\theta_1 \\\\\n\\sin m\\theta_2 \\\\\n\\sin m\\theta_2 \\\\\n\\vdots \\\\\n\\sin m\\theta_{d/2} \\\\\n\\sin m\\theta_{d/2}\n\\end{pmatrix}\n\\tag{1}\\]\n我们可以看到，其中\\((x_1, x_2)\\)是一组，\\((x_3, x_4)\\)是一组，以此类推，每一组都会被旋转，旋转的角度由位置信息\\(m\\)和hidden state的维度决定。通过这种方式，RoPE能够引入位置信息，使模型能够捕捉输入序列中各个元素的相对位置关系，从而提高模型的性能和表达能力。其中\\(\\theta_i\\) 是一个预定义的频率，通常是根据hidden state的维度来计算的，具体来说，\\(\\theta_i\\) 的计算方式如下：\n\\[\n\\theta_i = \\frac{1}{\\text{base}^{2i/d}}\n\\tag{2}\\]\n其中，\\(i\\) 是hidden state的维度索引，\\(d\\) 是hidden state的总维度，\\(\\text{base}\\) 是一个预定义的常数，通常取值为10,000。base的作用是控制控制 RoPE 中各个维度旋转频率的尺度范围，简单来说就是:\n\nbase 大：更多低频，旋转更慢，更偏向长距离\nbase 小：更多高频，旋转更快，更偏向短距离\n\n在我们这个项目中，我们会使用默认的base值100,000来计算RoPE的位置编码，这样可以在处理不同长度的输入序列时都能够有较好的性能表现。\n我们来看一下如何用代码来实现:\n\n\nchat_llm/model/llm.py\n\ndef apply_rotary_embedding(x: torch.Tensor, cos: torch.Tensor, sin: torch.Tensor) -&gt; torch.Tensor:\n    \"\"\"\n    x = cos * x\n    \"\"\"\n    assert x.ndim == 4, \"Input tensor must be of shape (batch_size, seq_len, num_heads, head_dim)\"\n    assert cos.shape == sin.shape, \"Cosine and sine tensors must have the same shape\"\n    assert cos.ndim == 4 and sin.ndim == 4, (\n        \"Cosine and sine tensors must be of shape (1, seq_len, num_heads, head_dim // 2)\"\n    )\n\n    x1, x2 = x.chunk(2, dim=-1)\n    y1 = x1 * cos + x2 * sin\n    y2 = x1 * (-sin) + x2 * cos\n    return torch.cat([y1, y2], dim=-1)\n\n接下来，我们看一下如何计算cosine和sine的值，这些值是根据位置信息\\(m\\)和hidden state的维度来计算的，具体代码如下：\n\n\nchat_llm/model/llm.py\n\ndef pre_compute_cos_sin(\n    max_seq_len: int,\n    head_dim: int,\n    base: int = 100_000,\n    device: torch.device = torch.device(\"cpu\"),\n    dtype: torch.dtype = torch.float32,\n) -&gt; tuple[torch.Tensor, torch.Tensor]:\n    channel_range = torch.arange(0, head_dim, 2, device=device, dtype=torch.float32)\n    inv_freq = 1.0 / (base ** (channel_range / head_dim))\n    pos_ids = torch.arange(max_seq_len, device=device, dtype=torch.float32)\n\n    freqs = torch.einsum(\"i,j-&gt;ij\", pos_ids, inv_freq)  # (max_seq_len, head_dim // 2)\n    cos, sin = freqs.cos(), freqs.sin()  # (max_seq_len, head_dim // 2)\n    cos, sin = cos.to(dtype=dtype), sin.to(dtype=dtype)\n    cos = cos[None, :, None, :]  # (1, max_seq_len, 1, head_dim // 2)\n    sin = sin[None, :, None, :]  # (1, max_seq_len, 1, head_dim // 2)\n    return cos, sin\n\n\n\nchat_llm/model/llm.py\n\nclass LLMModel(nn.Module):\n    def __init__(self, config: ModelConfig, padded_vocab_size: int = 64):\n        super().__init__()\n        ...\n        self.rotary_seq_len = config.max_seq_len * 10\n        cos, sin = pre_compute_cos_sin(\n            max_seq_len=self.rotary_seq_len, \n            head_dim=config.head_dim, \n            device=config.device, \n            dtype=config.dtype\n        )\n        self.register_buffer(\"cos\", cos, persistent=False)\n        self.register_buffer(\"sin\", sin, persistent=False)\n        ...\n\n我们通过 pre_compute_cos_sin 函数来预计算cosine和sine的值，并将其注册为模型的buffer，这样在模型的训练和推理过程中，我们就可以直接使用这些预计算的值来进行RoPE的位置编码了。通过这种方式，我们可以高效地引入位置信息，提高模型的性能和表达能力。\n\n\nNOTE: Different between code and math equation\n\n\n细心的读者可能会发现，我们代码的实现和我们上面给出的数学公式有一些不同，根据代码的实现方式，RoPE的配对方式是：\\((x_0,x_{d/2}), (x_1,x_{d/2+1}), \\dots, (x_{d/2-1},x_{d-1})\\)， 并且旋转的角度是\\(\\begin{pmatrix}\n\\cos(m\\theta_i) & \\sin(m\\theta_i)\\\\\n-\\sin(m\\theta_i) & \\cos(m\\theta_i)\n\\end{pmatrix}\\)，而我们上面给出的数学公式中，配对方式是\\((x_1,x_2), (x_3,x_4), \\dots, (x_{d-1},x_d)\\)，并且旋转的角度是\\(\\begin{pmatrix}\\cos(m\\theta_i) & \\sin(m\\theta_i)\\\\\n-\\sin(m\\theta_i) & \\cos(m\\theta_i)\n\\end{pmatrix}\\)。\n\\[\n\\mathrm{RoPE}_{\\text{code}}(x,m)=\n\\begin{pmatrix}\nx_1\\\\\nx_2\\\\\nx_3\\\\\n\\vdots\\\\\nx_{d/2}\\\\\nx_{d/2+1}\\\\\nx_{d/2+2}\\\\\nx_{d/2+3}\\\\\n\\vdots\\\\\nx_d\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\cos m\\theta_1\\\\\n\\cos m\\theta_2\\\\\n\\cos m\\theta_3\\\\\n\\vdots\\\\\n\\cos m\\theta_{d/2}\\\\\n\\cos m\\theta_1\\\\\n\\cos m\\theta_2\\\\\n\\cos m\\theta_3\\\\\n\\vdots\\\\\n\\cos m\\theta_{d/2}\n\\end{pmatrix}\n+\n\\begin{pmatrix}\nx_{d/2+1}\\\\\nx_{d/2+2}\\\\\nx_{d/2+3}\\\\\n\\vdots\\\\\nx_d\\\\\n-x_1\\\\\n-x_2\\\\\n-x_3\\\\\n\\vdots\\\\\n-x_{d/2}\n\\end{pmatrix}\n\\otimes\n\\begin{pmatrix}\n\\sin m\\theta_1\\\\\n\\sin m\\theta_2\\\\\n\\sin m\\theta_3\\\\\n\\vdots\\\\\n\\sin m\\theta_{d/2}\\\\\n\\sin m\\theta_1\\\\\n\\sin m\\theta_2\\\\\n\\sin m\\theta_3\\\\\n\\vdots\\\\\n\\sin m\\theta_{d/2}\n\\end{pmatrix}\n\\]\n这样实现的好处是： - 代码更加的简单 - 内存访问更加的连续，效率更高 - Fused Kernel的实现更加的简单\n至于为什么用逆时针来旋转，还是顺时针来旋转，这个其实并没有什么区别，主要是一个约定俗成的问题，RoPE的原论文(Su et al. 2023)中是使用逆时针旋转的，我们这里使用顺时针旋转的实现方式，主要是为了代码的简洁性和效率，毕竟在实际的实现中，这两种方式是等价的，并不会对模型的性能和表达能力产生实质性的影响。\n\n\n另外需要一个注意的点就是，我们把RoPE的位置编码的长度设置为 config.max_seq_len * 10，也就是说，我们预计算了10倍于最大序列长度的RoPE位置编码，这样做的主要目的是提前缓存更长范围的位置编码，从而避免在推理阶段处理更长上下文时重新计算 RoPE 参数；如果后续推理长度超过训练长度，也可以直接复用这部分预计算结果。不过，这并不意味着模型一定具备良好的长上下文外推能力。"
   },
   {
     "objectID": "posts/Projects/Micro-LLM/index.html#attention-mechanism",
     "href": "posts/Projects/Micro-LLM/index.html#attention-mechanism",
     "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
-    "section": "3.3 Attention Mechanism",
-    "text": "3.3 Attention Mechanism\n\n3.3.1 Globel Attention\n\n\n3.3.2 Sliding Window Attention"
+    "section": "3.5 Attention Mechanism",
+    "text": "3.5 Attention Mechanism\n\n3.5.1 Globel Attention\n\n\n3.5.2 Sliding Window Attention\n\n\n3.5.3 Hybrid Attention\n在LLM的训练中，我们通常会使用Global Attention和Sliding Window Attention的结合来提高模型的效率和性能。Global Attention能够捕捉输入序列中各个元素之间的全局依赖关系，而Sliding Window Attention能够捕捉输入序列中各个元素之间的局部依赖关系。通过结合Global Attention和Sliding Window Attention，我们可以同时捕捉输入序列中各个元素之间的全局依赖关系和局部依赖关系，从而提高模型的效率和性能。"
   },
   {
     "objectID": "posts/Projects/Micro-LLM/index.html#adamw",
@@ -1809,28 +1809,42 @@
     "objectID": "posts/Projects/Micro-LLM/index.html#normalization",
     "href": "posts/Projects/Micro-LLM/index.html#normalization",
     "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
-    "section": "3.2 Normalization",
-    "text": "3.2 Normalization"
+    "section": "3.4 Normalization",
+    "text": "3.4 Normalization\n在Transformer模型中，Normalization是一个非常重要的组件，它能够帮助模型更好地训练和收敛。传统的Transformer使用的是LayerNorm来进行Normalization，但是在现代的LLM中，我们通常会使用RMSNorm(Zhang and Sennrich 2019)来替代传统的LayerNorm，RMSNorm是一种基于均方根的Normalization方法，它通过计算输入的均方根来进行Normalization，从而提高模型的效率和性能。具体来说，RMSNorm的数学表达式如下：\n\\[\n\\mathrm{RMSNorm}(x) = \\frac{x}{\\sqrt{\\frac{1}{d} \\sum_{i=1}^{d} x_i^2 + \\epsilon}}\n\\tag{3}\\] 其中，\\(x\\) 是输入的向量，\\(d\\) 是输入向量的维度，\\(\\epsilon\\) 是一个小的常数，用于防止除以零。RMSNorm通过计算输入的均方根来进行Normalization，这样可以避免LayerNorm中计算均值和方差的开销，从而提高模型的效率和性能。并且我们丢掉了RMSNorm中的Learnable Parameters，因为在LLM的训练中， Norm 的主要任务是保持数值的稳定性，而不是学习表达能力，丢掉Learnable Parameters可以进一步减少模型的参数量和计算复杂度，从而提高模型的效率和性能。\n\n3.4.1 Pre-Normalization\n在 LLM 训练中，Normalization 的位置也是一个非常重要的设计选择，常见的方式主要有两种：\n\nPre-Normalization（Pre-Norm）：在每个 Transformer 子层（如 Attention 或 MLP）输入之前进行 Normalization。\nPost-Normalization（Post-Norm）：在每个 Transformer 子层输出之后，并在 Residual Add 之后进行 Normalization。\n\n\n\n\n\n\n\nFigure 3\n\n\n\n在最初的 Transformer(Vaswani et al. 2023) 中，采用的是 Post-Norm 的设计；而在现代 LLM 中，更常见的是 Pre-Norm。这是因为 Pre-Norm 通常能够带来更好的训练稳定性，尤其是在模型层数较深时表现更明显。\n具体来说，Pre-Norm 会将每个子层写成：\n\\[\nx_{l+1} = x_l + F(\\mathrm{Norm}(x_l))\n\\tag{4}\\]\n而 Post-Norm 的形式通常为： \\[\nx_{l+1} = \\mathrm{Norm}(x_l + F(x_l))\n\\tag{5}\\]\n相比之下，Pre-Norm 的 Residual 路径更加“干净”，恒等映射 \\(x_l \\to x_{l+1}\\) 更容易保留下来，因此梯度可以更直接地沿着 Residual Connection 向前传播。这使得深层网络在训练时更不容易出现梯度消失或梯度爆炸的问题，也因此成为现代大规模语言模型中的主流选择。"
   },
   {
     "objectID": "posts/Projects/Micro-LLM/index.html#feed-forward-network-ffn",
     "href": "posts/Projects/Micro-LLM/index.html#feed-forward-network-ffn",
     "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
-    "section": "3.4 Feed-Forward Network (FFN)",
-    "text": "3.4 Feed-Forward Network (FFN)"
+    "section": "3.6 Feed-Forward Network (FFN)",
+    "text": "3.6 Feed-Forward Network (FFN)\n在模型中，另一个核心组件是 Feed-Forward Network (FFN)。它通常位于每个 Transformer Block 的 Attention 之后，对每个位置的表示独立地进行非线性变换，从而进一步提升模型的表达能力。\n在这里，我们使用的是现代 LLM 中非常常见的一种 FFN 变体，也就是 Gated MLP，更具体地说，可以看作是 SwiGLU 风格 的实现。相比传统 Transformer 中使用的两层 MLP：\n\\[\n\\mathrm{FFN}(x) = W_2 \\,\\sigma(W_1 x)\n\\tag{6}\\]\nGated MLP 会额外引入一个门控分支，通过门控机制动态控制信息流动，其形式可以写成：\n\\[\n\\mathrm{MLP}(x) = W_{\\text{down}}\\Big( \\mathrm{silu}(W_{\\text{gate}}x) \\odot (W_{\\text{up}}x) \\Big)\n\\tag{7}\\]\n其中：\n\n\\(W_{\\text{gate}}\\) 对应 gate_proj\n\\(W_{\\text{up}}\\) 对应 up_proj\n\\(W_{\\text{down}}\\) 对应 down_proj\n\\(\\odot\\) 表示逐元素相乘\n\n\n\n\n\n\n\nFigure 4\n\n\n\n\n\nchat_llm/model/llm.py\n\nclass MLP(nn.Module):\n    def __init__(self, config):\n        super().__init__()\n        self.gate_up_proj = Linear(config.embed_dim, 2 * config.d_ff, bias=False)\n        self.down_proj = Linear(config.d_ff, config.embed_dim, bias=False)\n\n    def forward(self, x):\n        gate, up = self.gate_up_proj(x).chunk(2, dim=-1)\n        return self.down_proj(F.silu(gate) * up)\n\n有一个需要注意的点就是，在这个实现中，我们将 gate_proj 和 up_proj 合并成了一个线性层 gate_up_proj，\\([x_{\\text{gate}}, x_{\\text{up}}] = W_x\\)，这样可以减少一次矩阵乘法的计算。"
   },
   {
     "objectID": "posts/Projects/Micro-LLM/index.html#attention-residual",
     "href": "posts/Projects/Micro-LLM/index.html#attention-residual",
     "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
-    "section": "3.5 Attention Residual",
-    "text": "3.5 Attention Residual"
+    "section": "3.7 Attention Residual",
+    "text": "3.7 Attention Residual"
   },
   {
     "objectID": "posts/Projects/Micro-LLM/index.html#dummy-test",
     "href": "posts/Projects/Micro-LLM/index.html#dummy-test",
     "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
-    "section": "3.6 Dummy Test",
-    "text": "3.6 Dummy Test"
+    "section": "3.8 Dummy Test",
+    "text": "3.8 Dummy Test"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#linear-layer",
+    "href": "posts/Projects/Micro-LLM/index.html#linear-layer",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "3.1 Linear Layer",
+    "text": "3.1 Linear Layer\n首先我们先定义一个Linear Layer，这个Linear Layer会被我们后续的模型结构所使用。这个Linear Layer的实现非常简单，主要的目的是为了支持后续的Mixed Precision Training(Micikevicius et al. 2018), 主要是在计算过程中使用FP16或者BF16来提高模型的效率和性能。我们会在这个Linear Layer中添加一个参数 dtype，来指定我们使用的数值类型，具体代码如下:\n\n\nchat_llm/model/llm.py\n\nclass Linear(nn.Linear):\n    \"\"\"\n    A linear layer that supports mixed precision by converting weights and bias to the input dtype during the forward pass.\n    \"\"\"\n\n    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:\n        dtype = x.dtype\n        weight = self.weight.to(dtype)\n        bias = self.bias.to(dtype) if self.bias is not None else None\n        return F.linear(x, weight, bias)\n\n通过这个Linear Layer，我们在forward的过程中，显示地将weight和bias转换为输入的数值类型比如 bfloat16 或者 float16，这样就可以支持Mixed Precision Training了。接下来我们会在后续的模型结构中使用这个Linear Layer来构建我们的Transformer架构。"
+  },
+  {
+    "objectID": "posts/Projects/Micro-LLM/index.html#word-embedding-layer",
+    "href": "posts/Projects/Micro-LLM/index.html#word-embedding-layer",
+    "title": "ChatLLM: From-Scratch LLM Training and Post-Training Stack",
+    "section": "3.2 Word Embedding Layer",
+    "text": "3.2 Word Embedding Layer\n所有的LLM的模型，不论是基于Transformer框架，还是其他框架，都会有一个Embedding Layer来将所有的输入Tokens（One hot encoding）转化为Dense Vector的形式。通常来说，Embedding Layer的输入是一个整数序列，表示输入文本中的每个Token的索引，输出是一个二维矩阵，每一行对应一个Token的向量表示。这个向量表示可以通过训练来学习得到。我们通过一个简单的 nn.Embedding 来实现这个Embedding Layer，具体代码如下：\n\n\nchat_llm/model/llm.py\n\nclass LLMModel(nn.Module):\n    def __init__(self, config: ModelConfig, padded_vocab_size: int = 64):\n        super().__init__()\n        ...\n        padded_vocab_size = (\n            (config.vocab_size + padded_vocab_size - 1) // padded_vocab_size\n        ) * padded_vocab_size \n\n        self.transformer = nn.ModuleDict(\n            {\n                \"wte\": nn.Embedding(padded_vocab_size, config.embed_dim), \n                \"h\": nn.ModuleList([Block(config, layer_idx) for layer_idx in range(config.n_layers)]),\n            }\n        )\n        ...\n\n值得注意的一个点就是，我们在定义Embedding Layer的时候，通常会将词表大小（vocab size）进行padding，来使其成为一个特定的倍数（第5-7行），比如64的倍数，这样可以更好地利用GPU的计算资源，提高模型的效率和性能。这个就是所谓的”Nice Number”, 因为这类尺寸通常更符合现代的GPU和CUDA kernel的实现习惯，主要有以下几个好处：\n\n更好的Warp 利用：GPU中的线程是以Warp为单位进行调度的，通常一个Warp包含32个线程。如果模型的维度是32的倍数，那么每个Warp都可以被完全利用，避免了资源的浪费。\nCUDA Kernel优化：很多CUDA kernel在处理特定尺寸的数据时会有优化，比如当输入的维度是32、64、128等时，CUDA kernel可以更高效地进行计算，减少内存访问的开销。\n更适合显存访问：GPU 读取显存不是一个元素一个元素慢慢读，而是按固定大小的 memory segment 来取数据。\nTensor Core优化：对于NVIDIA的Tensor Core来说，通常要求输入的维度是8、16、32等特定的倍数，这样才能充分利用Tensor Core的计算能力。如果不满足这些条件，则可能无法使用Tensor Core，导致性能下降。\n\n因此，在设计Embedding Layer的时候，我们通常会将词表大小进行padding，来使其成为一个特定的倍数，这样可以更好地利用GPU的计算资源，提高模型的效率和性能。"
   }
 ]
