@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="">
+<meta name="author" content="Yuyang Zhang">
+<meta name="description" content="要想训练好一个LLM，除了有强大的模型架构和充足的计算资源，数据同样至关重要。Lecture 13和14深入探讨了用于训练大型语言模型的数据收集、清洗和处理方法。内容涵盖了不同类型的数据源（如网络文本、书籍、对话数据等），以及如何进行数据预处理以提升模型性能。此外，还介绍了数据增强技术和数据质量评估方法，帮助我们更好地理解如何利用高质量的数据来训练出更优秀的语言模型。">
 
-<title>About YUYANG</title>
+<title>Lecture 13 &amp; 14: Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,33 +22,54 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="././style/icon.avif" rel="icon">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-213121462314351c12dd3b6eb030f1fc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-cb9f6c690455c28238fbcbcd73a770ea.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-213121462314351c12dd3b6eb030f1fc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
-<script src="site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
-<link href="site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../.././style/icon.avif" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-8f792e8c3bace32b51045abf7f9a5a4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-44402bf054b1fe078bc4e7aebe64bce9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-8f792e8c3bace32b51045abf7f9a5a4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -143,11 +165,11 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="About YUYANG">
-<meta property="og:description" content="">
+<meta property="og:title" content="Lecture 13 &amp; 14: Data">
+<meta property="og:description" content="要想训练好一个LLM，除了有强大的模型架构和充足的计算资源，数据同样至关重要。Lecture 13和14深入探讨了用于训练大型语言模型的数据收集、清洗和处理方法。内容涵盖了不同类型的数据源（如网络文本、书籍、对话数据等），以及如何进行数据预处理以提升模型性能。此外，还介绍了数据增强技术和数据质量评估方法，帮助我们更好地理解如何利用高质量的数据来训练出更优秀的语言模型。">
 </head>
 
-<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -312,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
             <div id="quarto-search" class="" title="Search"></div>
@@ -322,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item">
@@ -336,15 +358,15 @@ document.addEventListener("DOMContentLoaded", function () {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./posts/Blogs/blogs_index.html"> 
+    <a class="nav-link" href="../../../../posts/Blogs/blogs_index.html"> 
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="../../../../posts/Projects/projects_index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="././posts/100-PwC/100-pwc_index.qmd"> 
+    <a class="nav-link" href="../../../.././posts/100-PwC/100-pwc_index.qmd"> 
 <span class="menu-text">100-PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -353,16 +375,12 @@ document.addEventListener("DOMContentLoaded", function () {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learning-notes">    
         <li>
-    <a class="dropdown-item" href="./posts/LearningNotes/CS336/index.html">
+    <a class="dropdown-item" href="../../../.././posts/CS336/index.qmd">
  <span class="dropdown-text">Stanford CS336 LLM From Scratch</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./posts/LearningNotes/Stanford-CME296-Diffusion/index.html">
+    <a class="dropdown-item" href="../../../.././posts/CME296/index.qmd">
  <span class="dropdown-text">Stanford CME296 Diffusion &amp; Large Vision Models</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./posts/LearningNotes/MIT6S184-Flow/index.html">
- <span class="dropdown-text">MIT 6.S184 Flow Matching and Diffusion Models</span></a>
   </li>  
     </ul>
   </li>
@@ -373,105 +391,178 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Lecture 13 &amp; 14: Data</h1>
+        </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title">About YUYANG</h1>
-                      </div>
-  </div>
-  <div class="quarto-title-meta column-page">
-    </div>
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-data-matters" id="toc-why-data-matters" class="nav-link active" data-scroll-target="#why-data-matters"><span class="header-section-number">1</span> Why Data Matters?</a></li>
+  <li><a href="#different-types-of-data" id="toc-different-types-of-data" class="nav-link" data-scroll-target="#different-types-of-data"><span class="header-section-number">2</span> Different Types of Data</a>
+  <ul>
+  <li><a href="#example" id="toc-example" class="nav-link" data-scroll-target="#example"><span class="header-section-number">2.1</span> Example</a></li>
+  </ul></li>
+  <li><a href="#pre-training-data-collection" id="toc-pre-training-data-collection" class="nav-link" data-scroll-target="#pre-training-data-collection"><span class="header-section-number">3</span> Pre-Training Data Collection</a>
+  <ul>
+  <li><a href="#common-crawl" id="toc-common-crawl" class="nav-link" data-scroll-target="#common-crawl"><span class="header-section-number">3.1</span> Common Crawl</a>
+  <ul>
+  <li><a href="#filter-common-crawl" id="toc-filter-common-crawl" class="nav-link" data-scroll-target="#filter-common-crawl"><span class="header-section-number">3.1.1</span> Filter Common Crawl</a>
+  <ul class="collapse">
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"><span class="header-section-number">3.1.1.1</span> </a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
 <!-- main -->
-<div class="quarto-about-solana column-page">
-  <div class="about-entity">
-    <div class="entity-contents">
-       <div class="about-links">
-  <a href="https://www.linkedin.com/in/zhang-yuyang/" class="about-link" rel="" target="">
-    <i class="bi bi-linkedin"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="https://github.com/YYZhang2025" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text"></span>
-  </a>
-  <a href="mailto:zhangyuyang1211@gmail.com" class="about-link" rel="" target="">
-    <i class="bi bi-envelope"></i>
-     <span class="about-link-text"></span>
-  </a>
-</div>
-      <div class="about-contents"><main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
-<p><span style="font-size: 1.3em; ">I am a recent graduate from Singapore Management University in MITB (AI Track). With a strong foundation in computer science and big data, I have hands-on experience in machine learning and deep learning, and I’m passionate about building impactful AI-driven solutions. I am currently seeking full-time opportunities in the AI field where I can contribute, grow, and make a meaningful impact. <strong>Open to Work</strong> – feel free to reach out at <a href="mailto:zhangyuyang1211@gmail.com">zhangyuyang1211@gmail.com</a>!</span></p>
-<section id="education" class="level2">
-<h2 data-anchor-id="education">Education</h2>
-<div class="timeline">
-  <div class="timeline-item">
-    <div class="dot"></div>
-    <div class="content">
-      <div class="year">2023 - 2025</div>
-      <div class="degree">Master of IT in Business</div>
-      <div class="school"><a href="https://www.smu.edu.sg/">Singapore Management University</a></div>
-    </div>
-  </div>
-  <div class="timeline-item">
-    <div class="dot"></div>
-    <div class="content">
-      <div class="year">2020 - 2023</div>
-      <div class="degree">Bachelor of Computer Science</div>
-      <div class="school"><a href="https://www.uow.edu.au/">University of Wollongong</a></div>
-    </div>
-  </div>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 13 &amp; 14: Data</h1>
 </div>
-</section>
-<section id="work-experience" class="level2">
-<h2 data-anchor-id="work-experience">Work Experience</h2>
-<div class="timeline">
-  <div class="timeline-item">
-    <div class="dot"></div>
-    <div class="content">
-      <div class="year">Feb 2025 - Apr 2025</div>
-      <div class="degree">Research Assistant Intern</div>
-      <div class="school"><a href="https://smart.mit.edu/">SMART</a></div>
-    </div>
-  </div>
-</div>
-</section>
-<section id="technical-skills" class="level2">
-<h2 data-anchor-id="technical-skills">Technical Skills</h2>
-<div class="tech-stack-container">
-  <div class="tech-tags">
-    <span class="tag">Python Development</span>
-    <span class="tag">Algorithm Design</span>
-    <span class="tag">Deep Learning</span>
-    <span class="tag">Machine Learning</span>
-    <span class="tag">Computer Vision</span>
-    <span class="tag">Natural Language Processing</span>
-    <span class="tag-highlight">Deep Reinforcement Learning</span>
-    <span class="tag">Graph Neural Networks</span>
-    <span class="tag-highlight">Large Language Model</span>
-    <span class="tag">Model Compression</span>
-    <span class="tag">Convex Optimization</span>
-    <span class="tag">Probabilistic Graph Model</span>
-    <span class="tag">Meta Learning</span>
-    <span class="tag-highlight">Deep Generative Model</span>
+
+<div>
+  <div class="description">
+    要想训练好一个LLM，除了有强大的模型架构和充足的计算资源，数据同样至关重要。Lecture 13和14深入探讨了用于训练大型语言模型的数据收集、清洗和处理方法。内容涵盖了不同类型的数据源（如网络文本、书籍、对话数据等），以及如何进行数据预处理以提升模型性能。此外，还介绍了数据增强技术和数据质量评估方法，帮助我们更好地理解如何利用高质量的数据来训练出更优秀的语言模型。
   </div>
 </div>
 
 
-</section>
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main></div>
-    </div>
-    <img src="style/profile.png" class="about-image
-  rounded " style="width: 15em;">
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
   </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-data-matters" id="toc-why-data-matters"><span class="header-section-number">1</span> Why Data Matters?</a></li>
+  <li><a href="#different-types-of-data" id="toc-different-types-of-data"><span class="header-section-number">2</span> Different Types of Data</a>
+  <ul>
+  <li><a href="#example" id="toc-example"><span class="header-section-number">2.1</span> Example</a></li>
+  </ul></li>
+  <li><a href="#pre-training-data-collection" id="toc-pre-training-data-collection"><span class="header-section-number">3</span> Pre-Training Data Collection</a>
+  <ul>
+  <li><a href="#common-crawl" id="toc-common-crawl"><span class="header-section-number">3.1</span> Common Crawl</a>
+  <ul>
+  <li><a href="#filter-common-crawl" id="toc-filter-common-crawl"><span class="header-section-number">3.1.1</span> Filter Common Crawl</a>
+  <ul>
+  <li><a href="#section" id="toc-section"><span class="header-section-number">3.1.1.1</span> </a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+<p>我们知道，模型训练需要两个重要的因素：模型架构和数据。前面的几节课程我们主要关注了模型架构的设计和优化，而在这一节，我们将重点讨论数据的重要性。要想训练好一个LLM，除了有强大的模型架构和充足的计算资源，数据同样至关重要。Lecture 13 和 14 将深入探讨用于训练大型语言模型的数据收集、清洗和处理方法。</p>
+<section id="why-data-matters" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Why Data Matters?</h1>
+<p>在很多开源权重模型（例如 LLaMA）的论文中，我们经常看到模型架构的描述和训练细节，但很少有关于数据的详细介绍。其背后主要有两个原因：</p>
+<ol type="1">
+<li><strong>数据隐私和商业机密</strong>：许多公司和研究机构在训练大型语言模型时使用了大量的网络文本、书籍、对话数据等，这些数据往往涉及版权和隐私问题，因此不便公开。</li>
+<li><strong>竞争壁垒</strong>：数据处理是最贵、最难复制的资产之一。</li>
+</ol>
+<p>在Foundation Model之前，数据通常是heavy annotation（例如图像分类中的ImageNet），但对于LLM来说，数据主要来自于网络文本、书籍、对话数据等，这些数据的规模和质量直接影响模型的性能和泛化能力。并且，Data 是一个long-tail problem，数据的质量和多样性对于模型的表现有着深远的影响。</p>
+</section>
+<section id="different-types-of-data" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Different Types of Data</h1>
+<p>大模型的训练阶段简单来说，可以分成3个阶段（现实里阶段节的边界可能更模糊）：</p>
+<ol type="1">
+<li>Pre-Training：在这个阶段，模型会使用大规模的文本数据进行无监督的训练，学习语言的基本结构和语义。</li>
+<li>Mid-Training：定向补充能力，数据更小，但更高质量，通常是一些特定领域的数据。</li>
+<li>Post-Training：让模型可以了聊天，更安全，需要做RLHF等，在这一阶段，需要一些指令数据、对话数据、偏好数据等。</li>
+</ol>
+<p>一个很实用的直觉是：</p>
+<div class="highlight">
+<p>越往后，数据越小、越贵、越“人为设计”，但对最终体验影响越大。</p>
 </div>
- <!-- /main -->
+<section id="example" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="example"><span class="header-section-number">2.1</span> Example</h2>
+<p>接下来我们来看一个具体的例子</p>
+<p>了解了不同的LLM训练阶段，接下来，我们来看一下在不同的阶段中，数据是如何收集的，我们先来看一下Pre-Training阶段，之后我们再来介绍Mid-Training和Post-Training阶段的数据收集方法。</p>
+</section>
+</section>
+<section id="pre-training-data-collection" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Pre-Training Data Collection</h1>
+<p>在Pre-Training阶段，模型需要大量的文本数据来学习语言的基本结构和语义。其实在GPT火之前，NLP领域已经有很多预训练语言模型了，例如BERT <span class="citation" data-cites="BERTPretrainingDeep2019devlin">(<a href="#ref-BERTPretrainingDeep2019devlin" role="doc-biblioref">Devlin et al. 2019</a>)</span>，这些模型的训练数据主要来自于网络文本、书籍等公开可用的数据源。 以BERT为例，BERT的训练数据主要来自于以下几个来源：</p>
+<ul>
+<li>BooksCorpus：当年从 Smashwords 抓取的免费自出版书籍（后来因 ToS 被下架）</li>
+<li>Wikipedia：高质量、结构化、引用链清晰，但有明显“缺失面”（观点、生活细节、长尾知识很多不在里面）</li>
+</ul>
+<p>Even high quality data source might contain bad content。</p>
+<p>我们之所以要以BERT为例子，是因为BERT标志着在Training阶段，Sequence are Document而不是之前的一个短句子Sentence，</p>
+<p>接下来我们来看一下GPT-2的训练数据，GPT-2的训练数据主要来自于WebText数据集，WebText是从Reddit上抓取的高质量文本数据，包含了大量的网络文本、新闻文章、博客等内容。其中包含了从 Reddit 高 karma 帖子的外链抓网页，相当于用群体行为做了一层过滤。</p>
+<section id="common-crawl" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="common-crawl"><span class="header-section-number">3.1</span> Common Crawl</h2>
+<p>Common Crawl 是一个非营利组织，致力于定期抓取和存档整个互联网的数据。它提供了一个庞大的、公开可用的网络文本数据集，涵盖了各种类型的网站和内容。Common Crawl 的数据集包含了数十亿个网页的文本内容，这些数据对于训练大型语言模型非常有价值，因为它们提供了丰富的语言表达和多样化的语料来源。Common Crawl（CC）更像：</p>
+<ul>
+<li>每月一次大规模 crawl</li>
+<li>输出 WARC（原始 HTTP 响应）和 WET（抽取后的文本）</li>
+<li>覆盖不完整、重复极多、噪声很大、而且 HTML→text 的工具会显著影响质量</li>
+</ul>
+<p>接下来讨论一下如何将HTML转化为Text。</p>
+<section id="filter-common-crawl" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="filter-common-crawl"><span class="header-section-number">3.1.1</span> Filter Common Crawl</h3>
+<p>原始的Common Crawl数据包含了大量的噪声和无关内容，因此需要进行过滤和清洗。常见的过滤方法包括：</p>
+<ul>
+<li>Rule-Based：基于规则的过滤方法，例如使用正则表达式来去除HTML标签、脚本、样式等无关内容。</li>
+<li>Model-Based：基于模型的过滤方法，例如使用预训练的语言模型来评估文本的质量，去除低质量或无意义的文本。</li>
+</ul>
+<section id="section" class="level4" data-number="3.1.1.1">
+
+
+
+
+</section>
+</section>
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">3.1.1.1 </h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-BERTPretrainingDeep2019devlin" class="csl-entry" role="listitem">
+Devlin, Jacob, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. <span>“<span>BERT</span>: <span class="nocase">Pre-training</span> of <span>Deep Bidirectional Transformers</span> for <span>Language Understanding</span>.”</span> May 24, 2019. <a href="https://doi.org/10.48550/arXiv.1810.04805">https://doi.org/10.48550/arXiv.1810.04805</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -487,6 +578,13 @@ document.addEventListener("DOMContentLoaded", function () {
       window.document.body.appendChild(a);
     }
     setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -882,6 +980,38 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
   </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark_dimmed">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      if (authorPrefersDark) {
+          [baseTheme, altTheme] = [altTheme, baseTheme];
+      }
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "YYZhang2025/YYZhang2025.github.io";
+    script.dataset.repoId = "R_kgDOQlDTcQ";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOQlDTcc4C2MRz";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -932,5 +1062,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-<script src="site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+<script src="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
 </body></html>
