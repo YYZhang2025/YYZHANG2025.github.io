@@ -52,6 +52,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -407,7 +410,7 @@ window.Quarto = {
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../.././posts/100-PwC/100-pwc_index.qmd"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/100-AI-Papers-with-Code/"> 
 <span class="menu-text">100-PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -481,16 +484,26 @@ window.Quarto = {
 </ul>
 <p>这个课程将从DDPM的方法基础开始，逐步介绍Score Matching， Flow Matching， 以及一些加速Diffusion Models的方法。课程主要是从Probabilistic Graph Modeling的角度来介绍Diffusion Models的原理和训练方法。对于那些想从<strong>Differential Equations</strong>的角度来理解的同学们，可以参考这个<a href="../../../posts/LearningNotes/MIT6S184-Flow/index.html">课程</a>。</p>
 <p><br> <br></p>
+<div id="fig-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
 
 
 
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1776255648569" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
+<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1776267009593" data-listing-reading-time-sort="3" data-listing-word-count-sort="574">
 <div class="thumbnail"><a href="../../../posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html" class="no-external">
 
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+<p class="card-img-top"><img src="Lec01/assets/ddpm-example.png"  class="thumbnail-image card-img"/></p>
 
 </a></div>
 <div class="body">
@@ -509,15 +522,15 @@ Yuyang Zhang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1776256448799" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
+<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1776318295552" data-listing-reading-time-sort="4" data-listing-word-count-sort="720">
 <div class="thumbnail"><a href="../../../posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html" class="no-external">
 
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+<img loading="lazy" src="../../../posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/assets/cover.png" class="thumbnail-image">
 
 </a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html" class="no-external"></a>
+<a href="../../../posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html" class="no-external">Lecture 02: Score Matching</a>
 </h3>
 <div class="delink listing-description"><a href="../../../posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html" class="no-external">
 <p>Lecture 02主要介绍了Score Matching的基本原理和训练方法。通过学习Lecture 02，我们可以理解Score Matching在Diffusion Models中的作用，以及如何利用Score Matching来训练Diffusion Models。此外，Lecture 02还介绍了一些基于Score Matching的变体方法，如Denoising Score Matching和Sliced Score Matching，这些方法在实际应用中具有重要的意义。</p>
@@ -997,6 +1010,38 @@ Yuyang Zhang
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

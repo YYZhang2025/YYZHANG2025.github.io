@@ -725,7 +725,7 @@
     "href": "posts/Blogs/blogs_index.html",
     "title": "👋🏻Welcome to Yuyang’s Blog",
     "section": "",
-    "text": "LLM Series Part2: Speed up & Scale up LLM\n\n\n在这篇文章中，我们将深入探讨LLM的高性能推理（Inference）技术。随着LLM的规模不断扩大，并且LLM相关的应用推理的计算资源需求也在不断增加，因此如何提高LLM的推理效率成为了一个重要的问题。在这篇文章中，我们将介绍一些常用的高性能推理技术，比如量化（Quantization），剪枝（Pruning），知识蒸馏（Knowledge Distillation）等，这些技术可以有效地减少模型的计算复杂度，提高模型的推理效率。另外，我们还会介绍一些针对LLM推理优化的硬件加速器，比如GPU，TPU等，以及一些针对LLM推理优化的软件库，比如ONNX…\n\n\n\n\n\n2026-04-08\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is Context Engineering & Harness Engineering?\n\n\n随着OpenClaw在2026年初的爆火，Context Engineering和Harness Engineering的概念被提出并且重新被人关注。Context Engineering主要是指在使用LLM的过程中，如何有效地管理和利用上下文信息，以提高模型的性能和效率。而Harness Engineering则是指在使用LLM的过程中，如何设计和构建一个高效的系统架构，以支持模型的训练和部署。在这篇文章中，我们将深入探讨Context Engineering和Harness Engineering的概念，以及它们在LLM应用中的重要性和实践方法。\n\n\n\n\n\n2026-03-21\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Series Part1: Architecture and Training Stages\n\n\n在这篇文章中，我们将深入探讨不同的LLM的模型架构。随着LLM的不断发展，模型的架构也在不断的演变，我们将从最初的Transformer架构展开，逐步的介绍不同Component的演变和改进。在最后，我们还会介绍除了Transformer架构之外的其他架构，比如Mamba, RetNet等。最后我们还会介绍不同的Optimizer，Loss Functions: Cross-Entropy Loss，Diffusion Loss等，以及Regularization techniques在LLM训练中的应用。\n\n\n\n\n\n2026-03-20\n\n\nYuyang Zhang\n\n\n3280 words\n\n\n13 mins\n\n\n\n\n\n\n\n\n\n\n\n\nReinforcement Learning in LLM\n\n\n\nTransformer\n\nLarge Language Model\n\nReinforcement Learning\n\n\n\nIn this blog, we explore how reinforcement learning (RL) is used to post-train large language models (LLMs) to improve performance, robustness, and alignment. We begin by formulating LLM generation as an RL problem (states, actions, policies, rewards), then introduce widely used RL-from-preference…\n\n\n\n\n\n2026-01-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\n\nMathematics\n\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of entropy, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its…\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\n\nDeep Learning\n\nSummary\n\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as…\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\n\nGenerative-Model\n\nDiffusion-Model\n\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic…\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "A Roadmap of Large Language Models (LLMs)\n\n\n在这篇文章中，我们将探讨大语言模型的发展史，以及如何训练出一个强大的LLM。我们从数据的收集和预处理开始，逐步介绍模型架构，训练方法，后训练，评估，部署，以及应用。之后我们将探讨LLM的应用，包括LLM-Based Agents，等等。最后我们将展望LLM的未来发展趋势。这篇文章不是一个详尽的技术指南，而是一个概览，旨在帮助读者理解LLM的基本概念和发展历程。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Series Part2: Speed up & Scale up LLM\n\n\n在这篇文章中，我们将深入探讨LLM的高性能推理（Inference）技术。随着LLM的规模不断扩大，并且LLM相关的应用推理的计算资源需求也在不断增加，因此如何提高LLM的推理效率成为了一个重要的问题。在这篇文章中，我们将介绍一些常用的高性能推理技术，比如量化（Quantization），剪枝（Pruning），知识蒸馏（Knowledge Distillation）等，这些技术可以有效地减少模型的计算复杂度，提高模型的推理效率。另外，我们还会介绍一些针对LLM推理优化的硬件加速器，比如GPU，TPU等，以及一些针对LLM推理优化的软件库，比如ONNX…\n\n\n\n\n\n2026-04-08\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is Context Engineering & Harness Engineering?\n\n\n随着OpenClaw在2026年初的爆火，Context Engineering和Harness Engineering的概念被提出并且重新被人关注。Context Engineering主要是指在使用LLM的过程中，如何有效地管理和利用上下文信息，以提高模型的性能和效率。而Harness Engineering则是指在使用LLM的过程中，如何设计和构建一个高效的系统架构，以支持模型的训练和部署。在这篇文章中，我们将深入探讨Context Engineering和Harness Engineering的概念，以及它们在LLM应用中的重要性和实践方法。\n\n\n\n\n\n2026-03-21\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLLM Series Part1: Architecture and Training Stages\n\n\n在这篇文章中，我们将深入探讨不同的LLM的模型架构。随着LLM的不断发展，模型的架构也在不断的演变，我们将从最初的Transformer架构展开，逐步的介绍不同Component的演变和改进。在最后，我们还会介绍除了Transformer架构之外的其他架构，比如Mamba, RetNet等。最后我们还会介绍不同的Optimizer，Loss Functions: Cross-Entropy Loss，Diffusion Loss等，以及Regularization techniques在LLM训练中的应用。\n\n\n\n\n\n2026-03-20\n\n\nYuyang Zhang\n\n\n3280 words\n\n\n13 mins\n\n\n\n\n\n\n\n\n\n\n\n\nReinforcement Learning in LLM\n\n\n\nTransformer\n\nLarge Language Model\n\nReinforcement Learning\n\n\n\nIn this blog, we explore how reinforcement learning (RL) is used to post-train large language models (LLMs) to improve performance, robustness, and alignment. We begin by formulating LLM generation as an RL problem (states, actions, policies, rewards), then introduce widely used RL-from-preference…\n\n\n\n\n\n2026-01-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nFrom Entropy to KL Divergence: A Comprehensive Guide\n\n\n\nMathematics\n\n\n\nKL Divergence, also known as Kullback-Leibler Divergence, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of entropy, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its…\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll kinds of “Learnings” in Deep Learning\n\n\n\nDeep Learning\n\nSummary\n\n\n\nIn the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.\n\n\n\n\n\n2025-12-02\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nThe Evolution of Position Encoding in the Transformer\n\n\n\nTransformer\n\nLarge Language Model\n\n\n\nIn the blog, I will go through different position encoding machnism used in the Transformer-based neural network architecture. We will explore why the position encoding is important and different types of position encoding. In the end, we will extend the position encoding to visual field, such as…\n\n\n\n\n\n2025-11-25\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nAll About Diffusion & Flow Models\n\n\n\nGenerative-Model\n\nDiffusion-Model\n\n\n\nThis article offers a comprehensive overview of diffusion models from multiple perspectives. We begin with the foundations—DDPM, DDIM, and Score Matching—and explore their relationships. From there, we introduce the ODE/SDE framework, showing how DDPM can be derived from stochastic…\n\n\n\n\n\n2025-10-15\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nSpeed Up Training for Neural Networks\n\n\n\nTraining Tricks\n\n\n\nTraining large neural networks can be time-consuming and resource-intensive. This blog post explores various techniques to speed up the training process, including optimizing calculating in the single GPUs, and parallelizing the training across multiple GPUs.\n\n\n\n\n\n2025-09-10\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/Blogs/LLM-RL/post.html",
@@ -2426,14 +2426,14 @@
     "href": "posts/LearningNotes/Stanford-CME296-Diffusion/index.html",
     "title": "Stanford CME296: Diffusion & Large Vision Models",
     "section": "",
-    "text": "Resources:\n\nLecture Website: CME 296 Diffusion\nLecture Recordings: YouTube Playlist\nCheatsheet: GitHub\n\n这个课程将从DDPM的方法基础开始，逐步介绍Score Matching， Flow Matching， 以及一些加速Diffusion Models的方法。课程主要是从Probabilistic Graph Modeling的角度来介绍Diffusion Models的原理和训练方法。对于那些想从Differential Equations的角度来理解的同学们，可以参考这个课程。\n \n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 01: Diffusion\n\n\nLecture 01主要介绍了什么是Diffusion Models。并且通过讲解Denoised Diffusion Probabilistic Models (DDPM)的基本原理和训练方法，帮助我们理解Diffusion Models的工作机制。通过学习Lecture 01，我们可以对Diffusion Models有一个初步的了解，并且在最后介绍了加速Diffusion Models: Denoising Diffusion Implicit Models (DDIM)的基本原理和实现方法.\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 02主要介绍了Score Matching的基本原理和训练方法。通过学习Lecture 02，我们可以理解Score Matching在Diffusion Models中的作用，以及如何利用Score Matching来训练Diffusion Models。此外，Lecture 02还介绍了一些基于Score Matching的变体方法，如Denoising Score Matching和Sliced Score Matching，这些方法在实际应用中具有重要的意义。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "Resources:\n\nLecture Website: CME 296 Diffusion\nLecture Recordings: YouTube Playlist\nCheatsheet: GitHub\n\n这个课程将从DDPM的方法基础开始，逐步介绍Score Matching， Flow Matching， 以及一些加速Diffusion Models的方法。课程主要是从Probabilistic Graph Modeling的角度来介绍Diffusion Models的原理和训练方法。对于那些想从Differential Equations的角度来理解的同学们，可以参考这个课程。\n \n\n\n\n\n\n\nFigure 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 01: Diffusion\n\n\nLecture 01主要介绍了什么是Diffusion Models。并且通过讲解Denoised Diffusion Probabilistic Models (DDPM)的基本原理和训练方法，帮助我们理解Diffusion Models的工作机制。通过学习Lecture 01，我们可以对Diffusion Models有一个初步的了解，并且在最后介绍了加速Diffusion Models: Denoising Diffusion Implicit Models (DDIM)的基本原理和实现方法.\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 02: Score Matching\n\n\nLecture 02主要介绍了Score Matching的基本原理和训练方法。通过学习Lecture 02，我们可以理解Score Matching在Diffusion Models中的作用，以及如何利用Score Matching来训练Diffusion Models。此外，Lecture 02还介绍了一些基于Score Matching的变体方法，如Denoising Score Matching和Sliced Score Matching，这些方法在实际应用中具有重要的意义。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html",
     "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html",
     "title": "Lecture 01: Diffusion",
     "section": "",
-    "text": "Back to top"
+    "text": "1 Problem Setting\n  2 Denoised Diffusion Probabilistic Models (DDPM)\n  \n  2.1 Forward Diffusion Process\n  2.2 Reverse Denoising Process\n  2.3 Training DDPM\n  2.4 Sampling from DDPM\n  \n  3 Denoising Diffusion Implicit Models (DDIM)"
   },
   {
     "objectID": "posts/LearningNotes/CS336/Lecture05&06/lec05.html",
@@ -2573,7 +2573,7 @@
     "href": "posts/LearningNotes/CS336/index.html",
     "title": "CS336: LLM from Scratch Lecture Notes and Assignments",
     "section": "",
-    "text": "Related Resources:\n\nLecture Website: CS336 LLM from Scratch\nLecture Recordings: YouTube Playlist\nMy Solution Repo: GitHub\n\n\n\nAbout this Course:\n\nThis course has 17 Lectures and 5 Assignments in total.\nIt might take around 200 hours to finish all the lectures and assignments.\n\n\n\n\nFor those who have limited time, I recommend focusing on the following key lectures and assignments:\n\nLECTURE 1, 2, 3, 4 & Assignment01: After completing these, you will have a solid understanding of the fundamentals of LLMs, such as the Transformer Language Model architecture, attention mechanism, Mixture of Experts, and the training process of LLMs using autoregressive language modeling.\nLECTURE 15, 16, 17 & Assignment05: These cover advanced topics such as LLM aligment algorithms, such as SFT, RLHF(PPO, DPO), and RLVR(GRPO, Dr.GRPO). After completing these, you will understand how to align LLMs with human preferences and train a reasoning LLM.\nLECTURE 5, 6, 7, 8 & Assignment02: These focus on the hardware and parallelism techniques for training large models. After completing these, you will understand how to efficiently train large LLMs using distributed systems, such as data parallelism, model parallelism, and pipeline parallelism, and speed up the training process by leveraging the power of GPU, and undertand FlashAttention and its implementation.\nThe remaining lectures and assignments are also important, but they can be studied at a later time based on your interests and needs. Those includes:\n\nLecture 9 & 11: Scaling Laws\nLecture 10: Inference Optimization\nLecture 12 & Assignment 03: Evaluation of LLMs\nLecture 13, 14 & Assignment 04: Data Collection and Processing\n\n\n\n\n\n1 Lectures Notes\n\n\n\n\n\n\n\n\n\n\n\nLecture 01: Introduction & Tokenization\n\n\nLecture01介绍了课程的大纲以及LLM的现状和基本概念。在课程的后半段介绍了Language Modeling的第一步，即Tokenization的基本概念和常用方法。着重介绍了Byte Pair Encoding (BPE)算法的原理和实现。在学习完Lecture 01后，我们可以开始尝试Assignment 01的第一部分，即BPE-Tokenization的实现\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 02: PyTorch Basics & Resource Accounts\n\n\nLecture02 介绍了PyTorch的基本概念和使用方法。可以将这节课当作一个review，复习一下之前学过的PyTorch知识点。同时，课程中介绍了一个 einops 的库，可以简化张量操作的代码编写。这节课也介绍了不同数据类型（如FP32, FP16, BF16等）在深度学习中的应用和优缺点。并且通过计算这些数据类型在内存中的占用，帮助我们理解为什么有些数据类型更适合在有限资源下进行训练, 并且在什么情况下需要应用混合精度训练（Mixed Precision Training），什么情况下需要用高精度的数据类型。在课程的最后，还介绍了不同的Optimizer（如SGD, Adam等）的基本原理和使用场景\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 04: Introduction to MoE\n\n\nLecture 04 介绍了 MoE（Mixture of Experts）的基本概念和原理。从模型架构、路由机制、训练方法等方面进行了详细讲解，并讨论了 MoE 在自然语言处理中的应用和优势。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 05 & 06: GPUs, Kernels & Flash Attention\n\n\nLecture05介绍了GPU的基本架构与工作原理，并且介绍了几种提升计算效率的方法，比如Kernel Fusion, Memory Coalescing Tiling 等，并且在课程最后介绍了Flash Attention的原理及其实现细节。在Lecture06中，主要介绍了Triton，一个用于编写高性能GPU代码的开源编译器。内容涵盖了Triton的基本概念、编程模型以及如何使用Triton编写高效的GPU内核。通过实际示例，展示了Triton在深度学习中的应用和优势。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 07 & 08: Parallelism Training\n\n\nLecture 07与08介绍了深度学习中的并行训练方法，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。重点讲解了各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 09 & 11: Scaling Laws\n\n\n为什么LARGE language models在大规模上表现更好？Lecture 09和11介绍了Scaling Laws的基本概念和原理，探讨了模型规模、数据规模与计算资源之间的关系。内容涵盖了不同类型的Scaling Laws（如参数规模、数据规模和计算规模）以及它们对模型性能的影响。通过实际案例，展示了Scaling Laws在深度学习中的应用和重要性。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 10: Inference & Deployment\n\n\n训练完LLM之后，如何进行高效的推理和部署是非常重要的。Lecture 10介绍了模型压缩、量化、蒸馏等技术，以提升推理效率和降低资源消耗。此外，还讨论了模型部署的常见方法和挑战，包括云端部署、本地部署以及边缘计算等。通过这些技术，可以更好地将训练好的模型应用于实际场景中。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 12: Evaluation Metrics\n\n\nLecture 12介绍了评估语言模型性能的各种指标和方法。内容涵盖了传统的评估指标，如困惑度（Perplexity）、准确率（Accuracy）等，以及更适用于生成任务的指标，如BLEU、ROUGE和METEOR等。此外，还讨论了人类评估的重要性及其在模型评估中的作用。通过这些评估方法，可以更全面地了解语言模型的表现和改进方向。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 13 & 14: Data\n\n\n要想训练好一个LLM，除了有强大的模型架构和充足的计算资源，数据同样至关重要。Lecture 13和14深入探讨了用于训练大型语言模型的数据收集、清洗和处理方法。内容涵盖了不同类型的数据源（如网络文本、书籍、对话数据等），以及如何进行数据预处理以提升模型性能。此外，还介绍了数据增强技术和数据质量评估方法，帮助我们更好地理解如何利用高质量的数据来训练出更优秀的语言模型。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 15: LLM Alignment SFT & RLHF(PPO, DPO)\n\n\nLecture15主要梳理 LLM 的后训练（Post-Training）主线：从监督微调（SFT）的数据与目标函数出发，解释为何SFT可以让模型获得一定的Instruct Following的能力，并系统介绍 RLHF 的奖励模型训练与 PPO 更新流程，进一步对比 DPO/SimPO 等将 RL 简化为监督学习的替代方案。最后总结 RLHF 的关键风险（reward hacking、model collapse），并说明为何需要走向可验证奖励的 RLVR 来提升推理能力与训练稳定性。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 16 & 17: LLM Alignment SFT & RLVR（GRPO）\n\n\n这节介绍了PPO， 以及DPO所存在的问题，并且引出了Reinforcement Learning from Verified Rewards (RLVR)的新方法GRPO。内容包括Advantage Function、Length Normalization关键技术细节，并通过DeepSeek-R1、Kimi 1.5和Qwen3等案例展示了GRPO在实际中的应用。而Lecture17则通过一个排序任务的具体例子，详细讲解了GRPO算法的实现细节，包括数据生成、奖励函数设计、模型架构以及训练过程，在这里就把两节课合成一节课来写。\n\n\n\n\n\n\n\n\nNo matching items\n\n\n\n2 Assignments Solutions\n\n\n\n\n\n\n\n\n\n\n\nAssignment 01: Tokenization & Language Modeling\n\n\nAssignment 01 要求我们实现一个简单的语言模型训练流程，涵盖数据预处理、模型定义、训练和评估等步骤。通过这个作业，我们将巩固对自然语言处理基础概念的理解，并掌握使用PyTorch进行深度学习模型开发的基本技能\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAssignment 02: Flash Attention & Data Parallelism\n\n\n在Assignment 02中，我们将实现Flash Attention和Data Parallelism，深入理解如何提升大型语言模型的训练效率和性能。通过这些技术的应用。首先我们会用Flash Attention来优化注意力机制的计算效率，减少内存占用和计算时间。接着，我们将实现Data Parallelism，将模型训练任务分布到多个GPU上，以加速训练过程并处理更大的模型和数据集。完成这两个部分后，我们将能够显著提升大型语言模型的训练效率，为后续的模型开发和应用打下坚实基础。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAssignment 04: Data Collection & Processing\n\n\n在Assignment 04中，我们将重点关注用于训练大型语言模型的数据收集和处理方法。首先，我们会探索不同类型的数据源，如网络文本、书籍和对话数据等，了解它们的特点和适用场景。接着，我们将学习如何进行数据清洗和预处理，以提升数据质量和模型性能。最后，我们还将介绍数据增强技术和数据质量评估方法，帮助我们更好地利用高质量的数据来训练出更优秀的语言模型。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAssignment 05: LLM Alignment: SFT, Expert Iteration, GRPO & DPO\n\n\n在Assignment 05 我们将会实现SFT， Expert Iteration以及GRPO算法，对Qwen2.5-Math-1.5B模型进行微调，以提升其在MATH数据集上的表现。通过这些算法的实现，我们将深入理解LLM的对齐方法，并掌握如何应用这些技术来改进大型语言模型的性能。\n\n\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n Back to top"
+    "text": "Related Resources:\n\nLecture Website: CS336 LLM from Scratch\nLecture Recordings: YouTube Playlist\nMy Solution Repo: GitHub\n\n\n\nAbout this Course:\n\nThis course has 17 Lectures and 5 Assignments in total.\nIt might take around 200 hours to finish all the lectures and assignments.\n\n\n\n\nFor those who have limited time, I recommend focusing on the following key lectures and assignments:\n\nLECTURE 1, 2, 3, 4 & Assignment01: After completing these, you will have a solid understanding of the fundamentals of LLMs, such as the Transformer Language Model architecture, attention mechanism, Mixture of Experts, and the training process of LLMs using autoregressive language modeling.\nLECTURE 15, 16, 17 & Assignment05: These cover advanced topics such as LLM aligment algorithms, such as SFT, RLHF(PPO, DPO), and RLVR(GRPO, Dr.GRPO). After completing these, you will understand how to align LLMs with human preferences and train a reasoning LLM.\nLECTURE 5, 6, 7, 8 & Assignment02: These focus on the hardware and parallelism techniques for training large models. After completing these, you will understand how to efficiently train large LLMs using distributed systems, such as data parallelism, model parallelism, and pipeline parallelism, and speed up the training process by leveraging the power of GPU, and undertand FlashAttention and its implementation.\nThe remaining lectures and assignments are also important, but they can be studied at a later time based on your interests and needs. Those includes:\n\nLecture 9 & 11: Scaling Laws\nLecture 10: Inference Optimization\nLecture 12 & Assignment 03: Evaluation of LLMs\nLecture 13, 14 & Assignment 04: Data Collection and Processing\n\n\n\n\n\n1 Lectures Notes\n\n\n\n\n\n\n\n\n\n\n\nLecture 01: Introduction & Tokenization\n\n\nLecture01介绍了课程的大纲以及LLM的现状和基本概念。在课程的后半段介绍了Language Modeling的第一步，即Tokenization的基本概念和常用方法。着重介绍了Byte Pair Encoding (BPE)算法的原理和实现。在学习完Lecture 01后，我们可以开始尝试Assignment 01的第一部分，即BPE-Tokenization的实现\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 02: PyTorch Basics & Resource Accounts\n\n\nLecture02 介绍了PyTorch的基本概念和使用方法。可以将这节课当作一个review，复习一下之前学过的PyTorch知识点。同时，课程中介绍了一个 einops 的库，可以简化张量操作的代码编写。这节课也介绍了不同数据类型（如FP32, FP16, BF16等）在深度学习中的应用和优缺点。并且通过计算这些数据类型在内存中的占用，帮助我们理解为什么有些数据类型更适合在有限资源下进行训练, 并且在什么情况下需要应用混合精度训练（Mixed Precision Training），什么情况下需要用高精度的数据类型。在课程的最后，还介绍了不同的Optimizer（如SGD, Adam等）的基本原理和使用场景\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 03&04: Transformer LLM Model Architecture & MoE\n\n\nLecture03和04介绍了Transformer Based LLM的模型架构以及Mixture of Experts (MoE) 模型的原理和实现细节。首先介绍了Transformer Based LLM的基本架构，包括Normalization Layer，Attention Layer和FFN Layers，包括介绍了如何Stable Training的各种技巧，包括Pre-Normlaization，QK-Norm等。接着在Lecture04 介绍了不同的Attention的变体，包括Linear Attention，Sparse Attention等，在Lecture04的后半段介绍了MoE模型的基本概念，架构组成部分以及训练方法等内容。最后还介绍了DeepSeek系列论文中提出的一些其他技巧，包括Multihead Latent Attention和Multi Tokens Prediction等内容。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 05 & 06: GPUs, Kernels & Flash Attention\n\n\nLecture05介绍了GPU的基本架构与工作原理，并且介绍了几种提升计算效率的方法，比如Kernel Fusion, Memory Coalescing Tiling 等，并且在课程最后介绍了Flash Attention的原理及其实现细节。在Lecture06中，主要介绍了Triton，一个用于编写高性能GPU代码的开源编译器。内容涵盖了Triton的基本概念、编程模型以及如何使用Triton编写高效的GPU内核。通过实际示例，展示了Triton在深度学习中的应用和优势。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 07 & 08: Parallelism Training\n\n\nLecture 07与08介绍了深度学习中的并行训练方法，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。重点讲解了各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 09 & 11: Scaling Laws\n\n\n为什么LARGE language models在大规模上表现更好？Lecture 09和11介绍了Scaling Laws的基本概念和原理，探讨了模型规模、数据规模与计算资源之间的关系。内容涵盖了不同类型的Scaling Laws（如参数规模、数据规模和计算规模）以及它们对模型性能的影响。通过实际案例，展示了Scaling Laws在深度学习中的应用和重要性。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 10: Inference & Deployment\n\n\n训练完LLM之后，如何进行高效的推理和部署是非常重要的。Lecture 10介绍了模型压缩、量化、蒸馏等技术，以提升推理效率和降低资源消耗。此外，还讨论了模型部署的常见方法和挑战，包括云端部署、本地部署以及边缘计算等。通过这些技术，可以更好地将训练好的模型应用于实际场景中。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 12: Evaluation Metrics\n\n\nLecture 12介绍了评估语言模型性能的各种指标和方法。内容涵盖了传统的评估指标，如困惑度（Perplexity）、准确率（Accuracy）等，以及更适用于生成任务的指标，如BLEU、ROUGE和METEOR等。此外，还讨论了人类评估的重要性及其在模型评估中的作用。通过这些评估方法，可以更全面地了解语言模型的表现和改进方向。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 13 & 14: Data\n\n\n要想训练好一个LLM，除了有强大的模型架构和充足的计算资源，数据同样至关重要。Lecture 13和14深入探讨了用于训练大型语言模型的数据收集、清洗和处理方法。内容涵盖了不同类型的数据源（如网络文本、书籍、对话数据等），以及如何进行数据预处理以提升模型性能。此外，还介绍了数据增强技术和数据质量评估方法，帮助我们更好地理解如何利用高质量的数据来训练出更优秀的语言模型。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 15: LLM Alignment SFT & RLHF(PPO, DPO)\n\n\nLecture15主要梳理 LLM 的后训练（Post-Training）主线：从监督微调（SFT）的数据与目标函数出发，解释为何SFT可以让模型获得一定的Instruct Following的能力，并系统介绍 RLHF 的奖励模型训练与 PPO 更新流程，进一步对比 DPO/SimPO 等将 RL 简化为监督学习的替代方案。最后总结 RLHF 的关键风险（reward hacking、model collapse），并说明为何需要走向可验证奖励的 RLVR 来提升推理能力与训练稳定性。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLecture 16 & 17: LLM Alignment SFT & RLVR（GRPO）\n\n\n这节介绍了PPO， 以及DPO所存在的问题，并且引出了Reinforcement Learning from Verified Rewards (RLVR)的新方法GRPO。内容包括Advantage Function、Length Normalization关键技术细节，并通过DeepSeek-R1、Kimi 1.5和Qwen3等案例展示了GRPO在实际中的应用。而Lecture17则通过一个排序任务的具体例子，详细讲解了GRPO算法的实现细节，包括数据生成、奖励函数设计、模型架构以及训练过程，在这里就把两节课合成一节课来写。\n\n\n\n\n\n\n\n\nNo matching items\n\n\n\n2 Assignments Solutions\n\n\n\n\n\n\n\n\n\n\n\nAssignment 01: Tokenization & Language Modeling\n\n\nAssignment 01 要求我们实现一个简单的语言模型训练流程，涵盖数据预处理、模型定义、训练和评估等步骤。通过这个作业，我们将巩固对自然语言处理基础概念的理解，并掌握使用PyTorch进行深度学习模型开发的基本技能\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAssignment 02: Flash Attention & Data Parallelism\n\n\n在Assignment 02中，我们将实现Flash Attention和Data Parallelism，深入理解如何提升大型语言模型的训练效率和性能。通过这些技术的应用。首先我们会用Flash Attention来优化注意力机制的计算效率，减少内存占用和计算时间。接着，我们将实现Data Parallelism，将模型训练任务分布到多个GPU上，以加速训练过程并处理更大的模型和数据集。完成这两个部分后，我们将能够显著提升大型语言模型的训练效率，为后续的模型开发和应用打下坚实基础。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAssignment 04: Data Collection & Processing\n\n\n在Assignment 04中，我们将重点关注用于训练大型语言模型的数据收集和处理方法。首先，我们会探索不同类型的数据源，如网络文本、书籍和对话数据等，了解它们的特点和适用场景。接着，我们将学习如何进行数据清洗和预处理，以提升数据质量和模型性能。最后，我们还将介绍数据增强技术和数据质量评估方法，帮助我们更好地利用高质量的数据来训练出更优秀的语言模型。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAssignment 05: LLM Alignment: SFT, Expert Iteration, GRPO & DPO\n\n\n在Assignment 05 我们将会实现SFT， Expert Iteration以及GRPO算法，对Qwen2.5-Math-1.5B模型进行微调，以提升其在MATH数据集上的表现。通过这些算法的实现，我们将深入理解LLM的对齐方法，并掌握如何应用这些技术来改进大型语言模型的性能。\n\n\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\n Back to top"
   },
   {
     "objectID": "posts/LearningNotes/CS336/Lecture9&11/lec9.html",
@@ -2662,9 +2662,9 @@
   {
     "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html",
     "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html",
-    "title": "",
+    "title": "Lecture 02: Score Matching",
     "section": "",
-    "text": "Back to top"
+    "text": "1 Problem Set Up\n  2 Score Estimation\n  3 Denoising Score Matching\n  \n  3.1 Score of Gaussian Distribution\n  3.2 Related to DDPM\n  \n  4 Differential Formulation of Score Matching\n  \n  4.1 Wiener Process\n  4.2 Continuous-Time Formulation of DDPM\n  \n  5 Training\n在Lecture01里，我们了解了什么是DDPM(Ho, Jain, and Abbeel 2020), 以及如何通过DDIM(J. Song, Meng, and Ermon 2022)来加速Inference的过程，在这节课中，我们将了解什么是Score Matching(Y. Song and Ermon 2020)."
   },
   {
     "objectID": "posts/LearningNotes/MIT6S184-Flow/index.html",
@@ -2672,5 +2672,383 @@
     "title": "MIT 6.S184: Introduction to Flow Matching and Diffusion Models",
     "section": "",
     "text": "Not start yet. Please check back later!\n\n\n\n Back to top"
+  },
+  {
+    "objectID": "posts/100PwC/idnex.html",
+    "href": "posts/100PwC/idnex.html",
+    "title": "About This Website",
+    "section": "",
+    "text": "在2026年春节期间，无聊至极，于是将之前的资料重新整理了一下，组成了这个网站。与之前的网站不一样，这个网站主要是用来记录不同课程，阅读笔记，以及还在进行的100 Paper with Code 系列的。之所以把这个网站命名为“Learning Notes”，是因为我觉得这个名字比较贴切，毕竟这个网站的主要内容就是一些学习笔记。希望这个网站能够帮助到一些正在学习相关课程或者对相关领域感兴趣的人。\n\n\n随着2023年ChatGPT的爆发，随之而来的是各种各样的AI工具，网络上也充斥着各种AI生成的内容。在这种情况下，也有好多小伙伴私信我说，为什么还要写这种学习的笔记？现在AI这么发达，直接AI总结，生成不就好了吗？ 的确，从ChatGPT， 到现在（2026年初）大火的OpenClaw，这些AI工具的确可以帮助我们完成很多任务，但是使用下来，给我带来的是一种空虚感，就好像吃了快餐一样，虽然很方便，但是吃完之后就没有什么满足感了。内容爆炸式的增长，每天被各种信息包围，不断用AI填补空白，但却很难真正消化和理解这些信息。包括现在的Vibe Coding，可以在几分钟内搭建，部署一个可运行的网站，然后呢？我们需要的不是一个可运行的网站，而是一个有价值，有内容的网站。就好像现在的AI工具，可以在几秒钟内生成一篇文章，但是我们需要的不是一篇文章，而是一篇有深度，有见解的文章。所以我觉得，在这个AI时代，写学习笔记依然是非常有必要的。通过写学习笔记，我们可以更好地消化和理解这些信息，真正掌握这些知识，而不是被这些信息所淹没。我尝试过用Claude来收集总结我想要的内容，很厉害，一下子创建出来20多个Markdown文件，内容也是可圈可点，有许多我没有了解过的角度，但是我不能立马吸收里面的内容，就好像囫囵吞枣, 过目就忘， 反而是自己写的笔记，虽然可能不够完美，但是在写的过程中，我需要不断地思考，不断地理解，这样才能真正掌握这些知识。所以我觉得，在这个AI时代，写学习笔记依然是非常有必要的。知其然还要知其所以然，只有真正理解了这些知识，才能更好地应用这些知识，而不是被这些知识所束缚。\n第二原因就是，在本科期间，有幸拜读过CS自学指南。我算是它的忠实粉丝了，从它在几百个⭐️的阶段，到现在已经有7万多个⭐️，我都一直在关注它的更新。它的内容非常丰富，涵盖了计算机科学的各个领域，从基础的编程，到算法，再到人工智能，机器学习，深度学习等等。从那时起，我就被它的作者，以及里面涵盖的所有课程的大学，教授的Open Source精神所深深吸引了。也正是因为这个网站，我才有了写学习笔记的想法，希望能够把我在学习过程中积累的一些知识和经验分享给更多的人，帮助他们更好地学习和成长。"
+  },
+  {
+    "objectID": "posts/100PwC/idnex.html#为什么在ai时代还要写学习笔记",
+    "href": "posts/100PwC/idnex.html#为什么在ai时代还要写学习笔记",
+    "title": "About This Website",
+    "section": "",
+    "text": "随着2023年ChatGPT的爆发，随之而来的是各种各样的AI工具，网络上也充斥着各种AI生成的内容。在这种情况下，也有好多小伙伴私信我说，为什么还要写这种学习的笔记？现在AI这么发达，直接AI总结，生成不就好了吗？ 的确，从ChatGPT， 到现在（2026年初）大火的OpenClaw，这些AI工具的确可以帮助我们完成很多任务，但是使用下来，给我带来的是一种空虚感，就好像吃了快餐一样，虽然很方便，但是吃完之后就没有什么满足感了。内容爆炸式的增长，每天被各种信息包围，不断用AI填补空白，但却很难真正消化和理解这些信息。包括现在的Vibe Coding，可以在几分钟内搭建，部署一个可运行的网站，然后呢？我们需要的不是一个可运行的网站，而是一个有价值，有内容的网站。就好像现在的AI工具，可以在几秒钟内生成一篇文章，但是我们需要的不是一篇文章，而是一篇有深度，有见解的文章。所以我觉得，在这个AI时代，写学习笔记依然是非常有必要的。通过写学习笔记，我们可以更好地消化和理解这些信息，真正掌握这些知识，而不是被这些信息所淹没。我尝试过用Claude来收集总结我想要的内容，很厉害，一下子创建出来20多个Markdown文件，内容也是可圈可点，有许多我没有了解过的角度，但是我不能立马吸收里面的内容，就好像囫囵吞枣, 过目就忘， 反而是自己写的笔记，虽然可能不够完美，但是在写的过程中，我需要不断地思考，不断地理解，这样才能真正掌握这些知识。所以我觉得，在这个AI时代，写学习笔记依然是非常有必要的。知其然还要知其所以然，只有真正理解了这些知识，才能更好地应用这些知识，而不是被这些知识所束缚。\n第二原因就是，在本科期间，有幸拜读过CS自学指南。我算是它的忠实粉丝了，从它在几百个⭐️的阶段，到现在已经有7万多个⭐️，我都一直在关注它的更新。它的内容非常丰富，涵盖了计算机科学的各个领域，从基础的编程，到算法，再到人工智能，机器学习，深度学习等等。从那时起，我就被它的作者，以及里面涵盖的所有课程的大学，教授的Open Source精神所深深吸引了。也正是因为这个网站，我才有了写学习笔记的想法，希望能够把我在学习过程中积累的一些知识和经验分享给更多的人，帮助他们更好地学习和成长。"
+  },
+  {
+    "objectID": "posts/100PwC/idnex.html#最后",
+    "href": "posts/100PwC/idnex.html#最后",
+    "title": "About This Website",
+    "section": "最后",
+    "text": "最后\n最后，希望这个网站能够帮助到一些正在学习相关课程或者对相关领域感兴趣的人。如果你想要更全面的了解某一方面的知识，我推荐可以去阅读我们的Blog，里面有很多关于不同领域的内容。\n\n当然，由于个人精力有限，网站内容难免有所不足之处，如果你有任何建议或者想要分享的内容，欢迎随时联系我。谢谢！"
+  },
+  {
+    "objectID": "posts/100PwC/idnex.html#关于logo",
+    "href": "posts/100PwC/idnex.html#关于logo",
+    "title": "About This Website",
+    "section": "关于Logo",
+    "text": "关于Logo\n这个网站的Logo是我家的猫，叫做花花。希望大家在AI的时代，能够像花花一样，保持好奇心和探索精神，不断地学习和成长。也希望这个网站能够成为一个有价值，有内容的网站，帮助更多的人学习和成长。也希望这只可爱的猫咪能够给大家带来一些快乐和温暖。"
+  },
+  {
+    "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html#forward-diffusion-process",
+    "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html#forward-diffusion-process",
+    "title": "Lecture 01: Diffusion",
+    "section": "2.1 Forward Diffusion Process",
+    "text": "2.1 Forward Diffusion Process\n图Figure 1 中\\(x_0\\) 到 \\(x_T\\) 的过程就是一个前向过程（Forward Diffusion Process），在这个过程中，我们逐步向数据添加噪声，最终得到一个完全被噪声覆盖的图像。这个过程可以用以下的公式来描述：\n\\[\nq(\\mathbf{x}_t | \\mathbf{x}_{t-1}) = \\mathcal{N}(\\mathbf{x}_t; \\sqrt{1 - \\beta_t} \\mathbf{x}_{t-1}, \\beta_t \\mathbf{I})\n\\tag{1}\\]\n\n\n\n\n\n\nFigure 2\n\n\n\n需要注意的是，在这个Forward Diffusion Process中，所有的都是已知的，因为所有的参数，包括噪声的方差 \\(\\beta_t\\) 都是我们自己设定的。因此，我们可以很容易地从这个过程中采样得到任意时间步 \\(t\\) 的图像 \\(\\mathbf{x}_t\\)，而不需要依赖于任何模型。我们可以通过以下的公式来直接采样得到 \\(\\mathbf{x}_t\\)：\n\\[\n\\mathbf{x}_t = \\sqrt{1 - \\beta_t} \\mathbf{x}_{t-1} + \\sqrt{\\beta_t} \\boldsymbol{\\epsilon}_t, \\quad \\boldsymbol{\\epsilon}_t \\sim \\mathcal{N}(\\mathbf{0}, \\mathbf{I})\n\\tag{2}\\]\n通过Recursive的方式，我们可以将上面的公式展开，得到一个更为直接的采样公式：\n\\[\n\\begin{split}\n\\mathbf{x}_t &= \\sqrt{1 - \\beta_t} \\mathbf{x}_{t-1} + \\sqrt{\\beta_t} \\boldsymbol{\\epsilon}_t \\\\\n&= \\sqrt{1 - \\beta_t} \\left( \\sqrt{1 - \\beta_{t-1}} \\mathbf{x}_{t-2} + \\sqrt{\\beta_{t-1}} \\boldsymbol{\\epsilon}_{t-1} \\right) + \\sqrt{\\beta_t} \\boldsymbol{\\epsilon}_t \\\\\n&= \\sqrt{1 - \\beta_t} \\sqrt{1 - \\beta_{t-1}} \\mathbf{x}_{t-2} + \\sqrt{1 - \\beta_t} \\sqrt{\\beta_{t-1}} \\boldsymbol{\\epsilon}_{t-1} + \\sqrt{\\beta_t} \\boldsymbol{\\epsilon}_t \\\\\n&= \\cdots \\\\\n&= \\sqrt{\\bar{\\alpha}_t} \\mathbf{x}_0 + (1 - \\bar{\\alpha}_t) \\boldsymbol{\\epsilon}_t\n\\end{split}\n\\tag{3}\\]\n其中 \\(\\bar{\\alpha}_t = \\prod_{s=1}^t (1 - \\beta_s)\\)。通过这个公式，我们可以直接从原始图像 \\(\\mathbf{x}_0\\) 和一个随机噪声 \\(\\boldsymbol{\\epsilon}_t\\) 中采样得到任意时间步 \\(t\\) 的图像 \\(\\mathbf{x}_t\\)。\n需要注意的一点是, \\(\\beta_t\\)的选择，因为我们在Forward Diffusion Process的最后，希望得到一个完全被噪声覆盖的图像，也就是说 \\(\\mathbf{x}_T\\) 应该接近于一个纯噪声图像。因此，我们需要选择一个合适的 \\(\\beta_t\\) 序列，使得在 \\(t=T\\) 时，\\(\\bar{\\alpha}_T\\) 非常小，从而使得 \\(\\mathbf{x}_T\\) 主要由噪声组成。通常情况下，我们会选择一个线性递增的 \\(\\beta_t\\) 序列，例如：\n\\[\n\\beta_t = \\beta_\\text{start} + \\frac{t}{T} (\\beta_\\text{end} - \\beta_\\text{start})\n\\tag{4}\\]\n在这个公式中，"
+  },
+  {
+    "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html#reverse-denoising-process",
+    "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html#reverse-denoising-process",
+    "title": "Lecture 01: Diffusion",
+    "section": "2.2 Reverse Denoising Process",
+    "text": "2.2 Reverse Denoising Process\n图Figure 1 中\\(x_T\\) 到 \\(x_0\\) 的过程就是一个反向过程（Reverse Denoising Process），在这个过程中，我们逐步去噪，最终得到一个清晰的图像。总的来说，我们的训练目标是:\n\\[\n\\max_\\theta \\mathbb{E}_{\\mathbf{x}_0 \\sim q_\\text{data}(\\mathbf{x}_0)} \\left[ \\log p_\\theta(\\mathbf{x}_0) \\right]\n\\tag{5}\\]\n我们可以通过Maximize Evidence Lower Bound (ELBO) 来优化这个目标函数：\n\\[\n\\mathbb{E}_{\\mathbf{x}_0 \\sim q_\\text{data}(\\mathbf{x}_0)} \\left[ \\log p_\\theta(\\mathbf{x}_0) \\right] \\geq \\mathbb{E}_{\\mathbf{x}_0 \\sim q_\\text{data}(\\mathbf{x}_0)}  \\left[ \\log \\frac{p_\\theta(\\mathbf{x}_{0:T})}{q(\\mathbf{x}_{1:T} | \\mathbf{x}_0)} \\right]\n\\tag{6}\\] (具体的推导请参考这篇文章)\n把这个ELBO展开，我们可以得到以下的分解：\n\\[\n\\begin{split}\n\\mathbb{E}_{\\mathbf{x}_0 \\sim q_\\text{data}(\\mathbf{x}_0)} \\left[ \\log p_\\theta(\\mathbf{x}_0) \\right] &\\geq \\mathbb{E}_{\\mathbf{x}_0 \\sim q_\\text{data}(\\mathbf{x}_0)}  \\left[ \\log \\frac{p_\\theta(\\mathbf{x}_{0:T})}{q(\\mathbf{x}_{1:T} | \\mathbf{x}_0)} \\right] \\\\\n&= \\mathbb{E}_{\\mathbf{x}_0 \\sim q_\\text{data}(\\mathbf{x}_0)} \\left[ \\log p_\\theta(\\mathbf{x}_T) + \\sum_{t=1}^T \\log \\frac{p_\\theta(\\mathbf{x}_{t-1} | \\mathbf{x}_t)}{q(\\mathbf{x}_t | \\mathbf{x}_{t-1})} \\right] \\\\\n&= \\mathbb{E}_{\\mathbf{x}_0 \\sim q_\\text{data}(\\mathbf{x}_0)} \\left[ \\log p_\\theta(\\mathbf{x}_T) + \\sum_{t=1}^T \\mathbb{E}_{\\mathbf{x}_t \\sim q(\\mathbf{x}_t | \\mathbf{x}_0)} \\left[ \\log \\frac{p_\\theta(\\mathbf{x}_{t-1} | \\mathbf{x}_t)}{q(\\mathbf{x}_t | \\mathbf{x}_{t-1})} \\right] \\right]\n\\end{split}\n\\tag{7}\\]\n最后我们得到以下的训练目标：\n\\[\n\\mathcal{L}(\\theta) = \\mathbb{E}_{t, x_0, \\boldsymbol{\\epsilon}} \\left[ \\| \\boldsymbol{\\epsilon} - \\boldsymbol{\\epsilon}_\\theta(\\mathbf{x}_t, t) \\|^2 \\right]\n\\tag{8}\\]"
+  },
+  {
+    "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html#training-ddpm",
+    "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html#training-ddpm",
+    "title": "Lecture 01: Diffusion",
+    "section": "2.3 Training DDPM",
+    "text": "2.3 Training DDPM\n有了上面的数据，目标函数，模型（之后我们会介绍），我们就可以开始训练DDPM了。训练的过程非常简单，我们只需要按照以下的步骤进行：\n\n从数据分布 \\(q_\\text{data}(\\mathbf{x}_0)\\) 中采样一个图像 \\(\\mathbf{x}_0\\)。\n从均匀分布 \\(U(1, T)\\) 中采样一个时间步 \\(t\\)。\n从标准正态分布 \\(\\mathcal{N}(\\mathbf{0}, \\mathbf{I})\\) 中采样一个噪声 \\(\\boldsymbol{\\epsilon}\\)。\n根据公式Equation 2，计算得到 \\(\\mathbf{x}_t\\)。\n将 \\(\\mathbf{x}_t\\) 和 \\(t\\) 输入到模型 \\(\\boldsymbol{\\epsilon}_\\theta\\) 中，得到预测的噪声 \\(\\boldsymbol{\\epsilon}_\\theta(\\mathbf{x}_t, t)\\)。\n\n计算损失函数 \\(\\mathcal{L}(\\theta)\\)，并且使用反向传播来更新模型参数 \\(\\theta\\)。\n重复上述步骤，直到模型收敛。\n\n我们来看看简单代码实现：\n# Assume we have:\n# dataloader, model, optimizer\nx_0 = next(iter(dataloader))  # Step 1\n\nt = torch.randint(1, T + 1, (x_0.size(0),))  # Step 2\n\nepsilon = torch.randn_like(x_0)  # Step 3\n\nx_t = sqrt_alpha_bar[t] * x_0 + sqrt_one_minus_alpha_bar[t] * epsilon  # Step 4\n\nepsilon_theta = model(x_t, t)  # Step 5\n\nloss = F.mse_loss(epsilon_theta, epsilon)  # Step 6\n\noptimizer.zero_grad()\nloss.backward()\noptimizer.step()  # Step 7"
+  },
+  {
+    "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html#sampling-from-ddpm",
+    "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec01/lec01.html#sampling-from-ddpm",
+    "title": "Lecture 01: Diffusion",
+    "section": "2.4 Sampling from DDPM",
+    "text": "2.4 Sampling from DDPM\n\\[\n\\mathbf{x}_{t-1} = \\frac{1}{\\sqrt{1 - \\beta_t}} \\left( \\mathbf{x}_t - \\frac{\\beta_t}{\\sqrt{1 - \\bar{\\alpha}_t}} \\boldsymbol{\\epsilon}_\\theta(\\mathbf{x}_t, t) \\right) + \\sqrt{\\beta_t} \\mathbf{z}, \\quad \\mathbf{z} \\sim \\mathcal{N}(\\mathbf{0}, \\mathbf{I})\n\\tag{9}\\]\n训练完成之后，我们看一下如何从训练好的DDPM模型中采样。采样的过程就是图Figure 1 中\\(x_T\\) 到 \\(x_0\\) 的过程，也就是一个反向过程（Reverse Denoising Process）。我们可以按照以下的步骤进行采样：\n\n从标准正态分布 \\(\\mathcal{N}(\\mathbf{0}, \\mathbf{I})\\) 中采样一个噪声 \\(\\mathbf{x}_T\\)。\n对于 \\(t = T, T-1, \\ldots, 1\\)，执行以下步骤：\n\n将 \\(\\mathbf{x}_t\\) 和 \\(t\\) 输入到模型 \\(\\boldsymbol{\\epsilon}_\\theta\\) 中，得到预测的噪声 \\(\\boldsymbol{\\epsilon}_\\theta(\\mathbf{x}_t, t)\\)。\n根据公式Equation 9，计算得到 \\(\\mathbf{x}_{t-1}\\)。\n\n最终得到 \\(\\mathbf{x}_0\\)，这就是我们生成的图像。\n\n用代码实现的话，可以写成如下的形式：\n# Assume we have:\n# model, T, beta, sqrt_alpha_bar, sqrt_one_minus_alpha_bar\nx_t = torch.randn(batch_size, channels, height, width)  # Step 1\n\nfor t in range(T, 0, -1):  # Step 2\n    epsilon_theta = model(x_t, t)  # Step 2a\n    z = torch.randn_like(x_t) if t &gt; 1 else torch.zeros_like(x_t)  # Step 2b\n    x_t = (1 / sqrt_alpha_bar[t]) * (x_t - (beta[t] / sqrt_one_minus_alpha_bar[t]) * epsilon_theta) + sqrt_beta[t] * z\n需要注意的是，在采样的过程中，我们在每一步都添加了一个随机噪声 \\(\\mathbf{z}\\)，这使得每次采样的结果都是不同的，从而保证了生成样本的多样性。\n显然，这个采样过程是非常慢的，因为我们需要进行 \\(T\\) 次迭代才能得到一个样本。通常情况下，\\(T\\) 的值可以是1000或者更多，这就意味着我们需要进行1000次迭代才能得到一个样本，这对于实际应用来说是非常不友好的。因此，在下一节，我们将会介绍一种加速Diffusion Models的方法：Denoising Diffusion Implicit Models (DDIM)。"
+  },
+  {
+    "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html#score-of-gaussian-distribution",
+    "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html#score-of-gaussian-distribution",
+    "title": "Lecture 02: Score Matching",
+    "section": "3.1 Score of Gaussian Distribution",
+    "text": "3.1 Score of Gaussian Distribution\n对于一个Gaussian Distribution \\(p(x) = \\mathcal{N}(x; \\mu, \\sigma^2 I)\\)，我们可以通过以下的方式来计算它的Score Function：\n\\[\ns(x) = \\nabla_x \\log p(x) = -\\frac{1}{\\sigma^2} (x - \\mu)\n\\tag{11}\\]\n现在，假如我们在数据上添加一个Gaussian Noise \\(\\epsilon \\sim \\mathcal{N}(0, \\sigma^2 I)\\)，那么我们得到的Noisy Data \\(\\tilde{x}\\) 可以表示为：\n\\[\n\\tilde{x} = x + \\sigma \\epsilon\n\\tag{12}\\]\n那么这个Noisy Data \\(\\tilde{x}\\) 的Probability Density Function \\(p(\\tilde{x})\\) 可以表示为：\n\\[\np_{\\sigma}(\\tilde{x}) = \\mathcal{N}(\\tilde{x}, \\sigma^2 I)\n\\tag{13}\\]\n它的Score Function \\(s_{\\sigma}(\\tilde{x})\\) 可以表示为：\n\\[\n\\begin{split}\ns_{\\sigma}(\\tilde{x}) &= \\nabla_{\\tilde{x}} \\log p_{\\sigma}(\\tilde{x}) \\\\\n&= -\\frac{1}{\\sigma^2} (\\tilde{x} - \\mu) \\\\\n&= -\\frac{1}{\\sigma^2} (x + \\sigma \\epsilon - \\mu) \\\\\n&= -\\frac{1}{\\sigma^2} (x - \\mu) - \\frac{1}{\\sigma} \\epsilon \\\\\n&= s(x) - \\frac{1}{\\sigma} \\epsilon\n\\end{split}\n\\tag{14}\\]\n对于这个Noisy Data \\(\\tilde{x}\\)，我们可以通过以下的方式来计算它的Score Function \\(s_{\\sigma}(\\tilde{x})\\)，我们可以看到，\\(s_{\\sigma}(\\tilde{x})\\) 可以看作是 \\(s(x)\\) 的一个Noisy Version，因此我们可以通过优化以下的Loss Function来估计 \\(s(x)\\)：\n\\[\n\\mathcal{L}_{\\text{DSM}}(\\theta) = \\mathbb{E}_{x \\sim p_{data}, \\epsilon \\sim \\mathcal{N}(0, I)} \\left[ \\| s_\\theta(x + \\sigma \\epsilon) + \\frac{1}{\\sigma} \\epsilon \\|^2 \\right]\n\\tag{15}\\]\n现在有个问题就是，我们要如何选择噪声的标准差 \\(\\sigma\\) 呢？\n\n如果\\(\\sigma \\ll 1\\)，那么我们添加的噪声非常小，这样我们得到的Noisy Data \\(\\tilde{x}\\) 就非常接近于原始数据 \\(x\\)，因此我们得到的Score Function \\(s_{\\sigma}(\\tilde{x})\\) 就非常接近于 \\(s(x)\\)，但是这些在Low-Density Regions的样本点的Score Function \\(s(x)\\) 的值可能会非常大，这会导致训练过程中的数值不稳定的问题。\n如果\\(\\sigma \\gg 1\\)，那么我们添加的噪声非常大，这样我们得到的Noisy Data \\(\\tilde{x}\\) 就非常远离原始数据 \\(x\\)，因此我们得到的Score Function \\(s_{\\sigma}(\\tilde{x})\\) 就非常远离 \\(s(x)\\)，这会导致训练过程中的Bias问题。\n\n将这两个问题结合起来，我们可以得出一个结论：我们需要选择一个合适的 \\(\\sigma\\) 来平衡Bias和Variance之间的关系，这样我们才能够得到一个稳定的训练过程，这个就是Annealed Langevin Dynamics的核心思想，通过逐渐减小 \\(\\sigma\\) 的值来平衡Bias和Variance之间的关系，从而得到一个稳定的训练过程。\n我们可以通过以下的方式来实现Annealed Langevin Dynamics的训练： 1. 选择一个初始的 \\(\\sigma_0\\)，并且设置一个衰减率 \\(\\alpha\\)。 2. 在每个训练步骤中，按照以下的方式来更新 \\(\\sigma\\) 的值： 3. \\[\n\\sigma_t = \\sigma_0 \\cdot \\alpha^t\n\\] 4. 在每个训练步骤中，按照以下的方式来更新模型参数 \\(\\theta\\) 的值： 5. \\[\n\\theta_{t} = \\theta_{t-1} - \\eta \\nabla_\\theta \\mathcal{L}_{\\text{DSM}}(\\theta_{t-1})\n\\]\n用Python代码来实现Annealed Langevin Dynamics的训练过程：\n# Assume we have a dataset of samples from p_data\n# and a model s_theta that estimates the score function\n\n# step 1: Samping Sigma\nu = torch.rand(x.size(0), device=device)\nsigma = sigma_min * (sigma_max / sigma_min) ** u   # log-uniform\nsigma_view = sigma.view(-1, 1, 1, 1)\n\n# 2. generate random noise image\nnoise = torch.randn_like(x)\nx_noisy = x + sigma_view * noise\n\n# 3. compute the loss\ntarget_score = - (x_noisy - x) / (sigma_view ** 2)\npred_score = model(x_noisy)\nloss = F.mse_loss(pred_score, target_score)\n\n# 4. update model parameters\noptimizer.zero_grad()\nloss.backward()\noptimizer.step()\n我们看一下如何通过Annealed Langevin Dynamics来进行Sampling的过程：\nx = random_noise()\n\nfor sigma in sigmas:   # from large to small\n    for t in range(steps_per_sigma):\n        z = randn_like(x)\n        score = model(x, sigma)\n        step_size = eps * sigma**2\n        x = x + 0.5 * step_size * score + sqrt(step_size) * z\n\nreturn x"
+  },
+  {
+    "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html#related-to-ddpm",
+    "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html#related-to-ddpm",
+    "title": "Lecture 02: Score Matching",
+    "section": "3.2 Related to DDPM",
+    "text": "3.2 Related to DDPM\nHow"
+  },
+  {
+    "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html#wiener-process",
+    "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html#wiener-process",
+    "title": "Lecture 02: Score Matching",
+    "section": "4.1 Wiener Process",
+    "text": "4.1 Wiener Process\nWiener Process，也被称为Brownian Motion，是一个连续时间的随机过程，它的定义如下：\n\\[\nW(t) = \\int_0^t \\epsilon(s) ds\n\\tag{16}\\]\n其中，\\(\\epsilon(s)\\) 是一个标准的Gaussian Noise，它的均值为0，方差为1。Wiener Process具有以下的性质：\n\n\\(W(0) = 0\\)，即在时间0的时候，Wiener Process的值为0。\n\\(W(t)\\) 是一个连续的函数，即在任意的时间点上，Wiener Process的值都是连续的。\n\\(W(t)\\) 是一个独立增量的过程，即对于任意的时间点 \\(t_1 &lt; t_2 &lt; ... &lt; t_n\\)，\\(W(t_2) - W(t_1)\\) 和 \\(W(t_3) - W(t_2)\\) 是独立的随机变量。\n\\(W(t)\\) 的增量是Gaussian分布的，即对于任意的时间点 \\(t_1 &lt; t_2\\)，\\(W(t_2) - W(t_1)\\) 服从一个Gaussian分布，均值为0，方差为 \\(t_2 - t_1\\)。\n\n接下来，我们看一下如何通过Wiener Process将DDPM变成一个连续时间的模型。"
+  },
+  {
+    "objectID": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html#continuous-time-formulation-of-ddpm",
+    "href": "posts/LearningNotes/Stanford-CME296-Diffusion/Lec02/lec02.html#continuous-time-formulation-of-ddpm",
+    "title": "Lecture 02: Score Matching",
+    "section": "4.2 Continuous-Time Formulation of DDPM",
+    "text": "4.2 Continuous-Time Formulation of DDPM\n在DDPM中，我们有一个离散的时间步长 \\(t = 0, 1, ..., T\\)，在每个时间步长上，我们都有一个对应的数据分布 \\(p_t(x)\\)，我们通过一个Markov Chain来描述数据的生成过程：\n\\[\nx_t = \\sqrt{1- \\beta_t} x_{t-1} + \\sqrt{\\beta_t} \\epsilon_t\n\\tag{17}\\]\n其中，\\(\\beta_t\\) 是一个时间步长相关的噪声强度，\\(\\epsilon_t\\) 是一个标准的Gaussian Noise。我们可以将上面的式子改写为： \\[\nx_t - x_{t-1} = \\left[\\sqrt{1 - \\beta_t} - 1\\right] x_{t-1} + \\sqrt{\\beta_t} \\epsilon_t\n\\tag{18}\\]\n接下来我们定义一下\\(\\beta(t)\\)，它是一个连续的函数，表示在时间 \\(t\\) 上的噪声强度，\\(\\beta_t=\\beta(t)\\)，我们可以将上面的式子改写为：\n\\[\nx(t + \\Delta t) - x(t) = \\left[\\sqrt{1 - \\beta(t)} - 1\\right] x(t) + \\sqrt{\\beta(t)} \\epsilon(t)\n\\tag{19}\\]"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "",
+    "text": "1 LLM\n  2 Pre-Training Phase\n  \n  2.1 Transformer LLM\n  \n  2.1.1 Work Embedding Layer\n  2.1.2 Position Embedding Layer\n  \n  2.1.2.1 Extend Position to Longer Sequence\n  \n  2.1.3 Attention Mechanism\n  2.1.4 Feed-Forward Network\n  \n  2.1.4.1 Mixture of Experts (MoE)\n  \n  2.1.5 Normalization Layers\n  \n  2.1.5.1 Position of Normalization\n  \n  \n  2.2 Scaling Laws\n  \n  3 Parallelism\n  \n  3.1 Data Parallelism\n  3.2 Model Parallelism\n  3.3 Pipeline Parallelism\n  3.4 ZeRO\n  3.5 FSDP\n  3.6 4D Parallelism\n  \n  4 Optimizer\n  \n  4.1 AdamW\n  4.2 Muon\n  4.3 SOAP\n  \n  5 Fine-Tuning\n  \n  5.1 LoRA & Q-LoRA\n  5.2 \n  \n  6 Post-Training\n  \n  6.1 Supervised Fine-Tuning (SFT)\n  6.2 Reinforcement Learning with Human Feedback (RLHF)\n  6.3 Reinforcement Learning with Verified Feedback (RLVF)\n  6.4 Reinforcement Learning with AI Feedback (RLAIF)\n  \n  7 Inference & Deployment\n  \n  7.1 KV-Cache\n  7.2 Quantization\n  7.3 Distillation\n  \n  8 Continuous Learning\n  9 LLM Applications\n  \n  9.1 Multi-Modality LLM\n  9.2 LLM-Based Autonomous Agents\n  9.3 Vision Language Action(VLA) Models\n  \n  10 Future of LLM\n  11 Related Resources\n  12 In the end\nLLM的发展很快速，迭代的也很快，自从2023年ChatGPT的发布，LLM已经成为了AI领域的热点话题。每年都有新的“SOTA”LLM模型发布。并且随着2026年初OpenClaw的发布，让人们讨论AGI的可能性又一次升温了。LLM的应用也越来越广泛，从文本生成到代码生成，从对话系统到LLM Based Autonomous Agents，LLM正在改变我们与计算机交互的方式。在这篇文章中，我们讲从一个开发者的角度，回顾一下LLM的发展历程，如何训练一个LLM，当前的应用，以及未来的发展趋势。"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#transformer-llm",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#transformer-llm",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "2.1 Transformer LLM",
+    "text": "2.1 Transformer LLM\nTransformer LLM的模型有以下几个核心组件：\n\nWord Embedding：将输入的文本序列转换成一个连续的向量表示。\nPosition Embedding：由于Transformer没有内置的序列信息，所以需要通过位置编码来告诉模型每个词在序列中的位置。\nAttention Mechanism：这是Transformer的核心组件，它允许模型在处理输入序列时关注不同位置的信息。对于Decoder-Only的Transformer来说，通常使用的是Masked Self-Attention，这样模型只能关注当前词之前的信息。\nFeed-Forward Network：这是一个全连接的神经网络，用于处理Attention Mechanism输出的结果。\nNormalization Layers：\n\n\n2.1.1 Work Embedding Layer\nWord Embedding Layer的作用是将输入的文本序列转换成一个连续的向量表示。通常使用的是一个查找表（Lookup Table），将每个词映射到一个固定维度的向量空间中。这个向量空间的维度通常是模型的隐藏层维度，比如512，1024，2048等。通过训练，这些词向量会学习到词与词之间的语义关系，使得相似意义的词在向量空间中更接近。这是所有语言模型的必做的第一步，因为模型只能处理数值数据，所以需要将文本转换成数值表示。Word Embedding Layer就是完成这个任务的组件。\n\n\n2.1.2 Position Embedding Layer\n由于Transformer没有内置的序列信息，所以需要通过位置编码来告诉模型每个词在序列中的位置。常见的Position Embedding方法有两种：一种是绝对位置编码（Absolute Position Encoding），另一种是相对位置编码（Relative Position Encoding）。绝对位置编码为每个位置分配一个唯一的向量，而相对位置编码则关注词之间的相对位置关系。Position Embedding Layer的作用是将这些位置信息与Word Embedding结合起来，使得模型能够理解输入序列的顺序和结构。现在常见的最常见的Position Embedding是RoPE(RoFormerEnhancedTransformer2023sun?),它是一种相对位置编码方法，通过旋转位置编码来捕捉词之间的相对位置信息，同时又输入了绝对位置信息，使得模型能够更好地理解输入序列的结构和关系。\n\n2.1.2.1 Extend Position to Longer Sequence\n在训练的时候，我们通常会设置一个最大输入长度，比如2048，4096，8192等。但是在实际应用中，我们可能需要处理更长的输入序列，比如10000，20000，甚至更长。为了让模型能够处理更长的输入序列，我们需要对Position Embedding进行扩展。常见的方法有两种：一种是直接将Position Embedding扩展到更长的序列长度，另一种是使用一些特殊的Position Embedding方法，比如ALiBi(ALiBiAttentionBias2023press?)，它通过引入一个线性偏置来捕捉词之间的相对位置信息，使得模型能够处理更长的输入序列。或者Yarn(Peng et al. 2023)，它通过引入一个可变长度的Position Embedding来捕捉词之间的相对位置信息，使得模型能够处理更长的输入序列。\n\n\n\n2.1.3 Attention Mechanism\nAttention Mechanism是Transformer的核心组件，它允许模型在处理输入序列时关注不同位置的信息。对于Decoder-Only的Transformer来说，通常使用的是Masked Self-Attention，这样模型只能关注当前词之前的信息。Attention Mechanism通过计算输入序列中每个词与其他词之间的相关性来生成一个加权的表示，使得模型能够捕捉到输入序列中的长距离依赖关系。这是LLM能够理解和生成自然语言的关键所在。但是，简单的Multi-Headed Attention存在一个显然的问题，就是它的计算复杂度是 \\(\\mathcal{O}(N^2)\\)，其中N是输入序列的长度。这对于长序列来说是非常昂贵的，也会随着输入序列长度的增加而迅速增长。因此关于Attention的优化方式层出不穷，主要有以下几种：\n\nSparse Attention：通过引入稀疏性来减少计算量，比如只关注输入序列中的一部分位置，或者使用一些特殊的Attention模式，比如Local Attention，Global Attention等。\nLow-Rank Approximation：通过对Attention矩阵进行低秩近似来减少计算量，比如使用一些矩阵分解方法来近似Attention矩阵。\nMemory-Augmented Attention：通过引入一个外部记忆来存储输入序列中的信息，从而减少计算量，比如使用一些特殊的Memory机制来存储输入序列中的信息\nKernel-Based Attention：通过使用一些特殊的核函数来近似Attention矩阵，从而减少计算量，比如使用一些特殊的核函数来近似Attention矩阵。比如Flash Attention\n\nGrouped Query Attention（GQA）(GroupedQueryAttention2023dao?)，它通过将查询向量分成多个组来减少计算量，使得模型能够更高效地处理长序列输入。\n\n\n2.1.4 Feed-Forward Network\nFeed-Forward Network是Transformer中的一个全连接的神经网络，用于处理Attention Mechanism输出的结果。它通常由两个线性层和一个非线性激活函数组成，比如ReLU或者GELU。Feed-Forward Network的作用是对Attention Mechanism输出的结果进行进一步的处理，使得模型能够更好地理解输入序列中的信息。它可以看作是一个特征提取器，通过对Attention Mechanism输出的结果进行非线性变换来提取更高层次的特征，从而提高模型的表达能力和性能。 ### Activation Functions\n\n2.1.4.1 Mixture of Experts (MoE)\nMixture of Experts（MoE）是一种特殊的Feed-Forward Network，它通过引入多个专家网络来提高模型的表达能力和性能。每个专家网络都是一个独立的Feed-Forward Network，它们通过一个门控机制来选择哪个专家网络来处理输入数据。MoE的主要优势在于它能够通过引入多个专家网络来提高模型的表达能力和性能，同时又能够通过门控机制来控制计算量，从而使得模型能够更高效地处理输入数据。MoE在LLM中被广泛使用，比如GLaM(GLaMEfficientMixture2021du?)，Switch Transformer(SwitchTransformerScaling2021fedus?)，等等。\n当一个MoE层有N个专家网路时，每个输入数据只会被分配到其中的K个专家网络进行处理，这样就可以大大减少计算量，同时又能够提高模型的表达能力和性能。这就是为什么很多模型命名为 -20BA2B，其中20B代表模型的参数量，2B代表MoE层中每个输入数据被分配到的专家网络数量。\n\n\n\n2.1.5 Normalization Layers\nNormalization Layers是Transformer中的一个重要组件，它用于对模型的输入进行归一化处理，从而提高模型的训练稳定性和性能。常见的Normalization方法有Layer Normalization，Batch Normalization，等等。在LLM中，通常使用的是Layer Normalization，它通过对每个样本的特征进行归一化来提高模型的训练稳定性和性能。Normalization Layers的作用是对模型的输入进行归一化处理，使得模型能够更好地学习输入数据中的模式和规律，从而提高模型的表达能力和性能。\n\n2.1.5.1 Position of Normalization\n主要有Pre-Norm和Post Norm"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#scaling-laws",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#scaling-laws",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "2.2 Scaling Laws",
+    "text": "2.2 Scaling Laws\n当我们提出一个模型，我们通常关心模型的性能和效率。性能通常是指模型在某个任务上的表现，比如准确率，召回率，等等。效率通常是指模型的计算资源消耗，比如训练时间，推理时间，等等。Scaling Laws是指当我们增加模型的参数量或者训练数据量时，模型的性能和效率会如何变化。通常来说，当我们增加模型的参数量或者训练数据量时，模型的性能会提高，但是效率会降低。这就是为什么我们需要在性能和效率之间进行权衡，以找到一个合适的模型规模。"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#data-parallelism",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#data-parallelism",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "3.1 Data Parallelism",
+    "text": "3.1 Data Parallelism\nData Parallelism是指将训练数据分成多个小批次，然后在多个GPU上并行地处理这些小批次。每个GPU都会计算一个小批次的梯度，然后通过通信来同步这些梯度，从而更新模型的参数。Data Parallelism的主要优势在于它能够通过并行处理训练数据来加速训练过程，同时又能够保持模型的性能和效率。"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#model-parallelism",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#model-parallelism",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "3.2 Model Parallelism",
+    "text": "3.2 Model Parallelism"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#pipeline-parallelism",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#pipeline-parallelism",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "3.3 Pipeline Parallelism",
+    "text": "3.3 Pipeline Parallelism"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#zero",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#zero",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "3.4 ZeRO",
+    "text": "3.4 ZeRO"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#fsdp",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#fsdp",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "3.5 FSDP",
+    "text": "3.5 FSDP"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#d-parallelism",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#d-parallelism",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "3.6 4D Parallelism",
+    "text": "3.6 4D Parallelism"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#adamw",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#adamw",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "4.1 AdamW",
+    "text": "4.1 AdamW"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#muon",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#muon",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "4.2 Muon",
+    "text": "4.2 Muon"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#soap",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#soap",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "4.3 SOAP",
+    "text": "4.3 SOAP"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#supervised-fine-tuning-sft",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#supervised-fine-tuning-sft",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "6.1 Supervised Fine-Tuning (SFT)",
+    "text": "6.1 Supervised Fine-Tuning (SFT)"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#reinforcement-learning-with-human-feedback-rlhf",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#reinforcement-learning-with-human-feedback-rlhf",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "6.2 Reinforcement Learning with Human Feedback (RLHF)",
+    "text": "6.2 Reinforcement Learning with Human Feedback (RLHF)"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#reinforcement-learning-with-verified-feedback-rlvf",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#reinforcement-learning-with-verified-feedback-rlvf",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "6.3 Reinforcement Learning with Verified Feedback (RLVF)",
+    "text": "6.3 Reinforcement Learning with Verified Feedback (RLVF)"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#reinforcement-learning-with-ai-feedback-rlaif",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#reinforcement-learning-with-ai-feedback-rlaif",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "6.4 Reinforcement Learning with AI Feedback (RLAIF)",
+    "text": "6.4 Reinforcement Learning with AI Feedback (RLAIF)"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#quantization",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#quantization",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "7.2 Quantization",
+    "text": "7.2 Quantization"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#distillation",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#distillation",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "7.3 Distillation",
+    "text": "7.3 Distillation"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#multi-modality-llm",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#multi-modality-llm",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "9.1 Multi-Modality LLM",
+    "text": "9.1 Multi-Modality LLM\n最训练完LLM之后，我们可以讲它最为基座，继续训练它，让它能够处理多模态的数据，比如图像，视频，音频等。这些模型通常被称为Multi-Modality LLM，比如GPT-4，Gemini，等等。Multi-Modality LLM的主要优势在于它能够通过处理多模态的数据来提高模型的表达能力和性能，从而更好地理解和生成自然语言。"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#llm-based-autonomous-agents",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#llm-based-autonomous-agents",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "9.2 LLM-Based Autonomous Agents",
+    "text": "9.2 LLM-Based Autonomous Agents\n这个现在最火的OpenClaw， Claude Code等，都是基于LLM的Autonomous Agents。它们通过利用LLM的强大语言理解和生成能力，结合一些特定的工具和环境交互能力，来实现自主决策和行动。这些Autonomous Agents能够在各种任务中表现出色，比如对话系统，代码生成，等等。LLM-Based Autonomous Agents的主要优势在于它们能够通过利用LLM的强大语言理解和生成能力来实现自主决策和行动，从而更好地满足用户的需求。 它利用LLM作为它的大脑"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#lora-q-lora",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#lora-q-lora",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "5.1 LoRA & Q-LoRA",
+    "text": "5.1 LoRA & Q-LoRA"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#section",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#section",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "5.2 ",
+    "text": "5.2"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#kv-cache",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#kv-cache",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "7.1 KV-Cache",
+    "text": "7.1 KV-Cache"
+  },
+  {
+    "objectID": "posts/Blogs/Roadmap-of-LLM/post.html#vision-language-actionvla-models",
+    "href": "posts/Blogs/Roadmap-of-LLM/post.html#vision-language-actionvla-models",
+    "title": "A Roadmap of Large Language Models (LLMs)",
+    "section": "9.3 Vision Language Action(VLA) Models",
+    "text": "9.3 Vision Language Action(VLA) Models\n\n\n\n\n\n\nFigure 1: Overview of OpenVLA."
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "",
+    "text": "1 Transformer Based LLM Architecture Overview\n  2 Normalization Layer\n  \n  2.1 Position of Normalization\n  2.2 Form of Normalization\n  \n  3 Activations\n  \n  3.1 Gated Activations(*GLU)\n  \n  4 Serial vs. Parallel Layers\n  5 Position Embedding\n  \n  5.1 RoPE\n  \n  6 Hyperparameters\n  \n  6.1 Model-Dimension Ratio\n  6.2 Attention Head Dimension\n  6.3 Aspect Ratio\n  6.4 Vocab Size\n  6.5 Dropout & Other Regularization\n  \n  7 Stability Tricks\n  \n  7.1 Output Softmax stability （z-loss）\n  7.2 Attention Softmax Stability （QK-Norm）\n  7.3 Logit soft-capping\n  \n  8 Attention\n  \n  8.1 GQA/MQA\n  \n  9 What is Mixture of Experts (MoE)?\n  10 MoE Architecture\n  \n  10.1 Routing Function\n  \n  10.1.1 Token-choice Router\n  \n  10.1.1.1 Top-K Gating\n  10.1.1.2 Top-K Variants\n  10.1.1.3 Choice of K\n  10.1.1.4 Is Top-K Gating Optimal?\n  \n  \n  10.2 Experts\n  10.3 Training Objectives\n  \n  10.3.1 The Challenge of MoE Training\n  \n  10.3.1.1 RL Based Optimization\n  10.3.1.2 Stochastic Approximation\n  \n  10.3.1.2.1 Stochastic Jittering\n  \n  10.3.1.3 Auxiliary / Heuristic Balancing Losses\n  \n  10.3.1.3.1 Load Balancing Loss\n  10.3.1.3.2 Z-Loss\n  \n  10.3.1.4 Loss Combination\n  \n  10.3.2 System Side\n  10.3.3 Fine-tuning MoE\n  10.3.4 Upcycling\n  \n  \n  11 Others\n  12 Summary\n  13 In the end\n在Lecture03中，我们会先介绍Transformer Based LLM的模型架构"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#routing-function",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#routing-function",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "10.1 Routing Function",
+    "text": "10.1 Routing Function\nMoE 的核心不是“有很多专家”，而是每个 token 该去哪些专家。这个决策由 Router（路由器）完成。我们可以把它理解成一个“轻量的分类器/打分器”：输入是每个 token 的 hidden state，输出是对所有专家的偏好分数，然后选出 top-K 个专家执行。有一点很重要的是：\n\nRouter 是具有上下文感知能力的，也就是说它会根据 token 的内容动态决定路由结果，也就是说同一个 token 在不同语境下可以被送去不同专家。\n\nRouter实现大概有3种思路：\n\nToken-choice（token 选专家）： 每个 token 给所有专家打分，选择 top-K 专家处理它（现代主流）\nExpert-choice（专家选 token）： 每个专家从一批 token 里挑 top-K 个来处理（天然更均衡）\nGlobal assignment（全局分配）：把 token–expert 匹配视作优化问题（如线性分配/最优传输），追求更均衡或更低通信成本\n\n\n\n\n\n\n\nFigure 17: 不同的Router设计思路比较。\n\n\n\n在实际应用中，Token-choice 是目前最主流的设计思路，因为它实现简单且易于扩展。下面我们来看一下Token-choice Router的具体实现。\n\n10.1.1 Token-choice Router\nToken-choice Router, 顾名思义，就是每个 token 给所有专家打分，选择 top-K 专家处理它。当然，这个“打分”过程（Routing）可以有很多种实现方式，比如：\n\nTop-K Gating：使用一个线性层对 token 的 hidden state 进行投影，得到每个专家的分数，然后选择 top-K 个专家。\nHashing-based Routing：使用哈希函数将 token 映射到专家，从而实现路由（通常作为Baseline）。\nRL to learn Routing：使用强化学习方法来学习路由策略。\nSolve a Optimization Problem：将路由问题视作一个优化问题，通过求解该问题来确定路由结果。\n\n下图展示了不同的Token-choice Router实现方式。\n\n\n\n\n\n\n\n\n\n\n\n(a) Top-K routing choice\n\n\n\n\n\n\n\n\n\n\n\n(b) Hashing-based routing（通常作为Baseline）\n\n\n\n\n\n\n\n\n\n\n\n\n\n(c) RL-Based Routing\n\n\n\n\n\n\n\n\n\n\n\n(d) Solve a Optimization Problem\n\n\n\n\n\n\n\nFigure 18\n\n\n\n在实际应用中，Top-K Gating 是目前最常用的 Token-choice Router 实现方式，因为它简单且高效。下面我们来看一下 Top-K Gating 的具体实现细节。\n\n10.1.1.1 Top-K Gating\nTop-K Gating 的实现步骤如下：\n\nScore Calculation：对于每个 token 的 hidden state \\(h_i\\)，通过一个线性层计算每个专家的分数： \\[\ns_{i,j} = W_g h_i + b_g\n\\tag{5}\\] 其中，\\(W_g\\) 和 \\(b_g\\) 是路由器的参数，\\(s_{i,j}\\) 是 token \\(i\\) 对专家 \\(j\\) 的分数。\n\n有了score之后，接下来我们需要选择 top-K 个专家，不过在此之前，我们通常会对score进行归一化处理，以便更好地比较不同专家的分数。常用的方法是使用softmax函数： \\[\np_{i,j} = \\frac{exp(s_{i,j})}{\\sum_{k} exp(s_{i,k})}\n\\tag{6}\\] 其中，\\(p_{i,j}\\) 是 token \\(i\\) 对专家 \\(j\\) 的归一化分数。\n\nTop-K Selection：对于每个 token，选择分数最高的 K 个专家： \\[\ng_{i, j} = \\begin{cases}\ns_{i, j}, \\quad s_{i, j} \\in \\text{Top-K}(s_i) \\\\\n0, \\quad \\text{otherwise}\n\\end{cases}\n\\tag{7}\\] 其中，\\(g_{i,j}\\) 是 token \\(i\\) 对专家 \\(j\\) 的选择结果。\nPassing to Experts：将 token 送入选择的专家进行处理。每个专家只处理被选中的 token，其余 token 被忽略。\nCombining Outputs：将专家的输出进行合并，得到最终的 token 表示。通常使用加权平均的方式： \\[\nh_i' = \\sum_{j} g_{i,j} \\text{Expert}_j(h_i) + h_i\n\\tag{8}\\] 其中，\\(h_i'\\) 是 token \\(i\\) 的最终表示，\\(\\text{Expert}_j(h_i)\\) 是专家 \\(j\\) 对 token \\(i\\) 的处理结果, \\(h_i\\) 是 token \\(i\\) 的原始表示(Residual Connection), \\(g_{i,j}\\) 是 token \\(i\\) 对专家 \\(j\\) 的选择结果。\n\n通过以上步骤，Top-K Gating 实现了对 token 的动态路由，使得每个 token 只经过少数几个专家，从而实现了 MoE 的高效计算。\n\n\n10.1.1.2 Top-K Variants\n在实际应用中，Top-K Gating 有一些变体，其中比较常见的是DeepSeek提出的Top-K变形(Dai et al. 2024), 它提出，在选择Top-K专家的基础上，每个token还会固定传入一个Shared Expert。这样做的好处是，可以确保每个token至少有一个专家能够处理它。 并且Expert的大小变小，但是数量变多（fine-grained Experts），从而提升模型的表达能力。\n\n\n\n\n\n\nFigure 19: DeepSeek提出的Top-K变形，每个token除了选择Top-K专家外，还会固定传入一个Shared Expert。\n\n\n\n这种方式，在之后的实验中也被证明是有效的。 Qwen3模型(Yang et al. 2025) 也采用了类似的设计。\n\n\n\n\n\n\nFigure 20: 从这种消融实验中可以看出，在experts变多的情况下，加入Shared Expert能够提升模型的性能。\n\n\n\n\n\n10.1.1.3 Choice of K\n我们了解了Top-K Gating的实现细节，接下来我们来看一下K值的选择对模型性能的影响。 K值的选择对MoE模型的性能有显著影响。一般来说，较小的K值可以减少计算量，但可能会限制模型的表达能力；而较大的K值则可以提升模型的表达能力，但会增加计算量。因此，在实际的应用中，通常使用 K=1 或 K=2 作为默认选择。\n\n\n\n\n\n\nK &gt; 1\n\n\n\n课堂中有提到，K &gt; 1 时。我们可以把它想象成Bandit的问题（熟悉Reinforcement Learning的同学应该了解）。每个token在选择专家时，就像是在玩一个多臂老虎机（Multi-armed Bandit），每次选择K个专家进行尝试，从而获得更好的奖励（模型性能）。这也是RL中探索与利用（Exploration vs. Exploitation）问题的一个体现。\n\n\n\n\n10.1.1.4 Is Top-K Gating Optimal?\n我们了解了Top-K Gating的实现，那么它是不是最优的呢？其实也不尽然。Lecture中有提到一个比较有趣的观察：即使 router 很弱（比如基于 hashing 的确定性映射），很多时候也能比 dense 更强。有一种合理的解释是：只要映射是确定性的，每个专家仍会长期看到某个子分布，从而形成某种“专门化”（不一定是你以为的语义专门化，可能是频率/模式上的专门化）。因此，Router并不一定要设计的很复杂，简单有效即可，这也就是为什么Top-K Gating能这么受欢迎的原因之一。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#experts",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#experts",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "10.2 Experts",
+    "text": "10.2 Experts\n在MoE模型中，Experts是多个独立的FFN Layer，每个Expert负责处理一部分token。每个Expert通常由一个前馈神经网络（Feed-Forward Neural Network, FFN）组成，结构与传统的Transformer中的FFN类似，但参数是独立的。那么，Experts的中间层的维度应该如何选择呢？ 一般来说，Experts的中间层维度通常设置为输入维度的4倍（即\\(4d_{model}\\)），和传统的FFN Layer保持一致。这是因为较大的中间层维度可以提升模型的表达能力，从而提升整体性能。 但是，在Figure 19中，我们看到DeepSeek介绍了Fine-Grained Experts的概念，即通过增加Experts的数量，同时减少每个Expert的中间层维度，从而提升模型的表达能力。在DeepSeek MoE 中(Dai et al. 2024), 每个Expert的中间层维度被设置为\\(\\frac{1}{4}d_{ff}\\). 这样做的好处是，可以让模型拥有更多的专家，从而提升模型的多样性和表达能力。\n\nDeepSeekMoE has 1 shared expert and 63 routed experts, where each expert is 0.25 times the size of a standard FFN. DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models, p.9"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#training-objectives",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#training-objectives",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "10.3 Training Objectives",
+    "text": "10.3 Training Objectives\n如果说 Routing Function 解决的是“每个 token 去哪些专家”，那 Training Objectives 解决的是更现实的问题：“每个专家到底学什么”。在 MoE 里，单纯靠主任务 loss(Next token Prediction Loss) 往往不够.如果你只用语言模型的主损失（next-token loss）去训 MoE，router 很容易把所有 token 都送去同一个专家。结果是：一个专家变成“万能专家”，其它专家几乎从不被激活（dead experts），你白白存了一堆参数，性能也会变差。\n因此，课堂上也在反复强调的一点是：\n\n\n\n\n\n\nImportant\n\n\n\nMoE 的 forward 很简单，难点在于训练时如何避免 expert collapse，并让专家使用更均匀、更有效率。\n\n\n接下来，我们来看看这个训练问题难在哪里，以及有哪些常用的解决方法。\n\n10.3.1 The Challenge of MoE Training\nMoE 的优势在于，在训练时，我们只需要根据Router来选择激活部分（Top-k）专家进行计算，而不是所有专家都参与计算。这种稀疏激活的方式，可以大幅减少每一步的计算量（FLOPs），从而提升训练效率。但是，这种稀疏激活的方式也带来的挑战是：Top-K是不可微的，这使得我们无法直接使用梯度下降法来优化模型参数。因此，研究员们提出了几种方法来解决这个问题。\n\n10.3.1.1 RL Based Optimization\n一种思路是使用强化学习（Reinforcement Learning, RL）的方法来优化路由器的参数。\n\n\n\n\n\n\nRL 101\n\n\n\n对于不熟悉强化学习的同学，简单介绍一下。强化学习是一种机器学习方法，它通过与环境的交互来学习最优策略。在强化学习中，智能体（Agent）通过观察环境状态（State），选择动作（Action），并根据环境反馈的奖励（Reward）来调整策略，从而最大化累积奖励。 在交互的过程中，Agent所产生的动作通常是离散的（Discrete Action），这就导致了强化学习中的一个核心问题：如何在离散动作空间中进行有效的策略优化。常用的方法包括策略梯度（Policy Gradient）和Q-learning等。 因此，我们可以将MoE的路由问题视作一个强化学习问题，通过设计合适的奖励函数，来引导路由器学习更优的路由策略。\n\n\n但是，强化学习的方法通常比较复杂，且训练过程不稳定（Gradient Estimation Variance较大），因此在实际应用中并不常用。\n\n\n10.3.1.2 Stochastic Approximation\n另一种思路是使用随机近似（Stochastic Approximation）的方法来优化路由器的参数。具体来说，在 router 打分（logits）里注入噪声/扰动，让 top-K 的选择在训练早期“偶尔换路”，从而更像 bandit 的探索策略。其中一个经典的例子就是 Stochastic Jittering. 它通过在路由器的打分中添加高斯噪声，从而实现对专家的随机选择。接下来我们来看一下Stochastic Jittering的具体实现细节。\n\n10.3.1.2.1 Stochastic Jittering\nStochastic Jittering 的实现步骤如下：\n\nRouter 计算：对于每个 token 的 hidden state \\(h_i\\)，通过一个线性层计算每个专家的分数： \\[\ns_{i,j} = W_g h_i + b_g\n\\tag{9}\\]\n添加噪声：在每个专家的分数中添加高斯噪声： \\[\n\\tilde{s}_{i,j} = s_{i,j} + \\epsilon_{i,j}, \\quad \\epsilon_{i,j} \\sim \\mathcal{N}(0, \\sigma(x_i)^2)\n\\tag{10}\\]\nTop-K 选择：对于每个 token，选择添加噪声后的分数最高的 K 个专家： \\[\ng_{i, j} = \\begin{cases}\n\\tilde{s}_{i, j}, \\quad \\tilde{s}_{i, j} \\in \\text{Top-K}(\\tilde{s}_i) \\\\\n0, \\quad \\text{otherwise}\n\\end{cases}\n\\tag{11}\\]\n\n其中，\\(\\sigma(x_i)\\) 是噪声的标准差, 它是一个可学习的函数，通常通过一个小的神经网络来实现。通过调整噪声的大小，可以控制路由器的探索程度，从而提升模型的训练效果。\n那么这个Stochastic Jittering解决了什么问题呢？ 它其实解决了类似于“探索与利用”（Exploration vs. Exploitation）的问题。在MoE的训练过程中，我们希望路由器能够既能利用当前的知识（选择表现好的专家），又能探索新的可能性（尝试其他专家）。这于 \\(\\epsilon_{i,j} \\sim \\mathcal{N}(0, \\sigma(x_i)^2)\\) 中的噪声注入机制相呼应，通过在路由器的打分中添加噪声，可以让路由器在训练早期“偶尔换路”，从而更像 bandit 的探索策略。\n但是，它显然没有解决Top-K选择的不可微问题，并且，噪声的引入也可能导致训练过程的不稳定：\n\n噪声过大：可能导致路由器选择的专家过于随机，每个专家不够专门化，影响模型性能。\n噪声过小：可能无法有效促进探索，路由器仍然倾向于选择少数几个专家，导致专家崩溃（Expert Collapse）。\n\n\n\n\n\n\n\nNote\n\n\n\n课上还提到对 logits做乘法噪声（Multiplicative Perturbation），也是类似的思路，但是也有类似的问题。\n\n\n\n\n\n10.3.1.3 Auxiliary / Heuristic Balancing Losses\n既然MoE训练的难点在于避免专家崩溃（Expert Collapse），那么一个直接的思路就是在主任务损失（Cross Entropy Loss）之外，添加一些辅助损失（Auxiliary Losses）来鼓励专家的均衡使用。这样做的好处是，可以直接引导模型学习更均衡的专家使用策略，从而提升整体性能。在这里，我们介绍两种常用的辅助损失：Load Balancing Loss 和 Z-Loss。\n\n10.3.1.3.1 Load Balancing Loss\nLoad Balancing Loss 是Switch Transformer(Fedus, Zoph, and Shazeer 2022)中提出的一种辅助损失，旨在鼓励路由器均衡地使用所有专家。具体来说，它通过计算每个专家被选择的频率，并与理想的均衡分布进行比较，从而计算出负载均衡损失。其公式如下： $$\nL_{} = N _{i=1}^{N} f_i P_i $${#eq-load-balancing-loss}\n其中：\n\n\\(f_i\\) 是专家 \\(i\\) 被选择的频率, 定义为： \\[\nf_i = \\frac{1}{T} \\sum_{x \\in \\mathcal{B}} \\mathbb{1} \\{\\text{argmax } p(x) = i\\}\n\\tag{12}\\] \\(\\mathcal{B}\\) 是当前批次的样本集合，\\(T\\) 是token 的数量，\\(\\mathbb{1}\\) 是指示函数，当专家 \\(i\\) 被选择时取值为1，否则为0。直观来说：expert i 实际上“承担”了多少负载。\n\\(P_i\\) 是专家 \\(i\\) 的平均路由概率，定义为： \\[\nP_i = \\frac{1}{T} \\sum_{x \\in \\mathcal{B}} p_i(x)\n\\tag{13}\\] 其中，\\(p_i(x)\\) 是路由器对专家 \\(i\\) 的输出分数。直观来说：router “本来倾向”把多少概率分给 expert i。\n\n直观来看：如果某个 expert 实际拿了很多 tokens (\\(f_i\\) 很大），同时 router 还继续给它很高概率（\\(P_i\\) 很大），那么它的负载均衡损失就会很大，从而促使路由器减少对该专家的选择。反之亦然。\n通过最小化负载均衡损失，可以鼓励路由器均衡地使用所有专家，从而提升模型的训练效果。具体来说： - 如果某个专家被选择的次数远高于平均水平，那么它的负载均衡损失就会很大，从而促使路由器减少对该专家的选择。 - 反之，如果某个专家被选择的次数远低于平均水平，那么它的负载均衡损失也会很大，从而促使路由器增加对该专家的选择。\n\n\n\n\n\n\nDeepseek 根据上面的 Load Balancing Loss 设计了一个改进版本。它们提出：\n\n\n- Per-expert Balancing Loss：将上述的负载均衡损失，拓展为Top-K专家的情况。 - Per-Device Balancing Loss：在分布式训练中，考虑每个计算设备上的专家负载均衡。\n\n\n我们来看看Per-Device Balancing Loss做的是什么。 我们知道，在分布式训练中，不同的计算设备上可能会有不同数量的专家。如果某个设备上的专家被选择的次数远高于平均水平，那么这个GPU很可能过载，甚至损坏，从而影响整体训练效率。而有些设备上的专家可能几乎没有被选择，导致资源浪费。因此，DeepSeek提出了Per-Device Balancing Loss，旨在鼓励每个计算设备上的专家均衡使用。其公式如下： \\[\nL_{\\text{device}} = \\beta \\cdot D \\cdot \\sum_{d=1}^{D} f_d P_d\n\\tag{14}\\]\n\n\n其中： - \\(D\\) 是计算设备的数量。 - \\(f_d\\) 是设备 \\(d\\) 上的专家被选择的频率， - \\(P_d\\) 是设备 \\(d\\) 上的专家的平均路由概率。\n\n\n&gt;Per-expert 保证“专家别死”，Per-device 保证“GPU 别爆”。\n\n\n\nDeepSeek V3 还提出了另一种改进版本，它们称作Auxiliary Loss Free Balancing，其核心思想是：不再主要依赖 \\(\\mathcal{L}_{\\text{ExpBal}}\\) 来做负载均衡，而是通过调整路由器的偏置项（Bias）来实现均衡使用专家。具体来说：\n\\[\ng_{i,j} = \\being{cases}\ns_{i,j} + b_j, \\quad s_{i,j} \\in \\text{Top-K}(s_i) \\\\\n0, \\quad \\text{otherwise}\n\\end{cases}\n\\tag{15}\\]\n直观来看：\n\n如果 expert i 最近拿到 token 太小 → 增大\\(b_i\\) → 它更容易进入 top-K\n如果 expert i 拿到的 token 太多 → 减小 \\(b_i\\) → 它更不容易被选中\n\n这是一种在线控制/在线学习式的负载均衡：用规则更新 \\(b_i\\)， 而不是​通过梯度下降去学习 \\(P_i\\) ​\n\n\n\n\n\n\nFigure 21: 我们看到，不加负载均衡损失时，某些专家几乎没有被选择（Dead Experts）。而加入负载均衡损失后，专家的使用更加均衡。\n\n\n\n\n\n10.3.1.3.2 Z-Loss\nZ-Loss 是另一种常用的辅助损失，旨在鼓励路由器的输出分布更加均匀。其公式如下： \\[\nL_{z} = \\sum_{i} \\left( \\frac{p_i}{\\sum_{j} p_j} - \\frac{1}{E} \\right)^2\n\\tag{16}\\] 其中，\\(p_i\\) 是路由器对专家 \\(i\\) 的输出分数，\\(E\\) 是专家的总数。通过最小化这个损失，可以鼓励路由器的输出分布更加均匀，从而提升模型的训练效果。\n\n\n\n10.3.1.4 Loss Combination\n在实际应用中，MoE模型的总损失通常由主任务损失（Cross Entropy Loss）和辅助损失（Load Balancing Loss 和 Z-Loss）组成： \\[\nL_{total} = L_{CE} + \\lambda_{load} L_{load} + \\lambda_{z} L_{z}\n\\tag{17}\\] 其中，\\(L_{CE}\\) 是主任务损失，\\(L_{load}\\) 是负载均衡损失，\\(L_{z}\\) 是Z-Loss，\\(\\lambda_{load}\\) 和 \\(\\lambda_{z}\\)\n\n\n\n10.3.2 System Side\n在MoE模型的实现中，系统层面的优化也是非常重要的。由于MoE模型通常包含大量的专家，因此在分布式训练中，需要考虑如何高效地管理和调度这些专家，以提升训练效率和模型性能。但是，它们也带来了系统实现上的挑战，比如：\n\n每个 token 只激活少数专家（top-K）才能省 FLOPs，但专家往往分散在不同 GPU/节点上，于是训练要频繁做 all-to-all dispatch + all-to-all gather（把 token 发给对应专家算，再收回来合并）。这类通信是否划算取决于专家 FFN 计算是否“够大够重”，能否 amortize 通信成本。\n\n\n\n10.3.3 Fine-tuning MoE\nMoE fine-tune 更难：更容易不稳定（blow up）+ 更容易过拟合（train–val gap 大）。\n\n\n10.3.4 Upcycling\nMoE 的另一个有趣应用是“Upcycling”（回收利用）。具体来说，先训练好一个 dense Transformer，再把其中的 FFN/MLP 复制成多份专家（experts），加上一个 router，让模型从这一刻起变成 MoE；继续训练一段时间，就能用较低成本得到“总参数更大、推理仍稀疏激活”的 MoE。它解决了“从零训练 MoE 太慢太难”的问题。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#position-of-normalization",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#position-of-normalization",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "2.1 Position of Normalization",
+    "text": "2.1 Position of Normalization\n在原本的Transformer(Vaswani et al. 2023)架构中，Normalization Layer通常放在Attention Layer和FFN Layer的后面，这种设计被称为Post-Normalization。然而，在实际训练过程中，Post-Normalization架构往往会遇到训练不稳定的问题，尤其是在训练大规模模型时。为了克服这个问题，研究人员提出了Pre-Normalization(Xiong et al. 2020)架构，即将Normalization Layer放在Attention Layer和FFN Layer的前面。这种设计可以显著提升训练的稳定性，使得模型能够更好地收敛。如下图所示：\n\n\n\n\n\n\nFigure 1: 图片a展示的是Post-Normalization架构，图片b展示的是Pre-Normalization架构。\n\n\n\n在Pre-Norm最先提出的时候，一开始是为了缓解Learning Rate Schedule的问题(Nguyen and Salazar 2019), 如下图所示：\n\n\n\n\n\n\nFigure 2\n\n\n\n但是，后来研究人员发现，Pre-Normalization架构的优势不仅仅在于缓解Learning Rate Schedule的问题，还在于它能够提升模型的训练稳定性和性能。尤其是在解决:\n\nGraident attenutation: 在训练的过程中，模型的梯度可能会出现衰减（Attenuation），导致训练不稳定。\nGradient Spike: 在训练过程中，模型的梯度可能会出现突然的爆炸（Spike），导致训练不稳定。\n\n\n\n\n\n\n\nFigure 3\n\n\n\n\n\n\n\n\n\nFigure 4\n\n\n\n在了解为什么Pre-Normlaization能够提升训练稳定性之前，我们需要先来了解一下什么是Residual Connection(He et al. 2015)。Residual Connection是一种在神经网络中常用的结构，它通过将输入直接添加到输出中，来缓解深层网络中的梯度消失问题。它主要的贡献是：让Gradient能够直接从输出层反向传播到输入层，从而提升训练的稳定性。举个简单的例子:\n\\[\ny = F(x) + x\n\\tag{1}\\]\n当Gradient从输出层反向传播到输入层时，它可以直接通过Residual Connection传递，而不需要经过复杂的非线性变换:\n\\[\n\\begin{split}\n\\frac{\\partial L}{\\partial x} &= \\frac{\\partial L}{\\partial y} \\cdot \\frac{\\partial y}{\\partial x} \\\\\n&= \\frac{\\partial L}{\\partial y} \\cdot ( \\frac{\\partial F(x)}{\\partial x} + I ) \\\\\n&= \\frac{\\partial L}{\\partial y} \\cdot \\frac{\\partial F(x)}{\\partial x} + \\textcolor{red}{\\frac{\\partial L}{\\partial y}} \\\\\n\\end{split}\n\\tag{2}\\]\n可以看到，Residual Connection中的梯度 \\(\\frac{\\partial L}{\\partial y}\\) 可以直接传递到输入层，而不需要经过复杂的非线性变换，从而提升了训练的稳定性。\n\n从这个Pre-Norm的设置我们可以学到：要保持Residual Connection尽可能的“干净”，也就是说，尽量减少Residual Connection中非线性变换的影响，从而让Gradient能够更直接地传递到输入层。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#form-of-normalization",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#form-of-normalization",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "2.2 Form of Normalization",
+    "text": "2.2 Form of Normalization\n在了解了Normalization Layer的位置之后，我们接下来来了解一下Normalization Layer的形式。在Transformer的论文中，作者使用的是Layer Normalization(Ba, Kiros, and Hinton 2016), 公式如下：\n\\[\n\\text{LayerNorm}(x) = \\frac{x - \\mathbb{E}[x]}{\\sqrt{\\text{Var}[x] + \\epsilon}} \\cdot \\gamma + \\beta\n\\tag{3}\\]\n其中，\\(x\\) 是输入，\\(\\gamma\\) 和 \\(\\beta\\) 是可学习的参数，与输入的维度相同, 表示缩放和平移的参数。LayerNorm是可行的，但是在实际应用中，研究人员发现，使用RMSNorm(Zhang and Sennrich 2019)可以进一步提升模型的性能。RMSNorm的公式如下：\n\\[\n\\text{RMSNorm}(x) = \\frac{x}{\\sqrt{\\|x\\|^2 + \\epsilon}} \\cdot \\gamma\n\\tag{4}\\]\n其中, \\(\\|x\\|^2=\\frac{1}{d}\\sum_{i=1}^{d} x_i^2\\) 是输入的平方和，\\(d\\) 是输入的维度，\\(\\gamma\\) 是可学习的参数，表示缩放的参数。RMSNorm相对于LayerNorm的优势在于，它不需要计算输入的均值，从而减少了计算量，并且在某些情况下可以提升模型的性能。它的训练速度比LayerNorm更快，并且表现也没有下降，主要有以下几个原因：\n\nFewer Operation: RMSNorm不需要计算输入的均值，因此减少了计算量，从而提升了训练速度。\nFewer Parameters: RMSNorm没有平移参数\\(\\beta\\)，因此减少了模型的参数量，从而提升了训练速度。\n\n\n\n\n\n\n\nFigure 5\n\n\n\n可以看到，尽管 Normalization Layer需要的Flops比较少，但是Data Movement（从内存到计算单元的传输）却占了很大一部分，因此减少Normalization Layer的计算量和参数量，可以显著提升训练的效率。\n\n\n\n\n\n\nFigure 6: 左上角（黑色背景）是FLOPs，右上角（白色背景）是FLOPs/Memory，我们希望这个值越大越到（Compute-bound）。\n\n\n\n(Ivanov 2025)\n这个概念，同时也在Feed Forward Network体现，通过移除bias项，来减少数据移动的数量，提高训练效率。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#gated-activationsglu",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#gated-activationsglu",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "3.1 Gated Activations(*GLU)",
+    "text": "3.1 Gated Activations(*GLU)\n通过Gated Activation Functions，可以进一步提升模型的性能。GLU的公式如下：\n需要注意的是，随着引入Gated Activation Function，模型的参数量也会增加，因此在实际应用中，需要权衡模型的性能和计算资源的限制。 比如downscale \\(d_ff\\) by \\(\\frac{2}{3}\\)，来抵消GLU引入的参数增加。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#rope",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#rope",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "5.1 RoPE",
+    "text": "5.1 RoPE\n\n\n\n\n\n\nFigure 8"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#model-dimension-ratio",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#model-dimension-ratio",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "6.1 Model-Dimension Ratio",
+    "text": "6.1 Model-Dimension Ratio\nModel Dimension Ratio 是值模型在FFN中，\\(d_ff\\) 与 \\(d_{model}\\) 的比例。一般来说，\\(d_ff\\) 通常设置为 \\(4d_{model}\\)，这是因为较大的FFN Hidden Size可以提升模型的表达能力，从而提升整体性能。不过，也是有几个特例，比如：\n\n像我们之前提到的*GLU模型中，为了抵消GLU引入的参数增加，通常会将\\(d_ff\\)设置为\\(\\frac{2}{3}d_{ff}\\)。\nT5模型， \\(d_ff = 64d_{model}\\)\n\n一个简单的实验，就是通过\n\n\n\n\n\n\nFigure 9"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#attention-head-dimension",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#attention-head-dimension",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "6.2 Attention Head Dimension",
+    "text": "6.2 Attention Head Dimension\n在几乎所有的默认的Transformer中，\\(d_{head} = d_{model} / \\text{num\\_heads}\\)，也就是说，Attention Head Dimension是由Model Dimension和Attention Head Number共同决定的。但是这也不是一定的\n\n\n\n\n\n\nFigure 10\n\n\n\n随着2025年春节DeepSeek-R1 的发布，Mixture of Experts (MoE) 模型在自然语言处理领域重新引起了广泛关注。这节课我们将会学习什么的MoE Layer。它的基本原理是什么？它是如何工作的？以及它为什么能够提升模型的性能。\n\n\n\n\n\n\nMoE 代码实现\n\n\n\n在Assignment01中，我们实现了FFN Layer。但是作业中并没有要求大家实现MoE Layer。为了帮助大家更好地理解MoE Layer的实现细节，也作为大家关注我的Bonus，我在Assignment01的代码库中添加了MoE Layer的实现代码。大家可以参考以下链接查看代码实现。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#aspect-ratio",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#aspect-ratio",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "6.3 Aspect Ratio",
+    "text": "6.3 Aspect Ratio\nAspect Ratio 指的是Number of Layers与Model Dimension的比例：\n\n越深的模型，越难并行训练，并且Inference时候的Latency也会增加。\n\n\n\n\n\n\n\nFigure 11"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#vocab-size",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#vocab-size",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "6.4 Vocab Size",
+    "text": "6.4 Vocab Size\nVocab Size for 单一语言模型，不需要太大，但是对于多语言模型，尤其是包含了很多低资源语言的模型，通常需要更大的Vocab Size来覆盖更多的词汇，从而提升模型的性能。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#dropout-other-regularization",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#dropout-other-regularization",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "6.5 Dropout & Other Regularization",
+    "text": "6.5 Dropout & Other Regularization\nDropout是一种常用的正则化方法，它通过在训练过程中随机丢弃一部分神经元来防止模型过拟合。但是在训练模型的时候，Data 的数量大于模型的参数量时，过拟合通常不是一个大问题，因此在训练大规模模型时，很多人不选择使用Dropout，但是还会使用Weight Decay。\n但是很多人使用Weight Decay的目的，并不是出于Regularization，而是把它看作是Optimizer的一部分。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#output-softmax-stability",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#output-softmax-stability",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "7.1 Output Softmax stability",
+    "text": "7.1 Output Softmax stability"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#output-softmax-stability-z-loss",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#output-softmax-stability-z-loss",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "7.1 Output Softmax stability （z-loss）",
+    "text": "7.1 Output Softmax stability （z-loss）"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#attention-softmax-stability-qk-norm",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#attention-softmax-stability-qk-norm",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "7.2 Attention Softmax Stability （QK-Norm）",
+    "text": "7.2 Attention Softmax Stability （QK-Norm）"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#logit-soft-capping",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#logit-soft-capping",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "7.3 Logit soft-capping",
+    "text": "7.3 Logit soft-capping\n控制logit的范围，避免过大或过小导致的数值不稳定。"
+  },
+  {
+    "objectID": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#gqamqa",
+    "href": "posts/LearningNotes/CS336/Lecture03&04/lec04.html#gqamqa",
+    "title": "Lecture 03&04: Transformer LLM Model Architecture & MoE",
+    "section": "8.1 GQA/MQA",
+    "text": "8.1 GQA/MQA\nsd\n\n(Lecutre04)\njiexiali shi"
   }
 ]

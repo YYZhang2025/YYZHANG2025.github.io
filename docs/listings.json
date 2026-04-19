@@ -2,6 +2,7 @@
   {
     "listing": "/posts/Blogs/blogs_index.html",
     "items": [
+      "/posts/Blogs/Roadmap-of-LLM/post.html",
       "/posts/Blogs/LLM-Inference/post.html",
       "/posts/Blogs/Context-Engineering/post.html",
       "/posts/Blogs/LLM-Architecture/post.html",
@@ -54,7 +55,7 @@
     "items": [
       "/posts/LearningNotes/CS336/Lecture01/lec01.html",
       "/posts/LearningNotes/CS336/Lecture02/lec02.html",
-      "/posts/LearningNotes/CS336/Lecture04/lec04.html",
+      "/posts/LearningNotes/CS336/Lecture03&04/lec04.html",
       "/posts/LearningNotes/CS336/Lecture05&06/lec05.html",
       "/posts/LearningNotes/CS336/Lecture07&08/lec07.html",
       "/posts/LearningNotes/CS336/Lecture9&11/lec9.html",

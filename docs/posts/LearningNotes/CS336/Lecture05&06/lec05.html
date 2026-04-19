@@ -44,9 +44,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-8f792e8c3bace32b51045abf7f9a5a4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-44402bf054b1fe078bc4e7aebe64bce9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-8f792e8c3bace32b51045abf7f9a5a4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-d85075f6847ba5665d0c1832f92a5988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -147,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <meta property="og:title" content="Lecture 05 &amp; 06: GPUs, Kernels &amp; Flash Attention">
 <meta property="og:description" content="Lecture05介绍了GPU的基本架构与工作原理，并且介绍了几种提升计算效率的方法，比如Kernel Fusion, Memory Coalescing Tiling 等，并且在课程最后介绍了Flash Attention的原理及其实现细节。在Lecture06中，主要介绍了Triton，一个用于编写高性能GPU代码的开源编译器。内容涵盖了Triton的基本概念、编程模型以及如何使用Triton编写高效的GPU内核。通过实际示例，展示了Triton在深度学习中的应用和优势。">
+<meta property="og:image" content="./assets/cover.png">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -346,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../.././posts/100-PwC/100-pwc_index.qmd"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/100-AI-Papers-with-Code/"> 
 <span class="menu-text">100-PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -355,12 +356,16 @@ document.addEventListener("DOMContentLoaded", function () {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learning-notes">    
         <li>
-    <a class="dropdown-item" href="../../../.././posts/CS336/index.qmd">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/CS336/index.html">
  <span class="dropdown-text">Stanford CS336 LLM From Scratch</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../.././posts/CME296/index.qmd">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/Stanford-CME296-Diffusion/index.html">
  <span class="dropdown-text">Stanford CME296 Diffusion &amp; Large Vision Models</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/MIT6S184-Flow/index.html">
+ <span class="dropdown-text">MIT 6.S184 Flow Matching and Diffusion Models</span></a>
   </li>  
     </ul>
   </li>
