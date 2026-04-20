@@ -79,9 +79,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-8f792e8c3bace32b51045abf7f9a5a4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-44402bf054b1fe078bc4e7aebe64bce9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-8f792e8c3bace32b51045abf7f9a5a4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-d85075f6847ba5665d0c1832f92a5988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -414,7 +414,7 @@ window.Quarto = {
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../.././posts/100-PwC/100-pwc_index.qmd"> 
+    <a class="nav-link" href="https://yyzhang2025.github.io/100-AI-Papers-with-Code/"> 
 <span class="menu-text">100-PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -423,12 +423,8 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learning-notes">    
         <li>
-    <a class="dropdown-item" href="../../../.././posts/CS336/index.qmd">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/CS336/index.html">
  <span class="dropdown-text">Stanford CS336 LLM From Scratch</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../../.././posts/CME296/index.qmd">
- <span class="dropdown-text">Stanford CME296 Diffusion &amp; Large Vision Models</span></a>
   </li>  
     </ul>
   </li>
@@ -854,7 +850,7 @@ Table&nbsp;1: Qwen2.5-Math-1.5B Zero-Shot Evaluation Results on MATH and GSM8K D
 </ol>
 <p>在 PPO/GRPO 里经常会担心 reward hacking、模式坍塌、输出退化。 SFT 提供一个强先验：即使 RL 更新过猛，KL/参考模型通常也把它拉回 SFT 附近，让训练更稳。</p>
 <p>SFT的算法如下</p>
-<div id="algo-sft" class="pseudocode-container quarto-float" data-line-number="true" data-no-end="false" data-line-number-punc=":" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-pseudocode-number="1" data-comment-delimiter="#">
+<div id="algo-sft" class="pseudocode-container quarto-float" data-line-number-punc=":" data-line-number="true" data-indent-size="1.2em" data-no-end="false" data-comment-delimiter="#" data-pseudocode-number="1" data-caption-prefix="Algorithm">
 <div class="pseudocode">
 \begin{algorithm} \caption{Supervised Fine-Tuning (SFT)} \begin{algorithmic} \Require Initial policy model $\pi_{\theta_{\text{init}}}$ \Require SFT dataset $\mathcal{D}$ (prompt–response pairs) \Require Number of SFT steps $n_{\text{sft\_steps}}$ \Require Learning rate $\alpha$ \State $\pi_{\theta} \gets \pi_{\theta_{\text{init}}}$ \For{$\text{step} = 1$ \textbf{to} $n_{\text{sft\_steps}}$} \State Sample a minibatch $\mathcal{D}_b = \{(x_j, y_j)\}_{j=1}^{B}$ from $\mathcal{D}$ \Comment{$x$: prompt/question, $y$: target response} \State $\mathcal{L}_{\text{CE}}(\theta) \gets -\mathbb{E}_{(x,y)\sim \mathcal{D}_b}\left[\sum_{t=1}^{|y|}\log \pi_{\theta}(y_t \mid x, y_{&lt;t})\right]$ \Comment{Teacher-forcing cross-entropy / NLL} \State $\theta \gets \theta - \alpha \nabla_{\theta}\mathcal{L}_{\text{CE}}(\theta)$ \EndFor \State \Return $\pi_{\theta}$ \end{algorithmic} \end{algorithm}
 </div>
@@ -1196,7 +1192,7 @@ Figure&nbsp;1: Result of SFT on Qwen2.5-Math-1.5B
 </section>
 <section id="expert-iteration" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Expert Iteration</h1>
-<div id="algo-ei" class="pseudocode-container quarto-float" data-line-number="true" data-no-end="false" data-line-number-punc=":" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-pseudocode-number="2" data-comment-delimiter="#">
+<div id="algo-ei" class="pseudocode-container quarto-float" data-line-number-punc=":" data-line-number="true" data-indent-size="1.2em" data-no-end="false" data-comment-delimiter="#" data-pseudocode-number="2" data-caption-prefix="Algorithm">
 <div class="pseudocode">
 \begin{algorithm} \caption{Expert Iteration (EI)} \begin{algorithmic} \Require Initial policy model $\pi_{\theta_{\text{init}}}$ \Require Reward function $R(q, o)$ \Require Task question set $\mathcal{D}$ \Require Number of EI steps $n_{\text{ei\_steps}}$ \Require Number of samples per prompt $G$ \State $\pi_{\theta} \gets \pi_{\theta_{\text{init}}}$ \For{$\text{step} = 1$ \textbf{to} $n_{\text{ei\_steps}}$} \State Sample a batch of questions $\mathcal{D}_b \subset \mathcal{D}$ \State $\pi_{\theta_{\text{old}}} \gets \pi_{\theta}$ \Comment{freeze current policy as expert} \For{\textbf{each} question $q \in \mathcal{D}_b$} \State Sample $G$ candidate outputs $\{o^{(i)}\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot \mid q)$ \State Compute rewards $\{r^{(i)}\}_{i=1}^G$, where $r^{(i)} = R(q, o^{(i)})$ \EndFor \State $\mathcal{D}_{\text{sft}} \gets \{(q, o^{(i)}) \mid r^{(i)} &gt; 0\}$ \Comment{keep only correct / high-reward samples} \State $\pi_{\theta} \gets \text{SFT}(\pi_{\theta}, \mathcal{D}_{\text{sft}})$ \Comment{Algorithm 1: supervised fine-tuning on filtered data} \EndFor \State \Return $\pi_{\theta}$ \end{algorithmic} \end{algorithm}
 </div>
@@ -1300,7 +1296,7 @@ Figure&nbsp;2: Result of EI on Qwen2.5-Math-1.5B on MATH and GSM8K Datasets
 <section id="grpo" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> GRPO</h1>
 <p>经过前两轮的热身，终于到了我们本次Assignment的重头戏：GRPO。 GRPO的算法如下：</p>
-<div id="algo-grpo" class="pseudocode-container quarto-float" data-line-number="true" data-no-end="false" data-line-number-punc=":" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-pseudocode-number="3" data-comment-delimiter="#">
+<div id="algo-grpo" class="pseudocode-container quarto-float" data-line-number-punc=":" data-line-number="true" data-indent-size="1.2em" data-no-end="false" data-comment-delimiter="#" data-pseudocode-number="3" data-caption-prefix="Algorithm">
 <div class="pseudocode">
 \begin{algorithm} \caption{Group Relative Policy Optimization (GRPO)} \begin{algorithmic} \Require Initial policy $\pi_{\theta_{\text{init}}}$, reward function $R$, dataset of prompts/questions $\mathcal{D}$ \State Initialize policy $\pi_\theta \leftarrow \pi_{\theta_{\text{init}}}$ \For{$\text{step}=1,\dots,n_{\text{grpo\_steps}}$} \State Sample a minibatch of questions $\mathcal{D}_b \subset \mathcal{D}$ \State Snapshot old policy $\pi_{\theta_{\text{old}}} \leftarrow \pi_\theta$ \ForAll{$q \in \mathcal{D}_b$} \State Sample $G$ candidate outputs $\{o^{(i)}\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot \mid q)$ \State Compute rewards $r^{(i)} \leftarrow R\!\left(q, o^{(i)}\right)$ for $i=1,\dots,G$ \State Compute group-normalized advantages $A^{(i)}$ from $\{r^{(i)}\}_{i=1}^G$ (group normalization) \For{$\text{train\_step}=1,\dots,n_{\text{train\_steps\_per\_rollout\_batch}}$} \State Update $\pi_\theta$ by maximizing the GRPO-Clip objective using $\pi_{\theta_{\text{old}}}$ and $\{(o^{(i)},A^{(i)})\}_{i=1}^G$ \EndFor \EndFor \EndFor \State \Return $\pi_\theta$ \end{algorithmic} \end{algorithm}
 </div>
@@ -1535,7 +1531,7 @@ Figure&nbsp;3: Result of GRPO on Qwen2.5-Math-1.5B on GSM8K Dataset
 <section id="dpo" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> DPO</h1>
 <p>这个部分，是Assignment05 的补充内容，其主要目的是了解DPO算法的基本思想和实现方式。 由于时间的关系， 我并没有实现DPO的完整代码， 但是我会介绍DPO的基本思想和实现方式。DPO的算法如下：</p>
-<div id="algo-ei" class="pseudocode-container quarto-float" data-line-number="true" data-no-end="false" data-line-number-punc=":" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-pseudocode-number="4" data-comment-delimiter="#">
+<div id="algo-ei" class="pseudocode-container quarto-float" data-line-number-punc=":" data-line-number="true" data-indent-size="1.2em" data-no-end="false" data-comment-delimiter="#" data-pseudocode-number="4" data-caption-prefix="Algorithm">
 <div class="pseudocode">
 \begin{algorithm} \caption{Direct Preference Optimization (DPO)} \begin{algorithmic} \Require Initial policy model $\pi_{\theta_{\text{init}}}$ \Require Reference policy $\pi_{\text{ref}}$ (e.g., SFT model; fixed) \Require Preference dataset $\mathcal{D}=\{(x, y^{+}, y^{-})\}$ \Require Inverse temperature $\beta &gt; 0$ \Require Number of DPO steps $n_{\text{dpo\_steps}}$ \State $\pi_{\theta} \gets \pi_{\theta_{\text{init}}}$ \For{$\text{step} = 1$ \textbf{to} $n_{\text{dpo\_steps}}$} \State Sample a minibatch $\mathcal{B} \subset \mathcal{D}$ of triples $(x, y^{+}, y^{-})$ \For{\textbf{each} $(x, y^{+}, y^{-}) \in \mathcal{B}$} \State Compute log-likelihood ratios vs reference: \State $s^{+} \gets \log \pi_{\theta}(y^{+}\mid x) - \log \pi_{\text{ref}}(y^{+}\mid x)$ \State $s^{-} \gets \log \pi_{\theta}(y^{-}\mid x) - \log \pi_{\text{ref}}(y^{-}\mid x)$ \State Compute preference margin: \State $\Delta \gets \beta \, (s^{+} - s^{-})$ \State Compute DPO loss: \State $\ell \gets -\log \sigma(\Delta)$ \Comment{$\sigma(\cdot)$ is the logistic sigmoid} \EndFor \State Update $\theta$ by minimizing mean loss: \State $\theta \gets \theta - \eta \nabla_{\theta}\left(\frac{1}{|\mathcal{B}|}\sum_{(x,y^+,y^-)\in\mathcal{B}} \ell\right)$ \EndFor \State \Return $\pi_{\theta}$ \end{algorithmic} \end{algorithm}
 </div>
