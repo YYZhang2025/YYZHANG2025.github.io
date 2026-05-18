@@ -100,9 +100,9 @@ div.csl-indent {
 <link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-8f792e8c3bace32b51045abf7f9a5a4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-44402bf054b1fe078bc4e7aebe64bce9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-8f792e8c3bace32b51045abf7f9a5a4f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-d85075f6847ba5665d0c1832f92a5988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -416,15 +416,13 @@ window.Quarto = {
     <a class="nav-link" href="../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/YYZhang2025"> <i class="bi bi-github" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/YYZhang2025"> 
+<span class="menu-text"><i class="fa-brands fa-github fa-xl"></i></span></a>
   </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://www.linkedin.com/in/zhang-yuyang/"> <i class="bi bi-linkedin" role="img">
-</i> 
-<span class="menu-text"></span></a>
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/zhang-yuyang/"> 
+<span class="menu-text"><i class="fa-brands fa-linkedin fa-xl"></i></span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -433,17 +431,32 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://yyzhang2025.github.io/LearningNotes/"> 
+    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../.././posts/100PwC/index.qmd"> 
-<span class="menu-text">100 PwC</span></a>
+    <a class="nav-link" href="../../../posts/100PwC/index.html"> 
+<span class="menu-text">100PwC</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../../../posts/CS336/index.html"> 
-<span class="menu-text">Stanford CS336</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-learn-something" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Learn Something</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learn-something">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/LearningNotes/LLM/index.html">
+ <span class="dropdown-text">Learn (M)LLM</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/LearningNotes/Generative-AI/index.html">
+ <span class="dropdown-text">Learn Generative Models</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/LearningNotes/Agentic-AI/index.html">
+ <span class="dropdown-text">Learn Agentic AI</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -1167,7 +1180,7 @@ x_{t-\Delta t} = x_t + \Delta t , s_\theta(x_t, t) + \sqrt{2\Delta t},\varepsilo
 </section>
 <section id="progressive-distillation" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="progressive-distillation"><span class="header-section-number">5.2</span> Progressive Distillation</h2>
-<p>As proposed in <span class="citation" data-cites="ProgressiveDistillationFast2022salimans">(<a href="#ref-ProgressiveDistillationFast2022salimans" role="doc-biblioref"><strong>ProgressiveDistillationFast2022salimans?</strong></a>)</span> <img src="assets/Diffusion-Model-Progressive-Distillation.png" class="img-fluid"></p>
+<p>As proposed in <span class="citation" data-cites="ProgressiveDistillationFast2022salimans">(<a href="#ref-ProgressiveDistillationFast2022salimans" role="doc-biblioref">Salimans and Ho 2022</a>)</span> <img src="assets/Diffusion-Model-Progressive-Distillation.png" class="img-fluid"></p>
 </section>
 <section id="consistency-models" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="consistency-models"><span class="header-section-number">5.3</span> Consistency Models</h2>
@@ -1474,6 +1487,9 @@ Ho, Jonathan, Ajay Jain, and Pieter Abbeel. 2020. <span>“Denoising <span>Diffu
 </div>
 <div id="ref-AutoEncodingVariationalBayes2022kingma" class="csl-entry" role="listitem">
 Kingma, Diederik P., and Max Welling. 2022. <span>“Auto-<span>Encoding Variational Bayes</span>.”</span> December 10, 2022. <a href="https://doi.org/10.48550/arXiv.1312.6114">https://doi.org/10.48550/arXiv.1312.6114</a>.
+</div>
+<div id="ref-ProgressiveDistillationFast2022salimans" class="csl-entry" role="listitem">
+Salimans, Tim, and Jonathan Ho. 2022. <span>“Progressive <span>Distillation</span> for <span>Fast Sampling</span> of <span>Diffusion Models</span>.”</span> June 7, 2022. <a href="https://doi.org/10.48550/arXiv.2202.00512">https://doi.org/10.48550/arXiv.2202.00512</a>.
 </div>
 <div id="ref-ConsistencyModels2023song" class="csl-entry" role="listitem">
 Song, Yang, Prafulla Dhariwal, Mark Chen, and Ilya Sutskever. 2023. <span>“Consistency <span>Models</span>.”</span> May 31, 2023. <a href="https://doi.org/10.48550/arXiv.2303.01469">https://doi.org/10.48550/arXiv.2303.01469</a>.

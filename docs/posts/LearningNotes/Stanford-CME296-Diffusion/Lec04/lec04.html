@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yuyang Zhang">
+<meta name="description" content="Lecture04 主要介绍了Latent Space和Guidance的基本概念和应用。在Lecture04最后，我们还会对比Latent Space和Guidance在不同方法中的作用。">
+
+<title>Lecture 04: Latent Space &amp; Guidance</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../.././style/icon.avif" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-d85075f6847ba5665d0c1832f92a5988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E8EJCZTZG1"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-E8EJCZTZG1', { 'anonymize_ip': true});
+</script>
+<link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<script>
+    MathJax = {
+        loader: {
+        load: ['[tex]/boldsymbol']
+        },
+        tex: {
+        tags: "all",
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: {
+            '[+]': ['boldsymbol']
+        }
+        }
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".foldable-header").forEach(header => {
+    header.addEventListener("click", () => {
+      const block = header.closest(".foldable");
+      if (block) {
+        block.classList.toggle("is-open");
+      }
+    });
+
+    // 可访问性（键盘）
+    header.setAttribute("tabindex", "0");
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+});
+</script>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Lecture 04: Latent Space &amp; Guidance">
+<meta property="og:description" content="Lecture04 主要介绍了Latent Space和Guidance的基本概念和应用。在Lecture04最后，我们还会对比Latent Space和Guidance在不同方法中的作用。">
+<meta property="og:image" content="./assets/cover.png">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../index.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/YYZhang2025"> 
+<span class="menu-text"><i class="fa-brands fa-github fa-xl"></i></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/zhang-yuyang/"> 
+<span class="menu-text"><i class="fa-brands fa-linkedin fa-xl"></i></span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../posts/Blogs/blogs_index.html"> 
+<span class="menu-text">Blogs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../posts/Projects/projects_index.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://yyzhang2025.github.io/100-AI-Papers-with-Code/"> 
+<span class="menu-text">100-PwC</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-learning-notes" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Learning Notes</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learning-notes">    
+        <li>
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/CS336/index.html">
+ <span class="dropdown-text">Stanford CS336 LLM From Scratch</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/Stanford-CME296-Diffusion/index.html">
+ <span class="dropdown-text">Stanford CME296 Diffusion &amp; Large Vision Models</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Lecture 04: Latent Space &amp; Guidance</h1>
+        </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-representation-via-an-autoencoder" id="toc-learning-representation-via-an-autoencoder" class="nav-link active" data-scroll-target="#learning-representation-via-an-autoencoder"><span class="header-section-number">1</span> Learning Representation via an AutoEncoder</a></li>
+  <li><a href="#learning-a-constrained-latent-space" id="toc-learning-a-constrained-latent-space" class="nav-link" data-scroll-target="#learning-a-constrained-latent-space"><span class="header-section-number">2</span> Learning a Constrained Latent Space</a>
+  <ul>
+  <li><a href="#derive-of-elbo" id="toc-derive-of-elbo" class="nav-link" data-scroll-target="#derive-of-elbo"><span class="header-section-number">2.1</span> Derive of ELBO</a></li>
+  </ul></li>
+  <li><a href="#address-limitations-of-original-vae" id="toc-address-limitations-of-original-vae" class="nav-link" data-scroll-target="#address-limitations-of-original-vae"><span class="header-section-number">3</span> Address Limitations of original VAE</a>
+  <ul>
+  <li><a href="#combat-blurriness-with-perceptual-loss" id="toc-combat-blurriness-with-perceptual-loss" class="nav-link" data-scroll-target="#combat-blurriness-with-perceptual-loss"><span class="header-section-number">3.1</span> Combat Blurriness with Perceptual Loss</a></li>
+  <li><a href="#with-adversarial-loss" id="toc-with-adversarial-loss" class="nav-link" data-scroll-target="#with-adversarial-loss"><span class="header-section-number">3.2</span> With Adversarial Loss</a></li>
+  </ul></li>
+  <li><a href="#diffusion-in-latent-space" id="toc-diffusion-in-latent-space" class="nav-link" data-scroll-target="#diffusion-in-latent-space"><span class="header-section-number">4</span> Diffusion in Latent Space</a></li>
+  <li><a href="#guidance" id="toc-guidance" class="nav-link" data-scroll-target="#guidance"><span class="header-section-number">5</span> Guidance</a>
+  <ul>
+  <li><a href="#text-representation" id="toc-text-representation" class="nav-link" data-scroll-target="#text-representation"><span class="header-section-number">5.1</span> Text Representation</a></li>
+  <li><a href="#image-representation" id="toc-image-representation" class="nav-link" data-scroll-target="#image-representation"><span class="header-section-number">5.2</span> Image Representation</a></li>
+  <li><a href="#contrastive-learning" id="toc-contrastive-learning" class="nav-link" data-scroll-target="#contrastive-learning"><span class="header-section-number">5.3</span> Contrastive Learning</a></li>
+  <li><a href="#guidance-in-diffusion-models" id="toc-guidance-in-diffusion-models" class="nav-link" data-scroll-target="#guidance-in-diffusion-models"><span class="header-section-number">5.4</span> Guidance in Diffusion Models</a>
+  <ul>
+  <li><a href="#classifier-based-guidance" id="toc-classifier-based-guidance" class="nav-link" data-scroll-target="#classifier-based-guidance"><span class="header-section-number">5.4.1</span> Classifier-Based Guidance</a></li>
+  <li><a href="#classifier-free-guidance" id="toc-classifier-free-guidance" class="nav-link" data-scroll-target="#classifier-free-guidance"><span class="header-section-number">5.4.2</span> Classifier-Free Guidance</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Lecture 04: Latent Space &amp; Guidance</h1>
+</div>
+
+<div>
+  <div class="description">
+    Lecture04 主要介绍了Latent Space和Guidance的基本概念和应用。在Lecture04最后，我们还会对比Latent Space和Guidance在不同方法中的作用。
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-representation-via-an-autoencoder" id="toc-learning-representation-via-an-autoencoder"><span class="header-section-number">1</span> Learning Representation via an AutoEncoder</a></li>
+  <li><a href="#learning-a-constrained-latent-space" id="toc-learning-a-constrained-latent-space"><span class="header-section-number">2</span> Learning a Constrained Latent Space</a>
+  <ul>
+  <li><a href="#derive-of-elbo" id="toc-derive-of-elbo"><span class="header-section-number">2.1</span> Derive of ELBO</a></li>
+  </ul></li>
+  <li><a href="#address-limitations-of-original-vae" id="toc-address-limitations-of-original-vae"><span class="header-section-number">3</span> Address Limitations of original VAE</a>
+  <ul>
+  <li><a href="#combat-blurriness-with-perceptual-loss" id="toc-combat-blurriness-with-perceptual-loss"><span class="header-section-number">3.1</span> Combat Blurriness with Perceptual Loss</a></li>
+  <li><a href="#with-adversarial-loss" id="toc-with-adversarial-loss"><span class="header-section-number">3.2</span> With Adversarial Loss</a></li>
+  </ul></li>
+  <li><a href="#diffusion-in-latent-space" id="toc-diffusion-in-latent-space"><span class="header-section-number">4</span> Diffusion in Latent Space</a></li>
+  <li><a href="#guidance" id="toc-guidance"><span class="header-section-number">5</span> Guidance</a>
+  <ul>
+  <li><a href="#text-representation" id="toc-text-representation"><span class="header-section-number">5.1</span> Text Representation</a></li>
+  <li><a href="#image-representation" id="toc-image-representation"><span class="header-section-number">5.2</span> Image Representation</a></li>
+  <li><a href="#contrastive-learning" id="toc-contrastive-learning"><span class="header-section-number">5.3</span> Contrastive Learning</a></li>
+  <li><a href="#guidance-in-diffusion-models" id="toc-guidance-in-diffusion-models"><span class="header-section-number">5.4</span> Guidance in Diffusion Models</a>
+  <ul>
+  <li><a href="#classifier-based-guidance" id="toc-classifier-based-guidance"><span class="header-section-number">5.4.1</span> Classifier-Based Guidance</a></li>
+  <li><a href="#classifier-free-guidance" id="toc-classifier-free-guidance"><span class="header-section-number">5.4.2</span> Classifier-Free Guidance</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  </ul>
+</nav>
+<p>在之前的课程中，我们介绍了Diffusion Models，Score Matching Models，和 Flow Models的基本原理和算法。在这几个算法中，我们都在原始数据空间进行建模和训练，比如对于一个 <span class="math inline">\((3, H, W)\)</span> 的图像，我们直接在这个空间进行建模和训练, 我们有 <span class="math inline">\(x \in \mathbb{R}^{3 \times H \times W}\)</span>, 但是这个显然有几个明显的问题：</p>
+<ol type="1">
+<li>High Dimensionally: 原始数据空间的维度通常非常高，这会导致模型训练和推理的计算成本非常大。</li>
+<li>Redundant Information：原始数据空间中可能包含大量冗余信息，比如相邻像素之间的相关性，这会使得模型难以捕捉到数据的本质特征。</li>
+<li>Representation not meaningful：如果在原始的数据空间进行移动，比如加上一个noise，我们可能无法得到一个有意义的表示，这会导致模型难以学习到数据的结构和分布。</li>
+</ol>
+<p>因此，我们需要：</p>
+<ul>
+<li>Tractable Dimension</li>
+<li>Compact Representation</li>
+<li>Meaningful Representation</li>
+</ul>
+<p>Lecture04通过介绍Latent Space来解决以上的几个问题。并且，除此之外，我们还会在Lecture04中介绍Guidance的概念：到目前为止，之前的Lectures都是Unconditional的模型，也就是说我们没有给模型提供任何条件信息，模型只是随机的生成数据，在这节Lecture中，我们将介绍如何通过Guidance来引导模型生成特定的样本，比如给模型提供一个文本描述（“一只小猫”），让模型生成符合这个描述的图像。</p>
+<p>废话不多说，让我们开始学习！我们先来学习什么是Latent Space，之后我们再来学习什么是Guidance。不过在此之前，让我们先来学几个概念：</p>
+<ul>
+<li>Semantic Similarity：</li>
+<li>Perceptual Similarity：对于人的眼睛，看到的图片非常的类似</li>
+</ul>
+<p>接下来我们的目标就是，这两个概念，来构建我们的Latent Space。</p>
+<section id="learning-representation-via-an-autoencoder" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Learning Representation via an AutoEncoder</h1>
+<p>最简单的方法就是通过一个AutoEncoder来学习一个Latent Space。AutoEncoder由两部分组成：Encoder和Decoder。Encoder的作用是将输入数据映射到一个低维的Latent Space中，而Decoder的作用是将Latent Space中的表示映射回原始数据空间，Autoencoder的作用就是找到一个Low Dimension的Latent Space，并且在这个Latent Space中，数据的表示是有意义的：</p>
+<div id="fig-autoencoder.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-autoencoder.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/autoencoder.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/autoencoder.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-autoencoder.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<p>AutoEncoder的训练目标是最小化重建误差，也就是输入数据和通过Decoder重建的数据之间的差异。我们可以将Autoencoder看成：通过Proxy Task来学习一个有意义的Latent Space。</p>
+<p>Spatial Compression Ratio:</p>
+<p><span id="eq-spatial-compression-ratio"><span class="math display">\[
+f = \frac{H}{h} = \frac{W}{w}
+\tag{1}\]</span></span></p>
+<p>Around <span class="math inline">\(f=8\)</span> is a good choice for the spatial compression ratio.</p>
+<p>接下来我们来看看AutoEncoder的几个组件：</p>
+<ul>
+<li>Encoder: 将输入数据映射到Latent Space中。</li>
+<li>Decoder: 将Latent Space中的表示映射回原始数据空间。</li>
+<li>Latent Space: 一个低维的空间，在这个空间中，数据的表示是有意义的。</li>
+</ul>
+<p>假设我们有一个图片 <span class="math inline">\(x\)</span>, 我们通过一个Encoder <span class="math inline">\(E_{\varphi}\)</span>将这个图片映射到一个Latent Space中，得到一个Latent Representation <span class="math inline">\(z=E_{\varphi}(x)\)</span>，然后我们通过一个Decoder <span class="math inline">\(D_{\theta}\)</span>将这个Latent Representation映射回原始数据空间，得到一个重建的图片 <span class="math inline">\(\hat{x}=D_{\theta}(z)\)</span>。我们的目标就是最小化输入图片 <span class="math inline">\(x\)</span>和重建图片 <span class="math inline">\(\hat{x}\)</span>之间的差异，也就是最小化重建误差：</p>
+<p><span id="eq-reconstruction-loss"><span class="math display">\[
+\mathcal{L}_{\text{AE}}(\theta, \varphi) = \mathbb{E}_{x \sim p_{data}(x)} [||x - D_{\theta}(E_{\varphi}(x))||^2]
+\tag{2}\]</span></span></p>
+<p>如何将图片压缩到一个低维的Latent Space中呢？我们可以通过Convolutional Neural Networks (CNNs)来实现这个目标。通过使用卷积层和池化层，我们可以逐渐减少特征图的空间维度，从而将图片压缩到一个低维的Latent Space中。通过Coalition 和 Pooling，有了<span class="math inline">\(z\)</span> 之后，我们可以通过Upsampling Option来将这个Latent Representation映射回原始数据空间中。</p>
+<p>我们来看一下个这个方法可以否满足我们之前提到的几个要求：</p>
+<ul>
+<li>Tractable Dimension: 通过使用卷积层和池化层，我们可以将图片压缩到一个低维的Latent Space中，从而降低模型训练和推理的计算成本。</li>
+<li>Compact Representation: 通过学习一个有意义的Latent Space，我们可以捕捉到数据的本质特征，从而减少冗余信息。</li>
+<li>Meaningful Representation: NO!</li>
+</ul>
+</section>
+<section id="learning-a-constrained-latent-space" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Learning a Constrained Latent Space</h1>
+<p>简单的AutoEncoder虽然可以将图片压缩到一个低维的Latent Space中，但是这个Latent Space中的表示并不一定是有意义的，也就是说，在这个Latent Space中，数据的表示可能没有任何结构和分布，因此我们可以通过某种方式来限制这个Latent Space的表示</p>
+<div id="fig-constrained-latent-space.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-constrained-latent-space.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/constrained-latent-space.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="./assets/constrained-latent-space.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-constrained-latent-space.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+<p>我们看一下如何更改这个Encoder和Decoder，对于Encoder，我们不仅需要在Latent Space中，我们还希望在Encoder之后，我们可以得到一个分布 <span class="math inline">\(q_{\varphi}(z|x)\)</span>，这个分布可以是一个高斯分布，也可以是一个其他的分布，这样我们就可以通过这个分布来限制Latent Space中的表示，使得这个Latent Space中的表示具有一定的结构和分布。对于Decoder，我们需要将这个Latent Representation映射回原始数据空间中，这个过程可以通过一个神经网络来实现。<span class="math inline">\(z \sim q_{\varphi}(z|x) = \mathcal{N}(\mu_{\varphi}(x), \sigma_{\varphi}^2(x))\)</span>, 并且我们希望 <span class="math inline">\(q(z | x) \approx p(z)\)</span>, 也就是说，我们希望这个分布 <span class="math inline">\(q_{\varphi}(z|x)\)</span>能够逼近一个先验分布 <span class="math inline">\(p(z)\)</span>，这个先验分布可以是一个高斯分布，也可以是一个其他的分布。通过这种方式，我们就可以限制Latent Space中的表示，使得这个Latent Space中的表示具有一定的结构和分布。有了Latent Space之后，我们可以将它传入Decoder中，得到一个重建的图片 <span class="math inline">\(\hat{x} \sim p_{\theta}(x|z) = \mathcal{N}(\mu_{\theta}(z), \sigma_{\theta}^2(z))\)</span>, 因此，我么有了不同的Loss Function，这就是所谓的Variational AutoEncoder (VAE)</p>
+<p><span id="eq-vae-loss"><span class="math display">\[
+\mathcal{L}_{\text{VAE}}(\theta, \varphi) = \mathbb{E}_{x \sim p_{data}(x)} [\mathbb{E}_{z \sim q_{\varphi}(z|x)} [||x - D_{\theta}(z)||^2]] + \beta \cdot KL(q_{\varphi}(z|x) || p(z))
+\tag{3}\]</span></span></p>
+<section id="derive-of-elbo" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="derive-of-elbo"><span class="header-section-number">2.1</span> Derive of ELBO</h2>
+<p>让我们看看：</p>
+<ul>
+<li>Tractable Dimension: 通过使用卷积层和池化层，我们可以将图片压缩到一个低维的Latent Space中，从而降低模型训练和推理的计算成本。</li>
+<li>Compact Representation: 通过学习一个有意义的Latent Space，我们可以捕捉</li>
+<li>到数据的本质特征，从而减少冗余信息。</li>
+<li>Meaningful Representation: 通过限制Latent Space中的表示，使得这个Latent Space中的表示具有一定的结构和分布，我们可以得到一个有意义的Latent Space，这个Latent Space中的表示具有一定的结构和分布，这样我们就可以在这个Latent Space中进行有意义的操作，比如在这个Latent Space中进行插值，或者在这个Latent Space中进行加噪声等等。</li>
+<li>Truthful Representing： NO！</li>
+</ul>
+</section>
+</section>
+<section id="address-limitations-of-original-vae" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Address Limitations of original VAE</h1>
+<p>我们可以将之前的Loss function，抽象成： <span id="eq-vae-loss-abstract"><span class="math display">\[
+\mathcal{L}_{\text{VAE}} = \lambda_{\text{rec}}\mathcal{L}_{\text{rec}} + \lambda_{\text{KL}}\mathcal{L}_{\text{KL}}
+\tag{4}\]</span></span></p>
+<p>我们要如何解决Blurr的问题呢？ 我们先来看一下Reconstruction Loss：</p>
+<p><span id="eq-reconstruction-loss-l2"><span class="math display">\[
+\mathcal{L}_{\text{rec}} = \| x - \hat{x} \|^2
+\tag{5}\]</span></span></p>
+<p><span class="math inline">\(L_1\)</span> , <span class="math inline">\(L_2\)</span> 是直接作用在Pixel Space上的，这就意味着：当<span class="math inline">\(\hat{x}\)</span> 与原始的图片 <span class="math inline">\(x\)</span>之间存在一个小的位移时，<span class="math inline">\(L_1\)</span> 和 <span class="math inline">\(L_2\)</span> Loss都会非常大，因此模型就是产出Average的图片，来减少这个loss function，这就导致了重建的图片非常模糊。如果我们将<span class="math inline">\(\lambda_{\text{rec}}\)</span>设置的非常大 <span class="math inline">\(=1\)</span>, 那么模型就会非常的关注重建的质量，而忽略了Latent Space中的表示的结构和分布。那，Naive的Autoencoder就没有这个问题吗？也有，但是在VAE中，<span class="math inline">\(\lambda_{\text{KL}}\)</span>的存在，使得模型Blurry的问题变得更加严重，我们来看一下， 如果 <span class="math inline">\(\lambda_{\text{KL}}\)</span>设置的非常大 <span class="math inline">\(=1\)</span>, 那么模型就会非常的关注Latent Space中的表示的结构和分布，这就会导致 posterior collapse的问题，也就是说，模型会忽略输入数据 <span class="math inline">\(x\)</span>，直接将Latent Representation <span class="math inline">\(z\)</span>映射到一个固定的分布 <span class="math inline">\(p(z)\)</span>上，这样就会导致重建的图片非常模糊。</p>
+<p>那么如何解决这个问题呢？我们可以通过以下几种方法来解决这个问题：</p>
+<section id="combat-blurriness-with-perceptual-loss" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="combat-blurriness-with-perceptual-loss"><span class="header-section-number">3.1</span> Combat Blurriness with Perceptual Loss</h2>
+<p>我们不希望过于关注Pixel Space上的重建误差，而是希望关注Perceptual Space上的重建误差，也就是说，我们希望在Perceptual Space上，重建的图片和原始的图片之间的差异尽可能的小，这样就可以得到一个更清晰的重建图片。我们可以通过一个预训练的卷积神经网络来提取图片的特征，然后在这个特征空间上计算重建误差，这样就可以得到一个更清晰的重建图片。首先我们通过Feature Maps来提取图片的特征，然后在这个特征空间上计算重建误差，这样就可以得到一个更清晰的重建图片。我们可以将之前的Loss function，抽象成：</p>
+<p><span id="eq-perceptual-loss"><span class="math display">\[
+\mathcal{L}_{\text{perc}}=\sum_{l} \frac{1}{H_lW_l} \| w^l \cdot (\phi_l(x) - \phi_l(\hat{x})) \|^2
+\tag{6}\]</span></span></p>
+<p>这个也叫做Learned Perceptual Image Patch Similarity (LPIPS) Loss, 通过这个Loss function，我们可以得到一个更清晰的重建图片。</p>
+</section>
+<section id="with-adversarial-loss" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="with-adversarial-loss"><span class="header-section-number">3.2</span> With Adversarial Loss</h2>
+<p>通过引入一个Discriminator，我们可以通过Adversarial Loss来进一步提高重建图片的质量。我们可以将之前的Loss function，抽象成：</p>
+<p><span id="eq-adversarial-loss"><span class="math display">\[
+\mathcal{L}_{\text{adv}} = - \mathbb{E}[C_{\mathcal{w}}(\hat(x))]
+\tag{7}\]</span></span></p>
+</section>
+</section>
+<section id="diffusion-in-latent-space" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Diffusion in Latent Space</h1>
+<p>有了Latent Space之后，我们就可以在Latent Space中进行Diffusion了，这样就可以得到一个更高效的Diffusion Model。</p>
+<p>与之前的算法一样，不同的是，我们还需要另外训练一个Autoencoder模型，并且在Training的时候，先通过Encoder将输入数据映射到Latent Space中，然后在Latent Space中进行Diffusion的训练，最后在Inference的时候，我们先通过Diffusion模型在Latent Space中进行采样，得到一个Latent Representation <span class="math inline">\(z\)</span>, 然后通过Decoder将这个Latent Representation映射回原始数据空间中，得到一个生成的图片 <span class="math inline">\(\hat{x}\)</span>。我们可以看一下Decoder和Encoder的Size，Decoder is <span class="math inline">\(2x\)</span> larger than Encoder, 这是因为Decoder需要将Latent Representation映射回原始数据空间中，这个过程需要更多的参数来捕捉数据的结构和分布。通过在Latent Space中进行Diffusion，我们可以得到一个更高效的Diffusion Model，因为在Latent Space中，数据的表示是有意义的，这样就可以更容易地捕捉到数据的结构和分布，从而提高模型的性能。</p>
+<p>有了这个Latent Space之后，我们接下来看一下如何进行Guidance。</p>
+</section>
+<section id="guidance" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Guidance</h1>
+<section id="text-representation" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="text-representation"><span class="header-section-number">5.1</span> Text Representation</h2>
+<p>我们通常会训练一个Transformer的Encoder来将文本映射到一个Latent Space中</p>
+</section>
+<section id="image-representation" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="image-representation"><span class="header-section-number">5.2</span> Image Representation</h2>
+<p>同样的，通过ViT来将图片映射到一个Latent Space中</p>
+</section>
+<section id="contrastive-learning" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="contrastive-learning"><span class="header-section-number">5.3</span> Contrastive Learning</h2>
+<p>有了Text Representation和Image Representation之后，如何学习这两个Representation之间的关系呢？我们可以通过Contrastive Learning来学习这两个Representation之间的关系。我们可以通过一个Contrastive Loss来学习这两个Representation之间的关系，这样就可以得到一个更好的Guidance。</p>
+</section>
+<section id="guidance-in-diffusion-models" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="guidance-in-diffusion-models"><span class="header-section-number">5.4</span> Guidance in Diffusion Models</h2>
+<p>介绍了，铺垫了这么久，终于可以介绍Guidance了。我们可以通过在Diffusion Models中引入一个Guidance来引导模型生成特定的样本，比如给模型提供一个文本描述（“一只小猫”），让模型生成符合这个描述的图像。我们可以将之前的Loss function，抽象成：</p>
+<p><span id="eq-guidance-loss"><span class="math display">\[
+\mathcal{L}_{\text{guidance}} = \mathcal{L}_{\text{diffusion}} + \lambda_{\text{guidance}} \cdot \mathcal{L}_{\text{contrastive}}
+\tag{8}\]</span></span></p>
+<section id="classifier-based-guidance" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="classifier-based-guidance"><span class="header-section-number">5.4.1</span> Classifier-Based Guidance</h3>
+</section>
+<section id="classifier-free-guidance" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="classifier-free-guidance"><span class="header-section-number">5.4.2</span> Classifier-Free Guidance</h3>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Conclusion</h1>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark_dimmed">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      if (authorPrefersDark) {
+          [baseTheme, altTheme] = [altTheme, baseTheme];
+      }
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "YYZhang2025/YYZhang2025.github.io";
+    script.dataset.repoId = "R_kgDOQlDTcQ";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOQlDTcc4C2MRz";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© CC-By Yuyang, 2025</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+    <script type="text/javascript">
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let pseudocodeOptions = {
+          indentSize: el.dataset.indentSize,
+          commentDelimiter: el.dataset.commentDelimiter,
+          lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+          lineNumberPunc: el.dataset.lineNumberPunc,
+          noEnd: el.dataset.noEnd.toLowerCase() === "true",
+          titlePrefix: el.dataset.captionPrefix
+        };
+        pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+      });
+    })(document);
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+        if (captionSpan !== null) {
+          let captionPrefix = el.dataset.captionPrefix + " ";
+          let captionNumber = "";
+          if (el.dataset.pseudocodeNumber) {
+            captionNumber = el.dataset.pseudocodeNumber + " ";
+            if (el.dataset.chapterLevel) {
+              captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+            }
+          }
+          captionSpan.innerHTML = captionPrefix + captionNumber;
+        }
+      });
+    })(document);
+    </script>
+  
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+<script src="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+</body></html>

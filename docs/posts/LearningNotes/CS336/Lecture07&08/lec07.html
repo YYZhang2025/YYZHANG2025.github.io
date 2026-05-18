@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -50,6 +85,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -144,6 +182,35 @@ document.addEventListener("DOMContentLoaded", function () {
       </style>
     
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <meta property="og:title" content="Lecture 07 &amp; 08: Parallelism Training">
 <meta property="og:description" content="Lecture 07与08介绍了深度学习中的并行训练方法，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。重点讲解了各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。">
@@ -359,14 +426,6 @@ document.addEventListener("DOMContentLoaded", function () {
     <a class="dropdown-item" href="../../../../posts/LearningNotes/CS336/index.html">
  <span class="dropdown-text">Stanford CS336 LLM From Scratch</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../../../../posts/LearningNotes/Stanford-CME296-Diffusion/index.html">
- <span class="dropdown-text">Stanford CME296 Diffusion &amp; Large Vision Models</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../../../posts/LearningNotes/MIT6S184-Flow/index.html">
- <span class="dropdown-text">MIT 6.S184 Flow Matching and Diffusion Models</span></a>
-  </li>  
     </ul>
   </li>
 </ul>
@@ -399,7 +458,63 @@ document.addEventListener("DOMContentLoaded", function () {
         <div id="quarto-search" class="" title="Search"></div>
         </div>
         </div>
-    
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#为什么要并行训练" id="toc-为什么要并行训练" class="nav-link active" data-scroll-target="#为什么要并行训练"><span class="header-section-number">1</span> 为什么要并行训练？</a></li>
+  <li><a href="#building-blocks-of-distributed-communication-computation" id="toc-building-blocks-of-distributed-communication-computation" class="nav-link" data-scroll-target="#building-blocks-of-distributed-communication-computation"><span class="header-section-number">2</span> Building Blocks of Distributed Communication / Computation</a>
+  <ul>
+  <li><a href="#collective-operations" id="toc-collective-operations" class="nav-link" data-scroll-target="#collective-operations"><span class="header-section-number">2.1</span> Collective Operations</a>
+  <ul>
+  <li><a href="#broadcast" id="toc-broadcast" class="nav-link" data-scroll-target="#broadcast"><span class="header-section-number">2.1.1</span> Broadcast</a></li>
+  <li><a href="#scatter" id="toc-scatter" class="nav-link" data-scroll-target="#scatter"><span class="header-section-number">2.1.2</span> Scatter</a></li>
+  <li><a href="#gather" id="toc-gather" class="nav-link" data-scroll-target="#gather"><span class="header-section-number">2.1.3</span> Gather</a></li>
+  <li><a href="#reduce" id="toc-reduce" class="nav-link" data-scroll-target="#reduce"><span class="header-section-number">2.1.4</span> Reduce</a></li>
+  <li><a href="#all-gather" id="toc-all-gather" class="nav-link" data-scroll-target="#all-gather"><span class="header-section-number">2.1.5</span> All Gather</a></li>
+  <li><a href="#reduce-scatter" id="toc-reduce-scatter" class="nav-link" data-scroll-target="#reduce-scatter"><span class="header-section-number">2.1.6</span> Reduce-Scatter</a></li>
+  <li><a href="#all-reduce" id="toc-all-reduce" class="nav-link" data-scroll-target="#all-reduce"><span class="header-section-number">2.1.7</span> All Reduce</a></li>
+  <li><a href="#all-to-all" id="toc-all-to-all" class="nav-link" data-scroll-target="#all-to-all"><span class="header-section-number">2.1.8</span> All-to-All</a></li>
+  </ul></li>
+  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware"><span class="header-section-number">2.2</span> Hardware</a>
+  <ul>
+  <li><a href="#ncll" id="toc-ncll" class="nav-link" data-scroll-target="#ncll"><span class="header-section-number">2.2.1</span> NCLL</a></li>
+  </ul></li>
+  <li><a href="#torch-distributed" id="toc-torch-distributed" class="nav-link" data-scroll-target="#torch-distributed"><span class="header-section-number">2.3</span> Torch Distributed</a></li>
+  <li><a href="#benchmarking" id="toc-benchmarking" class="nav-link" data-scroll-target="#benchmarking"><span class="header-section-number">2.4</span> Benchmarking</a>
+  <ul>
+  <li><a href="#measure-speed" id="toc-measure-speed" class="nav-link" data-scroll-target="#measure-speed"><span class="header-section-number">2.4.1</span> Measure Speed</a></li>
+  <li><a href="#measure-effective-bandwidth" id="toc-measure-effective-bandwidth" class="nav-link" data-scroll-target="#measure-effective-bandwidth"><span class="header-section-number">2.4.2</span> Measure Effective Bandwidth</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#distributed-training" id="toc-distributed-training" class="nav-link" data-scroll-target="#distributed-training"><span class="header-section-number">3</span> Distributed Training</a>
+  <ul>
+  <li><a href="#data-parallelism" id="toc-data-parallelism" class="nav-link" data-scroll-target="#data-parallelism"><span class="header-section-number">3.1</span> Data Parallelism</a>
+  <ul>
+  <li><a href="#zero" id="toc-zero" class="nav-link" data-scroll-target="#zero"><span class="header-section-number">3.1.1</span> ZeRO</a>
+  <ul class="collapse">
+  <li><a href="#zero-stage-1-optimizer-state-sharding" id="toc-zero-stage-1-optimizer-state-sharding" class="nav-link" data-scroll-target="#zero-stage-1-optimizer-state-sharding"><span class="header-section-number">3.1.1.1</span> ZeRO Stage 1: Optimizer State Sharding</a></li>
+  <li><a href="#zero-stage-2-gradient-sharding" id="toc-zero-stage-2-gradient-sharding" class="nav-link" data-scroll-target="#zero-stage-2-gradient-sharding"><span class="header-section-number">3.1.1.2</span> ZeRO Stage 2: Gradient Sharding</a></li>
+  <li><a href="#zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp" id="toc-zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp" class="nav-link" data-scroll-target="#zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp"><span class="header-section-number">3.1.1.3</span> ZeRO Stage 3: Parameter Sharding （a.k.a Fully Sharded Data Parallel, FSDP）</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#model-tensor-parallelism" id="toc-model-tensor-parallelism" class="nav-link" data-scroll-target="#model-tensor-parallelism"><span class="header-section-number">3.2</span> Model Tensor Parallelism</a>
+  <ul>
+  <li><a href="#pipeline-parallelism" id="toc-pipeline-parallelism" class="nav-link" data-scroll-target="#pipeline-parallelism"><span class="header-section-number">3.2.1</span> Pipeline Parallelism</a>
+  <ul class="collapse">
+  <li><a href="#layer-wise-pipeline-parallelism" id="toc-layer-wise-pipeline-parallelism" class="nav-link" data-scroll-target="#layer-wise-pipeline-parallelism"><span class="header-section-number">3.2.1.1</span> Layer-wise Pipeline Parallelism</a></li>
+  <li><a href="#pipeline-parallelism-1" id="toc-pipeline-parallelism-1" class="nav-link" data-scroll-target="#pipeline-parallelism-1"><span class="header-section-number">3.2.1.2</span> Pipeline Parallelism</a></li>
+  <li><a href="#zero-bubble-pipeline" id="toc-zero-bubble-pipeline" class="nav-link" data-scroll-target="#zero-bubble-pipeline"><span class="header-section-number">3.2.1.3</span> Zero bubble Pipeline</a></li>
+  </ul></li>
+  <li><a href="#tensor-parallelism" id="toc-tensor-parallelism" class="nav-link" data-scroll-target="#tensor-parallelism"><span class="header-section-number">3.2.2</span> Tensor Parallelism</a>
+  <ul class="collapse">
+  <li><a href="#column-tensor-parallelism" id="toc-column-tensor-parallelism" class="nav-link" data-scroll-target="#column-tensor-parallelism"><span class="header-section-number">3.2.2.1</span> Column Tensor Parallelism</a></li>
+  <li><a href="#row-tensor-parallelism" id="toc-row-tensor-parallelism" class="nav-link" data-scroll-target="#row-tensor-parallelism"><span class="header-section-number">3.2.2.2</span> Row Tensor Parallelism</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -438,9 +553,374 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </header>
 
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#为什么要并行训练" id="toc-为什么要并行训练"><span class="header-section-number">1</span> 为什么要并行训练？</a></li>
+  <li><a href="#building-blocks-of-distributed-communication-computation" id="toc-building-blocks-of-distributed-communication-computation"><span class="header-section-number">2</span> Building Blocks of Distributed Communication / Computation</a>
+  <ul>
+  <li><a href="#collective-operations" id="toc-collective-operations"><span class="header-section-number">2.1</span> Collective Operations</a>
+  <ul>
+  <li><a href="#broadcast" id="toc-broadcast"><span class="header-section-number">2.1.1</span> Broadcast</a></li>
+  <li><a href="#scatter" id="toc-scatter"><span class="header-section-number">2.1.2</span> Scatter</a></li>
+  <li><a href="#gather" id="toc-gather"><span class="header-section-number">2.1.3</span> Gather</a></li>
+  <li><a href="#reduce" id="toc-reduce"><span class="header-section-number">2.1.4</span> Reduce</a></li>
+  <li><a href="#all-gather" id="toc-all-gather"><span class="header-section-number">2.1.5</span> All Gather</a></li>
+  <li><a href="#reduce-scatter" id="toc-reduce-scatter"><span class="header-section-number">2.1.6</span> Reduce-Scatter</a></li>
+  <li><a href="#all-reduce" id="toc-all-reduce"><span class="header-section-number">2.1.7</span> All Reduce</a></li>
+  <li><a href="#all-to-all" id="toc-all-to-all"><span class="header-section-number">2.1.8</span> All-to-All</a></li>
+  </ul></li>
+  <li><a href="#hardware" id="toc-hardware"><span class="header-section-number">2.2</span> Hardware</a>
+  <ul>
+  <li><a href="#ncll" id="toc-ncll"><span class="header-section-number">2.2.1</span> NCLL</a></li>
+  </ul></li>
+  <li><a href="#torch-distributed" id="toc-torch-distributed"><span class="header-section-number">2.3</span> Torch Distributed</a></li>
+  <li><a href="#benchmarking" id="toc-benchmarking"><span class="header-section-number">2.4</span> Benchmarking</a>
+  <ul>
+  <li><a href="#measure-speed" id="toc-measure-speed"><span class="header-section-number">2.4.1</span> Measure Speed</a></li>
+  <li><a href="#measure-effective-bandwidth" id="toc-measure-effective-bandwidth"><span class="header-section-number">2.4.2</span> Measure Effective Bandwidth</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#distributed-training" id="toc-distributed-training"><span class="header-section-number">3</span> Distributed Training</a>
+  <ul>
+  <li><a href="#data-parallelism" id="toc-data-parallelism"><span class="header-section-number">3.1</span> Data Parallelism</a>
+  <ul>
+  <li><a href="#zero" id="toc-zero"><span class="header-section-number">3.1.1</span> ZeRO</a>
+  <ul>
+  <li><a href="#zero-stage-1-optimizer-state-sharding" id="toc-zero-stage-1-optimizer-state-sharding"><span class="header-section-number">3.1.1.1</span> ZeRO Stage 1: Optimizer State Sharding</a></li>
+  <li><a href="#zero-stage-2-gradient-sharding" id="toc-zero-stage-2-gradient-sharding"><span class="header-section-number">3.1.1.2</span> ZeRO Stage 2: Gradient Sharding</a></li>
+  <li><a href="#zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp" id="toc-zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp"><span class="header-section-number">3.1.1.3</span> ZeRO Stage 3: Parameter Sharding （a.k.a Fully Sharded Data Parallel, FSDP）</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#model-tensor-parallelism" id="toc-model-tensor-parallelism"><span class="header-section-number">3.2</span> Model Tensor Parallelism</a>
+  <ul>
+  <li><a href="#pipeline-parallelism" id="toc-pipeline-parallelism"><span class="header-section-number">3.2.1</span> Pipeline Parallelism</a>
+  <ul>
+  <li><a href="#layer-wise-pipeline-parallelism" id="toc-layer-wise-pipeline-parallelism"><span class="header-section-number">3.2.1.1</span> Layer-wise Pipeline Parallelism</a></li>
+  <li><a href="#pipeline-parallelism-1" id="toc-pipeline-parallelism-1"><span class="header-section-number">3.2.1.2</span> Pipeline Parallelism</a></li>
+  <li><a href="#zero-bubble-pipeline" id="toc-zero-bubble-pipeline"><span class="header-section-number">3.2.1.3</span> Zero bubble Pipeline</a></li>
+  </ul></li>
+  <li><a href="#tensor-parallelism" id="toc-tensor-parallelism"><span class="header-section-number">3.2.2</span> Tensor Parallelism</a>
+  <ul>
+  <li><a href="#column-tensor-parallelism" id="toc-column-tensor-parallelism"><span class="header-section-number">3.2.2.1</span> Column Tensor Parallelism</a></li>
+  <li><a href="#row-tensor-parallelism" id="toc-row-tensor-parallelism"><span class="header-section-number">3.2.2.2</span> Row Tensor Parallelism</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+<p>在Lecture07和08的课程中，我们讲探讨不同的Parallelism的技巧，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。我们将重点讲解各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。</p>
+<p>废话不多说，让我们开始学习！</p>
+<p>使用GPUs很简单，但是想要</p>
+<p>Reduce communication across GPUs/nodes， via <strong>replication</strong> / <strong>sharding</strong></p>
+<section id="为什么要并行训练" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 为什么要并行训练？</h1>
+<p>Intra-node communication: GPU-GPU communication within a single node (e.g., via NVLink) Inter-node communication: GPU-GPU communication across different nodes (e.g., via Ethernet or InfiniBand)</p>
+</section>
+<section id="building-blocks-of-distributed-communication-computation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Building Blocks of Distributed Communication / Computation</h1>
+<div id="fig-building-blocks-setup.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-building-blocks-setup.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/building-blocks-setup.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/building-blocks-setup.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-building-blocks-setup.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<ul>
+<li>Rank: 每个GPU都有一个唯一的ID。</li>
+<li>World Size: 所有参与训练的GPU的总数。</li>
+</ul>
+<section id="collective-operations" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="collective-operations"><span class="header-section-number">2.1</span> Collective Operations</h2>
+<p>Collective 意思是：设计一个general的communication pattern，来支持跨不同的devices。接下来看几个比较常见的例子：</p>
+<section id="broadcast" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="broadcast"><span class="header-section-number">2.1.1</span> Broadcast</h3>
+<div id="fig-broadcast.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-broadcast.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/broadcast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="./assets/broadcast.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-broadcast.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+<p>Broadcast的意思是：从一个GPU（通常是rank 0）向所有其他GPU发送数据。</p>
+<p>通常作为模型参数初始化的第一步，或者在训练过程中需要同步某些数据时使用。Load Initial Checkpoint 并且broadcast to all ranks。</p>
+</section>
+<section id="scatter" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="scatter"><span class="header-section-number">2.1.2</span> Scatter</h3>
+<div id="fig-scatter-op.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scatter-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/scatter-op.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="./assets/scatter-op.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-scatter-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+<p>Scatter 的意思是：将一个大的数据集分成小块，分别发送到不同的GPU上进行处理。 需要注意的是，Scatter要确保数据的分割方式是合理的。</p>
+</section>
+<section id="gather" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="gather"><span class="header-section-number">2.1.3</span> Gather</h3>
+<div id="fig-gather-op.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gather-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/gather-op.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="./assets/gather-op.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-gather-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4
+</figcaption>
+</figure>
+</div>
+<p>Gather 的意思是：将分布在不同GPU上的数据收集到一个GPU上进行处理。通常在训练结束后需要将结果汇总到一个GPU上进行评估或者保存模型时使用。 Gather的实现需要考虑通信效率，尤其是在大规模分布式训练中，可能会成为瓶颈。</p>
+</section>
+<section id="reduce" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="reduce"><span class="header-section-number">2.1.4</span> Reduce</h3>
+<div id="fig-reduce-op.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reduce-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/reduce-op.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="./assets/reduce-op.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-reduce-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5
+</figcaption>
+</figure>
+</div>
+<p>reduce 的意思是：将分布在不同GPU上的数据进行某种聚合操作（如求和、平均等），并将结果发送到一个GPU上。通常在训练过程中需要对梯度进行reduce操作，以便更新模型参数。</p>
+</section>
+<section id="all-gather" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="all-gather"><span class="header-section-number">2.1.5</span> All Gather</h3>
+<div id="fig-all-gather-op.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-all-gather-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/all-gather-op.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: "><img src="./assets/all-gather-op.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-all-gather-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6
+</figcaption>
+</figure>
+</div>
+<p>在All Gather操作中，每个GPU将自己的数据发送给所有其他GPU，并且每个GPU都接收来自所有其他GPU的数据。这样，每个GPU最终都拥有了所有GPU的数据。</p>
+<p>举个例子，每个Rank 有parameter shard， 每个Rank都需要知道其他Rank的parameter shard，才能进行计算。All Gather操作可以让每个Rank都获得所有Rank的parameter shard，从而完成计算。</p>
+</section>
+<section id="reduce-scatter" class="level3" data-number="2.1.6">
+<h3 data-number="2.1.6" class="anchored" data-anchor-id="reduce-scatter"><span class="header-section-number">2.1.6</span> Reduce-Scatter</h3>
+<div id="fig-reduce-scatter.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reduce-scatter.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/reduce-scatter.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: "><img src="./assets/reduce-scatter.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-reduce-scatter.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7
+</figcaption>
+</figure>
+</div>
+<p>reduce-scatter 的意思是：将分布在不同GPU上的数据进行某种聚合操作（如求和、平均等），并将结果分散到不同的GPU上。通常在训练过程中需要对梯度进行reduce-scatter操作，以便每个GPU都能获得更新后的模型参数的一部分。</p>
+</section>
+<section id="all-reduce" class="level3" data-number="2.1.7">
+<h3 data-number="2.1.7" class="anchored" data-anchor-id="all-reduce"><span class="header-section-number">2.1.7</span> All Reduce</h3>
+<div id="fig-all-reduce.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-all-reduce.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/all-reduce.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8: "><img src="./assets/all-reduce.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-all-reduce.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8
+</figcaption>
+</figure>
+</div>
+<p>All Reduce 的意思是：将分布在不同GPU上的数据进行某种聚合操作（如求和、平均等），并将结果发送到所有GPU上。通常在训练过程中需要对梯度进行all-reduce操作，以便每个GPU都能获得更新后的模型参数。</p>
+</section>
+<section id="all-to-all" class="level3" data-number="2.1.8">
+<h3 data-number="2.1.8" class="anchored" data-anchor-id="all-to-all"><span class="header-section-number">2.1.8</span> All-to-All</h3>
+<p>all to all 是比较general的方法：each rank sends each other rank some tensor (most general)</p>
+<div class="tip foldable is-open">
+<div class="tip-header foldable-header">
+<p>TIP: How to Remember the Terminology</p>
+</div>
+<div class="tip-container foldable-content">
+<ul>
+<li>Reduce: 聚合数据并发送到一个GPU上。</li>
+<li>Scatter: 将数据分割并发送到不同的GPU上。</li>
+<li>All: 涉及所有GPU。</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="hardware" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="hardware"><span class="header-section-number">2.2</span> Hardware</h2>
+<div id="fig-classic-hardware.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-classic-hardware.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/classic-hardware.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;9: "><img src="./assets/classic-hardware.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-classic-hardware.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9
+</figcaption>
+</figure>
+</div>
+<p>从图 <a href="#fig-classic-hardware.png" class="quarto-xref">Figure&nbsp;9</a> 中可以看出，在相同node中的GPUs，可以通过 PCI(e) bus 进行通信，速度可以到达 (242GB/s)。而在不同node中的GPUs，则需要通过Eterhnet进行通信，速度通常在 (200MB/s) 之间，远远低于PCI(e)的速度。这也是为什么在分布式训练中，通信效率成为一个重要的瓶颈。</p>
+<p>接下来我们来看现代的Data Center 里面，不同的GPUs之间是怎么连接的。</p>
+<div id="fig-modern-hardware.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modern-hardware.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/modern-hardware.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;10: "><img src="./assets/modern-hardware.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-modern-hardware.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10
+</figcaption>
+</figure>
+</div>
+<p>从图中看到：</p>
+<ul>
+<li>8GPUs per node 并且通过 NVLink 连接到 NVSwitch，速度可以达到（1.8TB/s）。</li>
+<li>256 nodes 一个 pod，并且通过 InfiniBand 连接，速度可以达到（200GB/s）。connected by Infiniband (via PCIe -&gt; HCA / Infiniband NIC -&gt; Infiniband cable) (~0.05 TB/s)</li>
+<li>N pods per cluster， 并且通过 Ethernet 连接，速度可以达到（200MB/s）。</li>
+</ul>
+<p>什么叫Bypassing CPU？</p>
+<p>RDMA Remote Direct Memory Access (RDMA) 是一种允许计算机直接访问远程计算机内存的技术，而无需通过CPU进行数据传输。这种技术可以显著降低通信延迟和CPU负载，提高分布式系统中的数据传输效率。</p>
+<section id="ncll" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="ncll"><span class="header-section-number">2.2.1</span> NCLL</h3>
+<p>NCCL translates collective operations into low-level packets that are sent between GPUs. [talk]</p>
+<p>Detects topology of hardware (e.g., number of nodes, switches, NVLink/PCIe)</p>
+<p>Optimizes the path between GPUs</p>
+<p>Launches GPU kernels to send/receive data</p>
+</section>
+</section>
+<section id="torch-distributed" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="torch-distributed"><span class="header-section-number">2.3</span> Torch Distributed</h2>
+<p>主要介绍了PyTorch中的分布式训练框架torch.distributed。</p>
+<p>setup</p>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> setup(rank, world_size):</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    os.environ[<span class="st">'MASTER_ADDR'</span>] <span class="op">=</span> <span class="st">'localhost'</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    os.environ[<span class="st">'MASTER_PORT'</span>] <span class="op">=</span> <span class="st">'12355'</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="co"># initialize the process group</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>    dist.init_process_group(<span class="st">"nccl"</span>, rank<span class="op">=</span>rank, world_size<span class="op">=</span>world_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>在setup之后，</p>
+<div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>dist.barrier()  <span class="co"># Synchronize all processes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Wait to all the process to reach this point.</p>
+<p>接下来看几个操作:</p>
+<ul>
+<li><code>dist.all_reduce(tensor, op=dist.ReduceOp.SUM)</code>: 对所有GPU上的tensor进行求和，并将结果发送到所有GPU上。其中 <code>async_op</code> 参数表示是否异步执行，如果设置为True，则函数会立即返回一个Future对象，表示操作的状态，可以通过调用Future对象的wait()方法来等待操作完成。</li>
+<li><code>dist.reduce_scatter(tensor, scatter_list, op=dist.ReduceOp.SUM)</code>: 将分布在不同GPU上的数据进行求和，并将结果分散到不同的GPU上。其中 <code>scatter_list</code> 是一个列表，包含每个GPU上要发送的数据块。</li>
+<li><code>dist.all_gather(tensor_list, tensor)</code>: 将每个GPU上的tensor发送给所有其他GPU，并将结果收集到一个列表中。其中 <code>tensor_list</code> 是一个列表，包含每个GPU上要接收的数据块。</li>
+<li><code>dist.broadcast(tensor, src=0)</code>: 从指定的GPU（通常是rank 0）向所有其他GPU发送数据。其中 <code>src</code> 参数表示源GPU的rank。</li>
+</ul>
+<p>在Distributed 最后，记得clean up：</p>
+<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> cleanup():</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    dist.destroy_process_group()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="benchmarking" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="benchmarking"><span class="header-section-number">2.4</span> Benchmarking</h2>
+<section id="measure-speed" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="measure-speed"><span class="header-section-number">2.4.1</span> Measure Speed</h3>
+</section>
+<section id="measure-effective-bandwidth" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="measure-effective-bandwidth"><span class="header-section-number">2.4.2</span> Measure Effective Bandwidth</h3>
+</section>
+</section>
+</section>
+<section id="distributed-training" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Distributed Training</h1>
+<section id="data-parallelism" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="data-parallelism"><span class="header-section-number">3.1</span> Data Parallelism</h2>
+<div id="fig-data-parallelism-example.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-data-parallelism-example.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/data-parallelism-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;11: "><img src="./assets/data-parallelism-example.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-data-parallelism-example.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11
+</figcaption>
+</figure>
+</div>
+<p>根据Batch Size来切，每个GPU负责不同部分的数据，每个GPU上都有完整的模型副本，计算完梯度之后需要进行通信来同步参数更新。</p>
+<div class="sourceCode" id="cb4" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">for</span> p <span class="kw">in</span> params:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    dist.all_reduce(p.grad.data, op<span class="op">=</span>dist.ReduceOp.AVG)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>接下来让我们看一下Data Parallelism是如何Scaling的：</p>
+<ul>
+<li>Compute Scaling： 每个GPU都得到了B/M的Batch Size，计算量减少了M倍。</li>
+<li>Communication Overhead: transmit <span class="math inline">\(2x\)</span> parameters (forward + backward)，每个GPU都需要和其他GPU通信来同步参数更新，通信量随着GPU数量的增加而增加。</li>
+<li>Memory Scaling: None. 每个GPU上都有完整的模型副本，所以内存需求没有减少。</li>
+</ul>
+<p>可见，这种最常见的问题就是Memory的问题，每个GPUs都有一份copy</p>
+<section id="zero" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="zero"><span class="header-section-number">3.1.1</span> ZeRO</h3>
+<p>shard the optimizer state, gradients and parameters across GPUs, this corresponing to the 3 stages of ZeRO.</p>
+<section id="zero-stage-1-optimizer-state-sharding" class="level4" data-number="3.1.1.1">
+<h4 data-number="3.1.1.1" class="anchored" data-anchor-id="zero-stage-1-optimizer-state-sharding"><span class="header-section-number">3.1.1.1</span> ZeRO Stage 1: Optimizer State Sharding</h4>
+<p>在ZeRO Stage 1中，优化器状态（如动量、二阶矩等）被分割并分布在不同的GPU上。每个GPU只保存自己负责的参数对应的优化器状态，而不是整个模型的优化器状态。</p>
+<p>这个是怎么进行的的呢？</p>
+</section>
+<section id="zero-stage-2-gradient-sharding" class="level4" data-number="3.1.1.2">
+<h4 data-number="3.1.1.2" class="anchored" data-anchor-id="zero-stage-2-gradient-sharding"><span class="header-section-number">3.1.1.2</span> ZeRO Stage 2: Gradient Sharding</h4>
+<p>在ZeRO Stage 2中，除了优化器状态之外，梯度也被分割并分布在不同的GPU上。每个GPU只计算自己负责的参数对应的梯度，并且只保存自己负责的参数对应的梯度。</p>
+</section>
+<section id="zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp" class="level4" data-number="3.1.1.3">
+<h4 data-number="3.1.1.3" class="anchored" data-anchor-id="zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp"><span class="header-section-number">3.1.1.3</span> ZeRO Stage 3: Parameter Sharding （a.k.a Fully Sharded Data Parallel, FSDP）</h4>
+<p>在ZeRO Stage 3中，除了优化器状态和梯度之外，模型参数也被分割并分布在不同的GPU上。每个GPU只保存自己负责的参数，并且在计算过程中需要通信来获取其他GPU上的参数。</p>
+<p>Critical Batch Size</p>
+<p>Still Has Memory Issue</p>
+</section>
+</section>
+</section>
+<section id="model-tensor-parallelism" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="model-tensor-parallelism"><span class="header-section-number">3.2</span> Model Tensor Parallelism</h2>
+<section id="pipeline-parallelism" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="pipeline-parallelism"><span class="header-section-number">3.2.1</span> Pipeline Parallelism</h3>
+<div id="fig-pipeline-parallelism.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pipeline-parallelism.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/pipeline-parallelism.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;12: "><img src="./assets/pipeline-parallelism.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-pipeline-parallelism.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12
+</figcaption>
+</figure>
+</div>
+<section id="layer-wise-pipeline-parallelism" class="level4" data-number="3.2.1.1">
+<h4 data-number="3.2.1.1" class="anchored" data-anchor-id="layer-wise-pipeline-parallelism"><span class="header-section-number">3.2.1.1</span> Layer-wise Pipeline Parallelism</h4>
+</section>
+<section id="pipeline-parallelism-1" class="level4" data-number="3.2.1.2">
+<h4 data-number="3.2.1.2" class="anchored" data-anchor-id="pipeline-parallelism-1"><span class="header-section-number">3.2.1.2</span> Pipeline Parallelism</h4>
+<p>The problem of the simple pipeling parallelism is the pipeline bubble. 由于每个GPU需要等待前一个GPU完成计算才能开始计算，所以在训练过程中会出现空闲时间，导致效率降低。</p>
+</section>
+<section id="zero-bubble-pipeline" class="level4" data-number="3.2.1.3">
+<h4 data-number="3.2.1.3" class="anchored" data-anchor-id="zero-bubble-pipeline"><span class="header-section-number">3.2.1.3</span> Zero bubble Pipeline</h4>
+</section>
+</section>
+<section id="tensor-parallelism" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="tensor-parallelism"><span class="header-section-number">3.2.2</span> Tensor Parallelism</h3>
+<div id="fig-tensor-parallelism.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tensor-parallelism.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/tensor-parallelism.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;13: "><img src="./assets/tensor-parallelism.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-tensor-parallelism.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13
+</figcaption>
+</figure>
+</div>
+<p>each GPUs 保存一部分的模型参数，计算时需要通信来获取其他GPU上的参数。</p>
+<section id="column-tensor-parallelism" class="level4" data-number="3.2.2.1">
+<h4 data-number="3.2.2.1" class="anchored" data-anchor-id="column-tensor-parallelism"><span class="header-section-number">3.2.2.1</span> Column Tensor Parallelism</h4>
+</section>
+<section id="row-tensor-parallelism" class="level4" data-number="3.2.2.2">
+<h4 data-number="3.2.2.2" class="anchored" data-anchor-id="row-tensor-parallelism"><span class="header-section-number">3.2.2.2</span> Row Tensor Parallelism</h4>
 
 
-
+</section>
+</section>
+</section>
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -938,6 +1418,38 @@ document.addEventListener("DOMContentLoaded", function () {
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

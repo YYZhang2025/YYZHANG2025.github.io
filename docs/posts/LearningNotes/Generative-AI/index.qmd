@@ -1,0 +1,31 @@
+---
+title: "Diffusion Models"
+description: CS336是关于从零开始构建大型语言模型的综合课程，涵盖了从Transformer架构的基础知识，到MoE模型，GPU加速，Parallelism训练，模型的评估，数据的收集和处理，以及LLM的对齐算法等最新的进展。这个页面包含了CS336课程的所有学习笔记和作业解答。
+image: "./cover.png"
+    
+format:
+    html:
+      link-external-icon: false
+      page-layout: full
+      toc: false
+
+
+listing: 
+  - id: "lectures"
+    contents: "Lec*/*.qmd"
+    fields: [ "title", "description", 'image' ]
+
+  - id: "assignments"
+    contents: "Ass*/*.qmd"
+    fields: [ "title", "description", 'image' ]
+
+  
+author: ""
+page-layout: full
+
+
+title-block-banner: true
+title-block-banner-align: left
+comments: false
+sidebar: false
+---

@@ -50,6 +50,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -359,14 +362,6 @@ document.addEventListener("DOMContentLoaded", function () {
     <a class="dropdown-item" href="../../../../posts/LearningNotes/CS336/index.html">
  <span class="dropdown-text">Stanford CS336 LLM From Scratch</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../../../../posts/LearningNotes/Stanford-CME296-Diffusion/index.html">
- <span class="dropdown-text">Stanford CME296 Diffusion &amp; Large Vision Models</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../../../posts/LearningNotes/MIT6S184-Flow/index.html">
- <span class="dropdown-text">MIT 6.S184 Flow Matching and Diffusion Models</span></a>
-  </li>  
     </ul>
   </li>
 </ul>
@@ -399,7 +394,35 @@ document.addEventListener("DOMContentLoaded", function () {
         <div id="quarto-search" class="" title="Search"></div>
         </div>
         </div>
-    
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#gpus-in-depth" id="toc-gpus-in-depth" class="nav-link active" data-scroll-target="#gpus-in-depth"><span class="header-section-number">1</span> GPUs in depth</a>
+  <ul>
+  <li><a href="#different-from-cpu" id="toc-different-from-cpu" class="nav-link" data-scroll-target="#different-from-cpu"><span class="header-section-number">1.1</span> Different from CPU</a></li>
+  <li><a href="#execution-model" id="toc-execution-model" class="nav-link" data-scroll-target="#execution-model"><span class="header-section-number">1.2</span> Execution Model</a></li>
+  <li><a href="#memory-model" id="toc-memory-model" class="nav-link" data-scroll-target="#memory-model"><span class="header-section-number">1.3</span> Memory Model</a></li>
+  </ul></li>
+  <li><a href="#speed-up-gpu-computation" id="toc-speed-up-gpu-computation" class="nav-link" data-scroll-target="#speed-up-gpu-computation"><span class="header-section-number">2</span> Speed Up GPU Computation</a>
+  <ul>
+  <li><a href="#control-divergence" id="toc-control-divergence" class="nav-link" data-scroll-target="#control-divergence"><span class="header-section-number">2.1</span> Control Divergence</a></li>
+  <li><a href="#low-precision-computation" id="toc-low-precision-computation" class="nav-link" data-scroll-target="#low-precision-computation"><span class="header-section-number">2.2</span> Low Precision Computation</a></li>
+  <li><a href="#operator-fusion" id="toc-operator-fusion" class="nav-link" data-scroll-target="#operator-fusion"><span class="header-section-number">2.3</span> Operator Fusion</a></li>
+  <li><a href="#recomputation" id="toc-recomputation" class="nav-link" data-scroll-target="#recomputation"><span class="header-section-number">2.4</span> Recomputation</a></li>
+  <li><a href="#coalescing-memory" id="toc-coalescing-memory" class="nav-link" data-scroll-target="#coalescing-memory"><span class="header-section-number">2.5</span> Coalescing Memory</a></li>
+  <li><a href="#tiling" id="toc-tiling" class="nav-link" data-scroll-target="#tiling"><span class="header-section-number">2.6</span> Tiling</a></li>
+  </ul></li>
+  <li><a href="#putting-all-together-flash-attention" id="toc-putting-all-together-flash-attention" class="nav-link" data-scroll-target="#putting-all-together-flash-attention"><span class="header-section-number">3</span> Putting all together: Flash Attention</a></li>
+  <li><a href="#profiling-gpu" id="toc-profiling-gpu" class="nav-link" data-scroll-target="#profiling-gpu"><span class="header-section-number">4</span> Profiling GPU</a></li>
+  <li><a href="#triton" id="toc-triton" class="nav-link" data-scroll-target="#triton"><span class="header-section-number">5</span> Triton</a>
+  <ul>
+  <li><a href="#softmax" id="toc-softmax" class="nav-link" data-scroll-target="#softmax"><span class="header-section-number">5.1</span> Softmax</a></li>
+  </ul></li>
+  <li><a href="#related-source" id="toc-related-source" class="nav-link" data-scroll-target="#related-source"><span class="header-section-number">6</span> Related Source</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">7</span> Conclusion</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -438,9 +461,137 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </header>
 
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#gpus-in-depth" id="toc-gpus-in-depth"><span class="header-section-number">1</span> GPUs in depth</a>
+  <ul>
+  <li><a href="#different-from-cpu" id="toc-different-from-cpu"><span class="header-section-number">1.1</span> Different from CPU</a></li>
+  <li><a href="#execution-model" id="toc-execution-model"><span class="header-section-number">1.2</span> Execution Model</a></li>
+  <li><a href="#memory-model" id="toc-memory-model"><span class="header-section-number">1.3</span> Memory Model</a></li>
+  </ul></li>
+  <li><a href="#speed-up-gpu-computation" id="toc-speed-up-gpu-computation"><span class="header-section-number">2</span> Speed Up GPU Computation</a>
+  <ul>
+  <li><a href="#control-divergence" id="toc-control-divergence"><span class="header-section-number">2.1</span> Control Divergence</a></li>
+  <li><a href="#low-precision-computation" id="toc-low-precision-computation"><span class="header-section-number">2.2</span> Low Precision Computation</a></li>
+  <li><a href="#operator-fusion" id="toc-operator-fusion"><span class="header-section-number">2.3</span> Operator Fusion</a></li>
+  <li><a href="#recomputation" id="toc-recomputation"><span class="header-section-number">2.4</span> Recomputation</a></li>
+  <li><a href="#coalescing-memory" id="toc-coalescing-memory"><span class="header-section-number">2.5</span> Coalescing Memory</a></li>
+  <li><a href="#tiling" id="toc-tiling"><span class="header-section-number">2.6</span> Tiling</a></li>
+  </ul></li>
+  <li><a href="#putting-all-together-flash-attention" id="toc-putting-all-together-flash-attention"><span class="header-section-number">3</span> Putting all together: Flash Attention</a></li>
+  <li><a href="#profiling-gpu" id="toc-profiling-gpu"><span class="header-section-number">4</span> Profiling GPU</a></li>
+  <li><a href="#triton" id="toc-triton"><span class="header-section-number">5</span> Triton</a>
+  <ul>
+  <li><a href="#softmax" id="toc-softmax"><span class="header-section-number">5.1</span> Softmax</a></li>
+  </ul></li>
+  <li><a href="#related-source" id="toc-related-source"><span class="header-section-number">6</span> Related Source</a></li>
+  <li><a href="#conclusion" id="toc-conclusion"><span class="header-section-number">7</span> Conclusion</a></li>
+  </ul>
+</nav>
+<p>在Lecture05和Lecture06课程中，我们讲主要探讨GPU的架构以及如何利用GPU进行高效计算。在Lecture05中，我们首先介绍了GPU的基本架构和工作原理，接着讨论了几种提升计算效率的方法，如Kernel Fusion、Memory Coalescing和Tiling等。最后，我们还介绍了Flash Attention的原理及其实现细节。在Lecture06中，我们会先介绍如何Profiling GPU代码，接着介绍Triton，一个用于编写高性能GPU代码的开源编译器。我们将探讨Triton的基本概念、编程模型以及如何使用Triton编写高效的GPU内核。通过实际示例，我们将展示Triton在深度学习中的应用和优势。</p>
+<p>在Lecture05的目标就是读懂下面这张图：</p>
+<div id="fig-matmul-gpu.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-matmul-gpu.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/matmul-gpu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/matmul-gpu.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-matmul-gpu.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<p>接下来，我们先来了解一下GPU的基本框架。</p>
+<section id="gpus-in-depth" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> GPUs in depth</h1>
+<section id="different-from-cpu" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="different-from-cpu"><span class="header-section-number">1.1</span> Different from CPU</h2>
+<p>CPU 和 GPU 的设计目标从一开始就不一样。</p>
+<p>CPU的目标是：</p>
+<ul>
+<li>尽可能快地执行一条条操作序列，也就是把一个“线程”做得很快。</li>
+<li>它擅长处理逻辑复杂、步骤多、分支多的任务。</li>
+<li>一般只能同时高效处理几十个线程左右，但每个线程都很强。</li>
+</ul>
+<p>与CPU不同的是，GPU的设计目标是：</p>
+<ul>
+<li>同时执行成千上万个线程。</li>
+<li>它不追求单个线程特别快，而是追求大规模并行。</li>
+</ul>
+<div id="fig-cpu-gpu-compare.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cpu-gpu-compare.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/cpu-gpu-compare.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="./assets/cpu-gpu-compare.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-cpu-gpu-compare.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+<p>从图 <a href="#fig-cpu-gpu-compare.png" class="quarto-xref">Figure&nbsp;2</a> 中可以看出，CPU的核心数量较少，但每个核心都非常强大，适合处理复杂的任务。而GPU则拥有大量的核心，虽然每个核心相对较弱，但它们可以同时处理大量的线程，非常适合进行大规模并行计算。</p>
+</section>
+<section id="execution-model" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="execution-model"><span class="header-section-number">1.2</span> Execution Model</h2>
+</section>
+<section id="memory-model" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="memory-model"><span class="header-section-number">1.3</span> Memory Model</h2>
+<div id="fig-computing-scaling.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-computing-scaling.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/computing-scaling.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="./assets/computing-scaling.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-computing-scaling.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="speed-up-gpu-computation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Speed Up GPU Computation</h1>
+<section id="control-divergence" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="control-divergence"><span class="header-section-number">2.1</span> Control Divergence</h2>
+</section>
+<section id="low-precision-computation" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="low-precision-computation"><span class="header-section-number">2.2</span> Low Precision Computation</h2>
+</section>
+<section id="operator-fusion" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="operator-fusion"><span class="header-section-number">2.3</span> Operator Fusion</h2>
+</section>
+<section id="recomputation" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="recomputation"><span class="header-section-number">2.4</span> Recomputation</h2>
+</section>
+<section id="coalescing-memory" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="coalescing-memory"><span class="header-section-number">2.5</span> Coalescing Memory</h2>
+</section>
+<section id="tiling" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="tiling"><span class="header-section-number">2.6</span> Tiling</h2>
+</section>
+</section>
+<section id="putting-all-together-flash-attention" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Putting all together: Flash Attention</h1>
+</section>
+<section id="profiling-gpu" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Profiling GPU</h1>
+</section>
+<section id="triton" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Triton</h1>
+<section id="softmax" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="softmax"><span class="header-section-number">5.1</span> Softmax</h2>
+</section>
+</section>
+<section id="related-source" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Related Source</h1>
+<ul>
+<li><a href="https://www.thonking.ai/p/what-shapes-do-matrix-multiplications">What Shapes Do Matrix Multiplications Like?</a></li>
+</ul>
+</section>
+<section id="conclusion" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Conclusion</h1>
 
 
-
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -938,6 +1089,38 @@ document.addEventListener("DOMContentLoaded", function () {
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
