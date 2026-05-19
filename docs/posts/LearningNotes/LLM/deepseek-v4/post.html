@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="">
+<meta name="author" content="Yuyang Zhang">
+<meta name="description" content="在这篇文章中，我们将深入探讨DeepSeek V4的模型，训练方式以及推理的方式。通过这篇文章，我们将学习现在的SOTA模型，都是如何设计的。在本文中，我们会介绍Compressed Sparse Attention(CSA), Heavily Compressed Attention(HCA), Mainifold-Constrained Hyper-Connections(mHC)等新性的技术。同时我们会了解什么是Muon优化器，并且了解它是如何在大规模的模型训练中发挥作用的。同时会介绍训练和推理的Infrastructure，了解它是如何实现1M Context的推理。">
 
-<title>Learning (Multimodal) Large Language Models</title>
+<title>Dive into DeepSeek v4</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,36 +22,92 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../">
-<link href="../../.././style/icon.avif" rel="icon">
-<script src="../../../site_libs/quarto-listing/list.min.js"></script>
-<script src="../../../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-d85075f6847ba5665d0c1832f92a5988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
-<script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
-<link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../.././style/icon.avif" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-d85075f6847ba5665d0c1832f92a5988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -78,63 +135,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-notes .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-description','listing-image','listing-tags','listing-author',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-notes'] = new List('listing-notes', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-cs336-assignments .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-cs336-assignments'] = new List('listing-cs336-assignments', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E8EJCZTZG1"></script>
 
 <script type="text/javascript">
@@ -232,12 +232,12 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="Learning (Multimodal) Large Language Models">
-<meta property="og:description" content="">
-<meta property="og:image" content="../../../posts/LearningNotes/LLM/deepseek-v4/assets/cover.png">
+<meta property="og:title" content="Dive into DeepSeek v4">
+<meta property="og:description" content="在这篇文章中，我们将深入探讨DeepSeek V4的模型，训练方式以及推理的方式。通过这篇文章，我们将学习现在的SOTA模型，都是如何设计的。在本文中，我们会介绍Compressed Sparse Attention(CSA), Heavily Compressed Attention(HCA), Mainifold-Constrained Hyper-Connections(mHC)等新性的技术。同时我们会了解什么是Muon优化器，并且了解它是如何在大规模的模型训练中发挥作用的。同时会介绍训练和推理的Infrastructure，了解它是如何实现1M Context的推理。">
+<meta property="og:image" content="./assets/cover.png">
 </head>
 
-<body class="docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -402,7 +402,7 @@ window.Quarto = {
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
             <div id="quarto-search" class="" title="Search"></div>
@@ -412,7 +412,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
+    <a class="nav-link" href="../../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item">
@@ -426,15 +426,15 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Blogs/blogs_index.html"> 
+    <a class="nav-link" href="../../../../posts/Blogs/blogs_index.html"> 
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="../../../../posts/Projects/projects_index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/100PwC/index.html"> 
+    <a class="nav-link" href="../../../../posts/100PwC/index.html"> 
 <span class="menu-text">100PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -443,15 +443,15 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learn-something">    
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/LLM/index.html">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/LLM/index.html">
  <span class="dropdown-text">Learn (M)LLM</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/Generative-AI/index.html">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/Generative-AI/index.html">
  <span class="dropdown-text">Learn Generative Models</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/Agentic-AI/index.html">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/Agentic-AI/index.html">
  <span class="dropdown-text">Learn Agentic AI</span></a>
   </li>  
     </ul>
@@ -463,405 +463,219 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Dive into DeepSeek v4</h1>
+        </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title">Learning (Multimodal) Large Language Models</h1>
-                      </div>
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sec-model-architecture" id="toc-sec-model-architecture" class="nav-link active" data-scroll-target="#sec-model-architecture"><span class="header-section-number">1</span> Model Architecture</a>
+  <ul>
+  <li><a href="#tokenization-and-embedding" id="toc-tokenization-and-embedding" class="nav-link" data-scroll-target="#tokenization-and-embedding"><span class="header-section-number">1.1</span> Tokenization and Embedding</a></li>
+  <li><a href="#hybrid-attention" id="toc-hybrid-attention" class="nav-link" data-scroll-target="#hybrid-attention"><span class="header-section-number">1.2</span> Hybrid Attention</a>
+  <ul>
+  <li><a href="#deepseek-sparse-attentiondsa" id="toc-deepseek-sparse-attentiondsa" class="nav-link" data-scroll-target="#deepseek-sparse-attentiondsa"><span class="header-section-number">1.2.1</span> DeepSeek Sparse Attention(DSA)</a></li>
+  <li><a href="#compressed-sparse-attentioncsa" id="toc-compressed-sparse-attentioncsa" class="nav-link" data-scroll-target="#compressed-sparse-attentioncsa"><span class="header-section-number">1.2.2</span> Compressed Sparse Attention(CSA)</a></li>
+  <li><a href="#heavily-compressed-attentionhca" id="toc-heavily-compressed-attentionhca" class="nav-link" data-scroll-target="#heavily-compressed-attentionhca"><span class="header-section-number">1.2.3</span> Heavily Compressed Attention(HCA)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#sec-infrastructure" id="toc-sec-infrastructure" class="nav-link" data-scroll-target="#sec-infrastructure"><span class="header-section-number">2</span> Infrastructure</a></li>
+  <li><a href="#sec-pre-training" id="toc-sec-pre-training" class="nav-link" data-scroll-target="#sec-pre-training"><span class="header-section-number">3</span> Pre-Training</a></li>
+  <li><a href="#sec-post-training" id="toc-sec-post-training" class="nav-link" data-scroll-target="#sec-post-training"><span class="header-section-number">4</span> Post-Training</a></li>
+  <li><a href="#sec-casestudy" id="toc-sec-casestudy" class="nav-link" data-scroll-target="#sec-casestudy"><span class="header-section-number">5</span> Casestudy</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Dive into DeepSeek v4</h1>
+</div>
+
+<div>
+  <div class="description">
+    在这篇文章中，我们将深入探讨DeepSeek V4的模型，训练方式以及推理的方式。通过这篇文章，我们将学习现在的SOTA模型，都是如何设计的。在本文中，我们会介绍<strong>Compressed Sparse Attention(CSA)</strong>, <strong>Heavily Compressed Attention(HCA)</strong>, <strong>Mainifold-Constrained Hyper-Connections(mHC)</strong>等新性的技术。同时我们会了解什么是<strong>Muon</strong>优化器，并且了解它是如何在大规模的模型训练中发挥作用的。同时会介绍训练和推理的Infrastructure，了解它是如何实现1M Context的推理。
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page">
-
-      
     
-      
-    </div>
-    
+  </div>
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
-<!-- sidebar -->
-  
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    
-<!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
 
 
+</header>
 
-
-
-
-<p>In this page, I will share my learning notes for large language models (LLMs). It mostly based on the Stanford CS336 course with some additional notes that not covered in the course. It wil be updated regularly as I learn more about LLMs. Those notes are not meant to be comprehensive, but rather a summary of the key concepts and ideas that I find interesting and useful. Besides LLMs, I will also cover some related topics such as Multi-modality LLMs, and some typical and interesting papers and projects in the field of LLMs. I hope those notes can be helpful for anyone who is interested in learning about LLMs, and also for myself to review and consolidate my knowledge about LLMs.</p>
-<section id="related-courses-and-resources" class="level1">
-<h1>Related Courses and Resources</h1>
-<p>Courses:</p>
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sec-model-architecture" id="toc-sec-model-architecture"><span class="header-section-number">1</span> Model Architecture</a>
+  <ul>
+  <li><a href="#tokenization-and-embedding" id="toc-tokenization-and-embedding"><span class="header-section-number">1.1</span> Tokenization and Embedding</a></li>
+  <li><a href="#hybrid-attention" id="toc-hybrid-attention"><span class="header-section-number">1.2</span> Hybrid Attention</a>
+  <ul>
+  <li><a href="#deepseek-sparse-attentiondsa" id="toc-deepseek-sparse-attentiondsa"><span class="header-section-number">1.2.1</span> DeepSeek Sparse Attention(DSA)</a></li>
+  <li><a href="#compressed-sparse-attentioncsa" id="toc-compressed-sparse-attentioncsa"><span class="header-section-number">1.2.2</span> Compressed Sparse Attention(CSA)</a></li>
+  <li><a href="#heavily-compressed-attentionhca" id="toc-heavily-compressed-attentionhca"><span class="header-section-number">1.2.3</span> Heavily Compressed Attention(HCA)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#sec-infrastructure" id="toc-sec-infrastructure"><span class="header-section-number">2</span> Infrastructure</a></li>
+  <li><a href="#sec-pre-training" id="toc-sec-pre-training"><span class="header-section-number">3</span> Pre-Training</a></li>
+  <li><a href="#sec-post-training" id="toc-sec-post-training"><span class="header-section-number">4</span> Post-Training</a></li>
+  <li><a href="#sec-casestudy" id="toc-sec-casestudy"><span class="header-section-number">5</span> Casestudy</a></li>
+  <li><a href="#conclusion" id="toc-conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  </ul>
+</nav>
+<p>2026年的4月，DeepSeek发布了他们的DeepSeek V4系列，总共有两个版本，分别是DeepSeek-V4-Pro和DeepSeek-V4-Flash。这两个版本都支持1M的Context，并且在Reasoning和Agentic的能力上，都有很好的表现。在这篇文章中，我们将深入研究DeepSeek V4，了解它为什么可以实现Long-Context，Computing Efficiency和Memory Efficiency。</p>
+<div id="fig-deepseek-v4-performance.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-deepseek-v4-performance.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/deepseek-v4-performance.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: 左边的图展示了DeepSeek V4在Reasoning和Agentic能力上的表现，右上角的图展示了DeepSeek V4的Computing Efficiency，右下角的图展示了DeepSeek V4的Memory Efficiency。"><img src="./assets/deepseek-v4-performance.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deepseek-v4-performance.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: 左边的图展示了DeepSeek V4在Reasoning和Agentic能力上的表现，右上角的图展示了DeepSeek V4的Computing Efficiency，右下角的图展示了DeepSeek V4的Memory Efficiency。
+</figcaption>
+</figure>
+</div>
+<p>这篇文章将分成以下几个部分：</p>
 <ul>
-<li><a href="https://cs336.stanford.edu/">Stanford CS336: Large Language Models from Scratch</a></li>
-<li><a href="https://cme295.stanford.edu/syllabus/">Stanford CME295: Transformers &amp; LLMs</a></li>
+<li>Model Architecture<a href="#sec-model-architecture" class="quarto-xref">Section&nbsp;1</a>: 介绍DeepSeek V4的模型架构，包括Compressed Sparse Attention(CSA), Heavily Compressed Attention(HCA), Mainifold-Constrained Hyper-Connections(mHC)等技术。</li>
+<li>Infrastructure<a href="#sec-infrastructure" class="quarto-xref">Section&nbsp;2</a>: 介绍DeepSeek V4的训练和推理的Infrastructure，了解它是如何实现1M Context的推理的。</li>
+<li>Pre-Training<a href="#sec-pre-training" class="quarto-xref">Section&nbsp;3</a>: 介绍DeepSeek V4的预训练方式，Pre-Train的数据是怎么样的组成，Muon的优化器是怎么设计的</li>
+<li>Post-Training<a href="#sec-post-training" class="quarto-xref">Section&nbsp;4</a>: 介绍DeepSeek V4的后训练方式，包括SFT，GRPO，以及现在大热的ODP。</li>
+<li>Casestudy<a href="#sec-casestudy" class="quarto-xref">Section&nbsp;5</a>: 实际上手使用DeepSeek V4，了解它的使用方式，以及它在实际应用中的表现。</li>
 </ul>
-<p>Blogs:</p>
+<section id="sec-model-architecture" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Model Architecture</h1>
+<p><a href="#fig-deepseek-v4-architecture-overview.png" class="quarto-xref">Figure&nbsp;2</a>展示了DeepSeek V4模型的整体架构，主要包括以下几个部分：</p>
 <ul>
-<li><a href="https://huggingface.co/spaces/nanotron/ultrascale-playbook">The Ultra-Scale Playbook: Training LLMs on GPU Clusters</a></li>
-<li><a href="https://jax-ml.github.io/scaling-book/">How to Scale Your Model</a></li>
+<li>Compressed Sparse Attention(CSA): 这是一种新的注意力机制，可以在保持模型性能的同时，显著减少计算和内存的需求。</li>
+<li>Heavily Compressed Attention(HCA): 这是一种进一步压缩注意力机制的方法，可以在更大程度上减少计算和内存的需求。</li>
+<li>Mainifold-Constrained Hyper-Connections(mHC): 这是一种新的连接方式，可以在保持模型性能的同时，显著减少计算和内存的需求。</li>
+<li>Mixture-of-Experts(MoE): 这是一种常见的模型架构，可以在保持模型性能的同时，显著减少计算和内存的需求。</li>
 </ul>
+<div id="fig-deepseek-v4-architecture-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-deepseek-v4-architecture-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/deepseek-v4-architecture-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Overview of DeepSeek V4 architecture."><img src="./assets/deepseek-v4-architecture-overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-deepseek-v4-architecture-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Overview of DeepSeek V4 architecture.
+</figcaption>
+</figure>
+</div>
+<p>需要注意的是，<a href="#fig-deepseek-v4-architecture-overview.png" class="quarto-xref">Figure&nbsp;2</a> 中还有一个<strong>Multi-token Prediction（MTP）Head</strong>，我们将在<a href="#sec-pre-training" class="quarto-xref">Section&nbsp;3</a>这一章节中介绍它的作用和设计。</p>
+<p>那么废话不多说，让我们来看看DeepSeek V4的模型架构的细节。我们将从按照数据流的方向来介绍DeepSeek V4的模型架构，首先是输入，然后是模型的主体，最后是输出。首先是Tokenization和Embedding。</p>
+<section id="tokenization-and-embedding" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="tokenization-and-embedding"><span class="header-section-number">1.1</span> Tokenization and Embedding</h2>
+<p>DeepSeek V4的 Tokenization的方法，也是现在主流的Tokenization方法，使用了<strong>Byte-Pair Encoding(BPE)</strong><span class="citation" data-cites="NeuralMachineTranslation2016sennrich">(<a href="#ref-NeuralMachineTranslation2016sennrich" role="doc-biblioref">Sennrich, Haddow, and Birch 2016</a>)</span>的方法来进行Tokenization。BPE是一种基于统计的方法，可以在保持模型性能的同时，显著减少Token的数量。在这里我就不过多的介绍了，感兴趣的同学可以去看一下我的这一篇文章。</p>
+<p>在这里，我们来看一段例子：一段文字，在经过BPE Tokenization之后，会被分成多个Token，这些Token会被输入到模型中进行处理。比如：</p>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>"DeepSeek V4 is a powerful language model."</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>经过BPE Tokenization之后，可能会被分成以下几个Token：</p>
+<div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>["Deep", "Seek", "V", "4", "is", "a", "powerful", "language", "model", "."]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>其中每个Token都对应着一个ID，比如：</p>
+<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>["Deep", "Seek", "V", "4", "is", "a", "powerful", "language", "model", "."]</span>
+<span id="cb3-2"><a href="#cb3-2"></a>[123, 456, 789, 1011, 1213, 1415, 1617, 1819, 2021, 2223]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>有了这些ID之后，下一步就是将其传入Embedding层进行处理了。Embedding层的作用是将每个Token的ID映射到一个高维的向量空间中，这样模型就可以在这个向量空间中进行计算了。Embedding Layer就是一个巨大的<strong>Lookup Table</strong>，包含了所有Token的Embedding向量。每个Token的Embedding向量都是一个高维的向量，比如512维或者1024维，这些向量是模型在训练过程中学习到的，可以捕捉到Token之间的语义关系。</p>
+<p>通过这两步，我们就将输入的文本转换成了模型可以处理的向量形式了<span class="math inline">\(x \in \mathbb{R}^{n \times d}\)</span>。接下来，我们就可以将这些向量输入到模型的主体部分进行处理了。首先我们将介绍Attention的部分。</p>
 </section>
-<section id="llm-learning-notes" class="level1">
-<h1>LLM Learning Notes</h1>
-<p><br></p>
-<div id="listing-notes" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1779202406534" data-listing-reading-time-sort="1" data-listing-word-count-sort="134">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/deepseek-v4/post.html" class="no-external">
-
-<img loading="lazy" src="../../../posts/LearningNotes/LLM/deepseek-v4/assets/cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title" data-anchor-id="llm-learning-notes">
-<a href="../../../posts/LearningNotes/LLM/deepseek-v4/post.html" class="no-external">Dive into DeepSeek v4</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/deepseek-v4/post.html" class="no-external">
-<p>在这篇文章中，我们将深入探讨DeepSeek V4的模型，训练方式以及推理的方式。通过这篇文章，我们将学习现在的SOTA模型，都是如何设计的。在本文中，我们会介绍<strong>Compressed Sparse Attention(CSA)</strong>, <strong>Heavily Compressed Attention(HCA)</strong>, <strong>Mainifold-Constrained Hyper-Connections(mHC)</strong>等新性的技术。同时我们会了解什么是<strong>Muon</strong>优化器，并且了解它是如何在大规模的模型训练中发挥作用的。同时会介绍训练和推理的Infrastructure，了解它是如何实现1M Context的推理。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/deepseek-v4/post.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="Q1MzMzY=" data-listing-file-modified-sort="1779035461491" data-listing-reading-time-sort="9" data-listing-word-count-sort="1777">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/Architecture/post.html" class="no-external">
-
-<img loading="lazy" src="../../../posts/LearningNotes/LLM/Architecture/assets/cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/Architecture/post.html" class="no-external">LLM Part 1: Architecture</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/Architecture/post.html" class="no-external">
-<p>Lecture03和04介绍了Transformer Based LLM的模型架构以及Mixture of Experts (MoE) 模型的原理和实现细节。首先介绍了Transformer Based LLM的基本架构，包括Normalization Layer，Attention Layer和FFN Layers，包括介绍了如何Stable Training的各种技巧，包括Pre-Normlaization，QK-Norm等。接着在Lecture04 介绍了不同的Attention的变体，包括Linear Attention，Sparse Attention等，在Lecture04的后半段介绍了MoE模型的基本概念，架构组成部分以及训练方法等内容。最后还介绍了DeepSeek系列论文中提出的一些其他技巧，包括Multihead Latent Attention和Multi Tokens Prediction等内容。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/Architecture/post.html" class="no-external">
-<div class="listing-author">
-YYZhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1779035494532" data-listing-reading-time-sort="1" data-listing-word-count-sort="69">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/GPU-speedup/post.html" class="no-external">
-
-<img loading="lazy" src="../../../posts/LearningNotes/LLM/GPU-speedup/assets/cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/GPU-speedup/post.html" class="no-external">LLM Part 2: GPU &amp; Kernel Optimization</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/GPU-speedup/post.html" class="no-external">
-<p>Lecture05介绍了GPU的基本架构与工作原理，并且介绍了几种提升计算效率的方法，比如Kernel Fusion, Memory Coalescing Tiling 等，并且在课程最后介绍了Flash Attention的原理及其实现细节。在Lecture06中，主要介绍了Triton，一个用于编写高性能GPU代码的开源编译器。内容涵盖了Triton的基本概念、编程模型以及如何使用Triton编写高效的GPU内核。通过实际示例，展示了Triton在深度学习中的应用和优势。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/GPU-speedup/post.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1779035509349" data-listing-reading-time-sort="3" data-listing-word-count-sort="422">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/Parallel/post.html" class="no-external">
-
-<img loading="lazy" src="../../../posts/LearningNotes/LLM/Parallel/assets/cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/Parallel/post.html" class="no-external">LLM Part 3: Parallelism</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/Parallel/post.html" class="no-external">
-<p>Lecture 07与08介绍了深度学习中的并行训练方法，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。重点讲解了各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/Parallel/post.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-listing-file-modified-sort="1779035524224" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/Evaluation/post.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/Evaluation/post.html" class="no-external">LLM Part 4: Evaluation</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/Evaluation/post.html" class="no-external">
-<p>LLM Evaluation</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/Evaluation/post.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-listing-file-modified-sort="1779035538658" data-listing-reading-time-sort="1" data-listing-word-count-sort="6">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/Inference/post.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/Inference/post.html" class="no-external">LLM Part 5: Inference</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/Inference/post.html" class="no-external">
-<p>LLM Inference</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/Inference/post.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-listing-file-modified-sort="1779035639353" data-listing-reading-time-sort="4" data-listing-word-count-sort="721">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/Scaling-Law/post.html" class="no-external">
-
-<p class="card-img-top"><img src="Scaling-Law/assets/scaling-law-kaplan.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/Scaling-Law/post.html" class="no-external">LLM Part 6: Scaling Laws</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/Scaling-Law/post.html" class="no-external">
-<p>为什么<strong>LARGE</strong> language models在大规模上表现更好？Lecture 09和11介绍了Scaling Laws的基本概念和原理，探讨了模型规模、数据规模与计算资源之间的关系。内容涵盖了不同类型的Scaling Laws（如参数规模、数据规模和计算规模）以及它们对模型性能的影响。通过实际案例，展示了Scaling Laws在深度学习中的应用和重要性。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/Scaling-Law/post.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-listing-file-modified-sort="1779035662575" data-listing-reading-time-sort="1" data-listing-word-count-sort="69">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/Data/post.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/Data/post.html" class="no-external">LLM Part 7: Data</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/Data/post.html" class="no-external">
-<p>要想训练好一个LLM，除了有强大的模型架构和充足的计算资源，数据同样至关重要。Lecture 13和14深入探讨了用于训练大型语言模型的数据收集、清洗和处理方法。内容涵盖了不同类型的数据源（如网络文本、书籍、对话数据等），以及如何进行数据预处理以提升模型性能。此外，还介绍了数据增强技术和数据质量评估方法，帮助我们更好地理解如何利用高质量的数据来训练出更优秀的语言模型。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/Data/post.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-listing-file-modified-sort="1779035665536" data-listing-reading-time-sort="21" data-listing-word-count-sort="4185">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/Alignment/post.html" class="no-external">
-
-<p class="card-img-top"><img src="Alignment/assets/lec15-overview-post-training.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/Alignment/post.html" class="no-external">LLM Part 8: Alignment</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/Alignment/post.html" class="no-external">
-<p>Lecture15主要梳理 LLM 的后训练（<strong>Post-Training</strong>）主线：从监督微调（<strong>SFT</strong>）的数据与目标函数出发，解释为何SFT可以让模型获得一定的Instruct Following的能力，并系统介绍 RLHF 的奖励模型训练与 <strong>PPO</strong> 更新流程，进一步对比 <strong>DPO</strong>/<strong>SimPO</strong> 等将 RL 简化为监督学习的替代方案。最后总结 RLHF 的关键风险（<strong>reward hacking</strong>、<strong>model collapse</strong>），并说明为何需要走向可验证奖励的 RLVR 来提升推理能力与训练稳定性。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/Alignment/post.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
-<p><br></p>
+<section id="hybrid-attention" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="hybrid-attention"><span class="header-section-number">1.2</span> Hybrid Attention</h2>
+<section id="deepseek-sparse-attentiondsa" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="deepseek-sparse-attentiondsa"><span class="header-section-number">1.2.1</span> DeepSeek Sparse Attention(DSA)</h3>
 </section>
-<section id="stanford-cs336-llm-from-scratch-assignments" class="level1">
-<h1>Stanford CS336: LLM from Scratch Assignments</h1>
-<table class="table-hover table">
-<thead>
-<tr class="header">
-<th>Lecture Number</th>
-<th style="text-align: left;">Related Post</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Lecture 3&amp;4: Architecture, hyper-parameters, attention, moe</td>
-<td style="text-align: left;"><a href="../../../posts/LearningNotes/LLM/Architecture/post.html">LLM Architecture</a></td>
-</tr>
-<tr class="even">
-<td>Lecture 5&amp;6: GPUs, TPUs, Kernels, Triton, XLA</td>
-<td style="text-align: left;"><a href="../../../posts/LearningNotes/LLM/Alignment/post.html">LLM Alignment</a></td>
-</tr>
-<tr class="odd">
-<td>Lecture 7&amp;8: Parallelism</td>
-<td style="text-align: left;"><a href="../../../posts/LearningNotes/LLM/Data/post.html">LLM Data</a></td>
-</tr>
-<tr class="even">
-<td>Lecture 9&amp;11: Scaling Laws</td>
-<td style="text-align: left;"><a href="./Scaling-Laws/post.qmd">LLM Scaling Laws</a></td>
-</tr>
-<tr class="odd">
-<td>Lecture 10: Inference</td>
-<td style="text-align: left;"><a href="../../../posts/LearningNotes/LLM/Data/post.html">LLM Data</a></td>
-</tr>
-<tr class="even">
-<td>Lecture 12: Evaluation</td>
-<td style="text-align: left;"><a href="../../../posts/LearningNotes/LLM/Evaluation/post.html">LLM Evaluation</a></td>
-</tr>
-<tr class="odd">
-<td>Lecture 13&amp;14: Data</td>
-<td style="text-align: left;"><a href="../../../posts/LearningNotes/LLM/Data/post.html">LLM Data</a></td>
-</tr>
-<tr class="even">
-<td>Lecture 15, 16 &amp; 17: Alignment</td>
-<td style="text-align: left;"><a href="../../../posts/LearningNotes/LLM/Alignment/post.html">LLM Alignment</a></td>
-</tr>
-</tbody>
-</table>
-<p>Stanford CS336 course introduce the fundamental concepts of LLMs and how to build them from scratch. The course is designed to be hands-on, and the assignments are a key part of the learning process. I shared my solutions for those assignments in this section.</p>
-<p><br></p>
-<div id="listing-cs336-assignments" class="quarto-listing quarto-listing-container-default">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1774289328411" data-listing-reading-time-sort="76" data-listing-word-count-sort="15100">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/CS336/Ass01/ass01.html" class="no-external">
+<section id="compressed-sparse-attentioncsa" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="compressed-sparse-attentioncsa"><span class="header-section-number">1.2.2</span> Compressed Sparse Attention(CSA)</h3>
+<div id="fig-csa-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-csa-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/csa-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="./assets/csa-overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-csa-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="heavily-compressed-attentionhca" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="heavily-compressed-attentionhca"><span class="header-section-number">1.2.3</span> Heavily Compressed Attention(HCA)</h3>
+<div id="fig-hca-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hca-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/hca-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="./assets/hca-overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-hca-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+<section id="sec-infrastructure" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Infrastructure</h1>
+</section>
+<section id="sec-pre-training" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Pre-Training</h1>
+</section>
+<section id="sec-post-training" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Post-Training</h1>
+</section>
+<section id="sec-casestudy" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Casestudy</h1>
+</section>
+<section id="conclusion" class="level1" data-number="6">
 
-<img loading="lazy" src="../../../posts/LearningNotes/LLM/CS336/Ass01/assets/cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title" data-anchor-id="stanford-cs336-llm-from-scratch-assignments">
-<a href="../../../posts/LearningNotes/LLM/CS336/Ass01/ass01.html" class="no-external">Assignment 01: Tokenization &amp; Language Modeling</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/CS336/Ass01/ass01.html" class="no-external">
-<p>Assignment 01 要求我们实现一个简单的语言模型训练流程，涵盖数据预处理、模型定义、训练和评估等步骤。通过这个作业，我们将巩固对自然语言处理基础概念的理解，并掌握使用PyTorch进行深度学习模型开发的基本技能</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/CS336/Ass01/ass01.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-file-modified-sort="1774289328431" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/CS336/Ass02/ass02.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/CS336/Ass02/ass02.html" class="no-external">Assignment 02: Flash Attention &amp; Data Parallelism</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/CS336/Ass02/ass02.html" class="no-external">
-<p>在Assignment 02中，我们将实现Flash Attention和Data Parallelism，深入理解如何提升大型语言模型的训练效率和性能。通过这些技术的应用。首先我们会用Flash Attention来优化注意力机制的计算效率，减少内存占用和计算时间。接着，我们将实现Data Parallelism，将模型训练任务分布到多个GPU上，以加速训练过程并处理更大的模型和数据集。完成这两个部分后，我们将能够显著提升大型语言模型的训练效率，为后续的模型开发和应用打下坚实基础。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/CS336/Ass02/ass02.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-file-modified-sort="1774289328431" data-listing-reading-time-sort="1" data-listing-word-count-sort="3">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/CS336/Ass04/ass04.html" class="no-external">
-
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/CS336/Ass04/ass04.html" class="no-external">Assignment 04: Data Collection &amp; Processing</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/CS336/Ass04/ass04.html" class="no-external">
-<p>在Assignment 04中，我们将重点关注用于训练大型语言模型的数据收集和处理方法。首先，我们会探索不同类型的数据源，如网络文本、书籍和对话数据等，了解它们的特点和适用场景。接着，我们将学习如何进行数据清洗和预处理，以提升数据质量和模型性能。最后，我们还将介绍数据增强技术和数据质量评估方法，帮助我们更好地利用高质量的数据来训练出更优秀的语言模型。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/CS336/Ass04/ass04.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-file-modified-sort="1774289328432" data-listing-reading-time-sort="20" data-listing-word-count-sort="3880">
-<div class="thumbnail"><a href="../../../posts/LearningNotes/LLM/CS336/Ass05/ass05.html" class="no-external">
-
-<img loading="lazy" src="../../../posts/LearningNotes/LLM/CS336/Ass05/assets/cover.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../../posts/LearningNotes/LLM/CS336/Ass05/ass05.html" class="no-external">Assignment 05: LLM Alignment: SFT, Expert Iteration, GRPO &amp; DPO</a>
-</h3>
-<div class="delink listing-description"><a href="../../../posts/LearningNotes/LLM/CS336/Ass05/ass05.html" class="no-external">
-<p>在Assignment 05 我们将会实现SFT， Expert Iteration以及GRPO算法，对Qwen2.5-Math-1.5B模型进行微调，以提升其在MATH数据集上的表现。通过这些算法的实现，我们将深入理解LLM的对齐方法，并掌握如何应用这些技术来改进大型语言模型的性能。</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../../posts/LearningNotes/LLM/CS336/Ass05/ass05.html" class="no-external">
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div>
 
 
 
 </section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">6 Conclusion</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-NeuralMachineTranslation2016sennrich" class="csl-entry" role="listitem">
+Sennrich, Rico, Barry Haddow, and Alexandra Birch. 2016. <span>“Neural <span>Machine Translation</span> of <span>Rare Words</span> with <span>Subword Units</span>.”</span> June 10, 2016. <a href="https://doi.org/10.48550/arXiv.1508.07909">https://doi.org/10.48550/arXiv.1508.07909</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -1279,6 +1093,38 @@ Yuyang Zhang
     }
   });
   </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark_dimmed">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      if (authorPrefersDark) {
+          [baseTheme, altTheme] = [altTheme, baseTheme];
+      }
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "YYZhang2025/YYZhang2025.github.io";
+    script.dataset.repoId = "R_kgDOQlDTcQ";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOQlDTcc4C2MRz";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -1325,9 +1171,41 @@ Yuyang Zhang
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
-<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+<script src="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
 </body></html>

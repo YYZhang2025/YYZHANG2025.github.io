@@ -89,6 +89,7 @@
   {
     "listing": "/posts/LearningNotes/LLM/index.html",
     "items": [
+      "/posts/LearningNotes/LLM/deepseek-v4/post.html",
       "/posts/LearningNotes/LLM/Architecture/post.html",
       "/posts/LearningNotes/LLM/GPU-speedup/post.html",
       "/posts/LearningNotes/LLM/Parallel/post.html",
