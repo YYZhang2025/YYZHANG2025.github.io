@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
+<meta name="description" content="在这篇文章中，我们将介绍基于LLM的AI Agent的概念，我们会介绍核心的概念，包括Memory，Tool Use，Planning，Multi-Agent等。同时也会介绍一些当下最流行的AI Agent，例如OpenClaw， Hermes Agent等。">
 
-<title>Stable Diffusion</title>
+<title>An overview of LLM-based AI Agent</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,31 +25,34 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../">
-<link href="../../.././style/icon.avif" rel="icon">
-<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-d4c49a53f189b33b391969faafe3a715.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
-<script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
-<link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../.././style/icon.avif" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-d4c49a53f189b33b391969faafe3a715.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -144,7 +148,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="Stable Diffusion">
+<meta property="og:title" content="An overview of LLM-based AI Agent">
+<meta property="og:description" content="在这篇文章中，我们将介绍基于LLM的AI Agent的概念，我们会介绍核心的概念，包括Memory，Tool Use，Planning，Multi-Agent等。同时也会介绍一些当下最流行的AI Agent，例如OpenClaw， Hermes Agent等。">
+<meta property="og:image" content="./assets/llm-based-agent-overview.png">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -322,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../index.html"> 
+    <a class="nav-link" href="../../../../index.html"> 
 <span class="menu-text">About Me</span></a>
   </li>  
   <li class="nav-item">
@@ -336,15 +342,15 @@ document.addEventListener("DOMContentLoaded", function () {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Blogs/blogs_index.html"> 
+    <a class="nav-link" href="../../../../posts/Blogs/blogs_index.html"> 
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+    <a class="nav-link" href="../../../../posts/Projects/projects_index.html"> 
 <span class="menu-text">Projects</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../posts/100PwC/index.html"> 
+    <a class="nav-link" href="../../../../posts/100PwC/index.html"> 
 <span class="menu-text">100PwC</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -353,15 +359,15 @@ document.addEventListener("DOMContentLoaded", function () {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learn-something">    
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/LLM/index.html">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/LLM/index.html">
  <span class="dropdown-text">Learn (M)LLM</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/Generative-AI/index.html">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/Generative-AI/index.html">
  <span class="dropdown-text">Learn Generative Models</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../../posts/LearningNotes/Agentic-AI/index.html">
+    <a class="dropdown-item" href="../../../../posts/LearningNotes/Agentic-AI/index.html">
  <span class="dropdown-text">Learn Agentic AI</span></a>
   </li>  
     </ul>
@@ -379,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Stable Diffusion</h1>
+          <h1 class="quarto-secondary-nav-title">An overview of LLM-based AI Agent</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -396,7 +402,13 @@ document.addEventListener("DOMContentLoaded", function () {
         <div id="quarto-search" class="" title="Search"></div>
         </div>
         </div>
-    
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-ai-agent" id="toc-what-is-ai-agent" class="nav-link active" data-scroll-target="#what-is-ai-agent"><span class="header-section-number">1</span> What is AI Agent？</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -408,9 +420,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Stable Diffusion</h1>
+<h1 class="title d-none d-lg-block">An overview of LLM-based AI Agent</h1>
 </div>
 
+<div>
+  <div class="description">
+    在这篇文章中，我们将介绍基于LLM的AI Agent的概念，我们会介绍核心的概念，包括Memory，Tool Use，Planning，Multi-Agent等。同时也会介绍一些当下最流行的AI Agent，例如OpenClaw， Hermes Agent等。
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
@@ -430,9 +447,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </header>
 
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-ai-agent" id="toc-what-is-ai-agent"><span class="header-section-number">1</span> What is AI Agent？</a></li>
+  </ul>
+</nav>
+<p>随着2026年初，<a href="https://github.com/openclaw/openclaw">OpenClaw</a>的爆火，全名开启了养虾时代，AI Agent的概念再次进入大众的视野，之后的<a href="https://github.com/nousresearch/hermes-agent">Hermes Agent</a>，让AI Agent的浪潮更近一步。作为AI从业者的我们，除了了解如何使用这些Agent，我们更感兴趣的是其背后的机制和原理。因此，在这篇文章中，我们将拆解AI Agent的核心概念，从底层看AI Agent是如何工作的。</p>
+<section id="what-is-ai-agent" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> What is AI Agent？</h1>
+<p>其实Agent的概念，并不新鲜，在AI领域，在LLM之前，Agent已经存在很长时间了。只不过之前的Agent，更多是基于Heuristic Rule的，或者是基于Reinforcement Learning的。但这些传统的Agent往往只能在特定环境下完成预设定的任务，泛化能力有限。而现在，随着LLM的出现，它涌现的能力，让Agent的能力有了质的飞跃。我们可以把AI Agent理解为一个智能体，它能够感知环境，进行决策，并且执行任务。它可以是一个单一的Agent，也可以是多个Agent协同工作的系统。</p>
+<blockquote class="blockquote">
+<p>An agent is anything that can be viewed as perceiving its environment through sensors and acting upon that environment through actuators. <cite>Artificial Intelligence: A Modern Approach, Stuart Russell and Peter Norvig</cite></p>
+</blockquote>
+<p>一个完整的LLM Based AI Agent系统，通常包含以下几个核心部分：</p>
+<ul>
+<li>LLM: 作为Agent的“大脑”，负责理解输入，生成输出，以及进行推理和规划。</li>
+<li>Perception：从外部环境获取信息，比如用户的输入，网页的内容，代码执行的结果等</li>
+<li>Memory：存储上下文，历史信息以及长期知识，让Agent能够持续的根据Context进行决策</li>
+<li>Reasoning &amp; Planning：根据当前的输入以及目标，进行推理，拆解，规划并且执行</li>
+<li>Tool Use：调用外部工具来完成特定的任务，比如搜索引擎，代码执行环境，数据库等</li>
+<li>Action：执行具体的操作，比如发送文件，回复用户，整理资料等。</li>
+</ul>
+<p>与简单的ChatBot不同的是，AI Agent不再只是一问一答，它能够自主的完成任务，甚至是多个任务的组合。它能够根据环境的变化，调整自己的策略和行为。</p>
+<div id="fig-llm-based-agent-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-llm-based-agent-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/llm-based-agent-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/llm-based-agent-overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-llm-based-agent-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<p>以上的内容，看起来很复杂，其实我们只要抓住一个核心点：LLM，<span class="hilite-teal">LLM的输入和输出都是文字，并且所谓的LLM-Based Agent，就是通过巧妙的设计不同的输入，解析不同的输出，来实现Agent的功能。</span></p>
 
 
-
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -930,9 +982,41 @@ document.addEventListener("DOMContentLoaded", function () {
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
 
-<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+<script src="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
 </body></html>

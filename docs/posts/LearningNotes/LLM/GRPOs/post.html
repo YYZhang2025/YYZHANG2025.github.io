@@ -99,9 +99,9 @@ div.csl-indent {
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-d85075f6847ba5665d0c1832f92a5988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-d4c49a53f189b33b391969faafe3a715.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -814,7 +814,7 @@ Figure&nbsp;2: 对比了 PPO 与 GRPO 的训练流程差异： <br>上半部分�
 <section id="grpo-algorithm" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="grpo-algorithm"><span class="header-section-number">3.3</span> GRPO Algorithm</h2>
 <p>了解了GRPO的Objective Function (<a href="#eq-grpo" class="quarto-xref">Equation&nbsp;1</a>) 和Advantage计算(<a href="#eq-grpo-advantage" class="quarto-xref">Equation&nbsp;3</a>) 后，我们来看一下GRPO的整体算法流程：</p>
-<div id="algo-grpo" class="pseudocode-container quarto-float" data-line-number="true" data-comment-delimiter="#" data-no-end="false" data-line-number-punc=":" data-indent-size="1.2em" data-caption-prefix="Algorithm" data-pseudocode-number="1">
+<div id="algo-grpo" class="pseudocode-container quarto-float" data-pseudocode-number="1" data-caption-prefix="Algorithm" data-comment-delimiter="#" data-line-number-punc=":" data-indent-size="1.2em" data-no-end="false" data-line-number="true">
 <div class="pseudocode">
 \begin{algorithm} \caption{Iterative Group Relative Policy Optimization (GRPO)}\begin{algorithmic} \Require initial policy model $\pi_{\theta_{\text{init}}}$; reward model(s) $r_\phi$; task prompts $\mathcal{D}$; hyperparameters $\epsilon, \beta, \mu$; group size $G$; iterations $I$; steps $M$ \Ensure trained policy $\pi_\theta$ \State $\pi_\theta \gets \pi_{\theta_{\text{init}}}$ \For{$\text{iteration} = 1, \ldots, I$} \State $\pi_{\text{ref}} \gets \pi_\theta$ \Comment{reference (anchor) policy} \For{$\text{step} = 1, \ldots, M$} \State Sample a batch $\mathcal{D}_b$ from $\mathcal{D}$ \State $\pi_{\theta_{\text{old}}} \gets \pi_\theta$ \Comment{snapshot old policy} \ForAll{$q \in \mathcal{D}_b$} \State Sample $G$ outputs $\{o_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot \mid q)$ \State Compute rewards $\{r_i\}_{i=1}^{G}$ by $r_i \gets r_\phi(q, o_i)$ \State Compute group-relative advantages $\{\hat{A}_{i,t}\}$ for each token $t$ in each $o_i$ \EndFor \For{$\text{GRPO-iter} = 1, \ldots, \mu$} \State Update $\pi_\theta$ by maximizing the GRPO objective \EndFor \State Update $r_\phi$ via continuous training using a replay mechanism \EndFor \EndFor \State \Return $\pi_\theta$ \end{algorithmic} \end{algorithm}
 </div>

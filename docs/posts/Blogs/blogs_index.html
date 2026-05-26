@@ -91,7 +91,7 @@ ul.task-list li input[type="checkbox"] {
     const options = {
       valueNames: ['listing-title','listing-description','listing-date','listing-image','listing-author','listing-total-words','listing-total-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -439,7 +439,7 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
+    <div class="quarto-title column-page-left">
       <h1 class="title">👋🏻Welcome to Yuyang’s Blog</h1>
                   <div>
         <div class="description">
@@ -450,7 +450,7 @@ window.Quarto = {
   </div>
     
   
-  <div class="quarto-title-meta column-page">
+  <div class="quarto-title-meta column-page-left">
 
       
     
@@ -463,16 +463,25 @@ window.Quarto = {
   
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-    </div>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-cloud"><div class="category" data-category="RGVlcCUyMExlYXJuaW5n"><span class="quarto-category-count category-cloud-5">Deep Learning</span></div><div class="category" data-category="TWF0aGVtYXRpY3M="><span class="quarto-category-count category-cloud-5">Mathematics</span></div><div class="category" data-category="U3VtbWFyeQ=="><span class="quarto-category-count category-cloud-5">Summary</span></div></div></div>
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
 
 
 
 
 
+<div class="note foldable is-open">
+<div class="note-header foldable-header">
+<p>NOTE</p>
+</div>
+<div class="note-container foldable-content">
+<p>In this section, I will share my thoughts and more general content in the AI field. If you are looking for more technical content or more specific content, please check out the “<strong>Learn Something</strong>” section in the <span class="hilite-teal">top navigation bar</span>, where I will share my learning notes on <a href="../../posts/LearningNotes/LLM/index.html">LLM</a>, <a href="../../posts/LearningNotes/Generative-AI/index.html">Generative AI</a>, and <a href="../../posts/LearningNotes/Agentic-AI/index.html">Agentic AI</a>. I hope you can find something useful here.</p>
+</div>
+</div>
+<p><br></p>
 
 
 

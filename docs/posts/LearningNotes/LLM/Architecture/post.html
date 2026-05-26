@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="YYZhang">
+<meta name="author" content="Yuyang Zhang">
 <meta name="description" content="Lecture03和04介绍了Transformer Based LLM的模型架构以及Mixture of Experts (MoE) 模型的原理和实现细节。首先介绍了Transformer Based LLM的基本架构，包括Normalization Layer，Attention Layer和FFN Layers，包括介绍了如何Stable Training的各种技巧，包括Pre-Normlaization，QK-Norm等。接着在Lecture04 介绍了不同的Attention的变体，包括Linear Attention，Sparse Attention等，在Lecture04的后半段介绍了MoE模型的基本概念，架构组成部分以及训练方法等内容。最后还介绍了DeepSeek系列论文中提出的一些其他技巧，包括Multihead Latent Attention和Multi Tokens Prediction等内容。">
 
 <title>LLM Part 1: Architecture</title>
@@ -64,9 +64,9 @@ div.csl-indent {
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-d85075f6847ba5665d0c1832f92a5988.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-b79f7ce7c9e29a74bb85a21f9754e837.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-d4c49a53f189b33b391969faafe3a715.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
@@ -570,7 +570,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>YYZhang </p>
+             <p>Yuyang Zhang </p>
           </div>
   </div>
     
