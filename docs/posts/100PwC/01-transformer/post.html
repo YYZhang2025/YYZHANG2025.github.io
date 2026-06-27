@@ -22,7 +22,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -50,6 +70,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -399,7 +422,13 @@ document.addEventListener("DOMContentLoaded", function () {
         <div id="quarto-search" class="" title="Search"></div>
         </div>
         </div>
-    
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview-of-transformer" id="toc-overview-of-transformer" class="nav-link active" data-scroll-target="#overview-of-transformer"><span class="header-section-number">1</span> Overview of Transformer</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -438,11 +467,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </header>
 
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview-of-transformer" id="toc-overview-of-transformer"><span class="header-section-number">1</span> Overview of Transformer</a></li>
+  </ul>
+</nav>
+<p>在现在LLM盛行的时代，要我选出一篇最重要，也是最基础的论文，就是这一篇Attention is All You Need<span class="citation" data-cites="AttentionAllYou2023vaswani">(<a href="#ref-AttentionAllYou2023vaswani" role="doc-biblioref">Vaswani et al. 2023</a>)</span>，也就是我们熟知的Transformer模型。在Transformer之前，RNN和CNN是NLP领域的主流模型，但它们存在一些局限性，例如<u>RNN在处理长序列时容易出现梯度消失或爆炸的问题，而CNN在捕捉长距离依赖关系方面表现不佳</u>。这也是使得Language Model的研究停滞不前的原因之一。Transformer的提出，彻底改变了这一局面，它通过自注意力机制和并行计算，显著提升了模型的性能和训练效率。</p>
+<p>在这第一篇文章中，我将从Transformer的核心组件，模型架构，训练方法和优化策略等方面进行详细的介绍和分析。希望通过这篇文章，能够帮助大家更好地理解Transformer模型的原理和应用。接下来废话不多说，让我们直接进入正题。</p>
+<section id="overview-of-transformer" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Overview of Transformer</h1>
+<div id="fig-architecture" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/cover.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Transformer 整体架构总览"><img src="./assets/cover.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-architecture-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Transformer 整体架构总览
+</figcaption>
+</figure>
+</div>
 
 
 
+</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-AttentionAllYou2023vaswani" class="csl-entry" role="listitem">
+Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, and Illia Polosukhin. 2023. <span>“Attention <span>Is All You Need</span>.”</span> August 2, 2023. <a href="https://doi.org/10.48550/arXiv.1706.03762">https://doi.org/10.48550/arXiv.1706.03762</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -938,6 +993,38 @@ document.addEventListener("DOMContentLoaded", function () {
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

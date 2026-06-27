@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yuyang Zhang">
+<meta name="dcterms.date" content="2026-06-27">
+<meta name="description" content="在这篇文章中，我们将介绍什么是RAG，以及它的组成部分，Datastore，Retriever, LLM，以及它的部署和Evaluation，在文章的最后，我们还会介绍一些Advanced RAG的内容，包括Multi-Modality RAG, Graph RAG, Image RAG等内容。相信通过这篇文章，你会对RAG有一个全面的了解，并且能够在实际的项目中应用RAG来提升你的LLM的性能。">
+
+<title>All about Retrieval-Augmented Generation (RAG)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../.././style/icon.avif" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-d4c49a53f189b33b391969faafe3a715.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-906a14efe2638ede68852e584c2dc9e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E8EJCZTZG1"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-E8EJCZTZG1', { 'anonymize_ip': true});
+</script>
+<link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<script>
+    MathJax = {
+        loader: {
+        load: ['[tex]/boldsymbol']
+        },
+        tex: {
+        tags: "all",
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: {
+            '[+]': ['boldsymbol']
+        }
+        }
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".foldable-header").forEach(header => {
+    header.addEventListener("click", () => {
+      const block = header.closest(".foldable");
+      if (block) {
+        block.classList.toggle("is-open");
+      }
+    });
+
+    // 可访问性（键盘）
+    header.setAttribute("tabindex", "0");
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+});
+</script>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
+
+
+<meta property="og:title" content="All about Retrieval-Augmented Generation (RAG)">
+<meta property="og:description" content="在这篇文章中，我们将介绍什么是RAG，以及它的组成部分，Datastore，Retriever, LLM，以及它的部署和Evaluation，在文章的最后，我们还会介绍一些Advanced RAG的内容，包括Multi-Modality RAG, Graph RAG, Image RAG等内容。相信通过这篇文章，你会对RAG有一个全面的了解，并且能够在实际的项目中应用RAG来提升你的LLM的性能。">
+<meta property="og:image" content="./assets/rag-system-overview.png">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/YYZhang2025"> 
+<span class="menu-text"><i class="fa-brands fa-github fa-xl"></i></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/zhang-yuyang/"> 
+<span class="menu-text"><i class="fa-brands fa-linkedin fa-xl"></i></span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/Blogs/blogs_index.html"> 
+<span class="menu-text">Blogs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/Projects/projects_index.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/100PwC/index.html"> 
+<span class="menu-text">100PwC</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-learn-something" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Learn Something</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learn-something">    
+        <li>
+    <a class="dropdown-item" href="../../../posts/LearningNotes/LLM/index.html">
+ <span class="dropdown-text">Learn (M)LLM</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/LearningNotes/Generative-AI/index.html">
+ <span class="dropdown-text">Learn Generative Models</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../../posts/LearningNotes/Agentic-AI/index.html">
+ <span class="dropdown-text">Learn Agentic AI</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">All about Retrieval-Augmented Generation (RAG)</h1>
+        </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-rag" id="toc-what-is-rag" class="nav-link active" data-scroll-target="#what-is-rag"><span class="header-section-number">1</span> What is RAG？</a>
+  <ul>
+  <li><a href="#why-we-need-rag" id="toc-why-we-need-rag" class="nav-link" data-scroll-target="#why-we-need-rag"><span class="header-section-number">1.1</span> Why we need RAG?</a></li>
+  <li><a href="#history-of-rag" id="toc-history-of-rag" class="nav-link" data-scroll-target="#history-of-rag"><span class="header-section-number">1.2</span> History of RAG</a></li>
+  </ul></li>
+  <li><a href="#datastore" id="toc-datastore" class="nav-link" data-scroll-target="#datastore"><span class="header-section-number">2</span> Datastore</a>
+  <ul>
+  <li><a href="#chunking" id="toc-chunking" class="nav-link" data-scroll-target="#chunking"><span class="header-section-number">2.1</span> Chunking</a>
+  <ul>
+  <li><a href="#fixed-size-chunking" id="toc-fixed-size-chunking" class="nav-link" data-scroll-target="#fixed-size-chunking"><span class="header-section-number">2.1.1</span> Fixed-Size Chunking</a>
+  <ul class="collapse">
+  <li><a href="#overlapping-chunking" id="toc-overlapping-chunking" class="nav-link" data-scroll-target="#overlapping-chunking"><span class="header-section-number">2.1.1.1</span> Overlapping Chunking</a></li>
+  </ul></li>
+  <li><a href="#context-aware-chunking" id="toc-context-aware-chunking" class="nav-link" data-scroll-target="#context-aware-chunking"><span class="header-section-number">2.1.2</span> Context-Aware Chunking</a>
+  <ul class="collapse">
+  <li><a href="#simple-sentence-and-paragraph-splitting" id="toc-simple-sentence-and-paragraph-splitting" class="nav-link" data-scroll-target="#simple-sentence-and-paragraph-splitting"><span class="header-section-number">2.1.2.1</span> Simple Sentence and Paragraph splitting</a></li>
+  <li><a href="#recursive-character-splitting" id="toc-recursive-character-splitting" class="nav-link" data-scroll-target="#recursive-character-splitting"><span class="header-section-number">2.1.2.2</span> Recursive Character Splitting</a></li>
+  <li><a href="#document-structure-aware-chunking" id="toc-document-structure-aware-chunking" class="nav-link" data-scroll-target="#document-structure-aware-chunking"><span class="header-section-number">2.1.2.3</span> Document Structure-Aware Chunking</a>
+  <ul class="collapse">
+  <li><a href="#pdf-documents" id="toc-pdf-documents" class="nav-link" data-scroll-target="#pdf-documents"><span class="header-section-number">2.1.2.3.1</span> PDF Documents</a></li>
+  <li><a href="#html-documents" id="toc-html-documents" class="nav-link" data-scroll-target="#html-documents"><span class="header-section-number">2.1.2.3.2</span> HTML Documents</a></li>
+  </ul></li>
+  <li><a href="#markdown-documents" id="toc-markdown-documents" class="nav-link" data-scroll-target="#markdown-documents"><span class="header-section-number">2.1.2.4</span> Markdown Documents</a></li>
+  <li><a href="#latex-documents" id="toc-latex-documents" class="nav-link" data-scroll-target="#latex-documents"><span class="header-section-number">2.1.2.5</span> LaTex Documents</a></li>
+  </ul></li>
+  <li><a href="#semantic-chunking" id="toc-semantic-chunking" class="nav-link" data-scroll-target="#semantic-chunking"><span class="header-section-number">2.1.3</span> Semantic Chunking</a></li>
+  <li><a href="#llm-based-chunks" id="toc-llm-based-chunks" class="nav-link" data-scroll-target="#llm-based-chunks"><span class="header-section-number">2.1.4</span> LLM based Chunks</a></li>
+  <li><a href="#which-chunking-method-to-choose" id="toc-which-chunking-method-to-choose" class="nav-link" data-scroll-target="#which-chunking-method-to-choose"><span class="header-section-number">2.1.5</span> Which Chunking method to choose?</a></li>
+  </ul></li>
+  <li><a href="#filtering" id="toc-filtering" class="nav-link" data-scroll-target="#filtering"><span class="header-section-number">2.2</span> Filtering</a>
+  <ul>
+  <li><a href="#vector-database" id="toc-vector-database" class="nav-link" data-scroll-target="#vector-database"><span class="header-section-number">2.2.1</span> Vector Database</a>
+  <ul class="collapse">
+  <li><a href="#faiss" id="toc-faiss" class="nav-link" data-scroll-target="#faiss"><span class="header-section-number">2.2.1.1</span> FAISS</a></li>
+  <li><a href="#milvus" id="toc-milvus" class="nav-link" data-scroll-target="#milvus"><span class="header-section-number">2.2.1.2</span> Milvus</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#indexing" id="toc-indexing" class="nav-link" data-scroll-target="#indexing"><span class="header-section-number">2.3</span> Indexing</a></li>
+  </ul></li>
+  <li><a href="#retriever" id="toc-retriever" class="nav-link" data-scroll-target="#retriever"><span class="header-section-number">3</span> Retriever</a>
+  <ul>
+  <li><a href="#tf-idf" id="toc-tf-idf" class="nav-link" data-scroll-target="#tf-idf"><span class="header-section-number">3.0.0.1</span> TF-IDF</a></li>
+  <li><a href="#bm25" id="toc-bm25" class="nav-link" data-scroll-target="#bm25"><span class="header-section-number">3.0.0.2</span> BM25</a></li>
+  <li><a href="#dense-retrievers" id="toc-dense-retrievers" class="nav-link" data-scroll-target="#dense-retrievers"><span class="header-section-number">3.0.1</span> Dense Retrievers</a>
+  <ul>
+  <li><a href="#dpr-dense-passage-retrieval" id="toc-dpr-dense-passage-retrieval" class="nav-link" data-scroll-target="#dpr-dense-passage-retrieval"><span class="header-section-number">3.0.1.1</span> DPR Dense Passage Retrieval</a></li>
+  <li><a href="#contriever" id="toc-contriever" class="nav-link" data-scroll-target="#contriever"><span class="header-section-number">3.0.1.2</span> Contriever</a></li>
+  <li><a href="#colbert" id="toc-colbert" class="nav-link" data-scroll-target="#colbert"><span class="header-section-number">3.0.1.3</span> ColBERT</a></li>
+  <li><a href="#nearest-neighbor-search" id="toc-nearest-neighbor-search" class="nav-link" data-scroll-target="#nearest-neighbor-search"><span class="header-section-number">3.0.1.4</span> Nearest Neighbor Search</a>
+  <ul class="collapse">
+  <li><a href="#k-nn" id="toc-k-nn" class="nav-link" data-scroll-target="#k-nn"><span class="header-section-number">3.0.1.4.1</span> K-NN</a></li>
+  <li><a href="#a-nn" id="toc-a-nn" class="nav-link" data-scroll-target="#a-nn"><span class="header-section-number">3.0.1.4.2</span> A-NN</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#hybrid-retrieval" id="toc-hybrid-retrieval" class="nav-link" data-scroll-target="#hybrid-retrieval"><span class="header-section-number">3.0.2</span> Hybrid Retrieval</a></li>
+  <li><a href="#metadata-filtering" id="toc-metadata-filtering" class="nav-link" data-scroll-target="#metadata-filtering"><span class="header-section-number">3.0.3</span> Metadata Filtering</a></li>
+  <li><a href="#rerankers" id="toc-rerankers" class="nav-link" data-scroll-target="#rerankers"><span class="header-section-number">3.0.4</span> Rerankers</a>
+  <ul>
+  <li><a href="#cross-encoder-reranker" id="toc-cross-encoder-reranker" class="nav-link" data-scroll-target="#cross-encoder-reranker"><span class="header-section-number">3.0.4.1</span> Cross-Encoder Reranker</a></li>
+  </ul></li>
+  <li><a href="#evaluation-metrics" id="toc-evaluation-metrics" class="nav-link" data-scroll-target="#evaluation-metrics"><span class="header-section-number">3.0.5</span> Evaluation Metrics</a>
+  <ul>
+  <li><a href="#recallk" id="toc-recallk" class="nav-link" data-scroll-target="#recallk"><span class="header-section-number">3.0.5.1</span> Recall@K</a></li>
+  <li><a href="#precisionk" id="toc-precisionk" class="nav-link" data-scroll-target="#precisionk"><span class="header-section-number">3.0.5.2</span> Precision@K</a></li>
+  <li><a href="#mrrmean-reciprocal-rank" id="toc-mrrmean-reciprocal-rank" class="nav-link" data-scroll-target="#mrrmean-reciprocal-rank"><span class="header-section-number">3.0.5.3</span> MRR(Mean Reciprocal Rank)</a></li>
+  <li><a href="#ndcg" id="toc-ndcg" class="nav-link" data-scroll-target="#ndcg"><span class="header-section-number">3.0.5.4</span> NDCG</a></li>
+  </ul></li>
+  <li><a href="#performance-v.s.-cost-trade-off" id="toc-performance-v.s.-cost-trade-off" class="nav-link" data-scroll-target="#performance-v.s.-cost-trade-off"><span class="header-section-number">3.0.6</span> Performance v.s. cost Trade Off</a>
+  <ul>
+  <li><a href="#query-rewriting" id="toc-query-rewriting" class="nav-link" data-scroll-target="#query-rewriting"><span class="header-section-number">3.0.6.1</span> Query Rewriting</a></li>
+  </ul></li>
+  <li><a href="#llm" id="toc-llm" class="nav-link" data-scroll-target="#llm"><span class="header-section-number">3.1</span> LLM</a>
+  <ul>
+  <li><a href="#input-augmentation" id="toc-input-augmentation" class="nav-link" data-scroll-target="#input-augmentation"><span class="header-section-number">3.1.1</span> Input Augmentation</a></li>
+  <li><a href="#named-entity-recognition" id="toc-named-entity-recognition" class="nav-link" data-scroll-target="#named-entity-recognition"><span class="header-section-number">3.1.2</span> Named Entity Recognition</a></li>
+  <li><a href="#intermediate-fusion" id="toc-intermediate-fusion" class="nav-link" data-scroll-target="#intermediate-fusion"><span class="header-section-number">3.1.3</span> Intermediate Fusion</a>
+  <ul class="collapse">
+  <li><a href="#retro" id="toc-retro" class="nav-link" data-scroll-target="#retro"><span class="header-section-number">3.1.3.1</span> RETRO</a></li>
+  <li><a href="#instruct-retro" id="toc-instruct-retro" class="nav-link" data-scroll-target="#instruct-retro"><span class="header-section-number">3.1.3.2</span> Instruct RETRO</a></li>
+  </ul></li>
+  <li><a href="#output-interpolation" id="toc-output-interpolation" class="nav-link" data-scroll-target="#output-interpolation"><span class="header-section-number">3.1.4</span> Output Interpolation</a>
+  <ul class="collapse">
+  <li><a href="#knnlm" id="toc-knnlm" class="nav-link" data-scroll-target="#knnlm"><span class="header-section-number">3.1.4.1</span> kNNLM</a></li>
+  </ul></li>
+  <li><a href="#self-rag" id="toc-self-rag" class="nav-link" data-scroll-target="#self-rag"><span class="header-section-number">3.1.5</span> Self-RAG</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#query-transformation" id="toc-query-transformation" class="nav-link" data-scroll-target="#query-transformation"><span class="header-section-number">4</span> Query Transformation</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation"><span class="header-section-number">5</span> Evaluation</a>
+  <ul>
+  <li><a href="#ragas" id="toc-ragas" class="nav-link" data-scroll-target="#ragas"><span class="header-section-number">5.1</span> Ragas</a></li>
+  </ul></li>
+  <li><a href="#deployment" id="toc-deployment" class="nav-link" data-scroll-target="#deployment"><span class="header-section-number">6</span> Deployment</a>
+  <ul>
+  <li><a href="#evaluation-and-logging" id="toc-evaluation-and-logging" class="nav-link" data-scroll-target="#evaluation-and-logging"><span class="header-section-number">6.1</span> Evaluation and Logging</a></li>
+  <li><a href="#system-optimization" id="toc-system-optimization" class="nav-link" data-scroll-target="#system-optimization"><span class="header-section-number">6.2</span> System Optimization</a></li>
+  </ul></li>
+  <li><a href="#advanced-rag" id="toc-advanced-rag" class="nav-link" data-scroll-target="#advanced-rag"><span class="header-section-number">7</span> Advanced RAG</a>
+  <ul>
+  <li><a href="#multi-modality-rag" id="toc-multi-modality-rag" class="nav-link" data-scroll-target="#multi-modality-rag"><span class="header-section-number">7.1</span> Multi-Modality RAG</a></li>
+  <li><a href="#graph-rag" id="toc-graph-rag" class="nav-link" data-scroll-target="#graph-rag"><span class="header-section-number">7.2</span> Graph RAG</a></li>
+  <li><a href="#image-rag" id="toc-image-rag" class="nav-link" data-scroll-target="#image-rag"><span class="header-section-number">7.3</span> Image RAG</a></li>
+  </ul></li>
+  <li><a href="#resource" id="toc-resource" class="nav-link" data-scroll-target="#resource"><span class="header-section-number">8</span> Resource</a></li>
+  <li><a href="#in-the-end" id="toc-in-the-end" class="nav-link" data-scroll-target="#in-the-end"><span class="header-section-number">9</span> In the end</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">All about Retrieval-Augmented Generation (RAG)</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Agentic AI</div>
+    <div class="quarto-category">LLM</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    在这篇文章中，我们将介绍什么是RAG，以及它的组成部分，Datastore，Retriever, LLM，以及它的部署和Evaluation，在文章的最后，我们还会介绍一些Advanced RAG的内容，包括Multi-Modality RAG, Graph RAG, Image RAG等内容。相信通过这篇文章，你会对RAG有一个全面的了解，并且能够在实际的项目中应用RAG来提升你的LLM的性能。
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-06-27</p>
+    </div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Last modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">2026-05-31</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#what-is-rag" id="toc-what-is-rag"><span class="header-section-number">1</span> What is RAG？</a>
+  <ul>
+  <li><a href="#why-we-need-rag" id="toc-why-we-need-rag"><span class="header-section-number">1.1</span> Why we need RAG?</a></li>
+  <li><a href="#history-of-rag" id="toc-history-of-rag"><span class="header-section-number">1.2</span> History of RAG</a></li>
+  </ul></li>
+  <li><a href="#datastore" id="toc-datastore"><span class="header-section-number">2</span> Datastore</a>
+  <ul>
+  <li><a href="#chunking" id="toc-chunking"><span class="header-section-number">2.1</span> Chunking</a>
+  <ul>
+  <li><a href="#fixed-size-chunking" id="toc-fixed-size-chunking"><span class="header-section-number">2.1.1</span> Fixed-Size Chunking</a>
+  <ul>
+  <li><a href="#overlapping-chunking" id="toc-overlapping-chunking"><span class="header-section-number">2.1.1.1</span> Overlapping Chunking</a></li>
+  </ul></li>
+  <li><a href="#context-aware-chunking" id="toc-context-aware-chunking"><span class="header-section-number">2.1.2</span> Context-Aware Chunking</a>
+  <ul>
+  <li><a href="#simple-sentence-and-paragraph-splitting" id="toc-simple-sentence-and-paragraph-splitting"><span class="header-section-number">2.1.2.1</span> Simple Sentence and Paragraph splitting</a></li>
+  <li><a href="#recursive-character-splitting" id="toc-recursive-character-splitting"><span class="header-section-number">2.1.2.2</span> Recursive Character Splitting</a></li>
+  <li><a href="#document-structure-aware-chunking" id="toc-document-structure-aware-chunking"><span class="header-section-number">2.1.2.3</span> Document Structure-Aware Chunking</a>
+  <ul>
+  <li><a href="#pdf-documents" id="toc-pdf-documents"><span class="header-section-number">2.1.2.3.1</span> PDF Documents</a></li>
+  <li><a href="#html-documents" id="toc-html-documents"><span class="header-section-number">2.1.2.3.2</span> HTML Documents</a></li>
+  </ul></li>
+  <li><a href="#markdown-documents" id="toc-markdown-documents"><span class="header-section-number">2.1.2.4</span> Markdown Documents</a></li>
+  <li><a href="#latex-documents" id="toc-latex-documents"><span class="header-section-number">2.1.2.5</span> LaTex Documents</a></li>
+  </ul></li>
+  <li><a href="#semantic-chunking" id="toc-semantic-chunking"><span class="header-section-number">2.1.3</span> Semantic Chunking</a></li>
+  <li><a href="#llm-based-chunks" id="toc-llm-based-chunks"><span class="header-section-number">2.1.4</span> LLM based Chunks</a></li>
+  <li><a href="#which-chunking-method-to-choose" id="toc-which-chunking-method-to-choose"><span class="header-section-number">2.1.5</span> Which Chunking method to choose?</a></li>
+  </ul></li>
+  <li><a href="#filtering" id="toc-filtering"><span class="header-section-number">2.2</span> Filtering</a>
+  <ul>
+  <li><a href="#vector-database" id="toc-vector-database"><span class="header-section-number">2.2.1</span> Vector Database</a>
+  <ul>
+  <li><a href="#faiss" id="toc-faiss"><span class="header-section-number">2.2.1.1</span> FAISS</a></li>
+  <li><a href="#milvus" id="toc-milvus"><span class="header-section-number">2.2.1.2</span> Milvus</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#indexing" id="toc-indexing"><span class="header-section-number">2.3</span> Indexing</a></li>
+  </ul></li>
+  <li><a href="#retriever" id="toc-retriever"><span class="header-section-number">3</span> Retriever</a>
+  <ul>
+  <li><a href="#tf-idf" id="toc-tf-idf"><span class="header-section-number">3.0.0.1</span> TF-IDF</a></li>
+  <li><a href="#bm25" id="toc-bm25"><span class="header-section-number">3.0.0.2</span> BM25</a></li>
+  <li><a href="#dense-retrievers" id="toc-dense-retrievers"><span class="header-section-number">3.0.1</span> Dense Retrievers</a>
+  <ul>
+  <li><a href="#dpr-dense-passage-retrieval" id="toc-dpr-dense-passage-retrieval"><span class="header-section-number">3.0.1.1</span> DPR Dense Passage Retrieval</a></li>
+  <li><a href="#contriever" id="toc-contriever"><span class="header-section-number">3.0.1.2</span> Contriever</a></li>
+  <li><a href="#colbert" id="toc-colbert"><span class="header-section-number">3.0.1.3</span> ColBERT</a></li>
+  <li><a href="#nearest-neighbor-search" id="toc-nearest-neighbor-search"><span class="header-section-number">3.0.1.4</span> Nearest Neighbor Search</a>
+  <ul>
+  <li><a href="#k-nn" id="toc-k-nn"><span class="header-section-number">3.0.1.4.1</span> K-NN</a></li>
+  <li><a href="#a-nn" id="toc-a-nn"><span class="header-section-number">3.0.1.4.2</span> A-NN</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#hybrid-retrieval" id="toc-hybrid-retrieval"><span class="header-section-number">3.0.2</span> Hybrid Retrieval</a></li>
+  <li><a href="#metadata-filtering" id="toc-metadata-filtering"><span class="header-section-number">3.0.3</span> Metadata Filtering</a></li>
+  <li><a href="#rerankers" id="toc-rerankers"><span class="header-section-number">3.0.4</span> Rerankers</a>
+  <ul>
+  <li><a href="#cross-encoder-reranker" id="toc-cross-encoder-reranker"><span class="header-section-number">3.0.4.1</span> Cross-Encoder Reranker</a></li>
+  </ul></li>
+  <li><a href="#evaluation-metrics" id="toc-evaluation-metrics"><span class="header-section-number">3.0.5</span> Evaluation Metrics</a>
+  <ul>
+  <li><a href="#recallk" id="toc-recallk"><span class="header-section-number">3.0.5.1</span> Recall@K</a></li>
+  <li><a href="#precisionk" id="toc-precisionk"><span class="header-section-number">3.0.5.2</span> Precision@K</a></li>
+  <li><a href="#mrrmean-reciprocal-rank" id="toc-mrrmean-reciprocal-rank"><span class="header-section-number">3.0.5.3</span> MRR(Mean Reciprocal Rank)</a></li>
+  <li><a href="#ndcg" id="toc-ndcg"><span class="header-section-number">3.0.5.4</span> NDCG</a></li>
+  </ul></li>
+  <li><a href="#performance-v.s.-cost-trade-off" id="toc-performance-v.s.-cost-trade-off"><span class="header-section-number">3.0.6</span> Performance v.s. cost Trade Off</a>
+  <ul>
+  <li><a href="#query-rewriting" id="toc-query-rewriting"><span class="header-section-number">3.0.6.1</span> Query Rewriting</a></li>
+  </ul></li>
+  <li><a href="#llm" id="toc-llm"><span class="header-section-number">3.1</span> LLM</a>
+  <ul>
+  <li><a href="#input-augmentation" id="toc-input-augmentation"><span class="header-section-number">3.1.1</span> Input Augmentation</a></li>
+  <li><a href="#named-entity-recognition" id="toc-named-entity-recognition"><span class="header-section-number">3.1.2</span> Named Entity Recognition</a></li>
+  <li><a href="#intermediate-fusion" id="toc-intermediate-fusion"><span class="header-section-number">3.1.3</span> Intermediate Fusion</a>
+  <ul>
+  <li><a href="#retro" id="toc-retro"><span class="header-section-number">3.1.3.1</span> RETRO</a></li>
+  <li><a href="#instruct-retro" id="toc-instruct-retro"><span class="header-section-number">3.1.3.2</span> Instruct RETRO</a></li>
+  </ul></li>
+  <li><a href="#output-interpolation" id="toc-output-interpolation"><span class="header-section-number">3.1.4</span> Output Interpolation</a>
+  <ul>
+  <li><a href="#knnlm" id="toc-knnlm"><span class="header-section-number">3.1.4.1</span> kNNLM</a></li>
+  </ul></li>
+  <li><a href="#self-rag" id="toc-self-rag"><span class="header-section-number">3.1.5</span> Self-RAG</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#query-transformation" id="toc-query-transformation"><span class="header-section-number">4</span> Query Transformation</a></li>
+  <li><a href="#evaluation" id="toc-evaluation"><span class="header-section-number">5</span> Evaluation</a>
+  <ul>
+  <li><a href="#ragas" id="toc-ragas"><span class="header-section-number">5.1</span> Ragas</a></li>
+  </ul></li>
+  <li><a href="#deployment" id="toc-deployment"><span class="header-section-number">6</span> Deployment</a>
+  <ul>
+  <li><a href="#evaluation-and-logging" id="toc-evaluation-and-logging"><span class="header-section-number">6.1</span> Evaluation and Logging</a></li>
+  <li><a href="#system-optimization" id="toc-system-optimization"><span class="header-section-number">6.2</span> System Optimization</a></li>
+  </ul></li>
+  <li><a href="#advanced-rag" id="toc-advanced-rag"><span class="header-section-number">7</span> Advanced RAG</a>
+  <ul>
+  <li><a href="#multi-modality-rag" id="toc-multi-modality-rag"><span class="header-section-number">7.1</span> Multi-Modality RAG</a></li>
+  <li><a href="#graph-rag" id="toc-graph-rag"><span class="header-section-number">7.2</span> Graph RAG</a></li>
+  <li><a href="#image-rag" id="toc-image-rag"><span class="header-section-number">7.3</span> Image RAG</a></li>
+  </ul></li>
+  <li><a href="#resource" id="toc-resource"><span class="header-section-number">8</span> Resource</a></li>
+  <li><a href="#in-the-end" id="toc-in-the-end"><span class="header-section-number">9</span> In the end</a></li>
+  </ul>
+</nav>
+<p>RAG作为伴随着LLM重新流行起来的一个概念，其实早在2020年就被提出来了<span class="citation" data-cites="RetrievalAugmentedGenerationKnowledgeIntensive2021lewis">(<a href="#ref-RetrievalAugmentedGenerationKnowledgeIntensive2021lewis" role="doc-biblioref">P. Lewis et al. 2021</a>)</span>，但是由于当时的LLM还没有现在这么强大，因此RAG并没有得到太多的关注。随着LLM的不断发展，RAG也逐渐成为了一个热门的话题，在这篇文章中，我们将介绍什么是RAG，以及它的组成部分，相信通过这篇文章之后，我们会对RAG有一个发展，技术内容有一个深入的了解。 那么废话不多少，我们直接开始吧！首先我们来了解一下什么是RAG，以及RAG里面的基本组成</p>
+<section id="what-is-rag" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> What is RAG？</h1>
+<p>RAG的全称叫做Retrieval-Augmented Generation，翻译过来就是<strong>检索增强生成</strong>。RAG的核心思想就是<span class="hilite-teal">通过检索相关的知识来增强生成的能力</span>。就这么一句话，其实就可以概括RAG的核心思想：</p>
+<ul>
+<li>检索(Retrieval): 如何快速，准确的检索出相关的知识。</li>
+<li>相关知识: 如何存储，组织这些知识，以及如何评估这些知识的相关性。</li>
+<li>增强生成能力（Augmented Generation）: 如何将检索到的知识注入到LLM中。</li>
+</ul>
+<p>不过，在了解RAG之前，让我们回头看一下为什么我们需要RAG，或者说RAG的好处是什么？</p>
+<section id="why-we-need-rag" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="why-we-need-rag"><span class="header-section-number">1.1</span> Why we need RAG?</h2>
+<p>虽然现在的大语言模型（LLM）已经非常强大，但它们本质上仍然是<strong>参数化知识（Parametric Knowledge）</strong>的存储器。模型的知识被压缩在数十亿甚至数万亿个参数中，因此天然存在一些局限性:</p>
+<ul>
+<li><em>知识过时</em>：LLM的知识截止于训练数据的时间点，无法获取最新的信息。</li>
+<li><em>知识不完整</em>：LLM可能没有覆盖所有领域的知识，尤其是专业领域。</li>
+<li><em>幻觉（Hallucination）</em>：LLM可能会生成不准确或完全错误的信息，尤其是在缺乏相关知识的情况下。</li>
+<li><em>无法解释</em>：LLM生成的内容缺乏来源，用户无法验证其真实性。</li>
+</ul>
+<p>然而，得益于大语言模型所展现出的 <strong>In-Context Learning</strong> (ICL) <span class="citation" data-cites="LanguageModelsAre2020brown">(<a href="#ref-LanguageModelsAre2020brown" role="doc-biblioref">Brown et al. 2020</a>)</span>能力，研究人员发现模型能够直接利用上下文中提供的信息完成知识获取与推理，而无需修改模型参数。因此，相比于将所有知识存储在模型参数中，一种更灵活的方案是从外部知识库中检索与当前问题相关的信息，并在推理阶段动态注入模型上下文。这一思想构成了 <strong>Retrieval-Augmented Generation（RAG）</strong>的基础。如何准确检索相关知识、如何存储与组织知识，以及如何将检索结果有效融入模型输入，成为 RAG 系统设计中的核心问题。 最简单的RAG系统架构如下图所示：</p>
+<div id="fig-rag-system-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rag-system-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/rag-system-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: Overview of simple RAG system. (Image Source :Understanding Retrieval-Augmented Generation (RAG) empowering LLMs)"><img src="./assets/rag-system-overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rag-system-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Overview of simple RAG system. (Image Source :<a href="https://safjan.com/understanding-retrieval-augmented-generation-rag-empowering-llms/">Understanding Retrieval-Augmented Generation (RAG) empowering LLMs</a>)
+</figcaption>
+</figure>
+</div>
+<p>从<a href="#fig-rag-system-overview.png" class="quarto-xref">Figure&nbsp;1</a>中我们可以看到，RAG系统主要由三个核心组件组成：</p>
+<ul>
+<li><strong>Datastore</strong>：用于存储外部知识库中的信息，通常以文档或向量的形式组织。</li>
+<li><strong>Retriever</strong>：负责根据用户查询从Datastore中检索出与查询相关的知识。</li>
+<li><strong>LLM</strong>：将检索到的相关知识与用户查询结合起来，生成最终的回答。</li>
+</ul>
+<p>接下来，我们来详细了解一下RAG的每个组件，以及它们在RAG系统中的作用和实现方式。在此之前，我们先来回顾一下RAG的好处：</p>
+<ul>
+<li>注入最新的知识/补充缺失的知识</li>
+<li>减少幻觉</li>
+<li>可以提供来源引用</li>
+<li>让模型专注于生成</li>
+</ul>
+</section>
+<section id="history-of-rag" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="history-of-rag"><span class="header-section-number">1.2</span> History of RAG</h2>
+<p>RAG其实在LLM流行之前就提出来了，据我了解（可能有误），最早的RAG概念是在2020年由Facebook AI Research的研究人员提出的<span class="citation" data-cites="RetrievalAugmentedGenerationKnowledgeIntensive2021lewis">(<a href="#ref-RetrievalAugmentedGenerationKnowledgeIntensive2021lewis" role="doc-biblioref">P. Lewis et al. 2021</a>)</span>，他们在论文中介绍了一种<strong>基于检索增强生成</strong>的模型架构，旨在解决<strong>知识密集型任务</strong>中的问题，模型的基本架构如下图所示：</p>
+<div id="fig-rag-original-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rag-original-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/rag-original-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Overview of the original RAG architecture。"><img src="./assets/rag-original-overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rag-original-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Overview of the original RAG architecture。
+</figcaption>
+</figure>
+</div>
+<p>可以看到，它把RAG分成了两个阶段：</p>
+<ul>
+<li><strong>Retrieval Stage</strong>：模型会根据输入的查询从一个大型文本语料库中检索出相关的文档。</li>
+<li><strong>Generation Stage</strong>：模型会将检索到的文档与输入的查询结合起来，生成最终的回答。</li>
+</ul>
+<p>这也就是论文中<span class="citation" data-cites="RetrievalAugmentedGenerationKnowledgeIntensive2021lewis">(<a href="#ref-RetrievalAugmentedGenerationKnowledgeIntensive2021lewis" role="doc-biblioref">P. Lewis et al. 2021</a>)</span>提出的Parametric Memory和Non-Parametric Memory的概念，前者指的是模型参数中存储的知识，后者指的是外部知识库中的知识。这个RAG框架的整体流程如下：</p>
+<ol type="1">
+<li>用户输入一个查询。</li>
+<li>Retriever从Datastore中检索出与查询相关的Top-K文档</li>
+<li>LLM将查询和检索到的文档结合起来，生成最终的回答。</li>
+</ol>
+<p>其实<a href="#fig-rag-original-overview.png" class="quarto-xref">Figure&nbsp;2</a>中还有其他的组件，比如：</p>
+<ul>
+<li><strong>Query Encoder</strong>： 将用户的Query，通过一个<strong>Embedding模型</strong>编码成一个向量表示。</li>
+<li><strong>Document Encoder</strong>： 将Datastore中的文档，也通过一个<strong>Embedding模型</strong>编码成一个向量表示。</li>
+<li><strong>Retriever</strong>： 通过计算Query向量和Document向量之间的相似度，文章中使用了<strong>Dense Retriever</strong>，也就是基于向量的检索方法，并且通过<strong>Maximum Inner Product Search (MIPS)</strong>来实现高效的检索。</li>
+<li><strong>Generator</strong>： 接收 Query 和检索结果作为输入，生成最终答案，文章中使用了<strong>BART</strong><span class="citation" data-cites="BARTDenoisingSequencetoSequence2019lewis">(<a href="#ref-BARTDenoisingSequencetoSequence2019lewis" role="doc-biblioref">M. Lewis et al. 2019</a>)</span>作为生成模型，而现在我们可以使用更强大的LLM比如LLaMA<span class="citation" data-cites="LLaMAOpenEfficient2023touvron">(<a href="#ref-LLaMAOpenEfficient2023touvron" role="doc-biblioref">Touvron et al. 2023</a>)</span>, DeepSeek<span class="citation" data-cites="DeepSeekV32PushingFrontier2025deepseek-ai">(<a href="#ref-DeepSeekV32PushingFrontier2025deepseek-ai" role="doc-biblioref">DeepSeek-AI et al. 2025</a>)</span>, Qwen<span class="citation" data-cites="Qwen3TechnicalReport2025yang">(<a href="#ref-Qwen3TechnicalReport2025yang" role="doc-biblioref">Yang et al. 2025</a>)</span>来作为生成模型。</li>
+</ul>
+<p>值得注意的是，虽然现代 RAG 系统已经在检索模型、向量数据库、重排序（Reranking）以及长上下文处理等方面发生了巨大变化，但其基本思想与原始 RAG 架构并没有本质区别：<u>先检索（Retrieve），再生成（Generate）</u>。将知识存储在外部知识库中，并在推理阶段动态注入模型上下文，而不是完全依赖模型参数中的知识。</p>
+<p>首先，我们来看一下RAG的第一部分，Datastore。</p>
+</section>
+</section>
+<section id="datastore" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Datastore</h1>
+<p>Datastore是RAG系统中用于存储外部知识库的组件，通常以文档或向量的形式组织。Datastore的设计和实现对于RAG系统的性能和效果至关重要，因为它直接影响到检索阶段的效率和相关性。</p>
+<section id="chunking" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="chunking"><span class="header-section-number">2.1</span> Chunking</h2>
+<p>Chunking是将大文本分割成更小的部分（Chunks）的过程，以便更有效地存储和检索。之所以需要Chunking，是因为：</p>
+<ul>
+<li><strong>Token Limits</strong>：LLM的输入通常有最大Token限制，过大的文本无法直接输入模型。</li>
+<li><strong>Improved Relevancy</strong>：文本中不是所有的内容都是相关的，Chunking可以帮助我们更精确地定位相关信息。</li>
+<li><strong>LLM只需要相关的内容</strong>：通过Chunking，我们可以将相关的内容提取出来，减少模型处理不相关信息的负担。</li>
+</ul>
+<p>Chunking的方法有很多种，主要可以分成两大类：</p>
+<ul>
+<li>Early-Chunking: 将文本预先分割成Chunks，然后通过Embedding模型将每个Chunk编码成向量存储在Datastore中。</li>
+<li>Late-Chunking: 先将整个文本的Token输入到LLM中，再根据Boundary Cues来识别出不同的Chunks。</li>
+</ul>
+<p>这两种Chunk的方式如图下图所示：</p>
+<div id="fig-two-chunking-methods.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-two-chunking-methods.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/two-chunking-methods.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Image Source: Reconstructing Context Evaluating Advanced Chunking Strategies for Retrieval-Augmented Generation"><img src="./assets/two-chunking-methods.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-two-chunking-methods.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Image Source: <a href="https://arxiv.org/pdf/2504.19754">Reconstructing Context Evaluating Advanced Chunking Strategies for Retrieval-Augmented Generation</a>
+</figcaption>
+</figure>
+</div>
+<p>现在主流的Chunking方法主要是Early-Chunking，因为它可以更好地控制Chunk的大小和内容，并且可以更高效地进行检索。因此在这篇文章中，我们主要介绍一下Early-Chunking的方法。</p>
+<section id="fixed-size-chunking" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="fixed-size-chunking"><span class="header-section-number">2.1.1</span> Fixed-Size Chunking</h3>
+<p>Chunking 的最简单的方法就是固定大小的Chunking，也就是将文本按照固定的Token数量进行分割，比如每500个Token为一个Chunk。但是，首先我们需要决定Chunk的大小，Chunk Size的选择对于RAG系统的性能和效果有着重要的影响：</p>
+<ul>
+<li>太大：LLM Context会被填满</li>
+<li>太小：丢失上下文信息</li>
+</ul>
+<p>因此我们需要找到一个合适的Chunk大小。但是如何决定Chunk大小呢？这就需要我们根据具体的应用场景和数据特点来进行调整，通常可以通过实验来找到一个最佳的Chunk大小，通过Evaluation Metrics来评估不同Chunk大小的效果，从而选择一个最适合我们RAG系统的Chunk大小。通常512Tokens是一个比较好的起始点。</p>
+<p>一个比较直观的Chunk Size的选择方式是，查看Chunk之后的文件：</p>
+<blockquote class="blockquote">
+<p>As a rule of thumb, if the chunk of text makes sense without the surrounding context to a human, it will make sense to the language model as well.</p>
+</blockquote>
+<section id="overlapping-chunking" class="level4" data-number="2.1.1.1">
+<h4 data-number="2.1.1.1" class="anchored" data-anchor-id="overlapping-chunking"><span class="header-section-number">2.1.1.1</span> Overlapping Chunking</h4>
+<p>不过，固定大小的Chunking可能会导致一些重要的信息被分割开来，尤其是在文本中存在一些重要的上下文关系时。为了避免这种情况，我们可以使用Overlapping Chunking的方法，也就是在Chunk之间设置一定的重叠部分，这样可以确保重要的信息不会被分割开来，同时也可以提供更多的上下文信息给LLM，从而提升生成的质量。</p>
+<div id="fig-over-lapping-chunking.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-over-lapping-chunking.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/over-lapping-chunking.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="./assets/over-lapping-chunking.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-over-lapping-chunking.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="context-aware-chunking" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="context-aware-chunking"><span class="header-section-number">2.1.2</span> Context-Aware Chunking</h3>
+<p>Fixed-Size Chunking虽然简单，但它并没有考虑文本的结构和内容，可能会导致一些重要的信息被分割开来。并且我们需要预先设定一个Chunk Size，这对于不同的文本可能并不适用。为了更好地适应文本的结构和内容，我们可以使用Context-Aware Chunking的方法，也就是利用文档本身的结构和上下文信息来决定切分位置，而不是简单按照固定 Token 数量进行切分。比如我们有一个文本：</p>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a># Transformer</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>Transformer 是一种基于 Attention 的架构。</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>## Self-Attention</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>Self-Attention 允许模型关注序列中的所有位置。</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a>### Query, Key, Value</span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a>Attention(Q,K,V)=softmax(QK^T)V</span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a>## Feed Forward Network</span>
+<span id="cb1-14"><a href="#cb1-14"></a></span>
+<span id="cb1-15"><a href="#cb1-15"></a>FFN 通常由两个线性层组成。</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>如果用Fixed-Size Chunking，我们可能会得到以下的Chunks：</p>
+<div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>Chunk 1</span>
+<span id="cb2-2"><a href="#cb2-2"></a># Transformer</span>
+<span id="cb2-3"><a href="#cb2-3"></a>Transformer 是一种基于 Attention 的架构。</span>
+<span id="cb2-4"><a href="#cb2-4"></a>## Self-Attention</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a>Chunk 2</span>
+<span id="cb2-7"><a href="#cb2-7"></a>Self-Attention 允许模型关注序列中的所有位置。</span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a>Chunk 3</span>
+<span id="cb2-10"><a href="#cb2-10"></a>### Query, Key, Value</span>
+<span id="cb2-11"><a href="#cb2-11"></a>Attention(Q,K,V)=...</span>
+<span id="cb2-12"><a href="#cb2-12"></a></span>
+<span id="cb2-13"><a href="#cb2-13"></a>Chunk 4</span>
+<span id="cb2-14"><a href="#cb2-14"></a>## Feed Forward Network</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>这显然有一个明显的问题，就是章节结构被打断。但如果我们使用Context-Aware Chunking，我们可以得到以下的Chunks：</p>
+<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>Chunk 1</span>
+<span id="cb3-2"><a href="#cb3-2"></a>Transformer</span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a>Chunk 2</span>
+<span id="cb3-5"><a href="#cb3-5"></a>Self-Attention</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>Chunk 3</span>
+<span id="cb3-8"><a href="#cb3-8"></a>Query, Key, Value</span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a>Chunk 4</span>
+<span id="cb3-11"><a href="#cb3-11"></a>Feed Forward Network</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>这样就可以更好地保留文本的结构和上下文信息，从而提升LLM生成的质量。</p>
+<p>常见的Context-Aware Chunking的方法有：</p>
+<ul>
+<li>Simple Sentences and Paragraphs: 以句子或者段落为单位进行切分。</li>
+<li>Recursive Character Splitting: 以特定的字符（比如换行符，标点符号等）为切分点进行切分。</li>
+</ul>
+<section id="simple-sentence-and-paragraph-splitting" class="level4" data-number="2.1.2.1">
+<h4 data-number="2.1.2.1" class="anchored" data-anchor-id="simple-sentence-and-paragraph-splitting"><span class="header-section-number">2.1.2.1</span> Simple Sentence and Paragraph splitting</h4>
+<p>最简单的保持语义完整的Chunking方法就是以句子或者段落为单位进行切分，这样可以确保每个Chunk都是一个完整的语义单元。我们有3种常见的切分方式：</p>
+<ol type="1">
+<li>Naive Splitting：直接利用文本中的标点符号进行切分，比如句号（.），换行符（），空白字符（Whitespace）等</li>
+<li>NLTK Splitting：利用自然语言处理工具包（NLTK）中的句子分割器来进行切分，这样可以更准确地识别出句子的边界。<code>sentences = sent_tokenize(text)</code></li>
+<li>spaCY Splitting: 利用spaCY中的句子分割器来进行切分，这样同样可以更准确地识别出句子的边界。<code>sentences = list(nlp(text).sents)</code></li>
+</ol>
+</section>
+<section id="recursive-character-splitting" class="level4" data-number="2.1.2.2">
+<h4 data-number="2.1.2.2" class="anchored" data-anchor-id="recursive-character-splitting"><span class="header-section-number">2.1.2.2</span> Recursive Character Splitting</h4>
+<p>Recursive Character Splitting 是 LangChain 默认采用的 Chunking 策略。它会按照预定义的分隔符优先级（如段落、换行、空格和字符）递归地切分文本，尽可能保留文档原有的语义结构，同时保证生成的 Chunk 不超过指定大小。相比固定长度切分，它能够减少语义截断问题；</p>
+</section>
+<section id="document-structure-aware-chunking" class="level4" data-number="2.1.2.3">
+<h4 data-number="2.1.2.3" class="anchored" data-anchor-id="document-structure-aware-chunking"><span class="header-section-number">2.1.2.3</span> Document Structure-Aware Chunking</h4>
+<p>之前的Chunking方式，我们都基于纯文本的结构进行切分，但是有些文档可能具有更复杂的结构，比如HTML文档，Markdown文档，PDF文档等，这些文档中可能包含标题、段落、列表、表格等不同的结构元素。对于这些文档，我们可以利用它们的结构信息来进行Chunking，比如我们可以以标题为切分点，或者以段落为切分点，或者以列表为切分点等，这样可以更好地保留文档的结构和上下文信息。我们先来看几个常见的文档结构：</p>
+<section id="pdf-documents" class="level5" data-number="2.1.2.3.1">
+<h5 data-number="2.1.2.3.1" class="anchored" data-anchor-id="pdf-documents"><span class="header-section-number">2.1.2.3.1</span> PDF Documents</h5>
+<p>一个PDF往往包含：</p>
+<ul>
+<li>Title</li>
+<li>Heading</li>
+<li>Paragraphs</li>
+<li>Tables</li>
+<li>Lists</li>
+<li>Figures</li>
+<li>Footer</li>
+</ul>
+</section>
+<section id="html-documents" class="level5" data-number="2.1.2.3.2">
+<h5 data-number="2.1.2.3.2" class="anchored" data-anchor-id="html-documents"><span class="header-section-number">2.1.2.3.2</span> HTML Documents</h5>
+<p>HTML 文档往往包含：</p>
+<ul>
+<li>Title</li>
+<li>Heading</li>
+<li>Paragraphs</li>
+<li>Lists</li>
+</ul>
+</section>
+</section>
+<section id="markdown-documents" class="level4" data-number="2.1.2.4">
+<h4 data-number="2.1.2.4" class="anchored" data-anchor-id="markdown-documents"><span class="header-section-number">2.1.2.4</span> Markdown Documents</h4>
+</section>
+<section id="latex-documents" class="level4" data-number="2.1.2.5">
+<h4 data-number="2.1.2.5" class="anchored" data-anchor-id="latex-documents"><span class="header-section-number">2.1.2.5</span> LaTex Documents</h4>
+<div class="note foldable is-open">
+<div class="note-header foldable-header">
+<p>NOTE: About Multi-Modality</p>
+</div>
+<div class="note-container foldable-content">
+<p>这些文档中往往包含着图片，或者图片的连接，我们之后在Multi-Modality RAG这一章节会介绍如何处理Mulit-Modality，在这，以及之后的文章里，我们就假设所有的输入都是文本。</p>
+</div>
+</div>
+</section>
+</section>
+<section id="semantic-chunking" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="semantic-chunking"><span class="header-section-number">2.1.3</span> Semantic Chunking</h3>
+<p>前面的两种Chunking方式，都依赖于某种预定的规则，Token 数量，Paragraph等，但是这些规则并没有考虑文本的语义信息，可能会导致一些重要的信息被分割开来。 通过相同的意思，将文件Chunk，而不是仅仅只是固定的大小，</p>
+<p>Semantic Chunking 利用 Embedding 所捕获的语义信息来决定 Chunk 的边界，而不是依赖固定长度或文档结构。当相邻文本之间出现明显的主题变化时，系统会自动创建新的 Chunk，从而获得语义更加一致的知识单元。在现代 RAG 系统中，它通常能够提供比 Fixed Chunking 更好的检索效果，但也需要更高的计算成本。</p>
+</section>
+<section id="llm-based-chunks" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="llm-based-chunks"><span class="header-section-number">2.1.4</span> LLM based Chunks</h3>
+</section>
+<section id="which-chunking-method-to-choose" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="which-chunking-method-to-choose"><span class="header-section-number">2.1.5</span> Which Chunking method to choose?</h3>
+</section>
+</section>
+<section id="filtering" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="filtering"><span class="header-section-number">2.2</span> Filtering</h2>
+<section id="vector-database" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="vector-database"><span class="header-section-number">2.2.1</span> Vector Database</h3>
+<p>将Chunk 编码成向量存储，我们可以选择不同的向量数据库，但是核心作用就是需要支持相似度搜索（Semantic Search）</p>
+<section id="faiss" class="level4" data-number="2.2.1.1">
+<h4 data-number="2.2.1.1" class="anchored" data-anchor-id="faiss"><span class="header-section-number">2.2.1.1</span> FAISS</h4>
+</section>
+<section id="milvus" class="level4" data-number="2.2.1.2">
+<h4 data-number="2.2.1.2" class="anchored" data-anchor-id="milvus"><span class="header-section-number">2.2.1.2</span> Milvus</h4>
+</section>
+</section>
+</section>
+<section id="indexing" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="indexing"><span class="header-section-number">2.3</span> Indexing</h2>
+</section>
+</section>
+<section id="retriever" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Retriever</h1>
+<p>Need to returns relevant documents and withhold irrelvant documents.</p>
+<ul>
+<li>RElational Database</li>
+<li>Vector Databases</li>
+</ul>
+<p>Two types of search approch: - Keywords search: search exact words - Semantic Search: Looks for documents with similar mearning to the prompts/ -</p>
+<p>之后有Metadata Filter，Filter出我们需要的内容。</p>
+<p>之后我们 ### Sparse Retrievers Term-frequency based embeddings 这个也叫Keyword Search，就是用于检查所需要的单词是否出现在我们保存的文字当中</p>
+<section id="tf-idf" class="level4" data-number="3.0.0.1">
+<h4 data-number="3.0.0.1" class="anchored" data-anchor-id="tf-idf"><span class="header-section-number">3.0.0.1</span> TF-IDF</h4>
+</section>
+<section id="bm25" class="level4" data-number="3.0.0.2">
+<h4 data-number="3.0.0.2" class="anchored" data-anchor-id="bm25"><span class="header-section-number">3.0.0.2</span> BM25</h4>
+<p>BM25（Best Matching 25）</p>
+<p>$$</p>
+<p>$$ 相对于TF-IDF有什么优势： - Term Frequence Saturation - Document Length Normalization</p>
+<p>更好的是，这些是Tunable Parameters。</p>
+</section>
+<section id="dense-retrievers" class="level3" data-number="3.0.1">
+<h3 data-number="3.0.1" class="anchored" data-anchor-id="dense-retrievers"><span class="header-section-number">3.0.1</span> Dense Retrievers</h3>
+<p>Dense embeddings encoded by pre-model， 也叫做 Semantic Search</p>
+<p>可以映射到不同维度的内容：越高维度意味着越多的空间形成Cluster，并且可以补充细微的relationship。</p>
+<p>可以有不同的Embedding的办法： - Word Embedding Model - Sentence Embedding Model - Document Embedding Model</p>
+<p>这种不同的模型，可以将不同长度，类型的内容，映射到相同的空间里</p>
+<p>需要一个指标来测量距离的大小： - Euclidean Distance： 测量两个点之间的直线距离是多少 - Cosine Similarity： 两个Vector之间，方向是否相近 - Dot Product：方向，长度是不是相近</p>
+<p>我们可以通过Contrastive Learning的方法，来学习一个Embedding模型：让相似的内容靠近，不相似的内容推远。</p>
+<section id="dpr-dense-passage-retrieval" class="level4" data-number="3.0.1.1">
+<h4 data-number="3.0.1.1" class="anchored" data-anchor-id="dpr-dense-passage-retrieval"><span class="header-section-number">3.0.1.1</span> DPR Dense Passage Retrieval</h4>
+</section>
+<section id="contriever" class="level4" data-number="3.0.1.2">
+<h4 data-number="3.0.1.2" class="anchored" data-anchor-id="contriever"><span class="header-section-number">3.0.1.2</span> Contriever</h4>
+</section>
+<section id="colbert" class="level4" data-number="3.0.1.3">
+<h4 data-number="3.0.1.3" class="anchored" data-anchor-id="colbert"><span class="header-section-number">3.0.1.3</span> ColBERT</h4>
+</section>
+<section id="nearest-neighbor-search" class="level4" data-number="3.0.1.4">
+<h4 data-number="3.0.1.4" class="anchored" data-anchor-id="nearest-neighbor-search"><span class="header-section-number">3.0.1.4</span> Nearest Neighbor Search</h4>
+<section id="k-nn" class="level5" data-number="3.0.1.4.1">
+<h5 data-number="3.0.1.4.1" class="anchored" data-anchor-id="k-nn"><span class="header-section-number">3.0.1.4.1</span> K-NN</h5>
+</section>
+<section id="a-nn" class="level5" data-number="3.0.1.4.2">
+<h5 data-number="3.0.1.4.2" class="anchored" data-anchor-id="a-nn"><span class="header-section-number">3.0.1.4.2</span> A-NN</h5>
+</section>
+</section>
+</section>
+<section id="hybrid-retrieval" class="level3" data-number="3.0.2">
+<h3 data-number="3.0.2" class="anchored" data-anchor-id="hybrid-retrieval"><span class="header-section-number">3.0.2</span> Hybrid Retrieval</h3>
+<p>Keyword Search 和 Semantic Search</p>
+<p>Metadata Filtering</p>
+</section>
+<section id="metadata-filtering" class="level3" data-number="3.0.3">
+<h3 data-number="3.0.3" class="anchored" data-anchor-id="metadata-filtering"><span class="header-section-number">3.0.3</span> Metadata Filtering</h3>
+<p>根据预先设置的条件，来减少documents的数量，比如title, author, creation data, access privileges 等</p>
+<p>这个于SQL很像。</p>
+<p>这个往往是最后一步，用于删选出，或者减少以及选择出来的内容</p>
+<p>Advantages： - 简单 - 快速 - 可以严格按照设定的内容</p>
+<p>Cons： - 不是一个True Search - 过于严格 - 单独使用Meta-data 是没有用的。</p>
+</section>
+<section id="rerankers" class="level3" data-number="3.0.4">
+<h3 data-number="3.0.4" class="anchored" data-anchor-id="rerankers"><span class="header-section-number">3.0.4</span> Rerankers</h3>
+<p>Scores Based on Jointly encoded query and doc</p>
+<p>Reciprocal Rank Fusion</p>
+<section id="cross-encoder-reranker" class="level4" data-number="3.0.4.1">
+<h4 data-number="3.0.4.1" class="anchored" data-anchor-id="cross-encoder-reranker"><span class="header-section-number">3.0.4.1</span> Cross-Encoder Reranker</h4>
+<p>One by one documents are concatenated with promtps Feed to Cross Encoder</p>
+</section>
+</section>
+<section id="evaluation-metrics" class="level3" data-number="3.0.5">
+<h3 data-number="3.0.5" class="anchored" data-anchor-id="evaluation-metrics"><span class="header-section-number">3.0.5</span> Evaluation Metrics</h3>
+<p>在Retriev 之后，我们需要一些Evaluation Metrics来计算，对于Retrieve的Evaluation，我们需要干些什么事情：</p>
+<ul>
+<li>The Prompts</li>
+<li>Ranked Results</li>
+<li>Ground Truth</li>
+</ul>
+<p>Precision / Recall</p>
+<p>Mean Average Precision（MAP)</p>
+<p>Reciprocal Rank</p>
+<section id="recallk" class="level4" data-number="3.0.5.1">
+<h4 data-number="3.0.5.1" class="anchored" data-anchor-id="recallk"><span class="header-section-number">3.0.5.1</span> Recall@K</h4>
+</section>
+<section id="precisionk" class="level4" data-number="3.0.5.2">
+<h4 data-number="3.0.5.2" class="anchored" data-anchor-id="precisionk"><span class="header-section-number">3.0.5.2</span> Precision@K</h4>
+</section>
+<section id="mrrmean-reciprocal-rank" class="level4" data-number="3.0.5.3">
+<h4 data-number="3.0.5.3" class="anchored" data-anchor-id="mrrmean-reciprocal-rank"><span class="header-section-number">3.0.5.3</span> MRR(Mean Reciprocal Rank)</h4>
+</section>
+<section id="ndcg" class="level4" data-number="3.0.5.4">
+<h4 data-number="3.0.5.4" class="anchored" data-anchor-id="ndcg"><span class="header-section-number">3.0.5.4</span> NDCG</h4>
+</section>
+</section>
+<section id="performance-v.s.-cost-trade-off" class="level3" data-number="3.0.6">
+<h3 data-number="3.0.6" class="anchored" data-anchor-id="performance-v.s.-cost-trade-off"><span class="header-section-number">3.0.6</span> Performance v.s. cost Trade Off</h3>
+<section id="query-rewriting" class="level4" data-number="3.0.6.1">
+<h4 data-number="3.0.6.1" class="anchored" data-anchor-id="query-rewriting"><span class="header-section-number">3.0.6.1</span> Query Rewriting</h4>
+<p>用LLM重新增强，在提交给Retriver 之前，</p>
+</section>
+</section>
+<section id="llm" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="llm"><span class="header-section-number">3.1</span> LLM</h2>
+<p>有了User的问题，相关的内容，接下来的问题就是，我们如何将其注入LLM中，</p>
+<section id="input-augmentation" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="input-augmentation"><span class="header-section-number">3.1.1</span> Input Augmentation</h3>
+</section>
+<section id="named-entity-recognition" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="named-entity-recognition"><span class="header-section-number">3.1.2</span> Named Entity Recognition</h3>
+<p>比如GLiner #### Hypothetical Document Embeddings（HyDE）</p>
+</section>
+<section id="intermediate-fusion" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="intermediate-fusion"><span class="header-section-number">3.1.3</span> Intermediate Fusion</h3>
+<section id="retro" class="level4" data-number="3.1.3.1">
+<h4 data-number="3.1.3.1" class="anchored" data-anchor-id="retro"><span class="header-section-number">3.1.3.1</span> RETRO</h4>
+</section>
+<section id="instruct-retro" class="level4" data-number="3.1.3.2">
+<h4 data-number="3.1.3.2" class="anchored" data-anchor-id="instruct-retro"><span class="header-section-number">3.1.3.2</span> Instruct RETRO</h4>
+</section>
+</section>
+<section id="output-interpolation" class="level3" data-number="3.1.4">
+<h3 data-number="3.1.4" class="anchored" data-anchor-id="output-interpolation"><span class="header-section-number">3.1.4</span> Output Interpolation</h3>
+<section id="knnlm" class="level4" data-number="3.1.4.1">
+<h4 data-number="3.1.4.1" class="anchored" data-anchor-id="knnlm"><span class="header-section-number">3.1.4.1</span> kNNLM</h4>
+</section>
+</section>
+<section id="self-rag" class="level3" data-number="3.1.5">
+<h3 data-number="3.1.5" class="anchored" data-anchor-id="self-rag"><span class="header-section-number">3.1.5</span> Self-RAG</h3>
+</section>
+</section>
+</section>
+<section id="query-transformation" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Query Transformation</h1>
+</section>
+<section id="evaluation" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Evaluation</h1>
+<section id="ragas" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="ragas"><span class="header-section-number">5.1</span> Ragas</h2>
+<p>Response Relevancy ’’</p>
+</section>
+</section>
+<section id="deployment" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Deployment</h1>
+<p>Scaling Performance:</p>
+<ul>
+<li>More Traffic: Increase latency and load</li>
+<li>More requests mean higher memory and compute costs</li>
+<li></li>
+</ul>
+<section id="evaluation-and-logging" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="evaluation-and-logging"><span class="header-section-number">6.1</span> Evaluation and Logging</h2>
+<p>Measture and Monitor RAG system performance</p>
+<p>Software Performance Metrics</p>
+<p>Quality Metrics</p>
+</section>
+<section id="system-optimization" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="system-optimization"><span class="header-section-number">6.2</span> System Optimization</h2>
+</section>
+</section>
+<section id="advanced-rag" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Advanced RAG</h1>
+<section id="multi-modality-rag" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="multi-modality-rag"><span class="header-section-number">7.1</span> Multi-Modality RAG</h2>
+<p>Both retriver and LLM need to be Multi Modality</p>
+<p>Image Tokenization</p>
+<p>在之前的内容中，我们了解什么是RAG。可以发现，现在的RAG都是基于文字的。显然我们的世界是多模态的，在这一章节中，我们将了解如何实现多模态的RAG。</p>
+</section>
+<section id="graph-rag" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="graph-rag"><span class="header-section-number">7.2</span> Graph RAG</h2>
+<p>https://github.com/datawhalechina/tiny-universe/tree/main/content/TinyGraphRAG</p>
+<p>优势是Multi-hop Reasoning 结构化知识更强</p>
+</section>
+<section id="image-rag" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="image-rag"><span class="header-section-number">7.3</span> Image RAG</h2>
+<p>https://arxiv.org/pdf/2502.09411 https://github.com/datawhalechina/tiny-universe/tree/main/content/TinyIMGRAG</p>
+</section>
+</section>
+<section id="resource" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Resource</h1>
+<ul>
+<li><a href="https://www.deeplearning.ai/courses/retrieval-augmented-generation">DeepLearning.AI RAG Course</a></li>
+<li><a href="https://cmu-l3.github.io/anlp-spring2026/">CMU Advanced NLP Lecture 10: Retrieval and RAG</a></li>
+<li><a href="https://www.linkedin.com/pulse/advanced-rag-techniques-overview-yugank-aman-t4kkf/">Advanced RAG Techniques: An Overview</a></li>
+<li><a href="https://datawhalechina.github.io/all-in-rag/#/">ALl in RAG</a></li>
+<li><a href="https://www.langchain.com/blog/query-transformations">LangChain Query Transformations</a></li>
+</ul>
+</section>
+<section id="in-the-end" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> In the end</h1>
+<p>创作不易，如果你觉得内容对你有帮助，欢迎请我 <span class="hilite-teal">喝杯咖啡/支付宝红包</span>，支持我继续创作！你们的支持是我最大的动力！ :) <br></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../../../style/AliPay.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="../../../style/AliPay.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="400"></a></p>
+</figure>
+</div>
+
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-LanguageModelsAre2020brown" class="csl-entry" role="listitem">
+Brown, Tom B., Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared Kaplan, Prafulla Dhariwal, Arvind Neelakantan, et al. 2020. <span>“Language <span>Models</span> Are <span>Few-Shot Learners</span>.”</span> July 22, 2020. <a href="https://doi.org/10.48550/arXiv.2005.14165">https://doi.org/10.48550/arXiv.2005.14165</a>.
+</div>
+<div id="ref-DeepSeekV32PushingFrontier2025deepseek-ai" class="csl-entry" role="listitem">
+DeepSeek-AI, Aixin Liu, Aoxue Mei, Bangcai Lin, Bing Xue, Bingxuan Wang, Bingzheng Xu, et al. 2025. <span>“<span>DeepSeek-V3</span>.2: <span>Pushing</span> the <span>Frontier</span> of <span>Open Large Language Models</span>.”</span> December 2, 2025. <a href="https://doi.org/10.48550/arXiv.2512.02556">https://doi.org/10.48550/arXiv.2512.02556</a>.
+</div>
+<div id="ref-BARTDenoisingSequencetoSequence2019lewis" class="csl-entry" role="listitem">
+Lewis, Mike, Yinhan Liu, Naman Goyal, Marjan Ghazvininejad, Abdelrahman Mohamed, Omer Levy, Ves Stoyanov, and Luke Zettlemoyer. 2019. <span>“<span>BART</span>: <span class="nocase">Denoising Sequence-to-Sequence Pre-training</span> for <span>Natural Language Generation</span>, <span>Translation</span>, and <span>Comprehension</span>.”</span> October 29, 2019. <a href="https://doi.org/10.48550/arXiv.1910.13461">https://doi.org/10.48550/arXiv.1910.13461</a>.
+</div>
+<div id="ref-RetrievalAugmentedGenerationKnowledgeIntensive2021lewis" class="csl-entry" role="listitem">
+Lewis, Patrick, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, et al. 2021. <span>“Retrieval-<span>Augmented Generation</span> for <span>Knowledge-Intensive NLP Tasks</span>.”</span> April 12, 2021. <a href="https://doi.org/10.48550/arXiv.2005.11401">https://doi.org/10.48550/arXiv.2005.11401</a>.
+</div>
+<div id="ref-LLaMAOpenEfficient2023touvron" class="csl-entry" role="listitem">
+Touvron, Hugo, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timothée Lacroix, Baptiste Rozière, et al. 2023. <span>“<span>LLaMA</span>: <span>Open</span> and <span>Efficient Foundation Language Models</span>.”</span> February 27, 2023. <a href="https://doi.org/10.48550/arXiv.2302.13971">https://doi.org/10.48550/arXiv.2302.13971</a>.
+</div>
+<div id="ref-Qwen3TechnicalReport2025yang" class="csl-entry" role="listitem">
+Yang, An, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, et al. 2025. <span>“Qwen3 <span>Technical Report</span>.”</span> May 14, 2025. <a href="https://doi.org/10.48550/arXiv.2505.09388">https://doi.org/10.48550/arXiv.2505.09388</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark_dimmed">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      if (authorPrefersDark) {
+          [baseTheme, altTheme] = [altTheme, baseTheme];
+      }
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "YYZhang2025/YYZhang2025.github.io";
+    script.dataset.repoId = "R_kgDOQlDTcQ";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOQlDTcc4C2MRz";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© CC-By Yuyang, 2025</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+    <script type="text/javascript">
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let pseudocodeOptions = {
+          indentSize: el.dataset.indentSize,
+          commentDelimiter: el.dataset.commentDelimiter,
+          lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+          lineNumberPunc: el.dataset.lineNumberPunc,
+          noEnd: el.dataset.noEnd.toLowerCase() === "true",
+          titlePrefix: el.dataset.captionPrefix
+        };
+        pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+      });
+    })(document);
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+        if (captionSpan !== null) {
+          let captionPrefix = el.dataset.captionPrefix + " ";
+          let captionNumber = "";
+          if (el.dataset.pseudocodeNumber) {
+            captionNumber = el.dataset.pseudocodeNumber + " ";
+            if (el.dataset.chapterLevel) {
+              captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+            }
+          }
+          captionSpan.innerHTML = captionPrefix + captionNumber;
+        }
+      });
+    })(document);
+    </script>
+  
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+</body></html>

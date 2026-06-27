@@ -89,9 +89,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-description','listing-date','listing-image','listing-author','listing-total-words','listing-total-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-description','listing-date','listing-image','listing-author','listing-total-words','listing-total-reading-time','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -402,32 +402,9 @@ window.Quarto = {
 <span class="menu-text">Blogs</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../posts/Projects/projects_index.html"> 
-<span class="menu-text">Projects</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../posts/100PwC/index.html"> 
 <span class="menu-text">100PwC</span></a>
   </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-learn-something" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Learn Something</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-learn-something">    
-        <li>
-    <a class="dropdown-item" href="../../posts/LearningNotes/LLM/index.html">
- <span class="dropdown-text">Learn (M)LLM</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../posts/LearningNotes/Generative-AI/index.html">
- <span class="dropdown-text">Learn Generative Models</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../posts/LearningNotes/Agentic-AI/index.html">
- <span class="dropdown-text">Learn Agentic AI</span></a>
-  </li>  
-    </ul>
-  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -464,7 +441,7 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-cloud"><div class="category" data-category="RGVlcCUyMExlYXJuaW5n"><span class="quarto-category-count category-cloud-5">Deep Learning</span></div><div class="category" data-category="TWF0aGVtYXRpY3M="><span class="quarto-category-count category-cloud-5">Mathematics</span></div><div class="category" data-category="U3VtbWFyeQ=="><span class="quarto-category-count category-cloud-5">Summary</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-cloud"></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -473,14 +450,15 @@ window.Quarto = {
 
 
 
-<div class="note foldable is-open">
-<div class="note-header foldable-header">
-<p>NOTE</p>
-</div>
-<div class="note-container foldable-content">
-<p>In this section, I will share my thoughts and more general content in the AI field. If you are looking for more technical content or more specific content, please check out the “<strong>Learn Something</strong>” section in the <span class="hilite-teal">top navigation bar</span>, where I will share my learning notes on <a href="../../posts/LearningNotes/LLM/index.html">LLM</a>, <a href="../../posts/LearningNotes/Generative-AI/index.html">Generative AI</a>, and <a href="../../posts/LearningNotes/Agentic-AI/index.html">Agentic AI</a>. I hope you can find something useful here.</p>
-</div>
-</div>
+<!-- 
+:::{.note .foldable .is-open}
+::::{.note-header .foldable-header}
+NOTE 
+::::
+::::{.note-container .foldable-content}
+In this section, I will share my thoughts and more general content in the AI field. If you are looking for more technical content or more specific content, please check out the "**Learn Something**" section in the <span class='hilite-teal'>top navigation bar</span>, where I will share my learning notes on [LLM](/posts/LearningNotes/LLM/index.qmd), [Generative AI](/posts/LearningNotes/Generative-AI/index.qmd), and [Agentic AI](/posts/LearningNotes/Agentic-AI/index.qmd). I hope you can find something useful here.  
+::::
+::: -->
 <p><br></p>
 
 
@@ -488,56 +466,7 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="TWF0aGVtYXRpY3M=" data-listing-date-sort="1764604800000" data-listing-file-modified-sort="1774628120298" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="32" data-listing-word-count-sort="6336">
-<div class="thumbnail"><a href="../../posts/Blogs/KL-Divergence/post.html" class="no-external">
 
-<p class="card-img-top"><img src="KL-Divergence/assets/KL-asymmetric.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../posts/Blogs/KL-Divergence/post.html" class="no-external">From Entropy to KL Divergence: A Comprehensive Guide</a>
-</h3>
-<div class="delink listing-description"><a href="../../posts/Blogs/KL-Divergence/post.html" class="no-external">
-<p>KL Divergence, also known as <em>Kullback-Leibler Divergence</em>, is a fundamental concept in information theory and statistics. In this blog post, we will first explore the concept of <strong>entropy</strong>, which is the foundation of KL Divergence. Then, we will delve into the concept of KL Divergence, its…</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../posts/Blogs/KL-Divergence/post.html" class="no-external">
-<div class="listing-date">
-2025-12-02
-</div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="RGVlcCUyMExlYXJuaW5nJTJDU3VtbWFyeQ==" data-listing-date-sort="1764604800000" data-listing-file-modified-sort="1774628120342" data-listing-date-modified-sort="1774628120000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2766">
-<div class="thumbnail"><a href="../../posts/Blogs/Learnings-in-DeepLearning/post.html" class="no-external">
-
-<p class="card-img-top"><img src="Learnings-in-DeepLearning/assets/Contrastive-Learning-Paragdim.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="../../posts/Blogs/Learnings-in-DeepLearning/post.html" class="no-external">All kinds of “Learnings” in Deep Learning</a>
-</h3>
-<div class="delink listing-description"><a href="../../posts/Blogs/Learnings-in-DeepLearning/post.html" class="no-external">
-<p>In the blog, I will cover all kind of learnings in Deep Learning, including supervised learning, unsupervised learning, self-supervised learning, reinforcement learning, and more. By the end, you will have a solid understanding of different learning paradigms in Deep Learning.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="../../posts/Blogs/Learnings-in-DeepLearning/post.html" class="no-external">
-<div class="listing-date">
-2025-12-02
-</div>
-<div class="listing-author">
-Yuyang Zhang
-</div>
-</a>
-</div>
-</div>
 </div>
 <div class="listing-no-matching d-none">No matching items</div>
 </div><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
