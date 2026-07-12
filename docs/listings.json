@@ -1,5 +1,11 @@
 [
   {
+    "listing": "/posts/LearningNotes/projects_index.html",
+    "items": [
+      "/posts/LearningNotes/StanfordCS336/index.html"
+    ]
+  },
+  {
     "listing": "/posts/Projects/projects_index.html",
     "items": [
       "/posts/Projects/PaliGemma/pali-gemma.html",
@@ -10,6 +16,16 @@
   {
     "listing": "/posts/Blogs/blogs_index.html",
     "items": []
+  },
+  {
+    "listing": "/posts/LearningNotes/StanfordCS336/index.html",
+    "items": [
+      "/posts/LearningNotes/StanfordCS336/Lectures/lec15&16/post.html",
+      "/posts/LearningNotes/StanfordCS336/Lectures/lec17/post.html",
+      "/posts/LearningNotes/StanfordCS336/Lectures/guest-lec-DanFu/post.html",
+      "/posts/LearningNotes/StanfordCS336/Assignments/ass01/post.html",
+      "/posts/LearningNotes/StanfordCS336/Assignments/ass02/post.html"
+    ]
   },
   {
     "listing": "/posts/100PwC/index.html",

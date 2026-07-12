@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yuyang Zhang">
+<meta name="description" content="Lecture 07与08介绍了深度学习中的并行训练方法，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。重点讲解了各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。">
+
+<title>LLM Part 3: Parallelism</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../.././style/icon.avif" rel="icon">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-7918b41b559d9771b366b8dfc4e23067.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-0af588f20cbc13bde34996b512351949.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-7918b41b559d9771b366b8dfc4e23067.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E8EJCZTZG1"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-E8EJCZTZG1', { 'anonymize_ip': true});
+</script>
+<link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<script>
+    MathJax = {
+        loader: {
+        load: ['[tex]/boldsymbol']
+        },
+        tex: {
+        tags: "all",
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: {
+            '[+]': ['boldsymbol']
+        }
+        }
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".foldable-header").forEach(header => {
+    header.addEventListener("click", () => {
+      const block = header.closest(".foldable");
+      if (block) {
+        block.classList.toggle("is-open");
+      }
+    });
+
+    // 可访问性（键盘）
+    header.setAttribute("tabindex", "0");
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+});
+</script>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="LLM Part 3: Parallelism">
+<meta property="og:description" content="Lecture 07与08介绍了深度学习中的并行训练方法，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。重点讲解了各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。">
+<meta property="og:image" content="./assets/cover.png">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../index.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/YYZhang2025"> 
+<span class="menu-text"><i class="fa-brands fa-github fa-xl"></i></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/zhang-yuyang/"> 
+<span class="menu-text"><i class="fa-brands fa-linkedin fa-xl"></i></span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../posts/Blogs/blogs_index.html"> 
+<span class="menu-text">Blogs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../posts/100PwC/index.html"> 
+<span class="menu-text">100PwC</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../posts/LearningNotes/projects_index.html"> 
+<span class="menu-text">Learning Notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://yyzhang2025.github.io/FlashCards"> 
+<span class="menu-text">Flashcards</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">LLM Part 3: Parallelism</h1>
+        </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#为什么要并行训练" id="toc-为什么要并行训练" class="nav-link active" data-scroll-target="#为什么要并行训练"><span class="header-section-number">1</span> 为什么要并行训练？</a></li>
+  <li><a href="#building-blocks-of-distributed-communication-computation" id="toc-building-blocks-of-distributed-communication-computation" class="nav-link" data-scroll-target="#building-blocks-of-distributed-communication-computation"><span class="header-section-number">2</span> Building Blocks of Distributed Communication / Computation</a>
+  <ul>
+  <li><a href="#collective-operations" id="toc-collective-operations" class="nav-link" data-scroll-target="#collective-operations"><span class="header-section-number">2.1</span> Collective Operations</a>
+  <ul>
+  <li><a href="#broadcast" id="toc-broadcast" class="nav-link" data-scroll-target="#broadcast"><span class="header-section-number">2.1.1</span> Broadcast</a></li>
+  <li><a href="#scatter" id="toc-scatter" class="nav-link" data-scroll-target="#scatter"><span class="header-section-number">2.1.2</span> Scatter</a></li>
+  <li><a href="#gather" id="toc-gather" class="nav-link" data-scroll-target="#gather"><span class="header-section-number">2.1.3</span> Gather</a></li>
+  <li><a href="#reduce" id="toc-reduce" class="nav-link" data-scroll-target="#reduce"><span class="header-section-number">2.1.4</span> Reduce</a></li>
+  <li><a href="#all-gather" id="toc-all-gather" class="nav-link" data-scroll-target="#all-gather"><span class="header-section-number">2.1.5</span> All Gather</a></li>
+  <li><a href="#reduce-scatter" id="toc-reduce-scatter" class="nav-link" data-scroll-target="#reduce-scatter"><span class="header-section-number">2.1.6</span> Reduce-Scatter</a></li>
+  <li><a href="#all-reduce" id="toc-all-reduce" class="nav-link" data-scroll-target="#all-reduce"><span class="header-section-number">2.1.7</span> All Reduce</a></li>
+  <li><a href="#all-to-all" id="toc-all-to-all" class="nav-link" data-scroll-target="#all-to-all"><span class="header-section-number">2.1.8</span> All-to-All</a></li>
+  </ul></li>
+  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware"><span class="header-section-number">2.2</span> Hardware</a>
+  <ul>
+  <li><a href="#ncll" id="toc-ncll" class="nav-link" data-scroll-target="#ncll"><span class="header-section-number">2.2.1</span> NCLL</a></li>
+  </ul></li>
+  <li><a href="#torch-distributed" id="toc-torch-distributed" class="nav-link" data-scroll-target="#torch-distributed"><span class="header-section-number">2.3</span> Torch Distributed</a></li>
+  <li><a href="#benchmarking" id="toc-benchmarking" class="nav-link" data-scroll-target="#benchmarking"><span class="header-section-number">2.4</span> Benchmarking</a>
+  <ul>
+  <li><a href="#measure-speed" id="toc-measure-speed" class="nav-link" data-scroll-target="#measure-speed"><span class="header-section-number">2.4.1</span> Measure Speed</a></li>
+  <li><a href="#measure-effective-bandwidth" id="toc-measure-effective-bandwidth" class="nav-link" data-scroll-target="#measure-effective-bandwidth"><span class="header-section-number">2.4.2</span> Measure Effective Bandwidth</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#distributed-training" id="toc-distributed-training" class="nav-link" data-scroll-target="#distributed-training"><span class="header-section-number">3</span> Distributed Training</a>
+  <ul>
+  <li><a href="#data-parallelism" id="toc-data-parallelism" class="nav-link" data-scroll-target="#data-parallelism"><span class="header-section-number">3.1</span> Data Parallelism</a>
+  <ul>
+  <li><a href="#zero" id="toc-zero" class="nav-link" data-scroll-target="#zero"><span class="header-section-number">3.1.1</span> ZeRO</a>
+  <ul class="collapse">
+  <li><a href="#zero-stage-1-optimizer-state-sharding" id="toc-zero-stage-1-optimizer-state-sharding" class="nav-link" data-scroll-target="#zero-stage-1-optimizer-state-sharding"><span class="header-section-number">3.1.1.1</span> ZeRO Stage 1: Optimizer State Sharding</a></li>
+  <li><a href="#zero-stage-2-gradient-sharding" id="toc-zero-stage-2-gradient-sharding" class="nav-link" data-scroll-target="#zero-stage-2-gradient-sharding"><span class="header-section-number">3.1.1.2</span> ZeRO Stage 2: Gradient Sharding</a></li>
+  <li><a href="#zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp" id="toc-zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp" class="nav-link" data-scroll-target="#zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp"><span class="header-section-number">3.1.1.3</span> ZeRO Stage 3: Parameter Sharding （a.k.a Fully Sharded Data Parallel, FSDP）</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#model-tensor-parallelism" id="toc-model-tensor-parallelism" class="nav-link" data-scroll-target="#model-tensor-parallelism"><span class="header-section-number">3.2</span> Model Tensor Parallelism</a>
+  <ul>
+  <li><a href="#pipeline-parallelism" id="toc-pipeline-parallelism" class="nav-link" data-scroll-target="#pipeline-parallelism"><span class="header-section-number">3.2.1</span> Pipeline Parallelism</a>
+  <ul class="collapse">
+  <li><a href="#layer-wise-pipeline-parallelism" id="toc-layer-wise-pipeline-parallelism" class="nav-link" data-scroll-target="#layer-wise-pipeline-parallelism"><span class="header-section-number">3.2.1.1</span> Layer-wise Pipeline Parallelism</a></li>
+  <li><a href="#pipeline-parallelism-1" id="toc-pipeline-parallelism-1" class="nav-link" data-scroll-target="#pipeline-parallelism-1"><span class="header-section-number">3.2.1.2</span> Pipeline Parallelism</a></li>
+  <li><a href="#zero-bubble-pipeline" id="toc-zero-bubble-pipeline" class="nav-link" data-scroll-target="#zero-bubble-pipeline"><span class="header-section-number">3.2.1.3</span> Zero bubble Pipeline</a></li>
+  </ul></li>
+  <li><a href="#tensor-parallelism" id="toc-tensor-parallelism" class="nav-link" data-scroll-target="#tensor-parallelism"><span class="header-section-number">3.2.2</span> Tensor Parallelism</a>
+  <ul class="collapse">
+  <li><a href="#column-tensor-parallelism" id="toc-column-tensor-parallelism" class="nav-link" data-scroll-target="#column-tensor-parallelism"><span class="header-section-number">3.2.2.1</span> Column Tensor Parallelism</a></li>
+  <li><a href="#row-tensor-parallelism" id="toc-row-tensor-parallelism" class="nav-link" data-scroll-target="#row-tensor-parallelism"><span class="header-section-number">3.2.2.2</span> Row Tensor Parallelism</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">LLM Part 3: Parallelism</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">LLM</div>
+    <div class="quarto-category">CS336</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Lecture 07与08介绍了深度学习中的并行训练方法，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。重点讲解了各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#为什么要并行训练" id="toc-为什么要并行训练"><span class="header-section-number">1</span> 为什么要并行训练？</a></li>
+  <li><a href="#building-blocks-of-distributed-communication-computation" id="toc-building-blocks-of-distributed-communication-computation"><span class="header-section-number">2</span> Building Blocks of Distributed Communication / Computation</a>
+  <ul>
+  <li><a href="#collective-operations" id="toc-collective-operations"><span class="header-section-number">2.1</span> Collective Operations</a>
+  <ul>
+  <li><a href="#broadcast" id="toc-broadcast"><span class="header-section-number">2.1.1</span> Broadcast</a></li>
+  <li><a href="#scatter" id="toc-scatter"><span class="header-section-number">2.1.2</span> Scatter</a></li>
+  <li><a href="#gather" id="toc-gather"><span class="header-section-number">2.1.3</span> Gather</a></li>
+  <li><a href="#reduce" id="toc-reduce"><span class="header-section-number">2.1.4</span> Reduce</a></li>
+  <li><a href="#all-gather" id="toc-all-gather"><span class="header-section-number">2.1.5</span> All Gather</a></li>
+  <li><a href="#reduce-scatter" id="toc-reduce-scatter"><span class="header-section-number">2.1.6</span> Reduce-Scatter</a></li>
+  <li><a href="#all-reduce" id="toc-all-reduce"><span class="header-section-number">2.1.7</span> All Reduce</a></li>
+  <li><a href="#all-to-all" id="toc-all-to-all"><span class="header-section-number">2.1.8</span> All-to-All</a></li>
+  </ul></li>
+  <li><a href="#hardware" id="toc-hardware"><span class="header-section-number">2.2</span> Hardware</a>
+  <ul>
+  <li><a href="#ncll" id="toc-ncll"><span class="header-section-number">2.2.1</span> NCLL</a></li>
+  </ul></li>
+  <li><a href="#torch-distributed" id="toc-torch-distributed"><span class="header-section-number">2.3</span> Torch Distributed</a></li>
+  <li><a href="#benchmarking" id="toc-benchmarking"><span class="header-section-number">2.4</span> Benchmarking</a>
+  <ul>
+  <li><a href="#measure-speed" id="toc-measure-speed"><span class="header-section-number">2.4.1</span> Measure Speed</a></li>
+  <li><a href="#measure-effective-bandwidth" id="toc-measure-effective-bandwidth"><span class="header-section-number">2.4.2</span> Measure Effective Bandwidth</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#distributed-training" id="toc-distributed-training"><span class="header-section-number">3</span> Distributed Training</a>
+  <ul>
+  <li><a href="#data-parallelism" id="toc-data-parallelism"><span class="header-section-number">3.1</span> Data Parallelism</a>
+  <ul>
+  <li><a href="#zero" id="toc-zero"><span class="header-section-number">3.1.1</span> ZeRO</a>
+  <ul>
+  <li><a href="#zero-stage-1-optimizer-state-sharding" id="toc-zero-stage-1-optimizer-state-sharding"><span class="header-section-number">3.1.1.1</span> ZeRO Stage 1: Optimizer State Sharding</a></li>
+  <li><a href="#zero-stage-2-gradient-sharding" id="toc-zero-stage-2-gradient-sharding"><span class="header-section-number">3.1.1.2</span> ZeRO Stage 2: Gradient Sharding</a></li>
+  <li><a href="#zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp" id="toc-zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp"><span class="header-section-number">3.1.1.3</span> ZeRO Stage 3: Parameter Sharding （a.k.a Fully Sharded Data Parallel, FSDP）</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#model-tensor-parallelism" id="toc-model-tensor-parallelism"><span class="header-section-number">3.2</span> Model Tensor Parallelism</a>
+  <ul>
+  <li><a href="#pipeline-parallelism" id="toc-pipeline-parallelism"><span class="header-section-number">3.2.1</span> Pipeline Parallelism</a>
+  <ul>
+  <li><a href="#layer-wise-pipeline-parallelism" id="toc-layer-wise-pipeline-parallelism"><span class="header-section-number">3.2.1.1</span> Layer-wise Pipeline Parallelism</a></li>
+  <li><a href="#pipeline-parallelism-1" id="toc-pipeline-parallelism-1"><span class="header-section-number">3.2.1.2</span> Pipeline Parallelism</a></li>
+  <li><a href="#zero-bubble-pipeline" id="toc-zero-bubble-pipeline"><span class="header-section-number">3.2.1.3</span> Zero bubble Pipeline</a></li>
+  </ul></li>
+  <li><a href="#tensor-parallelism" id="toc-tensor-parallelism"><span class="header-section-number">3.2.2</span> Tensor Parallelism</a>
+  <ul>
+  <li><a href="#column-tensor-parallelism" id="toc-column-tensor-parallelism"><span class="header-section-number">3.2.2.1</span> Column Tensor Parallelism</a></li>
+  <li><a href="#row-tensor-parallelism" id="toc-row-tensor-parallelism"><span class="header-section-number">3.2.2.2</span> Row Tensor Parallelism</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+<p>在Lecture07和08的课程中，我们讲探讨不同的Parallelism的技巧，包括Data Parallelism， Model Parallelism，ZeRO，Pipleline Parallelism等技术。我们将重点讲解各类并行方法的原理、实现及其在大规模模型训练中的应用。个人认为这两节内容非常重要，理解这些并行训练技术对于处理大规模深度学习模型至关重要。</p>
+<p>废话不多说，让我们开始学习！</p>
+<p>使用GPUs很简单，但是想要</p>
+<p>Reduce communication across GPUs/nodes， via <strong>replication</strong> / <strong>sharding</strong></p>
+<section id="为什么要并行训练" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> 为什么要并行训练？</h1>
+<p>Intra-node communication: GPU-GPU communication within a single node (e.g., via NVLink) Inter-node communication: GPU-GPU communication across different nodes (e.g., via Ethernet or InfiniBand)</p>
+</section>
+<section id="building-blocks-of-distributed-communication-computation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Building Blocks of Distributed Communication / Computation</h1>
+<div id="fig-building-blocks-setup.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-building-blocks-setup.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/building-blocks-setup.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/building-blocks-setup.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-building-blocks-setup.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<ul>
+<li>Rank: 每个GPU都有一个唯一的ID。</li>
+<li>World Size: 所有参与训练的GPU的总数。</li>
+</ul>
+<section id="collective-operations" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="collective-operations"><span class="header-section-number">2.1</span> Collective Operations</h2>
+<p>Collective 意思是：设计一个general的communication pattern，来支持跨不同的devices。接下来看几个比较常见的例子：</p>
+<section id="broadcast" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="broadcast"><span class="header-section-number">2.1.1</span> Broadcast</h3>
+<div id="fig-broadcast.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-broadcast.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/broadcast.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="./assets/broadcast.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-broadcast.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+<p>Broadcast的意思是：从一个GPU（通常是rank 0）向所有其他GPU发送数据。</p>
+<p>通常作为模型参数初始化的第一步，或者在训练过程中需要同步某些数据时使用。Load Initial Checkpoint 并且broadcast to all ranks。</p>
+</section>
+<section id="scatter" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="scatter"><span class="header-section-number">2.1.2</span> Scatter</h3>
+<div id="fig-scatter-op.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scatter-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/scatter-op.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="./assets/scatter-op.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-scatter-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+<p>Scatter 的意思是：将一个大的数据集分成小块，分别发送到不同的GPU上进行处理。 需要注意的是，Scatter要确保数据的分割方式是合理的。</p>
+</section>
+<section id="gather" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="gather"><span class="header-section-number">2.1.3</span> Gather</h3>
+<div id="fig-gather-op.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gather-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/gather-op.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="./assets/gather-op.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-gather-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4
+</figcaption>
+</figure>
+</div>
+<p>Gather 的意思是：将分布在不同GPU上的数据收集到一个GPU上进行处理。通常在训练结束后需要将结果汇总到一个GPU上进行评估或者保存模型时使用。 Gather的实现需要考虑通信效率，尤其是在大规模分布式训练中，可能会成为瓶颈。</p>
+</section>
+<section id="reduce" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="reduce"><span class="header-section-number">2.1.4</span> Reduce</h3>
+<div id="fig-reduce-op.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reduce-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/reduce-op.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="./assets/reduce-op.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-reduce-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5
+</figcaption>
+</figure>
+</div>
+<p>reduce 的意思是：将分布在不同GPU上的数据进行某种聚合操作（如求和、平均等），并将结果发送到一个GPU上。通常在训练过程中需要对梯度进行reduce操作，以便更新模型参数。</p>
+</section>
+<section id="all-gather" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="all-gather"><span class="header-section-number">2.1.5</span> All Gather</h3>
+<div id="fig-all-gather-op.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-all-gather-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/all-gather-op.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: "><img src="./assets/all-gather-op.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-all-gather-op.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6
+</figcaption>
+</figure>
+</div>
+<p>在All Gather操作中，每个GPU将自己的数据发送给所有其他GPU，并且每个GPU都接收来自所有其他GPU的数据。这样，每个GPU最终都拥有了所有GPU的数据。</p>
+<p>举个例子，每个Rank 有parameter shard， 每个Rank都需要知道其他Rank的parameter shard，才能进行计算。All Gather操作可以让每个Rank都获得所有Rank的parameter shard，从而完成计算。</p>
+</section>
+<section id="reduce-scatter" class="level3" data-number="2.1.6">
+<h3 data-number="2.1.6" class="anchored" data-anchor-id="reduce-scatter"><span class="header-section-number">2.1.6</span> Reduce-Scatter</h3>
+<div id="fig-reduce-scatter.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reduce-scatter.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/reduce-scatter.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: "><img src="./assets/reduce-scatter.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-reduce-scatter.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7
+</figcaption>
+</figure>
+</div>
+<p>reduce-scatter 的意思是：将分布在不同GPU上的数据进行某种聚合操作（如求和、平均等），并将结果分散到不同的GPU上。通常在训练过程中需要对梯度进行reduce-scatter操作，以便每个GPU都能获得更新后的模型参数的一部分。</p>
+</section>
+<section id="all-reduce" class="level3" data-number="2.1.7">
+<h3 data-number="2.1.7" class="anchored" data-anchor-id="all-reduce"><span class="header-section-number">2.1.7</span> All Reduce</h3>
+<div id="fig-all-reduce.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-all-reduce.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/all-reduce.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8: "><img src="./assets/all-reduce.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-all-reduce.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8
+</figcaption>
+</figure>
+</div>
+<p>All Reduce 的意思是：将分布在不同GPU上的数据进行某种聚合操作（如求和、平均等），并将结果发送到所有GPU上。通常在训练过程中需要对梯度进行all-reduce操作，以便每个GPU都能获得更新后的模型参数。</p>
+</section>
+<section id="all-to-all" class="level3" data-number="2.1.8">
+<h3 data-number="2.1.8" class="anchored" data-anchor-id="all-to-all"><span class="header-section-number">2.1.8</span> All-to-All</h3>
+<p>all to all 是比较general的方法：each rank sends each other rank some tensor (most general)</p>
+<div class="tip foldable is-open">
+<div class="tip-header foldable-header">
+<p>TIP: How to Remember the Terminology</p>
+</div>
+<div class="tip-container foldable-content">
+<ul>
+<li>Reduce: 聚合数据并发送到一个GPU上。</li>
+<li>Scatter: 将数据分割并发送到不同的GPU上。</li>
+<li>All: 涉及所有GPU。</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="hardware" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="hardware"><span class="header-section-number">2.2</span> Hardware</h2>
+<div id="fig-classic-hardware.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-classic-hardware.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/classic-hardware.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9" title="Figure&nbsp;9: "><img src="./assets/classic-hardware.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-classic-hardware.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9
+</figcaption>
+</figure>
+</div>
+<p>从图 <a href="#fig-classic-hardware.png" class="quarto-xref">Figure&nbsp;9</a> 中可以看出，在相同node中的GPUs，可以通过 PCI(e) bus 进行通信，速度可以到达 (242GB/s)。而在不同node中的GPUs，则需要通过Eterhnet进行通信，速度通常在 (200MB/s) 之间，远远低于PCI(e)的速度。这也是为什么在分布式训练中，通信效率成为一个重要的瓶颈。</p>
+<p>接下来我们来看现代的Data Center 里面，不同的GPUs之间是怎么连接的。</p>
+<div id="fig-modern-hardware.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modern-hardware.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/modern-hardware.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Figure&nbsp;10: "><img src="./assets/modern-hardware.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-modern-hardware.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10
+</figcaption>
+</figure>
+</div>
+<p>从图中看到：</p>
+<ul>
+<li>8GPUs per node 并且通过 NVLink 连接到 NVSwitch，速度可以达到（1.8TB/s）。</li>
+<li>256 nodes 一个 pod，并且通过 InfiniBand 连接，速度可以达到（200GB/s）。connected by Infiniband (via PCIe -&gt; HCA / Infiniband NIC -&gt; Infiniband cable) (~0.05 TB/s)</li>
+<li>N pods per cluster， 并且通过 Ethernet 连接，速度可以达到（200MB/s）。</li>
+</ul>
+<p>什么叫Bypassing CPU？</p>
+<p>RDMA Remote Direct Memory Access (RDMA) 是一种允许计算机直接访问远程计算机内存的技术，而无需通过CPU进行数据传输。这种技术可以显著降低通信延迟和CPU负载，提高分布式系统中的数据传输效率。</p>
+<section id="ncll" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="ncll"><span class="header-section-number">2.2.1</span> NCLL</h3>
+<p>NCCL translates collective operations into low-level packets that are sent between GPUs. [talk]</p>
+<p>Detects topology of hardware (e.g., number of nodes, switches, NVLink/PCIe)</p>
+<p>Optimizes the path between GPUs</p>
+<p>Launches GPU kernels to send/receive data</p>
+</section>
+</section>
+<section id="torch-distributed" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="torch-distributed"><span class="header-section-number">2.3</span> Torch Distributed</h2>
+<p>主要介绍了PyTorch中的分布式训练框架torch.distributed。</p>
+<p>setup</p>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> setup(rank, world_size):</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    os.environ[<span class="st">'MASTER_ADDR'</span>] <span class="op">=</span> <span class="st">'localhost'</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    os.environ[<span class="st">'MASTER_PORT'</span>] <span class="op">=</span> <span class="st">'12355'</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="co"># initialize the process group</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>    dist.init_process_group(<span class="st">"nccl"</span>, rank<span class="op">=</span>rank, world_size<span class="op">=</span>world_size)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>在setup之后，</p>
+<div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>dist.barrier()  <span class="co"># Synchronize all processes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Wait to all the process to reach this point.</p>
+<p>接下来看几个操作:</p>
+<ul>
+<li><code>dist.all_reduce(tensor, op=dist.ReduceOp.SUM)</code>: 对所有GPU上的tensor进行求和，并将结果发送到所有GPU上。其中 <code>async_op</code> 参数表示是否异步执行，如果设置为True，则函数会立即返回一个Future对象，表示操作的状态，可以通过调用Future对象的wait()方法来等待操作完成。</li>
+<li><code>dist.reduce_scatter(tensor, scatter_list, op=dist.ReduceOp.SUM)</code>: 将分布在不同GPU上的数据进行求和，并将结果分散到不同的GPU上。其中 <code>scatter_list</code> 是一个列表，包含每个GPU上要发送的数据块。</li>
+<li><code>dist.all_gather(tensor_list, tensor)</code>: 将每个GPU上的tensor发送给所有其他GPU，并将结果收集到一个列表中。其中 <code>tensor_list</code> 是一个列表，包含每个GPU上要接收的数据块。</li>
+<li><code>dist.broadcast(tensor, src=0)</code>: 从指定的GPU（通常是rank 0）向所有其他GPU发送数据。其中 <code>src</code> 参数表示源GPU的rank。</li>
+</ul>
+<p>在Distributed 最后，记得clean up：</p>
+<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> cleanup():</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    dist.destroy_process_group()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="benchmarking" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="benchmarking"><span class="header-section-number">2.4</span> Benchmarking</h2>
+<section id="measure-speed" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="measure-speed"><span class="header-section-number">2.4.1</span> Measure Speed</h3>
+</section>
+<section id="measure-effective-bandwidth" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="measure-effective-bandwidth"><span class="header-section-number">2.4.2</span> Measure Effective Bandwidth</h3>
+</section>
+</section>
+</section>
+<section id="distributed-training" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Distributed Training</h1>
+<section id="data-parallelism" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="data-parallelism"><span class="header-section-number">3.1</span> Data Parallelism</h2>
+<div id="fig-data-parallelism-example.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-data-parallelism-example.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/data-parallelism-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" title="Figure&nbsp;11: "><img src="./assets/data-parallelism-example.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-data-parallelism-example.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11
+</figcaption>
+</figure>
+</div>
+<p>根据Batch Size来切，每个GPU负责不同部分的数据，每个GPU上都有完整的模型副本，计算完梯度之后需要进行通信来同步参数更新。</p>
+<div class="sourceCode" id="cb4" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">for</span> p <span class="kw">in</span> params:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    dist.all_reduce(p.grad.data, op<span class="op">=</span>dist.ReduceOp.AVG)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>接下来让我们看一下Data Parallelism是如何Scaling的：</p>
+<ul>
+<li>Compute Scaling： 每个GPU都得到了B/M的Batch Size，计算量减少了M倍。</li>
+<li>Communication Overhead: transmit <span class="math inline">\(2x\)</span> parameters (forward + backward)，每个GPU都需要和其他GPU通信来同步参数更新，通信量随着GPU数量的增加而增加。</li>
+<li>Memory Scaling: None. 每个GPU上都有完整的模型副本，所以内存需求没有减少。</li>
+</ul>
+<p>可见，这种最常见的问题就是Memory的问题，每个GPUs都有一份copy</p>
+<section id="zero" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="zero"><span class="header-section-number">3.1.1</span> ZeRO</h3>
+<p>shard the optimizer state, gradients and parameters across GPUs, this corresponing to the 3 stages of ZeRO.</p>
+<section id="zero-stage-1-optimizer-state-sharding" class="level4" data-number="3.1.1.1">
+<h4 data-number="3.1.1.1" class="anchored" data-anchor-id="zero-stage-1-optimizer-state-sharding"><span class="header-section-number">3.1.1.1</span> ZeRO Stage 1: Optimizer State Sharding</h4>
+<p>在ZeRO Stage 1中，优化器状态（如动量、二阶矩等）被分割并分布在不同的GPU上。每个GPU只保存自己负责的参数对应的优化器状态，而不是整个模型的优化器状态。</p>
+<p>这个是怎么进行的的呢？</p>
+</section>
+<section id="zero-stage-2-gradient-sharding" class="level4" data-number="3.1.1.2">
+<h4 data-number="3.1.1.2" class="anchored" data-anchor-id="zero-stage-2-gradient-sharding"><span class="header-section-number">3.1.1.2</span> ZeRO Stage 2: Gradient Sharding</h4>
+<p>在ZeRO Stage 2中，除了优化器状态之外，梯度也被分割并分布在不同的GPU上。每个GPU只计算自己负责的参数对应的梯度，并且只保存自己负责的参数对应的梯度。</p>
+</section>
+<section id="zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp" class="level4" data-number="3.1.1.3">
+<h4 data-number="3.1.1.3" class="anchored" data-anchor-id="zero-stage-3-parameter-sharding-a.k.a-fully-sharded-data-parallel-fsdp"><span class="header-section-number">3.1.1.3</span> ZeRO Stage 3: Parameter Sharding （a.k.a Fully Sharded Data Parallel, FSDP）</h4>
+<p>在ZeRO Stage 3中，除了优化器状态和梯度之外，模型参数也被分割并分布在不同的GPU上。每个GPU只保存自己负责的参数，并且在计算过程中需要通信来获取其他GPU上的参数。</p>
+<p>Critical Batch Size</p>
+<p>Still Has Memory Issue</p>
+</section>
+</section>
+</section>
+<section id="model-tensor-parallelism" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="model-tensor-parallelism"><span class="header-section-number">3.2</span> Model Tensor Parallelism</h2>
+<section id="pipeline-parallelism" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="pipeline-parallelism"><span class="header-section-number">3.2.1</span> Pipeline Parallelism</h3>
+<div id="fig-pipeline-parallelism.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pipeline-parallelism.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/pipeline-parallelism.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;12: "><img src="./assets/pipeline-parallelism.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-pipeline-parallelism.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12
+</figcaption>
+</figure>
+</div>
+<section id="layer-wise-pipeline-parallelism" class="level4" data-number="3.2.1.1">
+<h4 data-number="3.2.1.1" class="anchored" data-anchor-id="layer-wise-pipeline-parallelism"><span class="header-section-number">3.2.1.1</span> Layer-wise Pipeline Parallelism</h4>
+</section>
+<section id="pipeline-parallelism-1" class="level4" data-number="3.2.1.2">
+<h4 data-number="3.2.1.2" class="anchored" data-anchor-id="pipeline-parallelism-1"><span class="header-section-number">3.2.1.2</span> Pipeline Parallelism</h4>
+<p>The problem of the simple pipeling parallelism is the pipeline bubble. 由于每个GPU需要等待前一个GPU完成计算才能开始计算，所以在训练过程中会出现空闲时间，导致效率降低。</p>
+</section>
+<section id="zero-bubble-pipeline" class="level4" data-number="3.2.1.3">
+<h4 data-number="3.2.1.3" class="anchored" data-anchor-id="zero-bubble-pipeline"><span class="header-section-number">3.2.1.3</span> Zero bubble Pipeline</h4>
+</section>
+</section>
+<section id="tensor-parallelism" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="tensor-parallelism"><span class="header-section-number">3.2.2</span> Tensor Parallelism</h3>
+<div id="fig-tensor-parallelism.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tensor-parallelism.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/tensor-parallelism.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;13: "><img src="./assets/tensor-parallelism.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-tensor-parallelism.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13
+</figcaption>
+</figure>
+</div>
+<p>each GPUs 保存一部分的模型参数，计算时需要通信来获取其他GPU上的参数。</p>
+<section id="column-tensor-parallelism" class="level4" data-number="3.2.2.1">
+<h4 data-number="3.2.2.1" class="anchored" data-anchor-id="column-tensor-parallelism"><span class="header-section-number">3.2.2.1</span> Column Tensor Parallelism</h4>
+</section>
+<section id="row-tensor-parallelism" class="level4" data-number="3.2.2.2">
+<h4 data-number="3.2.2.2" class="anchored" data-anchor-id="row-tensor-parallelism"><span class="header-section-number">3.2.2.2</span> Row Tensor Parallelism</h4>
+
+
+</section>
+</section>
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark_dimmed">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      if (authorPrefersDark) {
+          [baseTheme, altTheme] = [altTheme, baseTheme];
+      }
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "YYZhang2025/YYZhang2025.github.io";
+    script.dataset.repoId = "R_kgDOQlDTcQ";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOQlDTcc4C2MRz";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© CC-By Yuyang, 2025</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+    <script type="text/javascript">
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let pseudocodeOptions = {
+          indentSize: el.dataset.indentSize,
+          commentDelimiter: el.dataset.commentDelimiter,
+          lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+          lineNumberPunc: el.dataset.lineNumberPunc,
+          noEnd: el.dataset.noEnd.toLowerCase() === "true",
+          titlePrefix: el.dataset.captionPrefix
+        };
+        pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+      });
+    })(document);
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+        if (captionSpan !== null) {
+          let captionPrefix = el.dataset.captionPrefix + " ";
+          let captionNumber = "";
+          if (el.dataset.pseudocodeNumber) {
+            captionNumber = el.dataset.pseudocodeNumber + " ";
+            if (el.dataset.chapterLevel) {
+              captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+            }
+          }
+          captionSpan.innerHTML = captionPrefix + captionNumber;
+        }
+      });
+    })(document);
+    </script>
+  
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+<script src="../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+</body></html>
