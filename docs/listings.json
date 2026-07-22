@@ -1,23 +1,5 @@
 [
   {
-    "listing": "/posts/LearningNotes/projects_index.html",
-    "items": [
-      "/posts/LearningNotes/StanfordCS336/index.html"
-    ]
-  },
-  {
-    "listing": "/posts/Projects/projects_index.html",
-    "items": [
-      "/posts/Projects/PaliGemma/pali-gemma.html",
-      "/posts/Projects/Qwen3-VL/Qwen3-VL.html",
-      "/posts/Projects/Micro-LLM/index.html"
-    ]
-  },
-  {
-    "listing": "/posts/Blogs/blogs_index.html",
-    "items": []
-  },
-  {
     "listing": "/posts/LearningNotes/StanfordCS336/index.html",
     "items": [
       "/posts/LearningNotes/StanfordCS336/Lectures/lec15&16/post.html",
@@ -28,9 +10,48 @@
     ]
   },
   {
+    "listing": "/posts/Blogs/blogs_index.html",
+    "items": []
+  },
+  {
+    "listing": "/posts/Projects/projects_index.html",
+    "items": [
+      "/posts/Projects/PaliGemma/pali-gemma.html",
+      "/posts/Projects/Qwen3-VL/Qwen3-VL.html",
+      "/posts/Projects/Micro-LLM/index.html"
+    ]
+  },
+  {
+    "listing": "/posts/LearningNotes/projects_index.html",
+    "items": [
+      "/posts/LearningNotes/StanfordCS336/index.html"
+    ]
+  },
+  {
     "listing": "/posts/100PwC/index.html",
     "items": [
-      "/posts/100PwC/01-transformer/post.html"
+      "/posts/100PwC/01-transformer/post.html",
+      "/posts/100PwC/02-vit/post.html",
+      "/posts/100PwC/03-bert/post.html",
+      "/posts/100PwC/04-gpt2/post.html",
+      "/posts/100PwC/05-clip/post.html",
+      "/posts/100PwC/06-swin-transformer/post.html",
+      "/posts/100PwC/07-dino/post.html",
+      "/posts/100PwC/08-vae/post.html",
+      "/posts/100PwC/09-vq-vae/post.html",
+      "/posts/100PwC/10-mae/post.html",
+      "/posts/100PwC/11-unet/post.html",
+      "/posts/100PwC/12-ddpm/post.html",
+      "/posts/100PwC/13-stable-diffusion/post.html",
+      "/posts/100PwC/14-dit/post.html",
+      "/posts/100PwC/14-mmdit/post.html",
+      "/posts/100PwC/16-gan/post.html",
+      "/posts/100PwC/17-pixel-cnn/post.html",
+      "/posts/100PwC/18-flash-attention/post.html",
+      "/posts/100PwC/19-mamba/post.html",
+      "/posts/100PwC/20-vision-mamba/post.html",
+      "/posts/100PwC/21-switch-transformer/post.html",
+      "/posts/100PwC/22-sedd/post.html"
     ]
   }
 ]

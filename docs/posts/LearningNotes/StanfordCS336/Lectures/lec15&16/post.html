@@ -22,7 +22,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -50,6 +105,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
 <script src="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
 <link href="../../../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -144,6 +202,35 @@ document.addEventListener("DOMContentLoaded", function () {
       </style>
     
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <meta property="og:title" content="Lecture 15 &amp; 16: Mid-Training(SFT) &amp; Post-Training(PPO, DPO, GRPO)">
 <meta property="og:description" content="This is the lecture 15 &amp; 16 of the Stanford CS336 course, which covers the topics of Mid-Training(SFT) &amp; Post-Training(PPO, DPO, GRPO).">
@@ -384,7 +471,41 @@ document.addEventListener("DOMContentLoaded", function () {
         <div id="quarto-search" class="" title="Search"></div>
         </div>
         </div>
-    
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-not-just-pre-training" id="toc-why-not-just-pre-training" class="nav-link active" data-scroll-target="#why-not-just-pre-training"><span class="header-section-number">1</span> Why not Just Pre-Training?</a></li>
+  <li><a href="#supervised-fine-tuningsft" id="toc-supervised-fine-tuningsft" class="nav-link" data-scroll-target="#supervised-fine-tuningsft"><span class="header-section-number">2</span> Supervised Fine-Tuning（SFT）</a>
+  <ul>
+  <li><a href="#the-evolution-of-sft-data" id="toc-the-evolution-of-sft-data" class="nav-link" data-scroll-target="#the-evolution-of-sft-data"><span class="header-section-number">2.1</span> The Evolution of SFT Data</a>
+  <ul>
+  <li><a href="#flan" id="toc-flan" class="nav-link" data-scroll-target="#flan"><span class="header-section-number">2.1.1</span> FLAN</a></li>
+  <li><a href="#alpaca" id="toc-alpaca" class="nav-link" data-scroll-target="#alpaca"><span class="header-section-number">2.1.2</span> Alpaca</a></li>
+  <li><a href="#openassistant" id="toc-openassistant" class="nav-link" data-scroll-target="#openassistant"><span class="header-section-number">2.1.3</span> OpenAssistant</a></li>
+  <li><a href="#namotron" id="toc-namotron" class="nav-link" data-scroll-target="#namotron"><span class="header-section-number">2.1.4</span> Namotron</a></li>
+  <li><a href="#compare-those-sft-datasets" id="toc-compare-those-sft-datasets" class="nav-link" data-scroll-target="#compare-those-sft-datasets"><span class="header-section-number">2.1.5</span> Compare those SFT Datasets</a></li>
+  </ul></li>
+  <li><a href="#why-high-quality-sft-data-can-harm-model" id="toc-why-high-quality-sft-data-can-harm-model" class="nav-link" data-scroll-target="#why-high-quality-sft-data-can-harm-model"><span class="header-section-number">2.2</span> Why High quality SFT Data can harm model?</a></li>
+  <li><a href="#safety-in-sft" id="toc-safety-in-sft" class="nav-link" data-scroll-target="#safety-in-sft"><span class="header-section-number">2.3</span> Safety in SFT</a></li>
+  <li><a href="#how-to-train-sft-model" id="toc-how-to-train-sft-model" class="nav-link" data-scroll-target="#how-to-train-sft-model"><span class="header-section-number">2.4</span> How to train SFT model?</a></li>
+  <li><a href="#summary-of-sft" id="toc-summary-of-sft" class="nav-link" data-scroll-target="#summary-of-sft"><span class="header-section-number">2.5</span> Summary of SFT</a></li>
+  </ul></li>
+  <li><a href="#rlhf" id="toc-rlhf" class="nav-link" data-scroll-target="#rlhf"><span class="header-section-number">3</span> RLHF</a>
+  <ul>
+  <li><a href="#ppo" id="toc-ppo" class="nav-link" data-scroll-target="#ppo"><span class="header-section-number">3.1</span> PPO</a></li>
+  <li><a href="#dpo" id="toc-dpo" class="nav-link" data-scroll-target="#dpo"><span class="header-section-number">3.2</span> DPO</a></li>
+  </ul></li>
+  <li><a href="#rlvr" id="toc-rlvr" class="nav-link" data-scroll-target="#rlvr"><span class="header-section-number">4</span> RLVR</a>
+  <ul>
+  <li><a href="#grpo" id="toc-grpo" class="nav-link" data-scroll-target="#grpo"><span class="header-section-number">4.1</span> GRPO</a></li>
+  <li><a href="#dr.grpo" id="toc-dr.grpo" class="nav-link" data-scroll-target="#dr.grpo"><span class="header-section-number">4.2</span> Dr.GRPO</a></li>
+  </ul></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study"><span class="header-section-number">5</span> Case study</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">6</span> Summary</a></li>
+  <li><a href="#in-the-end" id="toc-in-the-end" class="nav-link" data-scroll-target="#in-the-end"><span class="header-section-number">7</span> In the end</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -423,11 +544,292 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </header>
 
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-not-just-pre-training" id="toc-why-not-just-pre-training"><span class="header-section-number">1</span> Why not Just Pre-Training?</a></li>
+  <li><a href="#supervised-fine-tuningsft" id="toc-supervised-fine-tuningsft"><span class="header-section-number">2</span> Supervised Fine-Tuning（SFT）</a>
+  <ul>
+  <li><a href="#the-evolution-of-sft-data" id="toc-the-evolution-of-sft-data"><span class="header-section-number">2.1</span> The Evolution of SFT Data</a>
+  <ul>
+  <li><a href="#flan" id="toc-flan"><span class="header-section-number">2.1.1</span> FLAN</a></li>
+  <li><a href="#alpaca" id="toc-alpaca"><span class="header-section-number">2.1.2</span> Alpaca</a></li>
+  <li><a href="#openassistant" id="toc-openassistant"><span class="header-section-number">2.1.3</span> OpenAssistant</a></li>
+  <li><a href="#namotron" id="toc-namotron"><span class="header-section-number">2.1.4</span> Namotron</a></li>
+  <li><a href="#compare-those-sft-datasets" id="toc-compare-those-sft-datasets"><span class="header-section-number">2.1.5</span> Compare those SFT Datasets</a></li>
+  </ul></li>
+  <li><a href="#why-high-quality-sft-data-can-harm-model" id="toc-why-high-quality-sft-data-can-harm-model"><span class="header-section-number">2.2</span> Why High quality SFT Data can harm model?</a></li>
+  <li><a href="#safety-in-sft" id="toc-safety-in-sft"><span class="header-section-number">2.3</span> Safety in SFT</a></li>
+  <li><a href="#how-to-train-sft-model" id="toc-how-to-train-sft-model"><span class="header-section-number">2.4</span> How to train SFT model?</a></li>
+  <li><a href="#summary-of-sft" id="toc-summary-of-sft"><span class="header-section-number">2.5</span> Summary of SFT</a></li>
+  </ul></li>
+  <li><a href="#rlhf" id="toc-rlhf"><span class="header-section-number">3</span> RLHF</a>
+  <ul>
+  <li><a href="#ppo" id="toc-ppo"><span class="header-section-number">3.1</span> PPO</a></li>
+  <li><a href="#dpo" id="toc-dpo"><span class="header-section-number">3.2</span> DPO</a></li>
+  </ul></li>
+  <li><a href="#rlvr" id="toc-rlvr"><span class="header-section-number">4</span> RLVR</a>
+  <ul>
+  <li><a href="#grpo" id="toc-grpo"><span class="header-section-number">4.1</span> GRPO</a></li>
+  <li><a href="#dr.grpo" id="toc-dr.grpo"><span class="header-section-number">4.2</span> Dr.GRPO</a></li>
+  </ul></li>
+  <li><a href="#case-study" id="toc-case-study"><span class="header-section-number">5</span> Case study</a></li>
+  <li><a href="#summary" id="toc-summary"><span class="header-section-number">6</span> Summary</a></li>
+  <li><a href="#in-the-end" id="toc-in-the-end"><span class="header-section-number">7</span> In the end</a></li>
+  </ul>
+</nav>
+<p>在前几个Lecture之后，我们以及学习了什么是Pre-Training， 以及如何利用Scaling Law来判断和收集更多的数据，在接下来的几个Lecture中，我们将学习Pre-Training之后的两个重要阶段：Mid-Training和Post-Training。通过这两个步骤和阶段，我们可以从GPT获得ChatGPT。并且在Lecture16中，我们将学习如何改进PPO算法，从RLHF到RLVR，进一步提升模型的性能和能力，废话不多少，让我们开始学习。</p>
+<section id="why-not-just-pre-training" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Why not Just Pre-Training?</h1>
+<p>Pre-Training的目标，本质上就是预测一下个Token（Next Token Prediction），通过大量的文本数据，训练一个语言模型，让它能够理解和生成自然语言。模型从互联网，数据，代码等语料中学习语言规律和知识，并且通过Scaling Law来判断和收集更多的数据，从而提升模型的性能和能力。但是Pre-Training有一个很显然的问题就是：它只能做成语接龙。也就是说，通过Pre-Training训练出来的模型，它虽然可能具备某项能力，但它不一定知道：</p>
+<ul>
+<li>用户希望它执行什么任务。</li>
+<li>应该采用什么样的方式来回答</li>
+<li>什么时候该调用工具，而不是直接生成文本。</li>
+</ul>
+<p>这时候我们就需要继续训练模型，也就是所谓的Post-Training，通过Post-Training，我们可以让模型更好地理解用户的意图，采用合适的方式回答问题，并在必要时调用工具，从而提升模型的实际应用能力。后训练基本可以分成两个阶段：</p>
+<ul>
+<li>Supervised Fine-Tuning（SFT）</li>
+<li>Reinforcement Learning from Human Feedback（RLHF）</li>
+</ul>
+<div id="fig-rlhf-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rlhf-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/rlhf-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/rlhf-overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-rlhf-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<p>接下来我们来看一下这两个阶段的具体内容和实现方式。</p>
+</section>
+<section id="supervised-fine-tuningsft" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Supervised Fine-Tuning（SFT）</h1>
+<p>我们知道，训练一个模型，避不开的两件事就是：<strong>数据</strong>和<strong>算法</strong>，接下来我们就通过这两个方面来看看SFT</p>
+<p>SFT的算法本身并不复杂。大多数情况下说，它与Pre-Training的目标函数是一致的，也就是Cross Entropy Loss:</p>
+<p><span id="eq-sft-loss"><span class="math display">\[
+\mathcal{L}_{SFT} = -\sum_{i=\textcolor{red}{k}}^{N} y_i \log(\hat{y}_i)
+\tag{1}\]</span></span></p>
+<p>其中<span class="math inline">\(\textcolor{red}{k}\)</span>表示从第k个Token开始计算Loss，也就是说，前k个Token的Loss不计入总Loss中。为什么要这样做呢？因为在SFT中，我们通常会给模型提供一个Prompt，也就是一个问题或者指令，让模型根据这个Prompt来生成答案。而前k个Token就是Prompt的内容，我们不希望模型在学习如何生成答案时受到Prompt的影响，所以我们只计算从第k个Token开始的Loss。</p>
+<p>以上就是SFT的算法。决定SFT效果的关键因素就是数据，接下来我们就来看看SFT的数据是如何构建的，并且看一下这几年训练数据是如何演变的。</p>
+<section id="the-evolution-of-sft-data" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="the-evolution-of-sft-data"><span class="header-section-number">2.1</span> The Evolution of SFT Data</h2>
+<p>首先我们来看一个简单的SFT训练数据的例子，也就是所谓的Instruct Data：</p>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="dt">"instruction"</span><span class="fu">:</span> <span class="st">"Translate the following English sentence to Chinese."</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="dt">"input"</span><span class="fu">:</span> <span class="st">"Hello, how are you?"</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="dt">"output"</span><span class="fu">:</span> <span class="st">"你好，你怎么样？"</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>这个数据的结构非常简单，包含了三个字段：instruction、input和output。instruction是模型需要执行的任务，input是模型需要处理的输入，output是模型需要生成的输出。通过这样的数据，我们可以让模型学习如何根据instruction和input来生成output，从而让模型获得特定的能力，比如对话、翻译、问答等。接下来我们来看几个具体的数据库的例子。</p>
+<section id="flan" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="flan"><span class="header-section-number">2.1.1</span> FLAN</h3>
+<p>我们先来看一下FLAN <span class="citation" data-cites="ScalingInstructionFinetunedLanguage2022chung">(<a href="#ref-ScalingInstructionFinetunedLanguage2022chung" role="doc-biblioref">Chung et al. 2022</a>)</span>。 FLAN 是 Google 提出的一套多任务指令微调（Instruction Finetuning）方法。它的核心目标不是向模型灌输某一项特定知识，而是让预训练语言模型学会理解自然语言指令，并将这种能力泛化到训练阶段从未见过的新任务上。</p>
+<div id="fig-FLAN-T5-dataset-overview.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-FLAN-T5-dataset-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/FLAN-T5-dataset-overview.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="./assets/FLAN-T5-dataset-overview.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-FLAN-T5-dataset-overview.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+<p>FLAN可以被理解为一种大规模的多任务（Multi-Task）监督微调，举个例子，假设原始数据集是一个情感分类任务：</p>
+<div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1"></a>Input:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>The movie was surprisingly good.</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>Label:</span>
+<span id="cb2-5"><a href="#cb2-5"></a>Positive</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>FLAN 会通过模版（Template）将其转换为一个指令任务：</p>
+<div class="sourceCode" id="cb3" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1"></a>Classify the sentiment of the following sentence as positive or negative:</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a>The movie was surprisingly good.</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a>Answer:</span>
+<span id="cb3-6"><a href="#cb3-6"></a>Positive</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>这种转化的好处是，对于同一个任务，还可以使用不同的指令模板：</p>
+<div class="sourceCode" id="cb4" data-code-line-numbers=""><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1"></a>Is the following review positive or negative?</span>
+<span id="cb4-2"><a href="#cb4-2"></a>Determine the sentiment expressed in this sentence.</span>
+<span id="cb4-3"><a href="#cb4-3"></a>Does the author have a favorable opinion of the movie?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>这样做可以防止模型只记住某一种固定表达，让它学会理解多种自然语言指令。</p>
+<p>不过，FLAN的局限性也很明显：很多训练数据来自传统 NLP 数据集，再通过模板改写成指令，这就让训练的数据显得不够自然</p>
+</section>
+<section id="alpaca" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="alpaca"><span class="header-section-number">2.1.2</span> Alpaca</h3>
+<p>接下来我们来看一下Stanford 开源的<a href="https://crfm.stanford.edu/2023/03/13/alpaca.html">Alpaca</a>数据集。 Alpaca包含了约52，000条指令数据，每个数据都由3个字段组成：</p>
+<div class="sourceCode" id="cb5" data-code-line-numbers=""><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1"></a><span class="er">"instruction":</span> <span class="er">"描述模型需要完成的任务",</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="er">"input":</span> <span class="er">"模型需要处理的输入（可为空）",</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="er">"output":</span> <span class="er">"模型需要生成的输出"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>我们来看一个具体的例子：</p>
+<div id="fig-alpaca-example.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-alpaca-example.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/alpaca-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="./assets/alpaca-example.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-alpaca-example.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+<p>需要注意的是，与FLAN不同，Alpaca的数据是通过OpenAI的text-davinci-003模型生成的，而不是通过模板改写传统NLP数据集。这也就是所谓的Self-Instruct <span class="citation" data-cites="SelfInstructAligningLanguage2023wang">(<a href="#ref-SelfInstructAligningLanguage2023wang" role="doc-biblioref">Wang et al. 2023</a>)</span>的方法。 :::{#fig-Self-Instruct-Overview.png} <img src="./assets/Self-Instruct-Overview.png" class="img-fluid"> :::</p>
+</section>
+<section id="openassistant" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="openassistant"><span class="header-section-number">2.1.3</span> OpenAssistant</h3>
+<p>与 FLAN 和 Alpaca 不同，OpenAssistant<span class="citation" data-cites="OpenAssistantConversationsDemocratizing2023kopf">(<a href="#ref-OpenAssistantConversationsDemocratizing2023kopf" role="doc-biblioref">Köpf et al. 2023</a>)</span> 的核心数据并不是由已有 NLP 数据集转换而来，也不是主要由闭源语言模型自动生成，而是由全球志愿者直接编写、评价和排序。Open Assistant的主要目的是：开放社区能否像构建 Wikipedia 一样，通过大规模志愿者协作，构建真正由人类生成和评价的模型对齐数据？</p>
+<div id="fig-openassistant-conversation-tree.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-openassistant-conversation-tree.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/openassistant-conversation-tree.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="./assets/openassistant-conversation-tree.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-openassistant-conversation-tree.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4
+</figcaption>
+</figure>
+</div>
+<p>比较有意思的是，OpenAssistant的数据是以对话树（Conversation Tree）的形式组织的。每个对话树包含一个根节点和多个子节点，每个节点都是一个对话轮次（turn），包括用户的输入和模型的输出。志愿者可以在对话树中添加新的节点，或者对已有的节点进行评价和排序，从而形成一个不断扩展和优化的对话数据集，比如：</p>
+<pre data-code-line-numbers=""><code>用户：请解释什么是梯度下降。 
+│ ├── 助手回答 A：梯度下降是一种优化算法…… 
+│ │ │ ├── 用户追问：学习率是什么？ 
+│ │ ├── 助手回答 A1：学习率控制每一步更新大小…… 
+│ │ └── 助手回答 A2：可以把学习率理解为下山时的步长…… 
+│ │ │ └── 用户追问：能给一个数学例子吗？ 
+│ │
+│ └── 助手回答 B：梯度下降就是不断调整参数…… 
+│  │ └── 用户追问：这个解释太简单，可以详细一点吗？</code></pre>
+<p>通过这种方式，OpenAssistant能够收集到更自然、更多样化的对话数据，从而提升模型的对话能力和用户体验。</p>
+</section>
+<section id="namotron" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="namotron"><span class="header-section-number">2.1.4</span> Namotron</h3>
+<p>前面3个Dataset，都是把较模型如何与人类对话，而我们知道，现在的LLM，不仅需要对话能力，还需要有所谓的Agent能力，也就是可以调用外部工具。NVIDIA 发布的 Nemotron-SFT-OpenCode-v1，正是面向这类 Agentic Coding 场景构建的监督微调数据集。</p>
+<p>通过这种方式，可以显示的教模型Agentic的能力。</p>
+</section>
+<section id="compare-those-sft-datasets" class="level3" data-number="2.1.5">
+<h3 data-number="2.1.5" class="anchored" data-anchor-id="compare-those-sft-datasets"><span class="header-section-number">2.1.5</span> Compare those SFT Datasets</h3>
+<p>通过以上几个例子，我们可以看到SFT数据的演变过程：从回答一个问题，发展成维持一个对话，最后发展为在环境中执行一个任务。同时我们也看到，不同的SFT训练数据之间，有很大的差异：</p>
+<ul>
+<li>训练数据的长度不同</li>
+<li>回答问题的模式不同</li>
+<li>数据的来源不同</li>
+<li>数据的生成方式不同（人工编写 vs 模板改写 vs 模型生成）</li>
+<li>数据的结构不同（单轮问答 vs 多轮对话 vs 环境交互）</li>
+</ul>
+<div id="fig-style-matter-example.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-style-matter-example.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/style-matter-example.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="./assets/style-matter-example.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-style-matter-example.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5
+</figcaption>
+</figure>
+</div>
+<p>从这篇报道中<span class="citation" data-cites="AlpacaFarmSimulationFramework2024dubois">(<a href="#ref-AlpacaFarmSimulationFramework2024dubois" role="doc-biblioref">Dubois et al. 2024</a>)</span>，我们可以看到，不管是人类还是LLM Judger，都会偏向于选择更长的回答，或者更详细的回答，这也就是所谓的Style Matters。也就是说，SFT数据的质量和风格，对模型的性能和能力有很大的影响。</p>
+<p>但是尽管提升了这种Judge的分数，但在实际的Benchmark中，模型的性能和能力并没有明显的提升，这也就是所谓的SFT的局限性。</p>
+<p>如果只关注用户点击、点赞或模型评审分数，很容易把风格优化误认为能力进步。</p>
+<p>接下来我们再来了解一下SFT训练的局限性</p>
+</section>
+</section>
+<section id="why-high-quality-sft-data-can-harm-model" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="why-high-quality-sft-data-can-harm-model"><span class="header-section-number">2.2</span> Why High quality SFT Data can harm model?</h2>
+<p>接下来我们来了解一下反直觉的现象，当有些高质量的SFT数据，反而会降低模型的性能和能力。我们来看一个例子：假设训练数据中包含这样的回答：根据 Smith et al.&nbsp;(2019) 的研究……</p>
+<p>模型在学习这条样本时，实际上同时学习了两件事：</p>
+<ol type="1">
+<li>某个具体事实或引用；</li>
+<li>回答问题时应该给出学术引用。</li>
+</ol>
+<p>如果模型真正掌握了相关知识，这没有问题。</p>
+<p>但如果这条引用属于模型不熟悉的长尾知识，模型可能只学会了“回答时应该附带引用”的形式，却没有可靠地掌握引用内容。</p>
+<p>之后面对另一个问题时，它就可能生成一个看起来合理、实际上不存在的论文或作者。这就是所谓的“幻觉”现象（hallucination），也就是模型生成了一个看似合理但实际上不存在的答案。</p>
+</section>
+<section id="safety-in-sft" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="safety-in-sft"><span class="header-section-number">2.3</span> Safety in SFT</h2>
+<p>除了提升模型的能力和性能之外，SFT还可以用来提升模型的安全性。安全调优通常需要同时降低两个指标：</p>
+<ol type="1">
+<li>Violation Rate：模型错误地执行了危险或违反政策的请求。</li>
+<li>False Refusal Rate：模型错误地拒绝了安全或合理的请求。</li>
+</ol>
+<p>实验证明，仅仅通过一些安全相关的SFT数据，模型就可以显著降低Violation Rate，同时保持False Refusal Rate不变。这说明，SFT不仅可以提升模型的能力和性能，还可以提升模型的安全性。</p>
+</section>
+<section id="how-to-train-sft-model" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="how-to-train-sft-model"><span class="header-section-number">2.4</span> How to train SFT model?</h2>
+<p>有了数据，模型，接下来我们就可以训练SFT模型了。训练SFT模型的过程其实和Pre-Training模型的过程是类似的，都是通过梯度下降来优化模型的参数，只不过SFT模型的训练数据是经过精心设计和筛选的，目标是让模型学会如何根据指令和输入生成合适的输出。不过既然以及有了Pre-Training的架构，并且SFT的训练目标和Pre-Training的目标是一致的，那么我们就可以直接在Pre-Training模型的基础上进行SFT训练，这样可以节省大量的计算资源和时间。这就是所谓的Mid-Trainign/Two-phase Training:</p>
+<ul>
+<li>Phase 1: Pre-Training</li>
+<li>Phase 2: SFT</li>
+</ul>
+<p>通过改变训练时的数据分布，我们可以让模型从学习语言规律和知识，转变为学习如何根据指令和输入生成合适的输出，从而提升模型的实际应用能力。</p>
+<div id="fig-two-phase-training.png" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-two-phase-training.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/two-phase-training.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: "><img src="./assets/two-phase-training.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-two-phase-training.png-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6
+</figcaption>
+</figure>
+</div>
+<p>MiniCPM <span class="citation" data-cites="MiniCPMUnveilingPotential2024hu">(<a href="#ref-MiniCPMUnveilingPotential2024hu" role="doc-biblioref">Hu et al. 2024</a>)</span></p>
+</section>
+<section id="summary-of-sft" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="summary-of-sft"><span class="header-section-number">2.5</span> Summary of SFT</h2>
+</section>
+</section>
+<section id="rlhf" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> RLHF</h1>
+<section id="ppo" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="ppo"><span class="header-section-number">3.1</span> PPO</h2>
+</section>
+<section id="dpo" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="dpo"><span class="header-section-number">3.2</span> DPO</h2>
+</section>
+</section>
+<section id="rlvr" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> RLVR</h1>
+<section id="grpo" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="grpo"><span class="header-section-number">4.1</span> GRPO</h2>
+</section>
+<section id="dr.grpo" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="dr.grpo"><span class="header-section-number">4.2</span> Dr.GRPO</h2>
+</section>
+</section>
+<section id="case-study" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Case study</h1>
+</section>
+<section id="summary" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Summary</h1>
+</section>
+<section id="in-the-end" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> In the end</h1>
+<p>创作不易，如果你觉得内容对你有帮助，欢迎请我 <span class="hilite-teal">喝杯咖啡/支付宝红包</span>，支持我继续创作！你们的支持是我最大的动力！ :) <br></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="../../../../../style/AliPay.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="../../../../../style/AliPay.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="400"></a></p>
+</figure>
+</div>
 
 
 
+</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-ScalingInstructionFinetunedLanguage2022chung" class="csl-entry" role="listitem">
+Chung, Hyung Won, Le Hou, Shayne Longpre, Barret Zoph, Yi Tay, William Fedus, Yunxuan Li, et al. 2022. <span>“Scaling <span>Instruction-Finetuned Language Models</span>.”</span> December 6, 2022. <a href="https://doi.org/10.48550/arXiv.2210.11416">https://doi.org/10.48550/arXiv.2210.11416</a>.
+</div>
+<div id="ref-AlpacaFarmSimulationFramework2024dubois" class="csl-entry" role="listitem">
+Dubois, Yann, Xuechen Li, Rohan Taori, Tianyi Zhang, Ishaan Gulrajani, Jimmy Ba, Carlos Guestrin, Percy Liang, and Tatsunori B. Hashimoto. 2024. <span>“<span>AlpacaFarm</span>: <span>A Simulation Framework</span> for <span>Methods</span> That <span>Learn</span> from <span>Human Feedback</span>.”</span> January 8, 2024. <a href="https://doi.org/10.48550/arXiv.2305.14387">https://doi.org/10.48550/arXiv.2305.14387</a>.
+</div>
+<div id="ref-MiniCPMUnveilingPotential2024hu" class="csl-entry" role="listitem">
+Hu, Shengding, Yuge Tu, Xu Han, Chaoqun He, Ganqu Cui, Xiang Long, Zhi Zheng, et al. 2024. <span>“<span>MiniCPM</span>: <span>Unveiling</span> the <span>Potential</span> of <span>Small Language Models</span> with <span>Scalable Training Strategies</span>.”</span> June 3, 2024. <a href="https://doi.org/10.48550/arXiv.2404.06395">https://doi.org/10.48550/arXiv.2404.06395</a>.
+</div>
+<div id="ref-OpenAssistantConversationsDemocratizing2023kopf" class="csl-entry" role="listitem">
+Köpf, Andreas, Yannic Kilcher, Dimitri von Rütte, Sotiris Anagnostidis, Zhi-Rui Tam, Keith Stevens, Abdullah Barhoum, et al. 2023. <span>“<span>OpenAssistant Conversations</span> – <span>Democratizing Large Language Model Alignment</span>.”</span> October 31, 2023. <a href="https://doi.org/10.48550/arXiv.2304.07327">https://doi.org/10.48550/arXiv.2304.07327</a>.
+</div>
+<div id="ref-SelfInstructAligningLanguage2023wang" class="csl-entry" role="listitem">
+Wang, Yizhong, Yeganeh Kordi, Swaroop Mishra, Alisa Liu, Noah A. Smith, Daniel Khashabi, and Hannaneh Hajishirzi. 2023. <span>“Self-<span>Instruct</span>: <span>Aligning Language Models</span> with <span>Self-Generated Instructions</span>.”</span> May 25, 2023. <a href="https://doi.org/10.48550/arXiv.2212.10560">https://doi.org/10.48550/arXiv.2212.10560</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -923,6 +1325,38 @@ document.addEventListener("DOMContentLoaded", function () {
     })(document);
     </script>
   
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yuyang Zhang">
+<meta name="description" content="本文深入解析 SEDD（Score Entropy Discrete Diffusion），介绍离散扩散模型的基本原理，详细推导 Score Entropy 损失函数，并结合官方实现分析模型训练、采样及代码细节，帮助读者全面理解 Diffusion Language Model。">
+
+<title>21-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<link href="../../.././style/icon.avif" rel="icon">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0348920b7671f696dc9078d39bff215e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-7918b41b559d9771b366b8dfc4e23067.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-0af588f20cbc13bde34996b512351949.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-7918b41b559d9771b366b8dfc4e23067.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/pseudocode-2.4.1/pseudocode.min.css" rel="stylesheet">
+<script src="../../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E8EJCZTZG1"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-E8EJCZTZG1', { 'anonymize_ip': true});
+</script>
+<link href="https://fonts.cdnfonts.com/css/cmu-sans-serif" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<script>
+    MathJax = {
+        loader: {
+        load: ['[tex]/boldsymbol']
+        },
+        tex: {
+        tags: "all",
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        packages: {
+            '[+]': ['boldsymbol']
+        }
+        }
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".foldable-header").forEach(header => {
+    header.addEventListener("click", () => {
+      const block = header.closest(".foldable");
+      if (block) {
+        block.classList.toggle("is-open");
+      }
+    });
+
+    // 可访问性（键盘）
+    header.setAttribute("tabindex", "0");
+    header.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        header.click();
+      }
+    });
+  });
+});
+</script>
+    <style type="text/css">
+    .ps-root .ps-algorithm {
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+    }
+    .pseudocode-container {
+      text-align: left;
+    }
+    </style>
+  
+      <style type="text/css">
+      .ps-algorithm > .ps-line {
+        text-align: left;
+      }
+      </style>
+    
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="21-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution">
+<meta property="og:description" content="本文深入解析 SEDD（Score Entropy Discrete Diffusion），介绍离散扩散模型的基本原理，详细推导 Score Entropy 损失函数，并结合官方实现分析模型训练、采样及代码细节，帮助读者全面理解 Diffusion Language Model。">
+<meta property="og:image" content="./assets/cover.png">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../index.html"> 
+<span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/YYZhang2025"> 
+<span class="menu-text"><i class="fa-brands fa-github fa-xl"></i></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://www.linkedin.com/in/zhang-yuyang/"> 
+<span class="menu-text"><i class="fa-brands fa-linkedin fa-xl"></i></span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/Blogs/blogs_index.html"> 
+<span class="menu-text">Blogs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/100PwC/index.html"> 
+<span class="menu-text">100PwC</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../posts/LearningNotes/projects_index.html"> 
+<span class="menu-text">Learning Notes</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://yyzhang2025.github.io/FlashCards"> 
+<span class="menu-text">Flashcards</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">21-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution</h1>
+        </a>     
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link active" data-scroll-target="#preliminaries"><span class="header-section-number">1</span> Preliminaries</a>
+  <ul>
+  <li><a href="#continuous-time-markov-chain-ctmc" id="toc-continuous-time-markov-chain-ctmc" class="nav-link" data-scroll-target="#continuous-time-markov-chain-ctmc"><span class="header-section-number">1.1</span> Continuous Time Markov Chain (CTMC)</a></li>
+  <li><a href="#bregman-divergence" id="toc-bregman-divergence" class="nav-link" data-scroll-target="#bregman-divergence"><span class="header-section-number">1.2</span> Bregman Divergence</a></li>
+  </ul></li>
+  <li><a href="#score-entropy-discrete-diffusion" id="toc-score-entropy-discrete-diffusion" class="nav-link" data-scroll-target="#score-entropy-discrete-diffusion"><span class="header-section-number">2</span> Score Entropy Discrete Diffusion</a>
+  <ul>
+  <li><a href="#what-is-hard-in-discrete-diffusion-modeling" id="toc-what-is-hard-in-discrete-diffusion-modeling" class="nav-link" data-scroll-target="#what-is-hard-in-discrete-diffusion-modeling"><span class="header-section-number">2.1</span> What is Hard in Discrete Diffusion Modeling?</a></li>
+  <li><a href="#conrete-score" id="toc-conrete-score" class="nav-link" data-scroll-target="#conrete-score"><span class="header-section-number">2.2</span> Conrete Score</a></li>
+  <li><a href="#forward-process" id="toc-forward-process" class="nav-link" data-scroll-target="#forward-process"><span class="header-section-number">2.3</span> Forward Process</a>
+  <ul>
+  <li><a href="#noise-schedule" id="toc-noise-schedule" class="nav-link" data-scroll-target="#noise-schedule"><span class="header-section-number">2.3.1</span> Noise Schedule</a></li>
+  <li><a href="#transition-matrix" id="toc-transition-matrix" class="nav-link" data-scroll-target="#transition-matrix"><span class="header-section-number">2.3.2</span> Transition Matrix</a>
+  <ul class="collapse">
+  <li><a href="#absorbing-matrix" id="toc-absorbing-matrix" class="nav-link" data-scroll-target="#absorbing-matrix"><span class="header-section-number">2.3.2.1</span> Absorbing Matrix</a></li>
+  <li><a href="#uniform-matrix" id="toc-uniform-matrix" class="nav-link" data-scroll-target="#uniform-matrix"><span class="header-section-number">2.3.2.2</span> Uniform Matrix</a></li>
+  </ul></li>
+  <li><a href="#loss-function" id="toc-loss-function" class="nav-link" data-scroll-target="#loss-function"><span class="header-section-number">2.3.3</span> Loss Function</a></li>
+  <li><a href="#training-algorithm" id="toc-training-algorithm" class="nav-link" data-scroll-target="#training-algorithm"><span class="header-section-number">2.3.4</span> Training Algorithm</a></li>
+  </ul></li>
+  <li><a href="#backwardreverse-process" id="toc-backwardreverse-process" class="nav-link" data-scroll-target="#backwardreverse-process"><span class="header-section-number">2.4</span> Backward(Reverse) Process</a></li>
+  </ul></li>
+  <li><a href="#experiments-and-results" id="toc-experiments-and-results" class="nav-link" data-scroll-target="#experiments-and-results"><span class="header-section-number">3</span> Experiments and Results</a></li>
+  <li><a href="#whats-next" id="toc-whats-next" class="nav-link" data-scroll-target="#whats-next"><span class="header-section-number">4</span> What’s Next</a>
+  <ul>
+  <li><a href="#llada" id="toc-llada" class="nav-link" data-scroll-target="#llada"><span class="header-section-number">4.1</span> LLaDA</a></li>
+  <li><a href="#dream" id="toc-dream" class="nav-link" data-scroll-target="#dream"><span class="header-section-number">4.2</span> Dream</a></li>
+  </ul></li>
+  <li><a href="#in-the-end" id="toc-in-the-end" class="nav-link" data-scroll-target="#in-the-end"><span class="header-section-number">5</span> In the End</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">21-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution</h1>
+</div>
+
+<div>
+  <div class="description">
+    本文深入解析 SEDD（Score Entropy Discrete Diffusion），介绍离散扩散模型的基本原理，详细推导 Score Entropy 损失函数，并结合官方实现分析模型训练、采样及代码细节，帮助读者全面理解 Diffusion Language Model。
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yuyang Zhang </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC-body" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#preliminaries" id="toc-preliminaries"><span class="header-section-number">1</span> Preliminaries</a>
+  <ul>
+  <li><a href="#continuous-time-markov-chain-ctmc" id="toc-continuous-time-markov-chain-ctmc"><span class="header-section-number">1.1</span> Continuous Time Markov Chain (CTMC)</a></li>
+  <li><a href="#bregman-divergence" id="toc-bregman-divergence"><span class="header-section-number">1.2</span> Bregman Divergence</a></li>
+  </ul></li>
+  <li><a href="#score-entropy-discrete-diffusion" id="toc-score-entropy-discrete-diffusion"><span class="header-section-number">2</span> Score Entropy Discrete Diffusion</a>
+  <ul>
+  <li><a href="#what-is-hard-in-discrete-diffusion-modeling" id="toc-what-is-hard-in-discrete-diffusion-modeling"><span class="header-section-number">2.1</span> What is Hard in Discrete Diffusion Modeling?</a></li>
+  <li><a href="#conrete-score" id="toc-conrete-score"><span class="header-section-number">2.2</span> Conrete Score</a></li>
+  <li><a href="#forward-process" id="toc-forward-process"><span class="header-section-number">2.3</span> Forward Process</a>
+  <ul>
+  <li><a href="#noise-schedule" id="toc-noise-schedule"><span class="header-section-number">2.3.1</span> Noise Schedule</a></li>
+  <li><a href="#transition-matrix" id="toc-transition-matrix"><span class="header-section-number">2.3.2</span> Transition Matrix</a>
+  <ul>
+  <li><a href="#absorbing-matrix" id="toc-absorbing-matrix"><span class="header-section-number">2.3.2.1</span> Absorbing Matrix</a></li>
+  <li><a href="#uniform-matrix" id="toc-uniform-matrix"><span class="header-section-number">2.3.2.2</span> Uniform Matrix</a></li>
+  </ul></li>
+  <li><a href="#loss-function" id="toc-loss-function"><span class="header-section-number">2.3.3</span> Loss Function</a></li>
+  <li><a href="#training-algorithm" id="toc-training-algorithm"><span class="header-section-number">2.3.4</span> Training Algorithm</a></li>
+  </ul></li>
+  <li><a href="#backwardreverse-process" id="toc-backwardreverse-process"><span class="header-section-number">2.4</span> Backward(Reverse) Process</a></li>
+  </ul></li>
+  <li><a href="#experiments-and-results" id="toc-experiments-and-results"><span class="header-section-number">3</span> Experiments and Results</a></li>
+  <li><a href="#whats-next" id="toc-whats-next"><span class="header-section-number">4</span> What’s Next</a>
+  <ul>
+  <li><a href="#llada" id="toc-llada"><span class="header-section-number">4.1</span> LLaDA</a></li>
+  <li><a href="#dream" id="toc-dream"><span class="header-section-number">4.2</span> Dream</a></li>
+  </ul></li>
+  <li><a href="#in-the-end" id="toc-in-the-end"><span class="header-section-number">5</span> In the End</a></li>
+  </ul>
+</nav>
+<section id="preliminaries" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Preliminaries</h1>
+<p>在阅读和理解本文之前，我们需要对以下的内容和概念有一定的了解</p>
+<section id="continuous-time-markov-chain-ctmc" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="continuous-time-markov-chain-ctmc"><span class="header-section-number">1.1</span> Continuous Time Markov Chain (CTMC)</h2>
+<p>连续时间马尔可夫链（Continuous-Time Markov Chain，CTMC）是指在连续时间下的马尔可夫链。它是一个随机过程，满足马尔可夫性质，即未来的状态只依赖于当前的状态，而与过去的状态无关。CTMC可以用一个Generator Matrix <span class="math inline">\(Q\)</span> 来描述，它表示在单位时间内从一个状态跳转到另一个状态的速率, 比如：</p>
+<p><span id="eq-ctmc-example"><span class="math display">\[
+Q =
+\begin{bmatrix}
+-3 &amp; 1 &amp; 1 &amp; 1 \\
+1 &amp; -3 &amp; 1 &amp; 1 \\
+1 &amp; 1 &amp; -3 &amp; 1 \\
+1 &amp; 1 &amp; 1 &amp; -3
+\end{bmatrix}
+\tag{1}\]</span></span></p>
+<p>其中，每一列表示当前的状态，每一行表示下一个可以跳跃的状态。我们可以用<span class="math inline">\(p_t\)</span>来表示在时间<span class="math inline">\(t\)</span>时的状态分布，那么CTMC的状态转移可以用以下的微分方程来描述：</p>
+<p><span id="eq-ctmc-differential-equation"><span class="math display">\[
+\frac{d p_t}{dt} = Q p_t
+\tag{2}\]</span></span></p>
+</section>
+<section id="bregman-divergence" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="bregman-divergence"><span class="header-section-number">1.2</span> Bregman Divergence</h2>
+<p>regman Divergence 是一类用来衡量两个点“差异”的函数。它的定义如下: 给定一个严格凸，可微的函数 <span class="math inline">\(\phi\)</span>, Bregman Divergence 定义为：</p>
+<p><span id="eq-bregman-divergence-definition"><span class="math display">\[
+D_\phi(p \| q) = \phi(p) - \phi(q) - \nabla \phi(q)^{\top} (p - q)
+\tag{3}\]</span></span></p>
+<p>​它有一个特点就是非负性，即 <span class="math inline">\(D_\phi(p \| q) \geq 0\)</span>，并且当且仅当 <span class="math inline">\(p = q\)</span> 时，<span class="math inline">\(D_\phi(p \| q) = 0\)</span>。</p>
+</section>
+</section>
+<section id="score-entropy-discrete-diffusion" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Score Entropy Discrete Diffusion</h1>
+<p>我们知道，现在主流的Language Modeling的方式，是通过Auto-Regressive的方式来进行建模的，首先我们来看一下Language Modeling需要的目标是什么：</p>
+<p><span id="eq-generative-objective"><span class="math display">\[
+\max_{\theta} \mathbb{E}_{p_{\mathrm{data}}(x)} \left[ \log p_{\theta}(x) \right]
+\;\Longleftrightarrow\;
+\min_{\theta} \mathrm{KL}\!\left(p_{\mathrm{data}}(x)\,\|\,p_{\theta}(x)\right).
+\tag{4}\]</span></span></p>
+<p>而现在主流的Auto-Regressive的方式，是通过最大化下一个Token的概率来进行建模的，也就是所谓的Next Token Prediction：</p>
+<p>$$ p_{}(x)</p>
+<p>=</p>
+<p>p_{}(x^{1})</p>
+<p>_{i=2}^{L}</p>
+<p>p_{}(x<sup>{i}x</sup>{1},,x^{i-1}), $${#eq-autoregressive-modeling}</p>
+<p>但是这个是最优解吗？我们知道，在图片生成中，有Diffusion 的研究<span class="citation" data-cites="DenoisingDiffusionProbabilistic2020ho ScoreBasedGenerativeModeling2021song">(<a href="#ref-DenoisingDiffusionProbabilistic2020ho" role="doc-biblioref">Ho, Jain, and Abbeel 2020</a>; <a href="#ref-ScoreBasedGenerativeModeling2021song" role="doc-biblioref">Song et al. 2021</a>)</span>, 我们来想一下，如果我们也可以通过Diffusion的方式来进行Language Modeling呢？这就是本文所要介绍的Score Entropy Discrete Diffusion（SEDD）<span class="citation" data-cites="DiscreteDiffusionModeling2023chen">(<a href="#ref-DiscreteDiffusionModeling2023chen" role="doc-biblioref"><strong>DiscreteDiffusionModeling2023chen?</strong></a>)</span>，它是离散扩散模型的一种实现方式。</p>
+<section id="what-is-hard-in-discrete-diffusion-modeling" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="what-is-hard-in-discrete-diffusion-modeling"><span class="header-section-number">2.1</span> What is Hard in Discrete Diffusion Modeling?</h2>
+<p>在Discrete Diffusion Modeling中，有一个很大的问题，就是如何定义Diffusion的Forward Process和Backward Process。我们知道，在Continuous Diffusion Modeling中，Forward Process是通过一个连续的噪声过程来进行的，而Backward Process是通过一个连续的去噪过程来进行的。但是在Discrete Diffusion Modeling中，我们没有连续的噪声过程和去噪过程，所以我们需要找到一种方法来定义Discrete Diffusion的Forward Process和Backward Process。我们来回想一下Score的定义：</p>
+<p><span id="eq-score-definition"><span class="math display">\[
+s_{\theta}(x) = \nabla_{x} \log p_{\theta}(x),
+\tag{5}\]</span></span></p>
+<p>只要知道了Score，我们就可以通过Score来进行采样，也就是所谓的Score-based Sampling<span class="citation" data-cites="ScoreBasedGenerativeModeling2021song">(<a href="#ref-ScoreBasedGenerativeModeling2021song" role="doc-biblioref">Song et al. 2021</a>)</span>。但现在问题来了，Discrete Diffusion Modeling中，数据的状态是离散的，所以我们无法直接计算Score，也就无法直接进行采样。那么我们该如何解决这个问题呢？这就是本文所要介绍的Score Entropy Discrete Diffusion（SEDD）<span class="citation" data-cites="DiscreteDiffusionModeling2023chen">(<a href="#ref-DiscreteDiffusionModeling2023chen" role="doc-biblioref"><strong>DiscreteDiffusionModeling2023chen?</strong></a>)</span>，它通过估计数据分布的比率来定义Discrete Diffusion的Forward Process和Backward Process，从而实现了离散扩散模型的训练和采样。</p>
+</section>
+<section id="conrete-score" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="conrete-score"><span class="header-section-number">2.2</span> Conrete Score</h2>
+<p>这篇Paper的作者提出，可以利用Conrete Score<span class="citation" data-cites="ConcreteScore2022">(<a href="#ref-ConcreteScore2022" role="doc-biblioref"><strong>ConcreteScore2022?</strong></a>)</span>来定义Discrete Diffusion的Forward Process和Backward Process，从而实现离散扩散模型的训练和采样。Conrete Score的定义如下：</p>
+<p><span id="eq-concrete-score"><span class="math display">\[
+s_{\theta}(x) = \frac{p(y)}{p(x)}
+\tag{6}\]</span></span></p>
+<p>通过下图，我们可以很直观的看到concrete score<a href="#eq-concrete-score" class="quarto-xref">Equation&nbsp;6</a>与score<a href="#eq-score-definition" class="quarto-xref">Equation&nbsp;5</a>的关系：</p>
+<div id="fig-concrete-score-vs-score" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-concrete-score-vs-score-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="./assets/cover.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="./assets/cover.png" class="img-fluid figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-concrete-score-vs-score-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<p>Concrete Score通过比较离散数据的数据的所有状态，来跳跃到下一个比较高的Probability。因此，只要知道了Concrete Score，我们就可以通过Concrete Score来进行采样和生成。</p>
+<p>这篇文章就是通过定义一个Score Entropy Loss来训练一个模型，让模型能够学习到Concrete Score，从而实现离散扩散模型的训练和采样。接下来，我们将详细介绍Score Entropy Loss的定义和推导过程。</p>
+</section>
+<section id="forward-process" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="forward-process"><span class="header-section-number">2.3</span> Forward Process</h2>
+<p>SEDD的Forward Process是一个连续时间马尔可夫链（Continuous-Time Markov Chain，CTMC）。它从真实的数据样本<span class="math inline">\(x_0\)</span>出发，随着时间 <span class="math inline">\(t\)</span> 增大不断加入离散噪声，最终把文本破坏成一个容易采样的噪声分布。整个Forward Process可以通过两部分共同决定:</p>
+<ul>
+<li>基础的Generator <span class="math inline">\(Q\)</span>：这个决定了离散状态之间如何跳转，通常是一个固定的矩阵。</li>
+<li>Noise Schedule <span class="math inline">\(\sigma(t)\)</span>：这个决定了噪声随着时间如何增加，通常是一个随时间增加的函数。</li>
+</ul>
+<p>这两个相乘，我们可以得到 <span class="math inline">\(Q_t\)</span> 也就是真正随时间变化的Generator:</p>
+<p><span id="eq-generator-time-dependent"><span class="math display">\[
+Q_t = \dot\sigma(t) Q
+\tag{7}\]</span></span></p>
+<p>它表示，在时间<span class="math inline">\(t\)</span>内，按照<span class="math inline">\(Q\)</span>所规定的方向跳转，以<span class="math inline">\(\dot\sigma(t)\)</span>的速率进行跳转。</p>
+<section id="noise-schedule" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="noise-schedule"><span class="header-section-number">2.3.1</span> Noise Schedule</h3>
+<p>Noise Schedule 主要描述噪声随着时间如何增加，SEDD中主要使用两个量：</p>
+<ul>
+<li><span class="math inline">\(\sigma(t)\)</span>: 累计噪声的大小，随着时间增加，<span class="math inline">\(\sigma(t)\)</span>也会增加。</li>
+<li><span class="math inline">\(\bar{\sigma}(t) = \frac{d \sigma(t)}{dt}\)</span>: 瞬时噪声的大小，描述噪声在每个时间点的变化率。</li>
+</ul>
+<p>两者关系如下：</p>
+<p><span class="math display">\[
+\sigma(t) - \sigma(0) = \int_0^t \bar{\sigma}(s) ds
+\]</span></p>
+<p>这两个量的选择会影响Forward Process的噪声分布，从而影响模型的训练和采样效果。</p>
+<ul>
+<li><span class="math inline">\(\sigma(t)\)</span>: 用于从<span class="math inline">\(x_0\)</span>从直接采样<span class="math inline">\(x_t\)</span></li>
+<li><span class="math inline">\(\bar{\sigma}(t)\)</span>: 用于构造瞬时<span class="math inline">\(Q_t\)</span>, 给模型的训练Loss加权，以及进行采样</li>
+</ul>
+</section>
+<section id="transition-matrix" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="transition-matrix"><span class="header-section-number">2.3.2</span> Transition Matrix</h3>
+<p>Generator <span class="math inline">\(Q_t\)</span> 描述的是一个无穷小时间段内的跳转速率，对于很小的<span class="math inline">\(dt\)</span>:</p>
+<p><span class="math display">\[
+p_{t+dt} \approx (I + Q_t dt) p_t
+\]</span></p>
+<p>把从时间 <span class="math inline">\(0\)</span> 到时间 <span class="math inline">\(t\)</span> 的跳转速率累积起来，就可以得到完整的Forward Transition Matrix:</p>
+<p><span class="math display">\[
+P_{0 \to t} = \exp \left(\int_0^t Q_u du\right)
+\]</span></p>
+<p>因为：</p>
+<p><span class="math display">\[
+Q_u = \dot\sigma(u) Q
+\]</span></p>
+<p>所以：</p>
+<p><span class="math display">\[
+\int_0^t Q_u du = \int_0^t \dot\sigma(u) Q du = \sigma(t) Q
+\]</span></p>
+<p>从上面的式子中，我们可以推导出来:</p>
+<p><span class="math display">\[
+P_{0 \to t} = \exp((\sigma(t) - \sigma(0)) Q)
+\]</span></p>
+<p>如果 <span class="math inline">\(\sigma(0) = 0\)</span>，那么就有：</p>
+<p><span class="math display">\[
+P_{0 \to t} = \exp(\sigma(t) Q)
+\]</span></p>
+<p>从这个式子中，我们可以看到Forward Sampling的式子就是:</p>
+<p><span class="math display">\[
+x_t \sim P_{0 \to t} x_0 = \exp(\sigma(t) Q) x_0
+\]</span></p>
+<p>代码的实现也很简单：</p>
+<div class="sourceCode" id="cb1" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>sigma, dsigma <span class="op">=</span> noise(t)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>xt <span class="op">=</span> graph.sample_transition(x0, sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>具体的<code>sample_transition</code>的实现，我们将在下一节分析，不同的Transition Matrix的实现方式不同，具体的实现方式，我们将在下一节分析。</p>
+<section id="absorbing-matrix" class="level4" data-number="2.3.2.1">
+<h4 data-number="2.3.2.1" class="anchored" data-anchor-id="absorbing-matrix"><span class="header-section-number">2.3.2.1</span> Absorbing Matrix</h4>
+<p>Absorbing Matrix会引入一个特殊的token: <code>[MASK]</code>，它的作用是让模型在Forward Process中有一个吸收状态，意思就是，一旦token变成了<code>[MASK]</code>，它就不会再变回原来的token了。这个吸收状态的引入，可以让模型在Forward Process中有一个稳定的状态，从而提高模型的训练效果。</p>
+<p>具体的，Absorbing Matrix的定义如下：</p>
+<p><span class="math display">\[
+Q_{\text{absorb}} =
+\begin{bmatrix}
+-1 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\
+0 &amp; -1 &amp; \cdots &amp; 0 &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; -1 &amp; 0 \\
+1 &amp; 1 &amp; \cdots &amp; 1 &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>如果是absorb matrix，那么就有：</p>
+<p><span class="math display">\[
+P(x_t = x_0| x_0) = \exp(-\sigma(t))
+P(x_t = [MASK]| x_0) = 1 - \exp(-\sigma(t)  )
+\]</span></p>
+<p>接下来我们看一下代码实现:</p>
+<div class="sourceCode" id="cb2" data-code-line-numbers=""><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> sample_transition(<span class="va">self</span>, i, sigma):</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    move_chance <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="op">-</span>sigma).exp()</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    move_indices <span class="op">=</span> torch.rand(<span class="op">*</span>i.shape, device<span class="op">=</span>i.device) <span class="op">&lt;</span> move_chance</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    i_pert <span class="op">=</span> torch.where(move_indices, <span class="va">self</span>.dim <span class="op">-</span> <span class="dv">1</span>, i)</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">return</span> i_pert</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>我们来解释一些这段代码：</p>
+<ul>
+<li>第二行： <code>move_chance = 1 - (-sigma).exp()</code> 计算了每个token在Forward Process中变成<code>[MASK]</code>的概率。</li>
+<li>第三行： <code>move_indices = torch.rand(*i.shape, device=i.device) &lt; move_chance</code> 生成了一个随机的布尔矩阵，表示每个token是否变成了<code>[MASK]</code>。 其形状与输入的token序列相同。</li>
+<li>第四行： <code>i_pert = torch.where(move_indices, self.dim - 1, i)</code> 根据布尔矩阵，将变成<code>[MASK]</code>的token的索引设置为<code>self.dim - 1</code>，即<code>[MASK]</code>的索引，其余的token保持不变。</li>
+</ul>
+</section>
+<section id="uniform-matrix" class="level4" data-number="2.3.2.2">
+<h4 data-number="2.3.2.2" class="anchored" data-anchor-id="uniform-matrix"><span class="header-section-number">2.3.2.2</span> Uniform Matrix</h4>
+<p>与Absorbing Matrix不同，Uniform Matrix不会引入吸收状态，而是让每个token都有可能变成其他的token。Uniform Matrix的定义如下：</p>
+<p><span class="math display">\[
+Q_{\text{uniform}} =
+\begin{bmatrix}
+1 - V &amp; 1 &amp; \cdots &amp; 1 &amp; 1 \\
+1 &amp; 1 - V &amp; \cdots &amp; 1 &amp; 1 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\
+1 &amp; 1 &amp; \cdots &amp; 1 - V &amp; 1 \\
+1 &amp; 1 &amp; \cdots &amp; 1 &amp; 1 - V
+\end{bmatrix}
+\]</span></p>
+<p>我们来看一下代码实现：</p>
+<div class="sourceCode" id="cb3" data-code-line-numbers="4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> sample_transition(<span class="va">self</span>, i, sigma):</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    move_chance <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> (<span class="op">-</span>sigma).exp()</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    move_indices <span class="op">=</span> torch.rand(<span class="op">*</span>i.shape, device<span class="op">=</span>i.device) <span class="op">&lt;</span> move_chance</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    i_pert <span class="op">=</span> torch.where(move_indices, torch.randint_like(i, <span class="va">self</span>.dim), i) </span>
+<span id="cb3-5"><a href="#cb3-5"></a>    <span class="cf">return</span> i_pert</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>重点关注第四行的代码：<code>i_pert = torch.where(move_indices, torch.randint_like(i, self.dim), i)</code>，它的作用是将变成其他token的token的索引设置为一个随机的token的索引，其余的token保持不变。</p>
+</section>
+</section>
+<section id="loss-function" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="loss-function"><span class="header-section-number">2.3.3</span> Loss Function</h3>
+<p>有了上面的几个准备步骤，接下来我们可以终于可以开始推导Loss Function了。我们知道，SEDD的目标是让模型学习到Concrete Score，从而实现离散扩散模型的训练和采样。为了实现这个目标，我们需要定义一个Score Entropy Loss来训练模型，让模型能够学习到Concrete Score。</p>
+<p>我们知道，模型通常输出log-score：</p>
+<p><span class="math display">\[
+z_\theta(x, t)_y = \log s_\theta(x, t)_y
+\]</span></p>
+<p>但是真是的marginal score ratio是无法计算的, 这种情况在Score Matching中也出现过，而它的解决办法就是，利用已知的Forward Transition，来构建：</p>
+<p><span class="math display">\[
+r_t(y; x_t, x_0) = \frac{q_t(y | x_0)}{q_t(x_t | x_0)}
+\]</span></p>
+<p>因此我们需要<span class="math inline">\(s_\theta(x, t)_y\)</span>来近似<span class="math inline">\(r_t(y; x_t, x_0)\)</span>，也就是：</p>
+<p>好的，那么我们可以用简单的MSE来实现吗:</p>
+<p><span class="math display">\[
+\mathcal{L}_{\text{MSE}} = \mathbb{E}_{q_t(x_t | x_0)} \left[ \sum_{y} \left( s_\theta(x, t)_y - r_t(y; x_t, x_0) \right)^2 \right]
+\]</span></p>
+<p>它有一个很显然的问题就是，不能保证输出是正数，这是对于一个Probability来说是不合理的，因此我们需要对其进行改进。我们可以通过对数变换来解决这个问题，也就是：</p>
+<p>通过Bregman Divergence，我们可以得到一个新的Loss Function:</p>
+<p>于是我们就有了Denoising Score Entropy：</p>
+<p><span class="math display">\[
+\mathcal{L}_{\text{DSE}} = \mathbb{E}_{q_t(x_t | x_0)} \left[ \sum_{y} r_t(y; x_t, x_0) \log \frac{r_t(y; x_t, x_0)}{s_\theta(x, t)_y} \right]
+\]</span></p>
+<p>到目前为止，我们以及推导出来了SEDD的Loss Function，不过这还不够，我们还需要对Loss Function进行加权，因为在Forward Process中，随着时间的增加，噪声的大小也会增加，因此我们需要对Loss Function进行加权，让模型在训练过程中更加关注噪声较大的样本。具体的加权方式如下：</p>
+<p><span class="math display">\[
+\mathcal{L}_{\text{DWDSE}} = \inf_{0}^{T}\dot{sigma}(t)\mathcal{L}_{\text{DSE}}(t) dt
+\]</span></p>
+<p>它的Monte Carlo的形式就是：</p>
+<p><span class="math display">\[
+\mathcal{L}_{train} = \mathbb{E}_{t, x_0, x_t}\left[ \dot{\sigma}(t) \mathcal{L}_{\text{DSE}}(t) \right]
+\]</span></p>
+</section>
+<section id="training-algorithm" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="training-algorithm"><span class="header-section-number">2.3.4</span> Training Algorithm</h3>
+</section>
+</section>
+<section id="backwardreverse-process" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="backwardreverse-process"><span class="header-section-number">2.4</span> Backward(Reverse) Process</h2>
+</section>
+</section>
+<section id="experiments-and-results" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Experiments and Results</h1>
+<p>了解了SEDD的算法之后，接下来我们来训练一个character-level的Language Model，来看看SEDD的效果如何。我们将使用一个简单的字符级别的文本数据集来训练一个SEDD模型，并与传统的Auto-Regressive模型进行比较。</p>
+</section>
+<section id="whats-next" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> What’s Next</h1>
+<p>在SEDD提出来之后，好多的Follow-up的工作也随之而来，例如： - LLaDA：简化了SEDD的训练过程，提出了一个更简单的训练方法<span class="citation" data-cites="LLaDA2023chen">(<a href="#ref-LLaDA2023chen" role="doc-biblioref"><strong>LLaDA2023chen?</strong></a>)</span>。 - Dream</p>
+<section id="llada" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="llada"><span class="header-section-number">4.1</span> LLaDA</h2>
+</section>
+<section id="dream" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="dream"><span class="header-section-number">4.2</span> Dream</h2>
+</section>
+</section>
+<section id="in-the-end" class="level1" data-number="5">
+
+
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">5 In the End</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-DenoisingDiffusionProbabilistic2020ho" class="csl-entry" role="listitem">
+Ho, Jonathan, Ajay Jain, and Pieter Abbeel. 2020. <span>“Denoising <span>Diffusion Probabilistic Models</span>.”</span> December 16, 2020. <a href="https://doi.org/10.48550/arXiv.2006.11239">https://doi.org/10.48550/arXiv.2006.11239</a>.
+</div>
+<div id="ref-ScoreBasedGenerativeModeling2021song" class="csl-entry" role="listitem">
+Song, Yang, Jascha Sohl-Dickstein, Diederik P. Kingma, Abhishek Kumar, Stefano Ermon, and Ben Poole. 2021. <span>“Score-<span>Based Generative Modeling</span> Through <span>Stochastic Differential Equations</span>.”</span> February 10, 2021. <a href="https://doi.org/10.48550/arXiv.2011.13456">https://doi.org/10.48550/arXiv.2011.13456</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="dark_dimmed">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      if (authorPrefersDark) {
+          [baseTheme, altTheme] = [altTheme, baseTheme];
+      }
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "YYZhang2025/YYZhang2025.github.io";
+    script.dataset.repoId = "R_kgDOQlDTcQ";
+    script.dataset.category = "General";
+    script.dataset.categoryId = "DIC_kwDOQlDTcc4C2MRz";
+    script.dataset.mapping = "title";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© CC-By Yuyang, 2025</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+    <script type="text/javascript">
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let pseudocodeOptions = {
+          indentSize: el.dataset.indentSize,
+          commentDelimiter: el.dataset.commentDelimiter,
+          lineNumber: el.dataset.lineNumber.toLowerCase() === "true",
+          lineNumberPunc: el.dataset.lineNumberPunc,
+          noEnd: el.dataset.noEnd.toLowerCase() === "true",
+          titlePrefix: el.dataset.captionPrefix
+        };
+        pseudocode.renderElement(el.querySelector(".pseudocode"), pseudocodeOptions);
+      });
+    })(document);
+    (function(d) {
+      d.querySelectorAll(".pseudocode-container").forEach(function(el) {
+        let captionSpan = el.querySelector(".ps-root > .ps-algorithm > .ps-line > .ps-keyword")
+        if (captionSpan !== null) {
+          let captionPrefix = el.dataset.captionPrefix + " ";
+          let captionNumber = "";
+          if (el.dataset.pseudocodeNumber) {
+            captionNumber = el.dataset.pseudocodeNumber + " ";
+            if (el.dataset.chapterLevel) {
+              captionNumber = el.dataset.chapterLevel + "." + captionNumber;
+            }
+          }
+          captionSpan.innerHTML = captionPrefix + captionNumber;
+        }
+      });
+    })(document);
+    </script>
+  
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+<script src="../../../site_libs/quarto-contrib/line-highlight-1.0.0/line-highlight.js" defer="true"></script>
+</body></html>
