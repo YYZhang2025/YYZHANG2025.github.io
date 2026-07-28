@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
-<meta name="description" content="本文从零开始介绍 Variational Autoencoder（VAE），深入解析变分推断、ELBO、重参数化技巧、编码器与解码器结构、训练目标及生成过程，并结合 Auto-Encoding Variational Bayes 论文理解现代生成模型的理论基础。">
+<meta name="description" content="本文从零开始介绍 Switch Transformer，深入解析 Mixture of Experts（MoE）的核心思想，讲解 Router、Expert、负载均衡损失、稀疏计算、训练稳定性等关键技术，并结合论文分析其如何以较低计算成本将 Transformer 扩展到万亿参数规模，为现代大模型 MoE 架构奠定基础。">
 
-<title>08-VAE: Auto-Encoding Variational Bayes</title>
+<title>21: Switch Transformer</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -145,8 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="08-VAE: Auto-Encoding Variational Bayes">
-<meta property="og:description" content="本文从零开始介绍 Variational Autoencoder（VAE），深入解析变分推断、ELBO、重参数化技巧、编码器与解码器结构、训练目标及生成过程，并结合 Auto-Encoding Variational Bayes 论文理解现代生成模型的理论基础。">
+<meta property="og:title" content="21: Switch Transformer">
+<meta property="og:description" content="本文从零开始介绍 Switch Transformer，深入解析 Mixture of Experts（MoE）的核心思想，讲解 Router、Expert、负载均衡损失、稀疏计算、训练稳定性等关键技术，并结合论文分析其如何以较低计算成本将 Transformer 扩展到万亿参数规模，为现代大模型 MoE 架构奠定基础。">
 <meta property="og:image" content="./assets/cover.png">
 </head>
 
@@ -367,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">08-VAE: Auto-Encoding Variational Bayes</h1>
+          <h1 class="quarto-secondary-nav-title">21: Switch Transformer</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -396,12 +396,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">08-VAE: Auto-Encoding Variational Bayes</h1>
+<h1 class="title d-none d-lg-block">21: Switch Transformer</h1>
 </div>
 
 <div>
   <div class="description">
-    本文从零开始介绍 Variational Autoencoder（VAE），深入解析变分推断、ELBO、重参数化技巧、编码器与解码器结构、训练目标及生成过程，并结合 Auto-Encoding Variational Bayes 论文理解现代生成模型的理论基础。
+    本文从零开始介绍 Switch Transformer，深入解析 Mixture of Experts（MoE）的核心思想，讲解 Router、Expert、负载均衡损失、稀疏计算、训练稳定性等关键技术，并结合论文分析其如何以较低计算成本将 Transformer 扩展到万亿参数规模，为现代大模型 MoE 架构奠定基础。
   </div>
 </div>
 

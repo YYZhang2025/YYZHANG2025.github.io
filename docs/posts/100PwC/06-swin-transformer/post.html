@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
+<meta name="description" content="本文从零开始介绍 Swin Transformer，深入解析其分层结构、窗口注意力机制、移动窗口策略及在计算机视觉任务中的应用，并结合论文分析其如何在保持高效计算的同时实现强大的视觉表征能力。">
 
-<title>06-Swin Transformer</title>
+<title>06-Swin Transformer: Hierarchical Vision Transformer using Shifted Windows</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="06-Swin Transformer">
+<meta property="og:title" content="06-Swin Transformer: Hierarchical Vision Transformer using Shifted Windows">
+<meta property="og:description" content="本文从零开始介绍 Swin Transformer，深入解析其分层结构、窗口注意力机制、移动窗口策略及在计算机视觉任务中的应用，并结合论文分析其如何在保持高效计算的同时实现强大的视觉表征能力。">
 <meta property="og:image" content="./assets/cover.png">
 </head>
 
@@ -365,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">06-Swin Transformer</h1>
+          <h1 class="quarto-secondary-nav-title">06-Swin Transformer: Hierarchical Vision Transformer using Shifted Windows</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -394,9 +396,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">06-Swin Transformer</h1>
+<h1 class="title d-none d-lg-block">06-Swin Transformer: Hierarchical Vision Transformer using Shifted Windows</h1>
 </div>
 
+<div>
+  <div class="description">
+    本文从零开始介绍 Swin Transformer，深入解析其分层结构、窗口注意力机制、移动窗口策略及在计算机视觉任务中的应用，并结合论文分析其如何在保持高效计算的同时实现强大的视觉表征能力。
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">

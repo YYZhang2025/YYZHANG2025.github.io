@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
+<meta name="description" content="本文从零开始介绍 DDPM（Denoising Diffusion Probabilistic Models），深入解析其扩散过程与去噪过程、模型结构、训练目标及生成过程，并结合论文分析其如何通过逐步去噪实现高质量的图像生成。">
 
-<title>12-DDPM</title>
+<title>12-DDPM: Denoising Diffusion Probabilistic Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="12-DDPM">
+<meta property="og:title" content="12-DDPM: Denoising Diffusion Probabilistic Models">
+<meta property="og:description" content="本文从零开始介绍 DDPM（Denoising Diffusion Probabilistic Models），深入解析其扩散过程与去噪过程、模型结构、训练目标及生成过程，并结合论文分析其如何通过逐步去噪实现高质量的图像生成。">
 <meta property="og:image" content="./assets/cover.png">
 </head>
 
@@ -365,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">12-DDPM</h1>
+          <h1 class="quarto-secondary-nav-title">12-DDPM: Denoising Diffusion Probabilistic Models</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -394,9 +396,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">12-DDPM</h1>
+<h1 class="title d-none d-lg-block">12-DDPM: Denoising Diffusion Probabilistic Models</h1>
 </div>
 
+<div>
+  <div class="description">
+    本文从零开始介绍 DDPM（Denoising Diffusion Probabilistic Models），深入解析其扩散过程与去噪过程、模型结构、训练目标及生成过程，并结合论文分析其如何通过逐步去噪实现高质量的图像生成。
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">

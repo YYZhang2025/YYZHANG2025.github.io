@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
+<meta name="description" content="本文从零开始介绍 CLIP（Contrastive Language-Image Pre-Training），深入解析其对比学习方法、文本-图像对齐、双编码器结构、训练策略及在下游任务中的应用，并结合论文分析其如何实现从自然语言监督中学习可迁移的视觉表征。">
 
-<title>05-CLIP</title>
+<title>05-CLIP: Learning Transferable Visual Models From Natural Language Supervision</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="05-CLIP">
+<meta property="og:title" content="05-CLIP: Learning Transferable Visual Models From Natural Language Supervision">
+<meta property="og:description" content="本文从零开始介绍 CLIP（Contrastive Language-Image Pre-Training），深入解析其对比学习方法、文本-图像对齐、双编码器结构、训练策略及在下游任务中的应用，并结合论文分析其如何实现从自然语言监督中学习可迁移的视觉表征。">
 <meta property="og:image" content="./assets/cover.png">
 </head>
 
@@ -365,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">05-CLIP</h1>
+          <h1 class="quarto-secondary-nav-title">05-CLIP: Learning Transferable Visual Models From Natural Language Supervision</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -394,9 +396,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">05-CLIP</h1>
+<h1 class="title d-none d-lg-block">05-CLIP: Learning Transferable Visual Models From Natural Language Supervision</h1>
 </div>
 
+<div>
+  <div class="description">
+    本文从零开始介绍 CLIP（Contrastive Language-Image Pre-Training），深入解析其对比学习方法、文本-图像对齐、双编码器结构、训练策略及在下游任务中的应用，并结合论文分析其如何实现从自然语言监督中学习可迁移的视觉表征。
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">

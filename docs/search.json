@@ -37,14 +37,14 @@
   {
     "objectID": "posts/100PwC/08-vae/post.html",
     "href": "posts/100PwC/08-vae/post.html",
-    "title": "08-VAE",
+    "title": "08-VAE: Auto-Encoding Variational Bayes",
     "section": "",
     "text": "Back to top"
   },
   {
     "objectID": "posts/100PwC/14-mmdit/post.html",
     "href": "posts/100PwC/14-mmdit/post.html",
-    "title": "15-MMDiT",
+    "title": "15-MMDiT: Scaling Rectified Flow Transformers for High-Resolution Image Synthesis",
     "section": "",
     "text": "Back to top"
   },
@@ -58,35 +58,35 @@
   {
     "objectID": "posts/100PwC/13-stable-diffusion/post.html",
     "href": "posts/100PwC/13-stable-diffusion/post.html",
-    "title": "13-Stable Diffusion",
+    "title": "13-Stable Diffusion: High-Resolution Image Synthesis with Latent Diffusion Models",
     "section": "",
-    "text": "Back to top"
+    "text": "cover\n\n\n\n Back to top"
   },
   {
     "objectID": "posts/100PwC/10-mae/post.html",
     "href": "posts/100PwC/10-mae/post.html",
-    "title": "10-Masked Autoencoder",
+    "title": "10-Masked Autoencoder: Masked Autoencoders Are Scalable Vision Learners",
     "section": "",
     "text": "Back to top"
   },
   {
     "objectID": "posts/100PwC/07-dino/post.html",
     "href": "posts/100PwC/07-dino/post.html",
-    "title": "07-DINO",
+    "title": "07-DINO: Emerging Properties in Self-Supervised Vision Transformers",
     "section": "",
     "text": "Back to top"
   },
   {
     "objectID": "posts/100PwC/11-unet/post.html",
     "href": "posts/100PwC/11-unet/post.html",
-    "title": "11-U-Net",
+    "title": "11-U-Net: U-Net: Convolutional Networks for Biomedical Image Segmentation",
     "section": "",
     "text": "Back to top"
   },
   {
     "objectID": "posts/100PwC/14-dit/post.html",
     "href": "posts/100PwC/14-dit/post.html",
-    "title": "14-Diffusion Transformer",
+    "title": "14-Diffusion Transformer: Scalable Diffusion Models with Transformers",
     "section": "",
     "text": "Back to top"
   },
@@ -1696,7 +1696,7 @@
   {
     "objectID": "posts/100PwC/06-swin-transformer/post.html",
     "href": "posts/100PwC/06-swin-transformer/post.html",
-    "title": "06-Swin Transformer",
+    "title": "06-Swin Transformer: Hierarchical Vision Transformer using Shifted Windows",
     "section": "",
     "text": "Back to top"
   },
@@ -1705,19 +1705,19 @@
     "href": "posts/100PwC/index.html",
     "title": "100 Papers with Code Series",
     "section": "",
-    "text": "Why This Page in the Era of LLM?\nNowadays, with the help of Code Agent such as Claude Code, Codex, and so on. It is easier than ever to implement the code of the research papers. However, during my study and work, I found this kind of methods is in-efficient and not effective. It might take 10 minutes for code agent to generate the replace code but we can learn nothing from it. In contrast, if we read the paper and implement the code by hands, we can learn a lot and deeply understand the paper. So I decide to write this 100 (Planned) AI Papers with Code Series to share my learning experience and help others to learn the papers by hands.\n\n\nWho this page is for?\nThis page is for anyone who is interested in learning about the latest research in artificial intelligence. Whether you are\n\nan undergraduate student,\na graduate student,\na researcher,\nor just an AI enthusiast,\n\nyou will find something of value in this page.\n\n\nWho this page is NOT for?\nThis page is NOT for people looking for flashy AI applications or quick demos.\nMost of the content focuses on:\n\nmodel architectures,\nalgorithms,\ntraining methods,\noptimization,\nand system design,\n\nrather than AI products or application-level tutorials.\nIf you are mainly interested in AI applications, there are probably better resources available elsewhere.\n\n\nWARNING: Chinese version\n\n\nDue to limited time and energy, most of the content will be written in Chinese for now. If you are interested in helping translate the articles into other languages, please feel free to contact me. Any help is greatly appreciated.\n\n\n\n\nAll Papers\n\n\n\nPaper Title\nBlog\nCode\nDescription\n\n\n\n\nAttention is All you Need (Transformer)\n\n\nThe Transformer architecture, introduced in the paper “Attention is All You Need,” has revolutionized natural language processing and other sequence modeling tasks. It relies on self-attention mechanisms to capture dependencies between input elements, allowing for parallel processing and improved performance compared to traditional recurrent neural networks.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n01-Transformer: Attention is All You Need\n\n\nTransformer是由Vaswani等人在2017年提出的一种基于注意力机制的神经网络架构，彻底改变了自然语言处理领域。它通过自注意力机制和并行计算，显著提升了模型的性能和训练效率。Transformer的核心组件包括多头自注意力机制、位置编码和前馈神经网络。Transformer的成功不仅在自然语言处理领域，还被广泛应用于计算机视觉和语音识别等领域，成为现代深度学习的基石之一。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n02-Vision Transformer: An Image is Worth 16x16 Words\n\n\nTransformer是由Vaswani等人在2017年提出的一种基于注意力机制的神经网络架构，彻底改变了自然语言处理领域。它通过自注意力机制和并行计算，显著提升了模型的性能和训练效率。Transformer的核心组件包括多头自注意力机制、位置编码和前馈神经网络。Transformer的成功不仅在自然语言处理领域，还被广泛应用于计算机视觉和语音识别等领域，成为现代深度学习的基石之一。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n03-BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding\n\n\nBERT（Bidirectional Encoder Representations from Transformers）是由Google AI Language团队在2018年提出的一种基于Transformer架构的预训练语言模型。BERT通过双向编码器表示学习，能够捕捉上下文信息，从而在自然语言理解任务中表现出色。BERT的预训练任务包括Masked Language Model（MLM）和Next Sentence Prediction（NSP），使其在各种下游任务如问答、文本分类和命名实体识别等方面取得了显著的性能提升。BERT的成功不仅推动了自然语言处理领域的发展，还引发了大量基于Transformer架构的预训练模型的研究和应用。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n04-GPT-2: Language Models are Unsupervised Multitask Learners\n\n\nGPT-2（Generative Pre-trained Transformer 2）是由OpenAI在2019年发布的一种基于Transformer架构的语言模型。GPT-2通过大规模的无监督预训练，能够生成高质量的自然语言文本，并在多种自然语言处理任务中表现出色。GPT-2的成功不仅展示了预训练语言模型的强大能力，还引发了对生成式人工智能伦理和安全性的广泛讨论。GPT-2的发布标志着生成式语言模型在自然语言处理领域的重要里程碑，并为后续的GPT-3和其他大型语言模型的发展奠定了基础。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n05-CLIP\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n06-Swin Transformer\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n07-DINO\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n08-VAE\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n09-VQ-VAE\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n10-Masked Autoencoder\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n11-U-Net\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n12-DDPM\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n13-Stable Diffusion\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n14-Diffusion Transformer\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n15-MMDiT\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n16-GAN\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n17-Pixel CNN\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n18-Flash Attention\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n19 Mamba\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n20: Vision Mamba\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n21: Switch Transformer\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution\n\n\n本文深入解析 SEDD（Score Entropy Discrete Diffusion），介绍离散扩散模型的基本原理，详细推导 Score Entropy 损失函数，并结合官方实现分析模型训练、采样及代码细节，帮助读者全面理解 Diffusion Language Model。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
+    "text": "Why This Page in the Era of LLM?\nNowadays, with the help of Code Agent such as Claude Code, Codex, and so on. It is easier than ever to implement the code of the research papers. However, during my study and work, I found this kind of methods is in-efficient and not effective. It might take 10 minutes for code agent to generate the replace code but we can learn nothing from it. In contrast, if we read the paper and implement the code by hands, we can learn a lot and deeply understand the paper. So I decide to write this 100 (Planned) AI Papers with Code Series to share my learning experience and help others to learn the papers by hands.\n\n\nWho this page is for?\nThis page is for anyone who is interested in learning about the latest research in artificial intelligence. Whether you are\n\nan undergraduate student,\na graduate student,\na researcher,\nor just an AI enthusiast,\n\nyou will find something of value in this page.\n\n\nWho this page is NOT for?\nThis page is NOT for people looking for flashy AI applications or quick demos.\nMost of the content focuses on:\n\nmodel architectures,\nalgorithms,\ntraining methods,\noptimization,\nand system design,\n\nrather than AI products or application-level tutorials.\nIf you are mainly interested in AI applications, there are probably better resources available elsewhere.\n\n\nWARNING: Chinese version\n\n\nDue to limited time and energy, most of the content will be written in Chinese for now. If you are interested in helping translate the articles into other languages, please feel free to contact me. Any help is greatly appreciated.\n\n\n\n\nAll Papers\n\n\n\nPaper Title\nBlog\nCode\nDescription\n\n\n\n\nAttention is All you Need (Transformer)\n\n\nThe Transformer architecture, introduced in the paper “Attention is All You Need,” has revolutionized natural language processing and other sequence modeling tasks. It relies on self-attention mechanisms to capture dependencies between input elements, allowing for parallel processing and improved performance compared to traditional recurrent neural networks.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n01-Transformer: Attention is All You Need\n\n\nTransformer是由Vaswani等人在2017年提出的一种基于注意力机制的神经网络架构，彻底改变了自然语言处理领域。它通过自注意力机制和并行计算，显著提升了模型的性能和训练效率。Transformer的核心组件包括多头自注意力机制、位置编码和前馈神经网络。Transformer的成功不仅在自然语言处理领域，还被广泛应用于计算机视觉和语音识别等领域，成为现代深度学习的基石之一。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n02-Vision Transformer: An Image is Worth 16x16 Words\n\n\nTransformer是由Vaswani等人在2017年提出的一种基于注意力机制的神经网络架构，彻底改变了自然语言处理领域。它通过自注意力机制和并行计算，显著提升了模型的性能和训练效率。Transformer的核心组件包括多头自注意力机制、位置编码和前馈神经网络。Transformer的成功不仅在自然语言处理领域，还被广泛应用于计算机视觉和语音识别等领域，成为现代深度学习的基石之一。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n03-BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding\n\n\nBERT（Bidirectional Encoder Representations from Transformers）是由Google AI Language团队在2018年提出的一种基于Transformer架构的预训练语言模型。BERT通过双向编码器表示学习，能够捕捉上下文信息，从而在自然语言理解任务中表现出色。BERT的预训练任务包括Masked Language Model（MLM）和Next Sentence Prediction（NSP），使其在各种下游任务如问答、文本分类和命名实体识别等方面取得了显著的性能提升。BERT的成功不仅推动了自然语言处理领域的发展，还引发了大量基于Transformer架构的预训练模型的研究和应用。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n04-GPT-2: Language Models are Unsupervised Multitask Learners\n\n\nGPT-2（Generative Pre-trained Transformer 2）是由OpenAI在2019年发布的一种基于Transformer架构的语言模型。GPT-2通过大规模的无监督预训练，能够生成高质量的自然语言文本，并在多种自然语言处理任务中表现出色。GPT-2的成功不仅展示了预训练语言模型的强大能力，还引发了对生成式人工智能伦理和安全性的广泛讨论。GPT-2的发布标志着生成式语言模型在自然语言处理领域的重要里程碑，并为后续的GPT-3和其他大型语言模型的发展奠定了基础。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n05-CLIP: Learning Transferable Visual Models From Natural Language Supervision\n\n\n本文从零开始介绍 CLIP（Contrastive Language-Image Pre-Training），深入解析其对比学习方法、文本-图像对齐、双编码器结构、训练策略及在下游任务中的应用，并结合论文分析其如何实现从自然语言监督中学习可迁移的视觉表征。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n06-Swin Transformer: Hierarchical Vision Transformer using Shifted Windows\n\n\n本文从零开始介绍 Swin Transformer，深入解析其分层结构、窗口注意力机制、移动窗口策略及在计算机视觉任务中的应用，并结合论文分析其如何在保持高效计算的同时实现强大的视觉表征能力。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n07-DINO: Emerging Properties in Self-Supervised Vision Transformers\n\n\n本文从零开始介绍 DINO（Self-Distillation with No Labels），深入解析自监督学习的核心思想、教师-学生网络、动量编码器、多视角训练、特征对齐与避免模型坍塌等关键技术，并结合论文分析其如何在无需人工标注的情况下学习具有强泛化能力的视觉表征，为现代视觉基础模型的发展奠定基础。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n08-VAE: Auto-Encoding Variational Bayes\n\n\n本文从零开始介绍 Variational Autoencoder（VAE），深入解析变分推断、ELBO、重参数化技巧、编码器与解码器结构、训练目标及生成过程，并结合 Auto-Encoding Variational Bayes 论文理解现代生成模型的理论基础。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n09-VQ-VAE:Neural Discrete Representation Learning\n\n\n本文从零开始介绍 VQ-VAE（Vector Quantized Variational Autoencoder），深入解析其离散潜在空间、向量量化方法、编码器与解码器结构、训练目标及生成过程，并结合 Neural Discrete Representation Learning 论文理解如何通过离散表示学习实现高效的生成模型。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n10-Masked Autoencoder: Masked Autoencoders Are Scalable Vision Learners\n\n\n本文从零开始介绍 MAE（Masked Autoencoder），深入解析其自监督学习的核心思想、编码器与解码器结构、掩码策略、训练目标及在计算机视觉任务中的应用，并结合论文分析其如何通过掩码自编码器实现高效的视觉表征学习，为现代视觉基础模型的发展提供新的思路。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n11-U-Net: U-Net: Convolutional Networks for Biomedical Image Segmentation\n\n\n本文从零开始介绍 U-Net，深入解析其编码器-解码器结构、跳跃连接、卷积与反卷积操作、损失函数及在医学图像分割任务中的应用，并结合 U-Net 论文分析其如何在有限数据下实现高精度的图像分割，为现代医学图像分析提供了重要的基础。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n12-DDPM: Denoising Diffusion Probabilistic Models\n\n\n本文从零开始介绍 DDPM（Denoising Diffusion Probabilistic Models），深入解析其扩散过程与去噪过程、模型结构、训练目标及生成过程，并结合论文分析其如何通过逐步去噪实现高质量的图像生成。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n13-Stable Diffusion: High-Resolution Image Synthesis with Latent Diffusion Models\n\n\n本文从零开始介绍 Stable Diffusion，深入解析其潜在扩散模型、文本-图像对齐、训练策略及生成过程，并结合论文分析其如何实现高分辨率图像的高效生成。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n14-Diffusion Transformer: Scalable Diffusion Models with Transformers\n\n\n本文从零开始介绍 Diffusion Transformer，深入解析其将 Transformer 架构引入扩散模型的核心思想、网络结构、训练策略及生成过程，并结合论文分析其如何通过 Transformer 实现高效的图像生成，为现代扩散模型的发展提供新的思路。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n15-MMDiT: Scaling Rectified Flow Transformers for High-Resolution Image Synthesis\n\n\n本文从零开始介绍 MMDiT（Multimodal Diffusion Transformer），深入解析其双流 Transformer 架构、图像与文本特征融合、Rectified Flow、Flow Matching 训练目标以及高分辨率图像生成技术，并结合论文分析 MMDiT 如何成为 Stable Diffusion 3 的核心架构，实现更高质量、更强文本对齐能力的图像生成。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n16-GAN\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n17-Pixel CNN\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n18-Flash Attention\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n19 Mamba\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n20: Vision Mamba\n\n\n\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n21: Switch Transformer\n\n\n本文从零开始介绍 Switch Transformer，深入解析 Mixture of Experts（MoE）的核心思想，讲解 Router、Expert、负载均衡损失、稀疏计算、训练稳定性等关键技术，并结合论文分析其如何以较低计算成本将 Transformer 扩展到万亿参数规模，为现代大模型 MoE 架构奠定基础。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution\n\n\n本文深入解析 SEDD（Score Entropy Discrete Diffusion），介绍离散扩散模型的基本原理，详细推导 Score Entropy 损失函数，并结合官方实现分析模型训练、采样及代码细节，帮助读者全面理解 Diffusion Language Model。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\n\n\n\n\n\n\n\n23: Video Diffusion: Video Diffusion Models\n\n\n本文从零开始介绍 Video Diffusion Models，深入解析视频扩散模型的数学原理、时空扩散过程、网络结构、训练与推理流程，以及如何实现高质量、时间一致的视频生成，并结合经典论文分析当前主流技术路线。\n\n\n\n\n\nYuyang Zhang\n\n\n\n\n\nNo matching items\n Back to top"
   },
   {
     "objectID": "posts/100PwC/05-clip/post.html",
     "href": "posts/100PwC/05-clip/post.html",
-    "title": "05-CLIP",
+    "title": "05-CLIP: Learning Transferable Visual Models From Natural Language Supervision",
     "section": "",
     "text": "Back to top"
   },
   {
     "objectID": "posts/100PwC/09-vq-vae/post.html",
     "href": "posts/100PwC/09-vq-vae/post.html",
-    "title": "09-VQ-VAE",
+    "title": "09-VQ-VAE:Neural Discrete Representation Learning",
     "section": "",
     "text": "Back to top"
   },
@@ -1738,7 +1738,7 @@
   {
     "objectID": "posts/100PwC/12-ddpm/post.html",
     "href": "posts/100PwC/12-ddpm/post.html",
-    "title": "12-DDPM",
+    "title": "12-DDPM: Denoising Diffusion Probabilistic Models",
     "section": "",
     "text": "Back to top"
   },
@@ -1746,6 +1746,118 @@
     "objectID": "posts/100PwC/16-pixel-cnn/post.html",
     "href": "posts/100PwC/16-pixel-cnn/post.html",
     "title": "Pixel CNN",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "posts/100PwC/21-switch-transformer/post.html",
+    "href": "posts/100PwC/21-switch-transformer/post.html",
+    "title": "21: Switch Transformer",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html",
+    "href": "posts/100PwC/22-sedd/post.html",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "",
+    "text": "1 Preliminaries\n  \n  1.1 Continuous Time Markov Chain (CTMC)\n  1.2 Bregman Divergence\n  \n  2 Score Entropy Discrete Diffusion\n  \n  2.1 What is Hard in Discrete Diffusion Modeling?\n  2.2 Conrete Score\n  2.3 Forward Process\n  \n  2.3.1 Noise Schedule\n  2.3.2 Transition Matrix\n  \n  2.3.2.1 Absorbing Matrix\n  2.3.2.2 Uniform Matrix\n  \n  2.3.3 Loss Function\n  2.3.4 Training Algorithm\n  \n  2.4 Backward(Reverse) Process\n  \n  3 Experiments and Results\n  4 What’s Next\n  \n  4.1 LLaDA\n  4.2 Dream\n  \n  5 In the End"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html#continuous-time-markov-chain-ctmc",
+    "href": "posts/100PwC/22-sedd/post.html#continuous-time-markov-chain-ctmc",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "1.1 Continuous Time Markov Chain (CTMC)",
+    "text": "1.1 Continuous Time Markov Chain (CTMC)\n连续时间马尔可夫链（Continuous-Time Markov Chain，CTMC）是指在连续时间下的马尔可夫链。它是一个随机过程，满足马尔可夫性质，即未来的状态只依赖于当前的状态，而与过去的状态无关。CTMC可以用一个Generator Matrix \\(Q\\) 来描述，它表示在单位时间内从一个状态跳转到另一个状态的速率, 比如：\n\\[\nQ =\n\\begin{bmatrix}\n-3 & 1 & 1 & 1 \\\\\n1 & -3 & 1 & 1 \\\\\n1 & 1 & -3 & 1 \\\\\n1 & 1 & 1 & -3\n\\end{bmatrix}\n\\tag{1}\\]\n其中，每一列表示当前的状态，每一行表示下一个可以跳跃的状态。我们可以用\\(p_t\\)来表示在时间\\(t\\)时的状态分布，那么CTMC的状态转移可以用以下的微分方程来描述：\n\\[\n\\frac{d p_t}{dt} = Q p_t\n\\tag{2}\\]"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html#bregman-divergence",
+    "href": "posts/100PwC/22-sedd/post.html#bregman-divergence",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "1.2 Bregman Divergence",
+    "text": "1.2 Bregman Divergence\nregman Divergence 是一类用来衡量两个点“差异”的函数。它的定义如下: 给定一个严格凸，可微的函数 \\(\\phi\\), Bregman Divergence 定义为：\n\\[\nD_\\phi(p \\| q) = \\phi(p) - \\phi(q) - \\nabla \\phi(q)^{\\top} (p - q)\n\\tag{3}\\]\n​它有一个特点就是非负性，即 \\(D_\\phi(p \\| q) \\geq 0\\)，并且当且仅当 \\(p = q\\) 时，\\(D_\\phi(p \\| q) = 0\\)。"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html#what-is-hard-in-discrete-diffusion-modeling",
+    "href": "posts/100PwC/22-sedd/post.html#what-is-hard-in-discrete-diffusion-modeling",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "2.1 What is Hard in Discrete Diffusion Modeling?",
+    "text": "2.1 What is Hard in Discrete Diffusion Modeling?\n在Discrete Diffusion Modeling中，有一个很大的问题，就是如何定义Diffusion的Forward Process和Backward Process。我们知道，在Continuous Diffusion Modeling中，Forward Process是通过一个连续的噪声过程来进行的，而Backward Process是通过一个连续的去噪过程来进行的。但是在Discrete Diffusion Modeling中，我们没有连续的噪声过程和去噪过程，所以我们需要找到一种方法来定义Discrete Diffusion的Forward Process和Backward Process。我们来回想一下Score的定义：\n\\[\ns_{\\theta}(x) = \\nabla_{x} \\log p_{\\theta}(x),\n\\tag{5}\\]\n只要知道了Score，我们就可以通过Score来进行采样，也就是所谓的Score-based Sampling(Song et al. 2021)。但现在问题来了，Discrete Diffusion Modeling中，数据的状态是离散的，所以我们无法直接计算Score，也就无法直接进行采样。那么我们该如何解决这个问题呢？这就是本文所要介绍的Score Entropy Discrete Diffusion（SEDD）(DiscreteDiffusionModeling2023chen?)，它通过估计数据分布的比率来定义Discrete Diffusion的Forward Process和Backward Process，从而实现了离散扩散模型的训练和采样。"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html#conrete-score",
+    "href": "posts/100PwC/22-sedd/post.html#conrete-score",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "2.2 Conrete Score",
+    "text": "2.2 Conrete Score\n这篇Paper的作者提出，可以利用Conrete Score(ConcreteScore2022?)来定义Discrete Diffusion的Forward Process和Backward Process，从而实现离散扩散模型的训练和采样。Conrete Score的定义如下：\n\\[\ns_{\\theta}(x) = \\frac{p(y)}{p(x)}\n\\tag{6}\\]\n通过下图，我们可以很直观的看到concrete scoreEquation 6与scoreEquation 5的关系：\n\n\n\n\n\n\nFigure 1\n\n\n\nConcrete Score通过比较离散数据的数据的所有状态，来跳跃到下一个比较高的Probability。因此，只要知道了Concrete Score，我们就可以通过Concrete Score来进行采样和生成。\n这篇文章就是通过定义一个Score Entropy Loss来训练一个模型，让模型能够学习到Concrete Score，从而实现离散扩散模型的训练和采样。接下来，我们将详细介绍Score Entropy Loss的定义和推导过程。"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html#forward-process",
+    "href": "posts/100PwC/22-sedd/post.html#forward-process",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "2.3 Forward Process",
+    "text": "2.3 Forward Process\nSEDD的Forward Process是一个连续时间马尔可夫链（Continuous-Time Markov Chain，CTMC）。它从真实的数据样本\\(x_0\\)出发，随着时间 \\(t\\) 增大不断加入离散噪声，最终把文本破坏成一个容易采样的噪声分布。整个Forward Process可以通过两部分共同决定:\n\n基础的Generator \\(Q\\)：这个决定了离散状态之间如何跳转，通常是一个固定的矩阵。\nNoise Schedule \\(\\sigma(t)\\)：这个决定了噪声随着时间如何增加，通常是一个随时间增加的函数。\n\n这两个相乘，我们可以得到 \\(Q_t\\) 也就是真正随时间变化的Generator:\n\\[\nQ_t = \\dot\\sigma(t) Q\n\\tag{7}\\]\n它表示，在时间\\(t\\)内，按照\\(Q\\)所规定的方向跳转，以\\(\\dot\\sigma(t)\\)的速率进行跳转。\n\n2.3.1 Noise Schedule\nNoise Schedule 主要描述噪声随着时间如何增加，SEDD中主要使用两个量：\n\n\\(\\sigma(t)\\): 累计噪声的大小，随着时间增加，\\(\\sigma(t)\\)也会增加。\n\\(\\bar{\\sigma}(t) = \\frac{d \\sigma(t)}{dt}\\): 瞬时噪声的大小，描述噪声在每个时间点的变化率。\n\n两者关系如下：\n\\[\n\\sigma(t) - \\sigma(0) = \\int_0^t \\bar{\\sigma}(s) ds\n\\]\n这两个量的选择会影响Forward Process的噪声分布，从而影响模型的训练和采样效果。\n\n\\(\\sigma(t)\\): 用于从\\(x_0\\)从直接采样\\(x_t\\)\n\\(\\bar{\\sigma}(t)\\): 用于构造瞬时\\(Q_t\\), 给模型的训练Loss加权，以及进行采样\n\n\n\n2.3.2 Transition Matrix\nGenerator \\(Q_t\\) 描述的是一个无穷小时间段内的跳转速率，对于很小的\\(dt\\):\n\\[\np_{t+dt} \\approx (I + Q_t dt) p_t\n\\]\n把从时间 \\(0\\) 到时间 \\(t\\) 的跳转速率累积起来，就可以得到完整的Forward Transition Matrix:\n\\[\nP_{0 \\to t} = \\exp \\left(\\int_0^t Q_u du\\right)\n\\]\n因为：\n\\[\nQ_u = \\dot\\sigma(u) Q\n\\]\n所以：\n\\[\n\\int_0^t Q_u du = \\int_0^t \\dot\\sigma(u) Q du = \\sigma(t) Q\n\\]\n从上面的式子中，我们可以推导出来:\n\\[\nP_{0 \\to t} = \\exp((\\sigma(t) - \\sigma(0)) Q)\n\\]\n如果 \\(\\sigma(0) = 0\\)，那么就有：\n\\[\nP_{0 \\to t} = \\exp(\\sigma(t) Q)\n\\]\n从这个式子中，我们可以看到Forward Sampling的式子就是:\n\\[\nx_t \\sim P_{0 \\to t} x_0 = \\exp(\\sigma(t) Q) x_0\n\\]\n代码的实现也很简单：\nsigma, dsigma = noise(t)\nxt = graph.sample_transition(x0, sigma)\n具体的sample_transition的实现，我们将在下一节分析，不同的Transition Matrix的实现方式不同，具体的实现方式，我们将在下一节分析。\n\n2.3.2.1 Absorbing Matrix\nAbsorbing Matrix会引入一个特殊的token: [MASK]，它的作用是让模型在Forward Process中有一个吸收状态，意思就是，一旦token变成了[MASK]，它就不会再变回原来的token了。这个吸收状态的引入，可以让模型在Forward Process中有一个稳定的状态，从而提高模型的训练效果。\n具体的，Absorbing Matrix的定义如下：\n\\[\nQ_{\\text{absorb}} =\n\\begin{bmatrix}\n-1 & 0 & \\cdots & 0 & 0 \\\\\n0 & -1 & \\cdots & 0 & 0 \\\\\n\\vdots & \\vdots & \\ddots & \\vdots & \\vdots \\\\\n0 & 0 & \\cdots & -1 & 0 \\\\\n1 & 1 & \\cdots & 1 & 0\n\\end{bmatrix}\n\\]\n如果是absorb matrix，那么就有：\n\\[\nP(x_t = x_0| x_0) = \\exp(-\\sigma(t))\nP(x_t = [MASK]| x_0) = 1 - \\exp(-\\sigma(t)  )\n\\]\n接下来我们看一下代码实现:\ndef sample_transition(self, i, sigma):\n    move_chance = 1 - (-sigma).exp()\n    move_indices = torch.rand(*i.shape, device=i.device) &lt; move_chance\n    i_pert = torch.where(move_indices, self.dim - 1, i)\n    return i_pert\n我们来解释一些这段代码：\n\n第二行： move_chance = 1 - (-sigma).exp() 计算了每个token在Forward Process中变成[MASK]的概率。\n第三行： move_indices = torch.rand(*i.shape, device=i.device) &lt; move_chance 生成了一个随机的布尔矩阵，表示每个token是否变成了[MASK]。 其形状与输入的token序列相同。\n第四行： i_pert = torch.where(move_indices, self.dim - 1, i) 根据布尔矩阵，将变成[MASK]的token的索引设置为self.dim - 1，即[MASK]的索引，其余的token保持不变。\n\n\n\n2.3.2.2 Uniform Matrix\n与Absorbing Matrix不同，Uniform Matrix不会引入吸收状态，而是让每个token都有可能变成其他的token。Uniform Matrix的定义如下：\n\\[\nQ_{\\text{uniform}} =\n\\begin{bmatrix}\n1 - V & 1 & \\cdots & 1 & 1 \\\\\n1 & 1 - V & \\cdots & 1 & 1 \\\\\n\\vdots & \\vdots & \\ddots & \\vdots & \\vdots \\\\\n1 & 1 & \\cdots & 1 - V & 1 \\\\\n1 & 1 & \\cdots & 1 & 1 - V\n\\end{bmatrix}\n\\]\n我们来看一下代码实现：\ndef sample_transition(self, i, sigma):\n    move_chance = 1 - (-sigma).exp()\n    move_indices = torch.rand(*i.shape, device=i.device) &lt; move_chance\n    i_pert = torch.where(move_indices, torch.randint_like(i, self.dim), i) \n    return i_pert\n重点关注第四行的代码：i_pert = torch.where(move_indices, torch.randint_like(i, self.dim), i)，它的作用是将变成其他token的token的索引设置为一个随机的token的索引，其余的token保持不变。\n\n\n\n2.3.3 Loss Function\n有了上面的几个准备步骤，接下来我们可以终于可以开始推导Loss Function了。我们知道，SEDD的目标是让模型学习到Concrete Score，从而实现离散扩散模型的训练和采样。为了实现这个目标，我们需要定义一个Score Entropy Loss来训练模型，让模型能够学习到Concrete Score。\n我们知道，模型通常输出log-score：\n\\[\nz_\\theta(x, t)_y = \\log s_\\theta(x, t)_y\n\\]\n但是真是的marginal score ratio是无法计算的, 这种情况在Score Matching中也出现过，而它的解决办法就是，利用已知的Forward Transition，来构建：\n\\[\nr_t(y; x_t, x_0) = \\frac{q_t(y | x_0)}{q_t(x_t | x_0)}\n\\]\n因此我们需要\\(s_\\theta(x, t)_y\\)来近似\\(r_t(y; x_t, x_0)\\)，也就是：\n好的，那么我们可以用简单的MSE来实现吗:\n\\[\n\\mathcal{L}_{\\text{MSE}} = \\mathbb{E}_{q_t(x_t | x_0)} \\left[ \\sum_{y} \\left( s_\\theta(x, t)_y - r_t(y; x_t, x_0) \\right)^2 \\right]\n\\]\n它有一个很显然的问题就是，不能保证输出是正数，这是对于一个Probability来说是不合理的，因此我们需要对其进行改进。我们可以通过对数变换来解决这个问题，也就是：\n通过Bregman Divergence，我们可以得到一个新的Loss Function:\n于是我们就有了Denoising Score Entropy：\n\\[\n\\mathcal{L}_{\\text{DSE}} = \\mathbb{E}_{q_t(x_t | x_0)} \\left[ \\sum_{y} r_t(y; x_t, x_0) \\log \\frac{r_t(y; x_t, x_0)}{s_\\theta(x, t)_y} \\right]\n\\]\n到目前为止，我们以及推导出来了SEDD的Loss Function，不过这还不够，我们还需要对Loss Function进行加权，因为在Forward Process中，随着时间的增加，噪声的大小也会增加，因此我们需要对Loss Function进行加权，让模型在训练过程中更加关注噪声较大的样本。具体的加权方式如下：\n\\[\n\\mathcal{L}_{\\text{DWDSE}} = \\inf_{0}^{T}\\dot{sigma}(t)\\mathcal{L}_{\\text{DSE}}(t) dt\n\\]\n它的Monte Carlo的形式就是：\n\\[\n\\mathcal{L}_{train} = \\mathbb{E}_{t, x_0, x_t}\\left[ \\dot{\\sigma}(t) \\mathcal{L}_{\\text{DSE}}(t) \\right]\n\\]\n\n\n2.3.4 Training Algorithm"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html#backwardreverse-process",
+    "href": "posts/100PwC/22-sedd/post.html#backwardreverse-process",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "2.4 Backward(Reverse) Process",
+    "text": "2.4 Backward(Reverse) Process"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html#llada",
+    "href": "posts/100PwC/22-sedd/post.html#llada",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "4.1 LLaDA",
+    "text": "4.1 LLaDA"
+  },
+  {
+    "objectID": "posts/100PwC/22-sedd/post.html#dream",
+    "href": "posts/100PwC/22-sedd/post.html#dream",
+    "title": "22-SEDD: Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution",
+    "section": "4.2 Dream",
+    "text": "4.2 Dream"
+  },
+  {
+    "objectID": "posts/100PwC/20-vision-mamba/post.html",
+    "href": "posts/100PwC/20-vision-mamba/post.html",
+    "title": "20: Vision Mamba",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "posts/100PwC/19-mamba/post.html",
+    "href": "posts/100PwC/19-mamba/post.html",
+    "title": "19 Mamba",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "posts/100PwC/18-flash-attention/post.html",
+    "href": "posts/100PwC/18-flash-attention/post.html",
+    "title": "18-Flash Attention",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "posts/100PwC/17-pixel-cnn/post.html",
+    "href": "posts/100PwC/17-pixel-cnn/post.html",
+    "title": "17-Pixel CNN",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "posts/100PwC/16-gan/post.html",
+    "href": "posts/100PwC/16-gan/post.html",
+    "title": "16-GAN",
+    "section": "",
+    "text": "Back to top"
+  },
+  {
+    "objectID": "posts/100PwC/23-video-diffusion/post.html",
+    "href": "posts/100PwC/23-video-diffusion/post.html",
+    "title": "23: Video Diffusion: Video Diffusion Models",
     "section": "",
     "text": "Back to top"
   }

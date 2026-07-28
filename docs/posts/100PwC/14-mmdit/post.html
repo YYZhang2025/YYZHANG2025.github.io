@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
+<meta name="description" content="本文从零开始介绍 MMDiT（Multimodal Diffusion Transformer），深入解析其双流 Transformer 架构、图像与文本特征融合、Rectified Flow、Flow Matching 训练目标以及高分辨率图像生成技术，并结合论文分析 MMDiT 如何成为 Stable Diffusion 3 的核心架构，实现更高质量、更强文本对齐能力的图像生成。">
 
-<title>15-MMDiT</title>
+<title>15-MMDiT: Scaling Rectified Flow Transformers for High-Resolution Image Synthesis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +145,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="15-MMDiT">
+<meta property="og:title" content="15-MMDiT: Scaling Rectified Flow Transformers for High-Resolution Image Synthesis">
+<meta property="og:description" content="本文从零开始介绍 MMDiT（Multimodal Diffusion Transformer），深入解析其双流 Transformer 架构、图像与文本特征融合、Rectified Flow、Flow Matching 训练目标以及高分辨率图像生成技术，并结合论文分析 MMDiT 如何成为 Stable Diffusion 3 的核心架构，实现更高质量、更强文本对齐能力的图像生成。">
+<meta property="og:image" content="./assets/cover.png">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -364,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">15-MMDiT</h1>
+          <h1 class="quarto-secondary-nav-title">15-MMDiT: Scaling Rectified Flow Transformers for High-Resolution Image Synthesis</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -393,9 +396,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">15-MMDiT</h1>
+<h1 class="title d-none d-lg-block">15-MMDiT: Scaling Rectified Flow Transformers for High-Resolution Image Synthesis</h1>
 </div>
 
+<div>
+  <div class="description">
+    本文从零开始介绍 MMDiT（Multimodal Diffusion Transformer），深入解析其双流 Transformer 架构、图像与文本特征融合、Rectified Flow、Flow Matching 训练目标以及高分辨率图像生成技术，并结合论文分析 MMDiT 如何成为 Stable Diffusion 3 的核心架构，实现更高质量、更强文本对齐能力的图像生成。
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">

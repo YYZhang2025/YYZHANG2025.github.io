@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Yuyang Zhang">
+<meta name="description" content="本文从零开始介绍 U-Net，深入解析其编码器-解码器结构、跳跃连接、卷积与反卷积操作、损失函数及在医学图像分割任务中的应用，并结合 U-Net 论文分析其如何在有限数据下实现高精度的图像分割，为现代医学图像分析提供了重要的基础。">
 
-<title>11-U-Net</title>
+<title>11-U-Net: U-Net: Convolutional Networks for Biomedical Image Segmentation</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -144,7 +145,9 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-<meta property="og:title" content="11-U-Net">
+<meta property="og:title" content="11-U-Net: U-Net: Convolutional Networks for Biomedical Image Segmentation">
+<meta property="og:description" content="本文从零开始介绍 U-Net，深入解析其编码器-解码器结构、跳跃连接、卷积与反卷积操作、损失函数及在医学图像分割任务中的应用，并结合 U-Net 论文分析其如何在有限数据下实现高精度的图像分割，为现代医学图像分析提供了重要的基础。">
+<meta property="og:image" content="./assets/cover.png">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -364,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">11-U-Net</h1>
+          <h1 class="quarto-secondary-nav-title">11-U-Net: U-Net: Convolutional Networks for Biomedical Image Segmentation</h1>
         </a>     
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -393,9 +396,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">11-U-Net</h1>
+<h1 class="title d-none d-lg-block">11-U-Net: U-Net: Convolutional Networks for Biomedical Image Segmentation</h1>
 </div>
 
+<div>
+  <div class="description">
+    本文从零开始介绍 U-Net，深入解析其编码器-解码器结构、跳跃连接、卷积与反卷积操作、损失函数及在医学图像分割任务中的应用，并结合 U-Net 论文分析其如何在有限数据下实现高精度的图像分割，为现代医学图像分析提供了重要的基础。
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
